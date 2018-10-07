@@ -1,0 +1,21 @@
+{
+  "name": "webpanel-admin",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "patch-release": "npm version patch && git push --follow-tags && npm publish",
+    "test": "react-scripts-ts test --env=jsdom"
+  },
+  "dependencies": {
+    "antd": "3.8.0",
+    "webpanel-antd": "^0.0.22",
+    "webpanel-auth": "^0.0.13",
+    "webpanel-data": "^0.0.26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webpanel/admin.git"
+  }
+}
