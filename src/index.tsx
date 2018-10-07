@@ -33,7 +33,7 @@ export class Admin extends React.Component<IAdminProps> {
       <AuthComp
         {...auth}
         content={(props: AuthContentProps) => (
-          <AdminLayout entities={entities} logout={props.logout} />
+          <AdminLayout entities={entities} {...props} />
         )}
         form={(props: AuthFormProps) => <LoginForm authorizationInfo={props} />}
       />
