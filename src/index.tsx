@@ -19,6 +19,8 @@ export interface IAdminProps {
 }
 
 export class Admin extends React.Component<IAdminProps> {
+  static Entity: typeof Entity;
+
   render() {
     const { auth, entities } = this.props;
 
