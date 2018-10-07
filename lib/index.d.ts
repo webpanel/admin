@@ -3,7 +3,7 @@ import { AuthProps } from 'webpanel-auth/lib/Auth';
 import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
 import { Entity } from './model/Entity';
 export interface IAdminProps {
-    auth: (AuthProps | DummyAuthProps) & {
+    auth?: (AuthProps | DummyAuthProps) & {
         type: 'dummy' | 'oauth';
     };
     entities: Entity[];

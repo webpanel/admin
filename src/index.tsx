@@ -12,7 +12,7 @@ import { Entity } from './model/Entity';
 import { AdminLayout } from './components/layout';
 
 export interface IAdminProps {
-  auth: (AuthProps | DummyAuthProps) & {
+  auth?: (AuthProps | DummyAuthProps) & {
     type: 'dummy' | 'oauth';
   };
   entities: Entity[];
@@ -24,6 +24,9 @@ export class Admin extends React.Component<IAdminProps> {
   render() {
     const { auth, entities } = this.props;
 
+    if (!auth) {
+      return <AdminLayout entities={entities} logout={() => {}} />;
+    }
     const AuthComp = auth.type === 'dummy' ? DummyAuth : Auth;
 
     return (
