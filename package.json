@@ -11,7 +11,7 @@
   "dependencies": {
     "antd": "3.8.0",
     "webpanel-antd": "^0.0.22",
-    "webpanel-auth": "^0.0.13",
+    "webpanel-auth": "0.0.14",
     "webpanel-data": "^0.0.26"
   },
   "repository": {
