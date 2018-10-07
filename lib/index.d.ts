@@ -3,11 +3,12 @@ import { AuthProps } from 'webpanel-auth/lib/Auth';
 import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
 import { Entity } from './model/Entity';
 export interface IAdminProps {
-    auth: (AuthProps | DummyAuthProps) & {
-        type: 'dummy' | 'oauth';
-    };
-    entities: Entity[];
+  auth: (AuthProps | DummyAuthProps) & {
+    type: 'dummy' | 'oauth';
+  };
+  entities: Entity[];
 }
 export declare class Admin extends React.Component<IAdminProps> {
-    render(): JSX.Element;
+  static Entity: typeof Entity;
+  render(): JSX.Element;
 }
