@@ -9,7 +9,7 @@ import {
   SortInfoOrder
 } from 'webpanel-data';
 
-import { Entity } from '../model/Entity';
+import { Entity } from '../../model/Entity';
 
 export class EntityList extends React.Component<{
   entity: Entity;

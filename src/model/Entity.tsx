@@ -4,8 +4,8 @@ import * as React from 'react';
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
 
-import { EntityDetail } from '../components/detail';
-import { EntityList } from '../components/list';
+import { EntityDetail } from '../components/pages/detail';
+import { EntityList } from '../components/pages/list';
 import { IEntityFieldConfig, EntityField } from './EntityField';
 
 interface IEntityConfig {

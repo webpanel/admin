@@ -10,7 +10,7 @@ import {
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { DataSource, Resource, ResourceLayer } from 'webpanel-data';
 
-import { Entity } from '../model/Entity';
+import { Entity } from '../../model/Entity';
 
 export class EntityDetail extends React.Component<{
   entity: Entity;
@@ -41,7 +41,7 @@ export class EntityDetail extends React.Component<{
                       name={field.name}
                       formContext={formContext}
                     >
-                      <Input />
+                      {field.inputElement()}
                     </FormField>
                   ))}
                   <ResourceFormButtons formContext={formContext} />
