@@ -76,8 +76,9 @@ export class EntityField<T> {
       case 'number':
         return <InputNumber />;
       case 'date':
-      case 'datetime':
         return <DatePicker />;
+      case 'datetime':
+        return <DatePicker showTime={true} />;
     }
     return `unknown type ${type}`;
   }
