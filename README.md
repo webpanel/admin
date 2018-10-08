@@ -1,2 +1,3 @@
 # admin
-Webpanel Administration library for creating easy admin interfaces.
+
+Webpanel Administration library for creating various admin interfaces.

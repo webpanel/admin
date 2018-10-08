@@ -1,30 +1,22 @@
-// import { ColumnProps } from 'antd/lib/table';
 import * as inflection from 'inflection';
-// import { kebabCase } from 'lodash';
 import * as React from 'react';
+
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
 
 import { EntityDetail } from '../components/detail';
 import { EntityList } from '../components/list';
-
-interface IEntityFieldConfig {
-  name: string;
-  title?: string;
-  visibility?: {
-    list?: boolean;
-    detail?: boolean;
-  };
-}
+import { IEntityFieldConfig, EntityField } from './EntityField';
 
 interface IEntityConfig {
   name: string;
   dataSource: DataSource;
   title?: string;
-  fields: IEntityFieldConfig[];
 }
 
 export class Entity {
+  public fields: EntityField[] = [];
+
   constructor(private readonly config: IEntityConfig) {}
 
   public get structureName(): string {
@@ -41,11 +33,15 @@ export class Entity {
     return this.config.name;
   }
 
-  public get listFields(): IEntityFieldConfig[] {
-    return this.config.fields.filter(f => !f.visibility || f.visibility.list);
+  public field(config: IEntityFieldConfig): Entity {
+    this.fields.push(new EntityField(config));
+    return this;
   }
-  public get detailFields(): IEntityFieldConfig[] {
-    return this.config.fields.filter(f => !f.visibility || f.visibility.detail);
+  public get listFields(): EntityField[] {
+    return this.fields.filter(f => f.visible('list'));
+  }
+  public get detailFields(): EntityField[] {
+    return this.fields.filter(f => f.visible('detail'));
   }
 
   public menuItem = (): React.ReactNode => {

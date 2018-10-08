@@ -1,7 +1,4 @@
 import { Button, Card } from 'antd';
-// import { startCase } from 'lodash';
-// import * as moment from 'moment';
-import * as inflection from 'inflection';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { ResourceTable } from 'webpanel-antd';
@@ -40,10 +37,7 @@ export class EntityList extends React.Component<{
               columns={entity.listFields.map((field, i) => ({
                 key: i,
                 dataIndex: field.name,
-                title: inflection.transform(field.title || field.name, [
-                  'underscore',
-                  'titleize'
-                ])
+                title: field.title
               }))}
               detailButtonText="Edit"
             />

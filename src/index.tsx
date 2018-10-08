@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Auth, DummyAuth } from 'webpanel-auth';
 import {
-  AuthProps,
-  AuthFormProps,
-  AuthContentProps
-} from 'webpanel-auth/lib/Auth';
+  Auth,
+  DummyAuth,
+  AuthContentProps,
+  AuthFormProps
+} from 'webpanel-auth';
+import { AuthProps } from 'webpanel-auth/lib/Auth';
 import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
 import { LoginForm } from 'webpanel-antd';
 

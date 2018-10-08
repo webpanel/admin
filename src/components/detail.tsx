@@ -1,6 +1,4 @@
 import { Card } from 'antd';
-// import { startCase } from 'lodash';
-import * as inflection from 'inflection';
 import * as React from 'react';
 import {
   FormField,
@@ -39,10 +37,7 @@ export class EntityDetail extends React.Component<{
                   {entity.detailFields.map((field, i) => (
                     <FormField
                       key={i}
-                      label={inflection.transform(field.title || field.name, [
-                        'underscore',
-                        'titleize'
-                      ])}
+                      label={field.title}
                       name={field.name}
                       formContext={formContext}
                     >
