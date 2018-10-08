@@ -12,7 +12,7 @@ import {
 import { Entity } from '../../model/Entity';
 
 export class EntityList extends React.Component<{
-  entity: Entity;
+  entity: Entity<any>;
   dataSource: DataSource;
 }> {
   public render() {
@@ -37,7 +37,8 @@ export class EntityList extends React.Component<{
               columns={entity.listFields.map((field, i) => ({
                 key: i,
                 dataIndex: field.name,
-                title: field.title
+                title: field.title,
+                render: field.render
               }))}
               detailButtonText="Edit"
             />

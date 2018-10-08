@@ -6,7 +6,7 @@ export interface IAdminProps {
     auth?: (AuthProps | DummyAuthProps) & {
         type: 'dummy' | 'oauth';
     };
-    entities: Entity[];
+    entities: Entity<any>[];
 }
 export declare class Admin extends React.Component<IAdminProps> {
     static Entity: typeof Entity;

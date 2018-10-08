@@ -2,7 +2,6 @@ import { Card } from 'antd';
 import * as React from 'react';
 import {
   FormField,
-  Input,
   ResourceForm,
   ResourceFormButtons,
   RouteComponentProps
@@ -13,7 +12,7 @@ import { DataSource, Resource, ResourceLayer } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
 
 export class EntityDetail extends React.Component<{
-  entity: Entity;
+  entity: Entity<any>;
   route: RouteComponentProps<any>;
   dataSource: DataSource;
 }> {

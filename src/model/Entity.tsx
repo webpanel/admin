@@ -14,8 +14,8 @@ interface IEntityConfig {
   title?: string;
 }
 
-export class Entity {
-  public fields: EntityField[] = [];
+export class Entity<T> {
+  public fields: EntityField<T>[] = [];
 
   constructor(private readonly config: IEntityConfig) {}
 
@@ -33,14 +33,14 @@ export class Entity {
     return this.config.name;
   }
 
-  public field(config: IEntityFieldConfig): Entity {
+  public field(config: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityField(config));
     return this;
   }
-  public get listFields(): EntityField[] {
+  public get listFields(): EntityField<T>[] {
     return this.fields.filter(f => f.visible('list'));
   }
-  public get detailFields(): EntityField[] {
+  public get detailFields(): EntityField<T>[] {
     return this.fields.filter(f => f.visible('detail'));
   }
 

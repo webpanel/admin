@@ -5,7 +5,7 @@ import { Layout } from 'webpanel-antd';
 import { LayoutProps } from 'webpanel-antd/lib/layout/Layout';
 
 export interface ILayoutProps extends LayoutProps {
-  entities: Entity[];
+  entities: Entity<any>[];
 }
 
 export class AdminLayout extends React.Component<ILayoutProps> {
