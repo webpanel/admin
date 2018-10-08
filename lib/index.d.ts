@@ -9,8 +9,8 @@ export interface IAdminProps {
         type: 'dummy' | 'oauth';
     };
     entities: Entity<any>[];
-    menuItems?: React.ReactNode;
-    structureItems?: React.ReactNode;
+    menuItems?: React.ReactNode[];
+    structureItems?: React.ReactNode[];
 }
 export declare class Admin extends React.Component<IAdminProps> {
     static Entity: typeof Entity;

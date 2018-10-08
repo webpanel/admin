@@ -20,8 +20,8 @@ export interface IAdminProps {
     type: 'dummy' | 'oauth';
   };
   entities: Entity<any>[];
-  menuItems?: React.ReactNode;
-  structureItems?: React.ReactNode;
+  menuItems?: React.ReactNode[];
+  structureItems?: React.ReactNode[];
 }
 
 export class Admin extends React.Component<IAdminProps> {
