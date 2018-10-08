@@ -6,16 +6,20 @@ import { LayoutProps } from 'webpanel-antd/lib/layout/Layout';
 
 export interface ILayoutProps extends LayoutProps {
   entities: Entity<any>[];
+  menuItems?: React.ReactNode[];
+  structureItems?: React.ReactNode[];
 }
 
 export class AdminLayout extends React.Component<ILayoutProps> {
   render() {
-    const { entities, ...props } = this.props;
+    const { entities, menuItems, structureItems, ...props } = this.props;
     return (
       <Layout {...props}>
-        <Layout.Menu>{entities.map(x => x.menuItem())}</Layout.Menu>
+        <Layout.Menu>
+          {menuItems || entities.map(x => x.menuItem())}
+        </Layout.Menu>
         <Layout.Structure>
-          {entities.map(x => x.structureItem())}
+          {structureItems || entities.map(x => x.structureItem())}
         </Layout.Structure>
       </Layout>
     );
