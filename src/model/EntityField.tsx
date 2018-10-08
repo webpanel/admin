@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as inflection from 'inflection';
 import * as moment from 'moment';
 import { Input, FormField } from 'webpanel-antd';
-import { Input as AntdInput, InputNumber } from 'antd';
+import { Input as AntdInput, InputNumber, Checkbox } from 'antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
 import { DatePicker } from '../components/date-picker';
@@ -125,6 +125,8 @@ export class EntityField<T> {
         return <DatePicker />;
       case 'datetime':
         return <DatePicker showTime={true} />;
+      case 'boolean':
+        return <Checkbox />;
     }
     return `unknown type ${type}`;
   }
