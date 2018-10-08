@@ -3,7 +3,7 @@ import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Entity } from './Entity';
 import { Thunk } from '../thunk';
 export interface IEntityFieldInput {
-    type?: 'string' | 'number' | 'text' | 'date' | 'datetime';
+    type?: 'string' | 'number' | 'text' | 'date' | 'datetime' | 'boolean';
 }
 export interface IEntityFieldRelationship {
     type?: 'relationship';

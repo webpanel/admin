@@ -11,7 +11,7 @@ import { RelationField } from '../components/relation-field';
 import { Thunk, getThunkValue } from '../thunk';
 
 export interface IEntityFieldInput {
-  type?: 'string' | 'number' | 'text' | 'date' | 'datetime';
+  type?: 'string' | 'number' | 'text' | 'date' | 'datetime' | 'boolean';
 }
 
 export interface IEntityFieldRelationship {
@@ -83,6 +83,8 @@ export class EntityField<T> {
         case 'date':
         case 'datetime':
           return value => moment(value).calendar();
+        case 'boolean':
+          return value => (value ? '✓' : '✗');
         case 'relationship':
           const { targetEntity, toMany } = this
             .config as IEntityFieldRelationship;
