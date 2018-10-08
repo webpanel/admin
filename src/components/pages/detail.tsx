@@ -1,7 +1,6 @@
 import { Card } from 'antd';
 import * as React from 'react';
 import {
-  FormField,
   ResourceForm,
   ResourceFormButtons,
   RouteComponentProps
@@ -33,16 +32,9 @@ export class EntityDetail extends React.Component<{
               formResource={resource}
               render={(formContext: FormContext) => (
                 <>
-                  {entity.detailFields.map((field, i) => (
-                    <FormField
-                      key={i}
-                      label={field.title}
-                      name={field.name}
-                      formContext={formContext}
-                    >
-                      {field.inputElement()}
-                    </FormField>
-                  ))}
+                  {entity.detailFields.map((field, i) =>
+                    field.fieldElement(formContext, i)
+                  )}
                   <ResourceFormButtons formContext={formContext} />
                 </>
               )}

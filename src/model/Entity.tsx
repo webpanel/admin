@@ -8,16 +8,18 @@ import { EntityDetail } from '../components/pages/detail';
 import { EntityList } from '../components/pages/list';
 import { IEntityFieldConfig, EntityField } from './EntityField';
 
-interface IEntityConfig {
+interface IEntityConfig<T> {
   name: string;
   dataSource: DataSource;
   title?: string;
+
+  render?: ((value: T) => string);
 }
 
 export class Entity<T> {
   public fields: EntityField<T>[] = [];
 
-  constructor(private readonly config: IEntityConfig) {}
+  constructor(private readonly config: IEntityConfig<T>) {}
 
   public get structureName(): string {
     return `${inflection.transform(this.config.name, [
@@ -32,9 +34,24 @@ export class Entity<T> {
   public get name(): string {
     return this.config.name;
   }
+  public get dataSource(): DataSource {
+    return this.config.dataSource;
+  }
+  public get render(): ((value: T) => string) {
+    if (this.config.render) {
+      return this.config.render;
+    }
+    return (value: any) => {
+      return this.searchableFields.map(x => value[x.name]).join(', ');
+    };
+  }
 
-  public field(config: IEntityFieldConfig<T>): Entity<T> {
-    this.fields.push(new EntityField(config));
+  public field(config: string | IEntityFieldConfig<T>): Entity<T> {
+    if (typeof config === 'string') {
+      this.fields.push(new EntityField({ name: config }, this));
+    } else {
+      this.fields.push(new EntityField(config, this));
+    }
     return this;
   }
   public get listFields(): EntityField<T>[] {
@@ -42,6 +59,13 @@ export class Entity<T> {
   }
   public get detailFields(): EntityField<T>[] {
     return this.fields.filter(f => f.visible('detail'));
+  }
+  public get searchableFields(): EntityField<T>[] {
+    const fields = this.fields.filter(f => f.visible('searchable', true));
+    if (fields.length === 0) {
+      return [this.listFields[0]];
+    }
+    return fields;
   }
 
   public menuItem = (): React.ReactNode => {

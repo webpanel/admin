@@ -21,7 +21,7 @@ export class EntityList extends React.Component<{
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
-        fields={['id', ...entity.listFields.map(x => x.name)]}
+        fields={['id', ...entity.listFields.map(x => x.fetchField)]}
         initialSorting={[{ columnKey: 'id', order: SortInfoOrder.ascend }]}
         render={(resource: ResourceCollection) => (
           <Card
@@ -34,12 +34,19 @@ export class EntityList extends React.Component<{
           >
             <ResourceTable
               resourceCollection={resource}
-              columns={entity.listFields.map((field, i) => ({
-                key: i,
-                dataIndex: field.name,
-                title: field.title,
-                render: field.render
-              }))}
+              columns={entity.listFields.map((field, i) => {
+                const { render } = field;
+                return {
+                  key: i,
+                  dataIndex: field.name,
+                  title: field.title,
+                  render: render
+                    ? (value: any): React.ReactNode => {
+                        return render(value);
+                      }
+                    : undefined
+                };
+              })}
               detailButtonText="Edit"
             />
           </Card>
