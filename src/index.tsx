@@ -12,6 +12,8 @@ import { LoginForm } from 'webpanel-antd';
 import { Entity } from './model/Entity';
 import { AdminLayout } from './components/layout';
 
+export { Entity } from './model/Entity';
+
 export interface IAdminProps {
   auth?: (AuthProps | DummyAuthProps) & {
     type: 'dummy' | 'oauth';
