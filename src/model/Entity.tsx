@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
 
-import { EntityDetail } from '../components/pages/detail';
+import { EntityEdit } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
 import { IEntityFieldConfig, EntityField } from './EntityField';
 
@@ -85,7 +85,7 @@ export class Entity<T> {
           key="/new"
           name="New"
           content={(route: RouteComponentProps<any>) => (
-            <EntityDetail
+            <EntityEdit
               entity={this}
               dataSource={this.config.dataSource}
               route={route}
@@ -96,7 +96,7 @@ export class Entity<T> {
           key="/:id"
           name="Detail"
           content={(route: RouteComponentProps<any>) => (
-            <EntityDetail
+            <EntityEdit
               entity={this}
               dataSource={this.config.dataSource}
               route={route}

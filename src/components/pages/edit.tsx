@@ -10,7 +10,7 @@ import { DataSource, Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 
-export class EntityDetail extends React.Component<{
+export class EntityEdit extends React.Component<{
   entity: Entity<any>;
   route: RouteComponentProps<any>;
   dataSource: DataSource;
