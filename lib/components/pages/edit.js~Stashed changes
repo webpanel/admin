@@ -21,15 +21,12 @@ var EntityEdit = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EntityEdit.prototype.render = function () {
-        var _this = this;
         var _a = this.props, entity = _a.entity, route = _a.route;
-        return (React.createElement(ResourceLayer, { name: entity.name, id: route.match.params.id, fields: entity.editFields.map(function (f) { return f.name; }), dataSource: entity.dataSource, onCreate: function (id) {
-                if (_this.props.detailOnCreate) {
-                    route.history.push(id);
-                }
+        return (React.createElement(ResourceLayer, { name: entity.name, id: route.match.params.id, fields: entity.detailFields.map(function (f) { return f.name; }), dataSource: entity.dataSource, onCreate: function (id) {
+                route.history.push(id);
             }, render: function (resource) { return (React.createElement(Card, null,
                 React.createElement(ResourceForm, { formResource: resource, render: function (formContext) { return (React.createElement(React.Fragment, null,
-                        entity.editFields.map(function (field, i) {
+                        entity.detailFields.map(function (field, i) {
                             return field.fieldElement(formContext, i);
                         }),
                         React.createElement(ResourceFormButtons, { formContext: formContext }))); } }))); } }));

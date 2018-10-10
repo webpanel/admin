@@ -5,6 +5,7 @@ interface IEntityConfig<T> {
     name: string;
     dataSource: DataSource;
     title?: string;
+    showDetailPage?: boolean;
     render?: ((value: T) => string);
 }
 export declare class Entity<T> {
