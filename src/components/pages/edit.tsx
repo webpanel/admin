@@ -6,23 +6,22 @@ import {
   RouteComponentProps
 } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { DataSource, Resource, ResourceLayer } from 'webpanel-data';
+import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 
 export class EntityEdit extends React.Component<{
   entity: Entity<any>;
   route: RouteComponentProps<any>;
-  dataSource: DataSource;
 }> {
   public render() {
-    const { entity, route, dataSource } = this.props;
+    const { entity, route } = this.props;
     return (
       <ResourceLayer
         name={entity.name}
         id={route.match.params.id}
         fields={entity.detailFields.map(f => f.name)}
-        dataSource={dataSource}
+        dataSource={entity.dataSource}
         onCreate={(id: string) => {
           route.history.push(id);
         }}

@@ -85,22 +85,14 @@ export class Entity<T> {
           key="/new"
           name="New"
           content={(route: RouteComponentProps<any>) => (
-            <EntityEdit
-              entity={this}
-              dataSource={this.config.dataSource}
-              route={route}
-            />
+            <EntityEdit entity={this} route={route} />
           )}
         />
         <Layout.StructureItem
           key="/:id"
           name="Detail"
           content={(route: RouteComponentProps<any>) => (
-            <EntityEdit
-              entity={this}
-              dataSource={this.config.dataSource}
-              route={route}
-            />
+            <EntityEdit entity={this} route={route} />
           )}
         />
       </Layout.StructureItem>
