@@ -57,8 +57,8 @@ export class Entity<T> {
   public get listFields(): EntityField<T>[] {
     return this.fields.filter(f => f.visible('list'));
   }
-  public get detailFields(): EntityField<T>[] {
-    return this.fields.filter(f => f.visible('detail'));
+  public get editFields(): EntityField<T>[] {
+    return this.fields.filter(f => f.visible('edit'));
   }
   public get searchableFields(): EntityField<T>[] {
     const fields = this.fields.filter(f => f.visible('searchable', true));

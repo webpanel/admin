@@ -25,7 +25,7 @@ export interface IEntityFieldBaseConfig<T> {
   title?: string;
   visibility?: {
     list?: boolean;
-    detail?: boolean;
+    edit?: boolean;
     search?: boolean;
   };
   render?: (record: T) => React.ReactNode;
@@ -63,7 +63,7 @@ export class EntityField<T> {
   }
 
   public visible(
-    type: 'list' | 'detail' | 'searchable',
+    type: 'list' | 'edit' | 'searchable',
     strict: boolean = false
   ): boolean {
     if (strict && !this.config.visibility) {

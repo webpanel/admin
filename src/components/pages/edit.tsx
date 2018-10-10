@@ -20,7 +20,7 @@ export class EntityEdit extends React.Component<{
       <ResourceLayer
         name={entity.name}
         id={route.match.params.id}
-        fields={entity.detailFields.map(f => f.name)}
+        fields={entity.editFields.map(f => f.name)}
         dataSource={entity.dataSource}
         onCreate={(id: string) => {
           route.history.push(id);
@@ -31,7 +31,7 @@ export class EntityEdit extends React.Component<{
               formResource={resource}
               render={(formContext: FormContext) => (
                 <>
-                  {entity.detailFields.map((field, i) =>
+                  {entity.editFields.map((field, i) =>
                     field.fieldElement(formContext, i)
                   )}
                   <ResourceFormButtons formContext={formContext} />
