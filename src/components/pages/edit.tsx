@@ -13,6 +13,7 @@ import { Entity } from '../../model/Entity';
 export class EntityEdit extends React.Component<{
   entity: Entity<any>;
   route: RouteComponentProps<any>;
+  detailOnCreate?: boolean;
 }> {
   public render() {
     const { entity, route } = this.props;
@@ -23,7 +24,9 @@ export class EntityEdit extends React.Component<{
         fields={entity.editFields.map(f => f.name)}
         dataSource={entity.dataSource}
         onCreate={(id: string) => {
-          route.history.push(id);
+          if (this.props.detailOnCreate) {
+            route.history.push(id);
+          }
         }}
         render={(resource: Resource) => (
           <Card>

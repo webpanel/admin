@@ -14,6 +14,7 @@ import { Entity } from '../../model/Entity';
 export class EntityList extends React.Component<{
   entity: Entity<any>;
   dataSource: DataSource;
+  detailButtonText?: string;
 }> {
   public render() {
     const { entity } = this.props;
@@ -47,7 +48,9 @@ export class EntityList extends React.Component<{
                     : undefined
                 };
               })}
-              detailButtonText="Edit"
+              detailButtonText={
+                this.props.detailButtonText || 'Edit'
+              }
             />
           </Card>
         )}

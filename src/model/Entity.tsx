@@ -1,5 +1,6 @@
 import * as inflection from 'inflection';
 import * as React from 'react';
+import { Redirect } from 'react-router';
 
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
@@ -7,11 +8,13 @@ import { DataSource } from 'webpanel-data';
 import { EntityEdit } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
 import { IEntityFieldConfig, EntityField } from './EntityField';
+import { EntityDetail } from "../components/pages/detail";
 
 interface IEntityConfig<T> {
   name: string;
   dataSource: DataSource;
   title?: string;
+  showDetailPage?: boolean;
 
   render?: ((value: T) => string);
 }
@@ -78,19 +81,44 @@ export class Entity<T> {
         key={`/${this.structureName}`}
         name={this.title}
         content={
-          <EntityList entity={this} dataSource={this.config.dataSource} />
+          <EntityList
+            entity={this}
+            dataSource={this.config.dataSource}
+            detailButtonText={
+              this.config.showDetailPage
+                ? 'Detail'
+                : 'Edit'
+            }
+          />
         }
       >
         <Layout.StructureItem
           key="/new"
           name="New"
           content={(route: RouteComponentProps<any>) => (
-            <EntityEdit entity={this} route={route} />
+            <EntityEdit
+              entity={this}
+              route={route}
+              detailOnCreate={this.config.showDetailPage}
+            />
           )}
         />
         <Layout.StructureItem
           key="/:id"
           name="Detail"
+          content={(route: RouteComponentProps<any>) => (
+            this.config.showDetailPage
+            ? <EntityDetail
+              entity={this}
+              dataSource={this.dataSource}
+              route={route}
+            />
+            : <Redirect push to={`${route.match.params.id}/edit`}/>
+          )}
+        />
+        <Layout.StructureItem
+          key="/:id/edit"
+          name="Edit"
           content={(route: RouteComponentProps<any>) => (
             <EntityEdit entity={this} route={route} />
           )}
