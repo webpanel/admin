@@ -7,8 +7,8 @@ import { DataSource } from 'webpanel-data';
 
 import { EntityEdit } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
-import { IEntityFieldConfig, EntityField } from './EntityField';
 import { EntityDetail } from "../components/pages/detail";
+import { IEntityFieldConfig, EntityField } from './EntityField';
 
 interface IEntityConfig<T> {
   name: string;
@@ -99,7 +99,7 @@ export class Entity<T> {
             <EntityEdit
               entity={this}
               route={route}
-              detailOnCreate={this.config.showDetailPage}
+              pushDetailOnCreate={this.config.showDetailPage}
             />
           )}
         />
@@ -110,10 +110,9 @@ export class Entity<T> {
             this.config.showDetailPage
             ? <EntityDetail
               entity={this}
-              dataSource={this.dataSource}
               route={route}
             />
-            : <Redirect push to={`${route.match.params.id}/edit`}/>
+            : <Redirect to={`${route.match.params.id}/edit`}/>
           )}
         />
         <Layout.StructureItem

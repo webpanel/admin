@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { DataSource } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
-export declare class EntityList extends React.Component<{
+export interface IEntityListProps {
     entity: Entity<any>;
     dataSource: DataSource;
-    detailButtonText?: string;
-}> {
+    detailButtonText: string;
+}
+export declare class EntityList extends React.Component<IEntityListProps> {
     render(): JSX.Element;
 }

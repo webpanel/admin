@@ -3,19 +3,18 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { RouteComponentProps } from 'webpanel-antd';
 import {
-  DataSource, Resource,
+  Resource,
   ResourceLayer,
 } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 
-export class EntityDetail extends React.Component<{
+export interface IEntityDetailProps {
   entity: Entity<any>;
-  dataSource: DataSource;
   route: RouteComponentProps<any>;
+}
 
-  render?: (record: any) => React.ReactNode;
-}> {
+export class EntityDetail extends React.Component<IEntityDetailProps> {
   public render() {
     const { entity } = this.props;
     const { route: { match: { params: { id } } } } = this.props;
@@ -24,7 +23,7 @@ export class EntityDetail extends React.Component<{
       <ResourceLayer
         name={entity.name}
         id={id}
-        dataSource={this.props.dataSource}
+        dataSource={entity.dataSource}
         fields={['id', ...entity.listFields.map(x => x.fetchField)]}
         render={(resource: Resource) => (
           <Card
