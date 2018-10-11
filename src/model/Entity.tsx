@@ -5,17 +5,22 @@ import { Redirect } from 'react-router';
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
 
-import { EntityEdit } from '../components/pages/edit';
+import { EntityEdit, IEntityEditProps } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
-import { EntityDetail } from '../components/pages/detail';
+import { EntityDetail, IEntityDetailProps } from '../components/pages/detail';
 import { IEntityFieldConfig, EntityField } from './EntityField';
+import { Thunk } from '../thunk';
 
-interface IEntityConfig<T> {
+export interface IEntityConfig<T> {
   name: string;
   icon?: string;
   dataSource: DataSource;
   title?: string;
   showDetailPage?: boolean;
+  layouts?: {
+    detail?: Thunk<React.ReactElement<IEntityDetailProps>>;
+    edit?: Thunk<React.ReactElement<IEntityEditProps>>;
+  };
 
   render?: ((value: T) => string);
 }
@@ -32,15 +37,19 @@ export class Entity<T> {
       'pluralize'
     ])}`;
   }
+
   public get title(): string {
     return inflection.titleize(this.config.title || this.config.name);
   }
+
   public get name(): string {
     return this.config.name;
   }
+
   public get dataSource(): DataSource {
     return this.config.dataSource;
   }
+
   public get render(): ((value: T) => string) {
     if (this.config.render) {
       return this.config.render;
@@ -58,9 +67,11 @@ export class Entity<T> {
     }
     return this;
   }
+
   public get listFields(): EntityField<T>[] {
     return this.fields.filter(f => f.visible('list'));
   }
+
   public get editFields(): EntityField<T>[] {
     return this.fields.filter(f => f.visible('edit'));
   }
@@ -73,6 +84,18 @@ export class Entity<T> {
       return [this.listFields[0]];
     }
     return fields;
+  }
+
+  public get detailLayout():
+    | Thunk<React.ReactElement<IEntityDetailProps>>
+    | undefined {
+    return this.config.layouts ? this.config.layouts.detail : undefined;
+  }
+
+  public get editLayout():
+    | Thunk<React.ReactElement<IEntityEditProps>>
+    | undefined {
+    return this.config.layouts ? this.config.layouts.edit : undefined;
   }
 
   public menuItem = (): React.ReactNode => {
@@ -112,22 +135,33 @@ export class Entity<T> {
         <Layout.StructureItem
           key="/:id"
           name="Detail"
-          content={(route: RouteComponentProps<any>) =>
-            this.config.showDetailPage ? (
-              <EntityDetail entity={this} route={route} />
-            ) : (
-              <Redirect to={`${route.match.params.id}/edit`} />
-            )
-          }
+          content={this.getDetailPage}
         />
         <Layout.StructureItem
           key="/:id/edit"
           name="Edit"
-          content={(route: RouteComponentProps<any>) => (
-            <EntityEdit entity={this} route={route} />
-          )}
+          content={this.getEditPage}
         />
       </Layout.StructureItem>
     );
   };
+
+  private getDetailPage = (route: RouteComponentProps<any>) => {
+    if (this.config.showDetailPage) {
+      return this.detailLayout && typeof this.detailLayout === 'function' ? (
+        this.detailLayout(this, route)
+      ) : (
+        <EntityDetail entity={this} route={route} />
+      );
+    }
+
+    return <Redirect to={`${route.match.params.id}/edit`} />;
+  };
+
+  private getEditPage = (route: RouteComponentProps<any>) =>
+    this.editLayout && typeof this.editLayout === 'function' ? (
+      this.editLayout(this, route)
+    ) : (
+      <EntityEdit entity={this} route={route} />
+    );
 }
