@@ -10,11 +10,13 @@ import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 
-export class EntityEdit extends React.Component<{
+export interface IEntityEditProps {
   entity: Entity<any>;
   route: RouteComponentProps<any>;
-  detailOnCreate?: boolean;
-}> {
+  pushDetailOnCreate?: boolean;
+}
+
+export class EntityEdit extends React.Component<IEntityEditProps> {
   public render() {
     const { entity, route } = this.props;
     return (
@@ -24,7 +26,7 @@ export class EntityEdit extends React.Component<{
         fields={entity.editFields.map(f => f.name)}
         dataSource={entity.dataSource}
         onCreate={(id: string) => {
-          if (this.props.detailOnCreate) {
+          if (this.props.pushDetailOnCreate) {
             route.history.push(id);
           }
         }}

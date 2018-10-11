@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'webpanel-antd';
 import { Entity } from '../../model/Entity';
-export declare class EntityEdit extends React.Component<{
+export interface IEntityEditProps {
     entity: Entity<any>;
     route: RouteComponentProps<any>;
-    detailOnCreate?: boolean;
-}> {
+    pushDetailOnCreate?: boolean;
+}
+export declare class EntityEdit extends React.Component<IEntityEditProps> {
     render(): JSX.Element;
 }
