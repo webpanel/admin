@@ -2,10 +2,7 @@ import { Button, Card, Col, Row } from 'antd';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { RouteComponentProps } from 'webpanel-antd';
-import {
-  Resource,
-  ResourceLayer,
-} from 'webpanel-data';
+import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 
@@ -17,7 +14,13 @@ export interface IEntityDetailProps {
 export class EntityDetail extends React.Component<IEntityDetailProps> {
   public render() {
     const { entity } = this.props;
-    const { route: { match: { params: { id } } } } = this.props;
+    const {
+      route: {
+        match: {
+          params: { id }
+        }
+      }
+    } = this.props;
 
     return (
       <ResourceLayer
@@ -34,18 +37,14 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               </Link>
             }
           >
-            {
-              entity.listFields.map((field, i) => (
-                <Row key={field.name}>
-                  <Col span={12}>
-                    {`${field.title}`}
-                  </Col>
-                  <Col span={12}>
-                    {resource.data && resource.data[field.name]}
-                  </Col>
-                </Row>
-              ))
-            }
+            {entity.listFields.map((field, i) => (
+              <Row key={field.name}>
+                <Col span={12}>{`${field.title}`}</Col>
+                <Col span={12}>
+                  {resource.data && field.render(resource.data)}
+                </Col>
+              </Row>
+            ))}
           </Card>
         )}
       />

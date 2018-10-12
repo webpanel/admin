@@ -72,14 +72,10 @@ export class EntityField<T> {
     return !this.config.visibility || !!this.config.visibility[type];
   }
 
-  public get render(): ((record: T) => React.ReactNode) | undefined {
+  public get render(): ((record: T) => React.ReactNode) {
     const { render, type } = this.config;
     if (!render) {
       switch (type) {
-        case 'string':
-        case 'text':
-        case 'number':
-          return undefined;
         case 'date':
         case 'datetime':
           return value => moment(value).calendar();
@@ -106,7 +102,9 @@ export class EntityField<T> {
         return render(record);
       };
     }
-    return undefined;
+    return (values: any) => {
+      return values[this.name];
+    };
   }
 
   public inputElement(): React.ReactNode {

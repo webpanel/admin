@@ -29,7 +29,7 @@ export declare class EntityField<T> {
     readonly name: string;
     readonly fetchField: string;
     visible(type: 'list' | 'edit' | 'searchable', strict?: boolean): boolean;
-    readonly render: ((record: T) => React.ReactNode) | undefined;
+    readonly render: ((record: T) => React.ReactNode);
     inputElement(): React.ReactNode;
     fieldElement(formContext: FormContext, key: string | number): React.ReactNode;
     private relationshipFieldElement;

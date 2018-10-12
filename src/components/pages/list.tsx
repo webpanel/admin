@@ -43,11 +43,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                   key: i,
                   dataIndex: field.name,
                   title: field.title,
-                  render: render
-                    ? (value: any): React.ReactNode => {
-                        return render(value);
-                      }
-                    : undefined
+                  render
                 };
               })}
               detailButtonText={this.props.detailButtonText}
