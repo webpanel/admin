@@ -16,6 +16,7 @@ export interface IEntityFieldBaseConfig<T> {
     visibility?: {
         list?: boolean;
         edit?: boolean;
+        detail?: boolean;
         search?: boolean;
     };
     render?: (record: T) => React.ReactNode;
@@ -28,7 +29,7 @@ export declare class EntityField<T> {
     readonly title: string;
     readonly name: string;
     readonly fetchField: string;
-    visible(type: 'list' | 'edit' | 'searchable', strict?: boolean): boolean;
+    visible(type: 'list' | 'edit' | 'searchable' | 'detail', strict?: boolean): boolean;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(): React.ReactNode;
     fieldElement(formContext: FormContext, key: string | number): React.ReactNode;

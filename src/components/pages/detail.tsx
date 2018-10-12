@@ -37,7 +37,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               </Link>
             }
           >
-            {entity.listFields.map((field, i) => (
+            {entity.detailFields.map((field, i) => (
               <Row key={field.name}>
                 <Col span={12}>{`${field.title}`}</Col>
                 <Col span={12}>

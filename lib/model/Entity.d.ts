@@ -21,6 +21,7 @@ export declare class Entity<T> {
     field(config: string | IEntityFieldConfig<T>): Entity<T>;
     readonly listFields: EntityField<T>[];
     readonly editFields: EntityField<T>[];
+    readonly detailFields: EntityField<T>[];
     readonly searchableFields: EntityField<T>[];
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
