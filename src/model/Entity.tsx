@@ -7,9 +7,10 @@ import { DataSource } from 'webpanel-data';
 
 import { EntityEdit, IEntityEditProps } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
-import { EntityDetail, IEntityDetailProps } from '../components/pages/detail';
+import { IEntityDetailProps } from '../components/pages/detail';
 import { IEntityFieldConfig, EntityField } from './EntityField';
-import { Thunk } from '../thunk';
+import { EntityDetailLayout } from '../components/layouts/entity.detail';
+import { EntityEditLayout } from '../components/layouts/entity.edit';
 
 export interface IEntityConfig<T> {
   name: string;
@@ -18,8 +19,10 @@ export interface IEntityConfig<T> {
   title?: string;
   showDetailPage?: boolean;
   layouts?: {
-    detail?: Thunk<React.ReactElement<IEntityDetailProps>>;
-    edit?: Thunk<React.ReactElement<IEntityEditProps>>;
+    detail?: (
+      props: IEntityDetailProps
+    ) => React.ReactElement<IEntityDetailProps>;
+    edit?: (props: IEntityDetailProps) => React.ReactElement<IEntityEditProps>;
   };
 
   render?: ((value: T) => string);
@@ -87,15 +90,15 @@ export class Entity<T> {
   }
 
   public get detailLayout():
-    | Thunk<React.ReactElement<IEntityDetailProps>>
+    | ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>)
     | undefined {
-    return this.config.layouts ? this.config.layouts.detail : undefined;
+    return this.config.layouts && this.config.layouts.detail;
   }
 
   public get editLayout():
-    | Thunk<React.ReactElement<IEntityEditProps>>
+    | ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>)
     | undefined {
-    return this.config.layouts ? this.config.layouts.edit : undefined;
+    return this.config.layouts && this.config.layouts.edit;
   }
 
   public menuItem = (): React.ReactNode => {
@@ -135,33 +138,32 @@ export class Entity<T> {
         <Layout.StructureItem
           key="/:id"
           name="Detail"
-          content={this.getDetailPage}
+          content={this.getDetailPageLayout}
         />
         <Layout.StructureItem
           key="/:id/edit"
           name="Edit"
-          content={this.getEditPage}
+          content={this.getEditPageLayout}
         />
       </Layout.StructureItem>
     );
   };
 
-  private getDetailPage = (route: RouteComponentProps<any>) => {
+  private getDetailPageLayout = (route: RouteComponentProps<any>) => {
     if (this.config.showDetailPage) {
-      return this.detailLayout && typeof this.detailLayout === 'function' ? (
-        this.detailLayout(this, route)
-      ) : (
-        <EntityDetail entity={this} route={route} />
-      );
+      if (this.detailLayout) {
+        return this.detailLayout({ entity: this, route });
+      }
+      return <EntityDetailLayout entity={this} route={route} />;
     }
 
     return <Redirect to={`${route.match.params.id}/edit`} />;
   };
 
-  private getEditPage = (route: RouteComponentProps<any>) =>
-    this.editLayout && typeof this.editLayout === 'function' ? (
-      this.editLayout(this, route)
-    ) : (
-      <EntityEdit entity={this} route={route} />
-    );
+  private getEditPageLayout = (route: RouteComponentProps<any>) => {
+    if (this.editLayout) {
+      return this.editLayout({ entity: this, route });
+    }
+    return <EntityEditLayout entity={this} route={route} />;
+  };
 }

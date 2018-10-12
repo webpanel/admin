@@ -3,7 +3,6 @@ import { DataSource } from 'webpanel-data';
 import { IEntityEditProps } from '../components/pages/edit';
 import { IEntityDetailProps } from '../components/pages/detail';
 import { IEntityFieldConfig, EntityField } from './EntityField';
-import { Thunk } from '../thunk';
 export interface IEntityConfig<T> {
     name: string;
     icon?: string;
@@ -11,8 +10,8 @@ export interface IEntityConfig<T> {
     title?: string;
     showDetailPage?: boolean;
     layouts?: {
-        detail?: Thunk<React.ReactElement<IEntityDetailProps>>;
-        edit?: Thunk<React.ReactElement<IEntityEditProps>>;
+        detail?: (props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>;
+        edit?: (props: IEntityDetailProps) => React.ReactElement<IEntityEditProps>;
     };
     render?: ((value: T) => string);
 }
@@ -30,10 +29,10 @@ export declare class Entity<T> {
     readonly editFields: EntityField<T>[];
     readonly detailFields: EntityField<T>[];
     readonly searchableFields: EntityField<T>[];
-    readonly detailLayout: Thunk<React.ReactElement<IEntityDetailProps>> | undefined;
-    readonly editLayout: Thunk<React.ReactElement<IEntityEditProps>> | undefined;
+    readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
+    readonly editLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
-    private getDetailPage;
-    private getEditPage;
+    private getDetailPageLayout;
+    private getEditPageLayout;
 }
