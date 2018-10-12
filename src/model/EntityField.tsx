@@ -79,22 +79,23 @@ export class EntityField<T> {
       switch (type) {
         case 'date':
         case 'datetime':
-          return value => moment(value).calendar();
+          return values => moment(values[this.name]).calendar();
         case 'boolean':
-          return value => (value ? '✓' : '✗');
+          return values => (values[this.name] ? '✓' : '✗');
         case 'relationship':
           const { targetEntity, toMany } = this
             .config as IEntityFieldRelationship;
           if (targetEntity) {
             const render = getThunkValue(targetEntity).render;
-            return value => {
+            return values => {
+              const value = values[this.name];
               if (toMany && Array.isArray(value)) {
                 return value
                   .map(x => render && render(x))
                   .filter(x => x)
                   .join(', ');
               }
-              return render && render(value);
+              return render && render(values);
             };
           }
       }
