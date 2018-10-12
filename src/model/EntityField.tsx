@@ -145,12 +145,18 @@ export class EntityField<T> {
       );
     }
 
+    let valuePropName = 'value';
+    if (this.config.type === 'boolean') {
+      valuePropName = 'checked';
+    }
+
     return (
       <FormField
         key={key}
         label={this.title}
         name={this.name}
         formContext={formContext}
+        valuePropName={valuePropName}
       >
         {this.inputElement()}
       </FormField>
