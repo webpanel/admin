@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Card, Form } from 'antd';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { RouteComponentProps } from 'webpanel-antd';
@@ -22,6 +22,17 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       }
     } = this.props;
 
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
+    };
+
     return (
       <ResourceLayer
         name={entity.name}
@@ -37,14 +48,13 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               </Link>
             }
           >
-            {entity.detailFields.map((field, i) => (
-              <Row key={field.name}>
-                <Col span={12}>{`${field.title}`}</Col>
-                <Col span={12}>
+            <Form>
+              {entity.detailFields.map((field, i) => (
+                <Form.Item label={field.title} {...formItemLayout}>
                   {resource.data && field.render(resource.data)}
-                </Col>
-              </Row>
-            ))}
+                </Form.Item>
+              ))}
+            </Form>
           </Card>
         )}
       />
