@@ -7,11 +7,12 @@ import { DataSource } from 'webpanel-data';
 
 import { EntityEdit } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
-import { EntityDetail } from "../components/pages/detail";
+import { EntityDetail } from '../components/pages/detail';
 import { IEntityFieldConfig, EntityField } from './EntityField';
 
 interface IEntityConfig<T> {
   name: string;
+  icon?: string;
   dataSource: DataSource;
   title?: string;
   showDetailPage?: boolean;
@@ -72,7 +73,13 @@ export class Entity<T> {
   }
 
   public menuItem = (): React.ReactNode => {
-    return <Layout.MenuItem key={this.structureName} title={this.title} />;
+    return (
+      <Layout.MenuItem
+        key={this.structureName}
+        title={this.title}
+        icon={this.config.icon || 'folder'}
+      />
+    );
   };
 
   public structureItem = (): React.ReactNode => {
@@ -84,11 +91,7 @@ export class Entity<T> {
           <EntityList
             entity={this}
             dataSource={this.config.dataSource}
-            detailButtonText={
-              this.config.showDetailPage
-                ? 'Detail'
-                : 'Edit'
-            }
+            detailButtonText={this.config.showDetailPage ? 'Detail' : 'Edit'}
           />
         }
       >
@@ -106,14 +109,13 @@ export class Entity<T> {
         <Layout.StructureItem
           key="/:id"
           name="Detail"
-          content={(route: RouteComponentProps<any>) => (
-            this.config.showDetailPage
-            ? <EntityDetail
-              entity={this}
-              route={route}
-            />
-            : <Redirect to={`${route.match.params.id}/edit`}/>
-          )}
+          content={(route: RouteComponentProps<any>) =>
+            this.config.showDetailPage ? (
+              <EntityDetail entity={this} route={route} />
+            ) : (
+              <Redirect to={`${route.match.params.id}/edit`} />
+            )
+          }
         />
         <Layout.StructureItem
           key="/:id/edit"

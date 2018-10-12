@@ -3,6 +3,7 @@ import { DataSource } from 'webpanel-data';
 import { IEntityFieldConfig, EntityField } from './EntityField';
 interface IEntityConfig<T> {
     name: string;
+    icon?: string;
     dataSource: DataSource;
     title?: string;
     showDetailPage?: boolean;
