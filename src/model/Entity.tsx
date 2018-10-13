@@ -8,9 +8,19 @@ import { DataSource } from 'webpanel-data';
 import { EntityEdit, IEntityEditProps } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
-import { IEntityFieldConfig, EntityField } from './EntityField';
+import { EntityField, IEntityFieldConfig } from './EntityField';
 import { EntityDetailLayout } from '../components/layouts/entity.detail';
 import { EntityEditLayout } from '../components/layouts/entity.edit';
+import {
+  EntityFieldDate,
+  IEntityFieldDateConfig
+} from './fields/EntityFieldDate';
+import { EntityFieldNumber } from './fields/EntityFieldNumber';
+import { EntityFieldText } from './fields/EntityFieldText';
+import {
+  EntityFieldBoolean,
+  IEntityFieldBooleanConfig
+} from './fields/EntityFieldBoolean';
 
 export interface IEntityConfig<T> {
   name: string;
@@ -29,7 +39,7 @@ export interface IEntityConfig<T> {
 }
 
 export class Entity<T> {
-  public fields: EntityField<T>[] = [];
+  public fields: EntityField<T, any>[] = [];
 
   constructor(private readonly config: IEntityConfig<T>) {}
 
@@ -62,27 +72,27 @@ export class Entity<T> {
     };
   }
 
-  public field(config: string | IEntityFieldConfig<T>): Entity<T> {
-    if (typeof config === 'string') {
-      this.fields.push(new EntityField({ name: config }, this));
-    } else {
-      this.fields.push(new EntityField(config, this));
-    }
-    return this;
-  }
+  // public field(config: string | IEntityFieldConfig<T>): Entity<T> {
+  //   if (typeof config === 'string') {
+  //     this.fields.push(new EntityField({ name: config }, this));
+  //   } else {
+  //     this.fields.push(new EntityField(config, this));
+  //   }
+  //   return this;
+  // }
 
-  public get listFields(): EntityField<T>[] {
+  public get listFields(): EntityField<T, any>[] {
     return this.fields.filter(f => f.visible('list'));
   }
 
-  public get editFields(): EntityField<T>[] {
+  public get editFields(): EntityField<T, any>[] {
     return this.fields.filter(f => f.visible('edit'));
   }
-  public get detailFields(): EntityField<T>[] {
+  public get detailFields(): EntityField<T, any>[] {
     return this.fields.filter(f => f.visible('detail'));
   }
-  public get searchableFields(): EntityField<T>[] {
-    const fields = this.fields.filter(f => f.visible('searchable', true));
+  public get searchableFields(): EntityField<T, any>[] {
+    const fields = this.fields.filter(f => f.visible('search', true));
     if (fields.length === 0) {
       return [this.listFields[0]];
     }
@@ -166,4 +176,32 @@ export class Entity<T> {
     }
     return <EntityEditLayout entity={this} route={route} />;
   };
+
+  // fields
+  public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+    this.fields.push(new EntityField(name, config || {}, this));
+    return this;
+  }
+  public textField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+    this.fields.push(new EntityFieldText(name, config || {}, this));
+    return this;
+  }
+  public numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+    this.fields.push(new EntityFieldNumber(name, config || {}, this));
+    return this;
+  }
+  public dateField(
+    name: string,
+    config?: IEntityFieldDateConfig<T>
+  ): Entity<T> {
+    this.fields.push(new EntityFieldDate(name, config || {}, this));
+    return this;
+  }
+  public booleanField(
+    name: string,
+    config?: IEntityFieldBooleanConfig<T>
+  ): Entity<T> {
+    this.fields.push(new EntityFieldBoolean(name, config || {}, this));
+    return this;
+  }
 }
