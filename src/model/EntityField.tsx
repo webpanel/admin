@@ -1,185 +1,123 @@
 import * as React from 'react';
 import * as inflection from 'inflection';
-import * as moment from 'moment';
 import { Input, FormField } from 'webpanel-antd';
-import { Input as AntdInput, InputNumber, Checkbox } from 'antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
-import { DatePicker } from '../components/date-picker';
+// import { EntityField } from './_EntityField';
 import { Entity } from './Entity';
-import { RelationField } from '../components/relation-field';
-import { Thunk, getThunkValue } from '../thunk';
 
-export interface IEntityFieldInput {
-  type?: 'string' | 'number' | 'text' | 'date' | 'datetime' | 'boolean';
-}
+type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 
-export interface IEntityFieldRelationship {
-  type?: 'relationship';
-  targetEntity?: Thunk<Entity<any>>;
-  toMany?: boolean;
-}
-
-export interface IEntityFieldBaseConfig<T> {
-  name: string;
+export interface IEntityFieldConfig<T> {
   title?: string;
-  visibility?: {
-    list?: boolean;
-    edit?: boolean;
-    detail?: boolean;
-    search?: boolean;
-  };
+  visible?: FieldSections[];
+  hidden?: FieldSections[];
   render?: (record: T) => React.ReactNode;
 }
 
-export type IEntityFieldConfig<T> = IEntityFieldBaseConfig<T> &
-  (IEntityFieldInput | IEntityFieldRelationship);
-
-export class EntityField<T> {
+export class EntityField<T, C extends IEntityFieldConfig<T>> {
   constructor(
-    private readonly config: IEntityFieldConfig<T>,
+    public readonly name: string,
+    protected readonly config: C,
     public readonly entity: Entity<any>
   ) {}
 
   public get title(): string {
-    return inflection.transform(this.config.title || this.config.name, [
+    return inflection.transform(this.config.title || this.name, [
       'underscore',
       'titleize'
     ]);
   }
 
-  public get name(): string {
-    return this.config.name;
-  }
-
   public get fetchField(): string {
-    let name = this.config.name;
-    if (this.config.type === 'relationship' && this.config.targetEntity) {
-      const searchFields = getThunkValue(this.config.targetEntity)
-        .searchableFields;
+    let name = this.name;
+    // if (this.config.type === 'relationship' && this.config.targetEntity) {
+    //   const searchFields = getThunkValue(this.config.targetEntity)
+    //     .searchableFields;
 
-      name += `{ id ${searchFields.map(f => f.name).join(' ')}}`;
-    }
+    //   name += `{ id ${searchFields.map(f => f.name).join(' ')}}`;
+    // }
     return name;
   }
 
-  public visible(
-    type: 'list' | 'edit' | 'searchable' | 'detail',
-    strict: boolean = false
-  ): boolean {
-    if (strict && !this.config.visibility) {
+  public visible(section: FieldSections, strict: boolean = false): boolean {
+    const { visible, hidden } = this.config;
+    if (strict && !visible) {
       return false;
     }
-    return !this.config.visibility || !!this.config.visibility[type];
+    if (visible && visible.indexOf(section) === -1) {
+      return false;
+    }
+    if (hidden && hidden.indexOf(section) !== -1) {
+      return false;
+    }
+    return true;
   }
 
   public get render(): ((record: T) => React.ReactNode) {
-    const { render, type } = this.config;
-    if (!render) {
-      switch (type) {
-        case 'date':
-        case 'datetime':
-          return values => moment(values[this.name]).calendar();
-        case 'boolean':
-          return values => (values[this.name] ? '✓' : '✗');
-        case 'relationship':
-          const { targetEntity, toMany } = this
-            .config as IEntityFieldRelationship;
-          if (targetEntity) {
-            const render = getThunkValue(targetEntity).render;
-            return values => {
-              const value = values[this.name];
-              if (toMany && Array.isArray(value)) {
-                return value
-                  .map(x => render && render(x))
-                  .filter(x => x)
-                  .join(', ');
-              }
-              return render && render(values);
-            };
-          }
-      }
-    } else {
-      return (record: T) => {
-        return render(record);
-      };
-    }
     return (values: any) => {
       return values[this.name];
     };
   }
 
   public inputElement(): React.ReactNode {
-    const { type } = this.config;
-    if (!type) {
-      return <Input />;
-    }
-    switch (type) {
-      case 'string':
-        return <Input />;
-      case 'text':
-        return <AntdInput.TextArea />;
-      case 'number':
-        return <InputNumber />;
-      case 'date':
-        return <DatePicker />;
-      case 'datetime':
-        return <DatePicker showTime={true} />;
-      case 'boolean':
-        return <Checkbox />;
-    }
-    return `unknown type ${type}`;
+    return <Input />;
+  }
+
+  public get valuePropName(): string {
+    return 'value';
   }
 
   public fieldElement(
+    field: EntityField<T, C>,
     formContext: FormContext,
     key: string | number
   ): React.ReactNode {
-    const { type } = this.config;
+    // const { type } = this.config;
 
-    if (type === 'relationship') {
-      return this.relationshipFieldElement(
-        formContext,
-        this.config as IEntityFieldRelationship,
-        key
-      );
-    }
+    // if (type === 'relationship') {
+    //   return this.relationshipFieldElement(
+    //     formContext,
+    //     this.config as IEntityFieldRelationship,
+    //     key
+    //   );
+    // }
 
-    let valuePropName = 'value';
-    if (this.config.type === 'boolean') {
-      valuePropName = 'checked';
-    }
+    // let valuePropName = 'value';
+    // if (this.config.type === 'boolean') {
+    //   valuePropName = 'checked';
+    // }
 
     return (
       <FormField
         key={key}
-        label={this.title}
-        name={this.name}
+        label={field.title}
+        name={field.name}
         formContext={formContext}
-        valuePropName={valuePropName}
+        valuePropName={this.valuePropName}
       >
         {this.inputElement()}
       </FormField>
     );
   }
 
-  private relationshipFieldElement(
-    formContext: FormContext,
-    config: IEntityFieldRelationship,
-    key: string | number
-  ): React.ReactNode {
-    const { toMany, targetEntity } = config;
-    if (!targetEntity) {
-      return `targetEntity must be provided in field configuration`;
-    }
-    return (
-      <RelationField
-        key={key}
-        formContext={formContext}
-        field={this}
-        targetEntity={getThunkValue(targetEntity)}
-        mode={toMany ? 'tags' : 'default'}
-      />
-    );
-  }
+  // private relationshipFieldElement(
+  //   formContext: FormContext,
+  //   config: IEntityFieldRelationship,
+  //   key: string | number
+  // ): React.ReactNode {
+  //   const { toMany, targetEntity } = config;
+  //   if (!targetEntity) {
+  //     return `targetEntity must be provided in field configuration`;
+  //   }
+  //   return (
+  //     <RelationField
+  //       key={key}
+  //       formContext={formContext}
+  //       field={this}
+  //       targetEntity={getThunkValue(targetEntity)}
+  //       mode={toMany ? 'tags' : 'default'}
+  //     />
+  //   );
+  // }
 }

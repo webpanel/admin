@@ -3,7 +3,7 @@ import { EntityField } from '../../model/EntityField';
 import { Entity } from '../../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 export interface IRelationFieldProps {
-    field: EntityField<any>;
+    field: EntityField<any, any>;
     formContext: FormContext;
     targetEntity: Entity<any>;
     mode?: 'default' | 'multiple' | 'tags';

@@ -37,7 +37,7 @@ export class EntityEdit extends React.Component<IEntityEditProps> {
               render={(formContext: FormContext) => (
                 <>
                   {entity.editFields.map((field, i) =>
-                    field.fieldElement(formContext, i)
+                    field.fieldElement(field, formContext, i)
                   )}
                   <ResourceFormButtons formContext={formContext} />
                 </>

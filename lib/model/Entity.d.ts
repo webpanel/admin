@@ -2,7 +2,9 @@ import * as React from 'react';
 import { DataSource } from 'webpanel-data';
 import { IEntityEditProps } from '../components/pages/edit';
 import { IEntityDetailProps } from '../components/pages/detail';
-import { IEntityFieldConfig, EntityField } from './EntityField';
+import { EntityField, IEntityFieldConfig } from './EntityField';
+import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
+import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
 export interface IEntityConfig<T> {
     name: string;
     icon?: string;
@@ -17,22 +19,26 @@ export interface IEntityConfig<T> {
 }
 export declare class Entity<T> {
     private readonly config;
-    fields: EntityField<T>[];
+    fields: EntityField<T, any>[];
     constructor(config: IEntityConfig<T>);
     readonly structureName: string;
     readonly title: string;
     readonly name: string;
     readonly dataSource: DataSource;
     readonly render: ((value: T) => string);
-    field(config: string | IEntityFieldConfig<T>): Entity<T>;
-    readonly listFields: EntityField<T>[];
-    readonly editFields: EntityField<T>[];
-    readonly detailFields: EntityField<T>[];
-    readonly searchableFields: EntityField<T>[];
+    readonly listFields: EntityField<T, any>[];
+    readonly editFields: EntityField<T, any>[];
+    readonly detailFields: EntityField<T, any>[];
+    readonly searchableFields: EntityField<T, any>[];
     readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
     readonly editLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
     private getDetailPageLayout;
     private getEditPageLayout;
+    stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    dateField(name: string, config?: IEntityFieldDateConfig<T>): Entity<T>;
+    booleanField(name: string, config?: IEntityFieldBooleanConfig<T>): Entity<T>;
 }
