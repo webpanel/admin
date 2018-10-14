@@ -1,10 +1,6 @@
 import { Card } from 'antd';
 import * as React from 'react';
-import {
-  ResourceForm,
-  ResourceFormButtons,
-  RouteComponentProps
-} from 'webpanel-antd';
+import { ResourceForm, ResourceFormButtons } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource, ResourceLayer } from 'webpanel-data';
 
@@ -12,24 +8,20 @@ import { Entity } from '../../model/Entity';
 
 export interface IEntityEditProps {
   entity: Entity<any>;
-  route: RouteComponentProps<any>;
-  pushDetailOnCreate?: boolean;
+  resourceID?: string;
+  onCreate?: (id: string) => void;
 }
 
 export class EntityEdit extends React.Component<IEntityEditProps> {
   public render() {
-    const { entity, route } = this.props;
+    const { entity, resourceID, onCreate } = this.props;
     return (
       <ResourceLayer
         name={entity.name}
-        id={route.match.params.id}
-        fields={entity.editFields.map(f => f.name)}
+        id={resourceID}
+        fields={entity.editFields.map(f => f.columnName)}
         dataSource={entity.dataSource}
-        onCreate={(id: string) => {
-          if (this.props.pushDetailOnCreate) {
-            route.history.push(id);
-          }
-        }}
+        onCreate={onCreate}
         render={(resource: Resource) => (
           <Card>
             <ResourceForm
