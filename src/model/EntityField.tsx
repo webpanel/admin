@@ -29,15 +29,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     ]);
   }
 
+  public get columnName(): string {
+    return this.name;
+  }
   public get fetchField(): string {
-    let name = this.name;
-    // if (this.config.type === 'relationship' && this.config.targetEntity) {
-    //   const searchFields = getThunkValue(this.config.targetEntity)
-    //     .searchableFields;
-
-    //   name += `{ id ${searchFields.map(f => f.name).join(' ')}}`;
-    // }
-    return name;
+    return this.name;
   }
 
   public visible(section: FieldSections, strict: boolean = false): boolean {
@@ -60,8 +56,16 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     };
   }
 
-  public inputElement(): React.ReactNode {
-    return <Input />;
+  public inputElement(props?: {
+    value?: any;
+    onChange?: (value: any) => void;
+    autoFocus?: boolean;
+  }): React.ReactNode {
+    const onChange = props && props.onChange;
+    const onChangeProp = onChange
+      ? (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)
+      : undefined;
+    return <Input {...props} onChange={onChangeProp} />;
   }
 
   public get valuePropName(): string {
@@ -73,26 +77,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     formContext: FormContext,
     key: string | number
   ): React.ReactNode {
-    // const { type } = this.config;
-
-    // if (type === 'relationship') {
-    //   return this.relationshipFieldElement(
-    //     formContext,
-    //     this.config as IEntityFieldRelationship,
-    //     key
-    //   );
-    // }
-
-    // let valuePropName = 'value';
-    // if (this.config.type === 'boolean') {
-    //   valuePropName = 'checked';
-    // }
-
     return (
       <FormField
         key={key}
         label={field.title}
-        name={field.name}
+        name={field.columnName}
         formContext={formContext}
         valuePropName={this.valuePropName}
       >
@@ -100,24 +89,4 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       </FormField>
     );
   }
-
-  // private relationshipFieldElement(
-  //   formContext: FormContext,
-  //   config: IEntityFieldRelationship,
-  //   key: string | number
-  // ): React.ReactNode {
-  //   const { toMany, targetEntity } = config;
-  //   if (!targetEntity) {
-  //     return `targetEntity must be provided in field configuration`;
-  //   }
-  //   return (
-  //     <RelationField
-  //       key={key}
-  //       formContext={formContext}
-  //       field={this}
-  //       targetEntity={getThunkValue(targetEntity)}
-  //       mode={toMany ? 'tags' : 'default'}
-  //     />
-  //   );
-  // }
 }

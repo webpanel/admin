@@ -1,8 +1,27 @@
 import * as React from 'react';
-import { EntityEdit, IEntityEditProps } from '../pages/edit';
+import { EntityEdit } from '../pages/edit';
+import { Entity } from '../../model/Entity';
+import { RouteComponentProps } from 'react-router';
 
-export class EntityEditLayout extends React.Component<IEntityEditProps> {
+export interface IEntityEditLayoutProps {
+  entity: Entity<any>;
+  route: RouteComponentProps<any>;
+  pushDetailOnCreate?: boolean;
+}
+
+export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
   public render() {
-    return <EntityEdit entity={this.props.entity} route={this.props.route} />;
+    const { route, pushDetailOnCreate } = this.props;
+    return (
+      <EntityEdit
+        entity={this.props.entity}
+        resourceID={route.match.params.id}
+        onCreate={(id: string) => {
+          if (pushDetailOnCreate) {
+            route.history.push(id);
+          }
+        }}
+      />
+    );
   }
 }

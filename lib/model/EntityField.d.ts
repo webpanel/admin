@@ -14,10 +14,15 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly entity: Entity<any>;
     constructor(name: string, config: C, entity: Entity<any>);
     readonly title: string;
+    readonly columnName: string;
     readonly fetchField: string;
     visible(section: FieldSections, strict?: boolean): boolean;
     readonly render: ((record: T) => React.ReactNode);
-    inputElement(): React.ReactNode;
+    inputElement(props?: {
+        value?: any;
+        onChange?: (value: any) => void;
+        autoFocus?: boolean;
+    }): React.ReactNode;
     readonly valuePropName: string;
     fieldElement(field: EntityField<T, C>, formContext: FormContext, key: string | number): React.ReactNode;
 }

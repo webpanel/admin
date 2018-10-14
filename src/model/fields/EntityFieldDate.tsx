@@ -15,7 +15,11 @@ export class EntityFieldDate<T> extends EntityField<
   public get render(): ((record: T) => React.ReactNode) {
     return values => moment(values[this.name]).calendar();
   }
-  public inputElement(): React.ReactNode {
-    return <DatePicker showTime={this.config.showTime} />;
+  public inputElement(props?: {
+    value?: any;
+    onChange?: (value: any) => void;
+    autoFocus?: boolean;
+  }): React.ReactNode {
+    return <DatePicker showTime={this.config.showTime} {...props} />;
   }
 }
