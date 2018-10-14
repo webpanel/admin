@@ -5,12 +5,14 @@ import { Redirect } from 'react-router';
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
 
-import { EntityEdit, IEntityEditProps } from '../components/pages/edit';
 import { EntityList } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
 import { EntityField, IEntityFieldConfig } from './EntityField';
 import { EntityDetailLayout } from '../components/layouts/entity.detail';
-import { EntityEditLayout } from '../components/layouts/entity.edit';
+import {
+  EntityEditLayout,
+  IEntityEditLayoutProps
+} from '../components/layouts/entity.edit';
 import {
   EntityFieldDate,
   IEntityFieldDateConfig
@@ -21,6 +23,10 @@ import {
   EntityFieldBoolean,
   IEntityFieldBooleanConfig
 } from './fields/EntityFieldBoolean';
+import {
+  IEntityFieldRelationshipConfig,
+  EntityFieldRelationship
+} from './fields/EntityFieldRelationship';
 
 export interface IEntityConfig<T> {
   name: string;
@@ -32,7 +38,12 @@ export interface IEntityConfig<T> {
     detail?: (
       props: IEntityDetailProps
     ) => React.ReactElement<IEntityDetailProps>;
-    edit?: (props: IEntityDetailProps) => React.ReactElement<IEntityEditProps>;
+    edit?: (
+      props: IEntityEditLayoutProps
+    ) => React.ReactElement<IEntityEditLayoutProps>;
+    create?: (
+      props: IEntityEditLayoutProps
+    ) => React.ReactElement<IEntityEditLayoutProps>;
   };
 
   render?: ((value: T) => string);
@@ -72,15 +83,6 @@ export class Entity<T> {
     };
   }
 
-  // public field(config: string | IEntityFieldConfig<T>): Entity<T> {
-  //   if (typeof config === 'string') {
-  //     this.fields.push(new EntityField({ name: config }, this));
-  //   } else {
-  //     this.fields.push(new EntityField(config, this));
-  //   }
-  //   return this;
-  // }
-
   public get listFields(): EntityField<T, any>[] {
     return this.fields.filter(f => f.visible('list'));
   }
@@ -106,9 +108,19 @@ export class Entity<T> {
   }
 
   public get editLayout():
-    | ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>)
+    | ((
+        props: IEntityEditLayoutProps
+      ) => React.ReactElement<IEntityEditLayoutProps>)
     | undefined {
     return this.config.layouts && this.config.layouts.edit;
+  }
+
+  public get createLayout():
+    | ((
+        props: IEntityEditLayoutProps
+      ) => React.ReactElement<IEntityEditLayoutProps>)
+    | undefined {
+    return this.config.layouts && this.config.layouts.create;
   }
 
   public menuItem = (): React.ReactNode => {
@@ -137,13 +149,7 @@ export class Entity<T> {
         <Layout.StructureItem
           key="/new"
           name="New"
-          content={(route: RouteComponentProps<any>) => (
-            <EntityEdit
-              entity={this}
-              route={route}
-              pushDetailOnCreate={this.config.showDetailPage}
-            />
-          )}
+          content={this.getCreatePageLayout}
         />
         <Layout.StructureItem
           key="/:id"
@@ -177,6 +183,15 @@ export class Entity<T> {
     return <EntityEditLayout entity={this} route={route} />;
   };
 
+  private getCreatePageLayout = (route: RouteComponentProps<any>) => {
+    if (this.editLayout) {
+      return this.editLayout({ entity: this, route });
+    }
+    return (
+      <EntityEditLayout entity={this} route={route} pushDetailOnCreate={true} />
+    );
+  };
+
   // fields
   public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityField(name, config || {}, this));
@@ -202,6 +217,13 @@ export class Entity<T> {
     config?: IEntityFieldBooleanConfig<T>
   ): Entity<T> {
     this.fields.push(new EntityFieldBoolean(name, config || {}, this));
+    return this;
+  }
+  public relationshipField(
+    name: string,
+    config: IEntityFieldRelationshipConfig<T>
+  ): Entity<T> {
+    this.fields.push(new EntityFieldRelationship(name, config, this));
     return this;
   }
 }

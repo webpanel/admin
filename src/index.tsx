@@ -13,6 +13,7 @@ import { Entity } from './model/Entity';
 import { AdminLayout } from './components/layout';
 
 export { Entity } from './model/Entity';
+export { DataGrid } from './components/data-grid';
 export { Layout } from 'webpanel-antd';
 
 export interface IAdminProps {
