@@ -5,7 +5,7 @@ import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
     targetEntity: Entity<any>;
     type?: 'toOne' | 'toMany';
-    mode?: 'default' | 'multiple' | 'tags';
+    mode?: 'default' | 'multiple';
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
     readonly columnName: string;
