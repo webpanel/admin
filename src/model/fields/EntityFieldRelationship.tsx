@@ -11,7 +11,7 @@ export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
   targetEntity: Entity<any>;
   type?: 'toOne' | 'toMany';
-  mode?: 'default' | 'multiple' | 'tags';
+  mode?: 'default' | 'multiple';
 }
 
 export class EntityFieldRelationship<T> extends EntityField<
