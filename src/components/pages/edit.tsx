@@ -10,11 +10,12 @@ export interface IEntityEditProps {
   entity: Entity<any>;
   resourceID?: string;
   onCreate?: (id: string) => void;
+  initialValues?: { [key: string]: any };
 }
 
 export class EntityEdit extends React.Component<IEntityEditProps> {
   public render() {
-    const { entity, resourceID, onCreate } = this.props;
+    const { entity, resourceID, onCreate, initialValues } = this.props;
     return (
       <ResourceLayer
         name={entity.name}
@@ -22,6 +23,7 @@ export class EntityEdit extends React.Component<IEntityEditProps> {
         fields={entity.editFields.map(f => f.columnName)}
         dataSource={entity.dataSource}
         onCreate={onCreate}
+        initialValues={initialValues}
         render={(resource: Resource) => (
           <Card>
             <ResourceForm
