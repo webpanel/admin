@@ -17,6 +17,7 @@ export interface IDataGridProps {
   fields?: string[];
   editWholeRows?: boolean;
   initialFilters?: DataSourceArgumentMap;
+  newItemInitialValues?: { [key: string]: any };
 }
 export interface IDataGridState {
   rowValues: { [key: string]: { [key: string]: any } };
@@ -149,7 +150,7 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
   };
 
   render() {
-    const { entity, fields, initialFilters } = this.props;
+    const { entity, fields, initialFilters, newItemInitialValues } = this.props;
     const { rowValues, addingNewEntity } = this.state;
 
     const gridFields = entity.fields.filter(
@@ -183,6 +184,7 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
                 <EntityEdit
                   entity={entity}
                   onCreate={() => this.setState({ addingNewEntity: false })}
+                  initialValues={newItemInitialValues}
                 />
               </Modal>
               <ResourceTable

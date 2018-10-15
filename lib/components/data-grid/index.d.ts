@@ -10,6 +10,9 @@ export interface IDataGridProps {
     fields?: string[];
     editWholeRows?: boolean;
     initialFilters?: DataSourceArgumentMap;
+    newItemInitialValues?: {
+        [key: string]: any;
+    };
 }
 export interface IDataGridState {
     rowValues: {
