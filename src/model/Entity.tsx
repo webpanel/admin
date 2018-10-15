@@ -227,11 +227,8 @@ export class Entity<T> {
     this.fields.push(new EntityFieldRelationship(name, config, this));
     return this;
   }
-  public colorField(
-    name: string,
-    config?: IEntityFieldConfig<T>
-  ): Entity<T> {
-    this.fields.push(new EntityFieldColor(name, config, this));
+  public colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+    this.fields.push(new EntityFieldColor(name, config || {}, this));
     return this;
   }
 }
