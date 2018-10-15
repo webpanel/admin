@@ -46,4 +46,5 @@ export declare class Entity<T> {
     dateField(name: string, config?: IEntityFieldDateConfig<T>): Entity<T>;
     booleanField(name: string, config?: IEntityFieldBooleanConfig<T>): Entity<T>;
     relationshipField(name: string, config: IEntityFieldRelationshipConfig<T>): Entity<T>;
+    colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
 }
