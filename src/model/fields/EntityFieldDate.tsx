@@ -6,20 +6,35 @@ import { DatePicker } from '../../components/date-picker';
 
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
   showTime?: boolean;
+  format?: string;
 }
 
 export class EntityFieldDate<T> extends EntityField<
   T,
   IEntityFieldDateConfig<T>
 > {
-  public get render(): ((record: T) => React.ReactNode) {
-    return values => moment(values[this.name]).calendar();
+  private get format(): string {
+    return (
+      this.config.format ||
+      (this.config.showTime ? 'YYYY/MM/DD HH:mm' : 'YYYY/MM/DD')
+    );
   }
+
+  public get render(): ((record: T) => React.ReactNode) {
+    return values => moment(values[this.name]).format(this.format);
+  }
+
   public inputElement(props?: {
     value?: any;
     onChange?: (value: any) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    return <DatePicker showTime={this.config.showTime} {...props} />;
+    return (
+      <DatePicker
+        showTime={this.config.showTime}
+        format={this.format}
+        {...props}
+      />
+    );
   }
 }
