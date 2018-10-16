@@ -1,3 +1,4 @@
-.datagrid td {
+.datagrid td,
+.entitytable td {
   white-space: nowrap;
 }
