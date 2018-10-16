@@ -38,7 +38,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         name={entity.name}
         id={id}
         dataSource={entity.dataSource}
-        fields={['id', ...entity.listFields.map(x => x.fetchField)]}
+        fields={['id', ...entity.detailFields.map(x => x.fetchField)]}
         render={(resource: Resource) => (
           <Card
             title={entity.title}
