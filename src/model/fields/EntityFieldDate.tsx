@@ -7,6 +7,7 @@ import { DatePicker } from '../../components/date-picker';
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
   showTime?: boolean;
   format?: string;
+  render?: (date: any) => string;
 }
 
 export class EntityFieldDate<T> extends EntityField<
@@ -21,7 +22,10 @@ export class EntityFieldDate<T> extends EntityField<
   }
 
   public get render(): ((record: T) => React.ReactNode) {
-    return values => moment(values[this.name]).format(this.format);
+    return values =>
+      this.config.render
+        ? this.config.render(values)
+        : moment(values[this.name]).format(this.format);
   }
 
   public inputElement(props?: {

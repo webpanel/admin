@@ -3,6 +3,7 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
     showTime?: boolean;
     format?: string;
+    render?: (date: any) => string;
 }
 export declare class EntityFieldDate<T> extends EntityField<T, IEntityFieldDateConfig<T>> {
     private readonly format;
