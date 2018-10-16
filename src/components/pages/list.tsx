@@ -36,6 +36,8 @@ export class EntityList extends React.Component<IEntityListProps> {
             }
           >
             <ResourceTable
+              className="entitytable"
+              scroll={{ x: true }}
               resourceCollection={resource}
               columns={entity.listFields.map((field, i) => {
                 const { render } = field;
