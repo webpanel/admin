@@ -5,11 +5,11 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { getThunkValue } from '../../thunk';
+import { getThunkValue, Thunk } from '../../thunk';
 
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
-  targetEntity: Entity<any>;
+  targetEntity: Thunk<Entity<any>>;
   type?: 'toOne' | 'toMany';
   mode?: 'default' | 'multiple';
 }
