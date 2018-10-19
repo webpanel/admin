@@ -53,12 +53,18 @@ export class EntityFieldRelationship<T> extends EntityField<
     key: string | number
   ): React.ReactNode {
     const { targetEntity, mode } = this.config;
+    const _targetEntity = getThunkValue(targetEntity);
     return (
       <ResourceCollectionLayer
         key={key}
         name={targetEntity.name}
-        fields={['id', ...targetEntity.searchableFields.map(x => x.name)]}
-        dataSource={targetEntity.dataSource}
+        fields={[
+          'id',
+          ..._targetEntity.searchableFields.map(
+            (x: EntityField<any, any>) => x.name
+          )
+        ]}
+        dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => {
           return (
             <FormField
@@ -69,7 +75,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               <ResourceSelect
                 valueKey="id"
                 labelKey={(value: any): string => {
-                  return targetEntity.render(value);
+                  return _targetEntity.render(value);
                 }}
                 mode={mode}
                 resourceCollection={collection}
@@ -87,18 +93,23 @@ export class EntityFieldRelationship<T> extends EntityField<
     autoFocus?: boolean;
   }): React.ReactNode {
     const { targetEntity, mode } = this.config;
+    const _targetEntity = getThunkValue(targetEntity);
     return (
       <ResourceCollectionLayer
         name={targetEntity.name}
-        fields={['id', ...targetEntity.searchableFields.map(x => x.fetchField)]}
-        dataSource={targetEntity.dataSource}
+        fields={[
+          'id',
+          ..._targetEntity.searchableFields.map(x => x.fetchField)
+        ]}
+        dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => {
           return (
             <ResourceSelect
               {...props}
               valueKey="id"
+              allowClear={true}
               labelKey={(value: any): string => {
-                return targetEntity.render(value);
+                return _targetEntity.render(value);
               }}
               mode={mode}
               resourceCollection={collection}
