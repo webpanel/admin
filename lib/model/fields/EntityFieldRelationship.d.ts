@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { Thunk } from 'ts-thunk';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
-    targetEntity: Entity<any>;
+    targetEntity: Thunk<Entity<any>>;
     type?: 'toOne' | 'toMany';
     mode?: 'default' | 'multiple';
 }

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ResourceCollectionLayer, ResourceCollection } from 'webpanel-data';
+import { resolveThunk, Thunk } from 'ts-thunk';
 
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { getThunkValue, Thunk } from '../../thunk';
 
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
@@ -24,7 +24,8 @@ export class EntityFieldRelationship<T> extends EntityField<
 
   public get fetchField(): string {
     let name = this.name;
-    const searchFields = getThunkValue(this.config.targetEntity)
+
+    const searchFields = resolveThunk(this.config.targetEntity)
       .searchableFields;
     name += `{ id ${searchFields.map(f => f.name).join(' ')}} ${
       this.columnName
@@ -34,7 +35,7 @@ export class EntityFieldRelationship<T> extends EntityField<
 
   public get render(): ((record: T) => React.ReactNode) {
     const { targetEntity, type } = this.config;
-    const render = getThunkValue(targetEntity).render;
+    const render = resolveThunk(targetEntity).render;
     return values => {
       const value = values[this.name];
       if (type === 'toMany' && Array.isArray(value)) {
@@ -53,7 +54,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     key: string | number
   ): React.ReactNode {
     const { targetEntity, mode } = this.config;
-    const _targetEntity = getThunkValue(targetEntity);
+    const _targetEntity = resolveThunk(targetEntity);
     return (
       <ResourceCollectionLayer
         key={key}
@@ -93,7 +94,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     autoFocus?: boolean;
   }): React.ReactNode {
     const { targetEntity, mode } = this.config;
-    const _targetEntity = getThunkValue(targetEntity);
+    const _targetEntity = resolveThunk(targetEntity);
     return (
       <ResourceCollectionLayer
         name={targetEntity.name}
