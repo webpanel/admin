@@ -2,8 +2,9 @@ import * as inflection from 'inflection';
 import * as React from 'react';
 import { Redirect } from 'react-router';
 
-import { Layout, RouteComponentProps } from 'webpanel-antd';
+import { Layout, RouteComponentProps, Link } from 'webpanel-antd';
 import { DataSource } from 'webpanel-data';
+import { Button } from 'antd';
 
 import { EntityList } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
@@ -139,6 +140,14 @@ export class Entity<T> {
       <Layout.StructureItem
         key={`/${this.structureName}`}
         name={this.title}
+        header={{
+          title: this.title,
+          action: (
+            <Link to="new">
+              <Button htmlType="button">+</Button>
+            </Link>
+          )
+        }}
         content={
           <EntityList
             entity={this}
@@ -150,16 +159,30 @@ export class Entity<T> {
         <Layout.StructureItem
           key="/new"
           name="New"
+          header={{
+            title: 'New'
+          }}
           content={this.getCreatePageLayout}
         />
         <Layout.StructureItem
           key="/:id"
           name="Detail"
+          header={(route: RouteComponentProps<any>) => ({
+            title: `Detail`,
+            action: (
+              <Link to={`${route.match.params.id}/edit`}>
+                <Button htmlType="button">Edit</Button>
+              </Link>
+            )
+          })}
           content={this.getDetailPageLayout}
         />
         <Layout.StructureItem
           key="/:id/edit"
           name="Edit"
+          header={{
+            title: 'Edit'
+          }}
           content={this.getEditPageLayout}
         />
       </Layout.StructureItem>

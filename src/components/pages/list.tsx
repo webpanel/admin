@@ -1,6 +1,6 @@
-import { Button, Card } from 'antd';
+import { Card } from 'antd';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { ResourceTable } from 'webpanel-antd';
 import {
   DataSource,
@@ -27,14 +27,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         fields={['id', ...entity.listFields.map(x => x.fetchField)]}
         initialSorting={[{ columnKey: 'id', order: SortInfoOrder.ascend }]}
         render={(resource: ResourceCollection) => (
-          <Card
-            title={entity.title}
-            extra={
-              <Link to="new">
-                <Button htmlType="button">+</Button>
-              </Link>
-            }
-          >
+          <Card bodyStyle={{ padding: '0' }}>
             <ResourceTable
               className="entitytable"
               scroll={{ x: true }}
