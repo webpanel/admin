@@ -48,7 +48,7 @@ export interface IEntityConfig<T> {
     ) => React.ReactElement<IEntityEditLayoutProps>;
   };
 
-  render?: ((value: T) => string);
+  render?: ((value: T | null) => string);
 }
 
 export class Entity<T> {
@@ -76,11 +76,14 @@ export class Entity<T> {
     return this.config.dataSource;
   }
 
-  public get render(): ((value: T) => string) {
+  public get render(): ((value: T | null) => string) {
     if (this.config.render) {
       return this.config.render;
     }
     return (value: any) => {
+      if (value === null) {
+        return '–';
+      }
       return this.searchableFields.map(x => value[x.name]).join(', ');
     };
   }

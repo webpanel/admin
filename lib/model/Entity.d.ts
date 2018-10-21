@@ -17,7 +17,7 @@ export interface IEntityConfig<T> {
         edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
         create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
     };
-    render?: ((value: T) => string);
+    render?: ((value: T | null) => string);
 }
 export declare class Entity<T> {
     private readonly config;
@@ -27,7 +27,7 @@ export declare class Entity<T> {
     readonly title: string;
     readonly name: string;
     readonly dataSource: DataSource;
-    readonly render: ((value: T) => string);
+    readonly render: ((value: T | null) => string);
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];
