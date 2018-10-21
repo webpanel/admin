@@ -21,7 +21,14 @@ export class EntityFieldDate<T> extends EntityField<
   }
 
   public get render(): ((record: T) => React.ReactNode) {
-    return values => moment(values[this.name]).format(this.format);
+    return values => {
+      const d = moment(values[this.name]);
+      if (d.isValid()) {
+        return d.format(this.format);
+      } else {
+        return '–';
+      }
+    };
   }
 
   public inputElement(props?: {
