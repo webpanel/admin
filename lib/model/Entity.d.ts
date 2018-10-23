@@ -6,6 +6,7 @@ import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
 import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
 import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
 import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship';
+import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 export interface IEntityConfig<T> {
     name: string;
     icon?: string;
@@ -47,4 +48,5 @@ export declare class Entity<T> {
     booleanField(name: string, config?: IEntityFieldBooleanConfig<T>): Entity<T>;
     relationshipField(name: string, config: IEntityFieldRelationshipConfig<T>): Entity<T>;
     colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T>;
 }

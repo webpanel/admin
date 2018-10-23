@@ -28,6 +28,7 @@ import {
   EntityFieldRelationship
 } from './fields/EntityFieldRelationship';
 import { EntityFieldColor } from './fields/EntityFieldColor';
+import { EntityFieldEnum, IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 
 export interface IEntityConfig<T> {
   name: string;
@@ -229,6 +230,10 @@ export class Entity<T> {
   }
   public colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityFieldColor(name, config || {}, this));
+    return this;
+  }
+  public enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T> {
+    this.fields.push(new EntityFieldEnum(name, config, this));
     return this;
   }
 }
