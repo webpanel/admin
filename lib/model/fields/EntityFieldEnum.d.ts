@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
+import { Thunk } from 'ts-thunk';
 export interface IOption {
     value: string;
     label: string;
 }
 export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
-    options: IOption[];
+    options: Thunk<IOption[]>;
 }
 export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumConfig<T>> {
     inputElement(props?: {

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 import { Select } from 'antd';
+import { Thunk, resolveThunk } from 'ts-thunk';
 
 export interface IOption {
   value: string;
@@ -9,7 +10,7 @@ export interface IOption {
 }
 
 export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
-  options: IOption[];
+  options: Thunk<IOption[]>;
 }
 
 export class EntityFieldEnum<T> extends EntityField<
@@ -21,9 +22,7 @@ export class EntityFieldEnum<T> extends EntityField<
     onChange?: (value: any) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    const selectOptions = this
-      .config
-      .options
+    const selectOptions = resolveThunk(this.config.options)
       .map(
       (value: IOption) => (
         <Select.Option value={value.value}>
