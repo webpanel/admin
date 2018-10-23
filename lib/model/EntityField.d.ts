@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Entity } from './Entity';
+import { ValidationRule } from 'antd/lib/form/Form';
 declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 export interface IEntityFieldConfig<T> {
     title?: string;
     visible?: FieldSections[];
     hidden?: FieldSections[];
     render?: (record: T) => React.ReactNode;
+    rules?: ValidationRule[];
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;

@@ -5,6 +5,7 @@ import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
 // import { EntityField } from './_EntityField';
 import { Entity } from './Entity';
+import { ValidationRule } from 'antd/lib/form/Form';
 
 type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 
@@ -13,6 +14,7 @@ export interface IEntityFieldConfig<T> {
   visible?: FieldSections[];
   hidden?: FieldSections[];
   render?: (record: T) => React.ReactNode;
+  rules?: ValidationRule[];
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -84,6 +86,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
         name={field.columnName}
         formContext={formContext}
         valuePropName={this.valuePropName}
+        rules={field.config.rules}
       >
         {this.inputElement()}
       </FormField>
