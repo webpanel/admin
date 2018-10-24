@@ -9,6 +9,7 @@ export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
     options: Thunk<IOption[]>;
 }
 export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumConfig<T>> {
+    readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
         onChange?: (value: any) => void;
