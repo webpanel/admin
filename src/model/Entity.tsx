@@ -29,7 +29,10 @@ import {
   EntityFieldRelationship
 } from './fields/EntityFieldRelationship';
 import { EntityFieldColor } from './fields/EntityFieldColor';
-import { EntityFieldEnum, IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
+import {
+  EntityFieldEnum,
+  IEntityFieldEnumConfig
+} from './fields/EntityFieldEnum';
 
 export interface IEntityConfig<T> {
   name: string;
@@ -66,7 +69,7 @@ export class Entity<T> {
   }
 
   public get title(): string {
-    return inflection.titleize(this.config.title || this.config.name);
+    return this.config.title || inflection.titleize(this.config.name);
   }
 
   public get name(): string {
