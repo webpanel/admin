@@ -25,7 +25,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   ) {}
 
   public get title(): string {
-    return inflection.transform(this.config.title || this.name, [
+    return this.config.title || inflection.transform(this.name, [
       'underscore',
       'titleize'
     ]);
