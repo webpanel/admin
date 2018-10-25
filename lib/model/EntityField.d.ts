@@ -9,6 +9,7 @@ export interface IEntityFieldConfig<T> {
     hidden?: FieldSections[];
     render?: (record: T) => React.ReactNode;
     rules?: ValidationRule[];
+    sorter?: boolean;
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
@@ -18,6 +19,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly title: string;
     readonly columnName: string;
     readonly fetchField: string;
+    readonly sorter: boolean;
     visible(section: FieldSections, strict?: boolean): boolean;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
