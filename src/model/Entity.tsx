@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 
 import { Layout, RouteComponentProps, Link } from 'webpanel-antd';
-import { DataSource } from 'webpanel-data';
+import { DataSource, SortInfo } from 'webpanel-data';
 import { Button } from 'antd';
 
 import { EntityList } from '../components/pages/list';
@@ -54,6 +54,8 @@ export interface IEntityConfig<T> {
     ) => React.ReactElement<IEntityEditLayoutProps>;
   };
 
+  sortable?: boolean;
+  initialSorting?: SortInfo[];
   render?: ((value: T | null) => string);
 }
 
@@ -87,6 +89,10 @@ export class Entity<T> {
     return resolveThunk(this.config.name);
   }
 
+  public get sortable(): boolean {
+    return this.config.sortable || false;
+  }
+
   public get dataSource(): DataSource {
     return resolveThunk(this.config.dataSource);
   }
@@ -101,6 +107,10 @@ export class Entity<T> {
       }
       return this.searchableFields.map(x => value[x.name]).join(', ');
     };
+  }
+
+  public get initialSorting(): SortInfo[] | undefined {
+    return this.config.initialSorting;
   }
 
   public get listFields(): EntityField<T, any>[] {
