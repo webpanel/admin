@@ -6,7 +6,7 @@ import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
-  SortInfoOrder
+  SortInfo,
 } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
@@ -20,12 +20,13 @@ export interface IEntityListProps {
 export class EntityList extends React.Component<IEntityListProps> {
   public render() {
     const { entity } = this.props;
+
     return (
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
         fields={['id', ...entity.listFields.map(x => x.fetchField)]}
-        initialSorting={[{ columnKey: 'id', order: SortInfoOrder.ascend }]}
+        initialSorting={entity.initialSorting}
         render={(resource: ResourceCollection) => (
           <Card bodyStyle={{ padding: '0' }}>
             <ResourceTable
@@ -38,6 +39,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                   key: i,
                   dataIndex: field.name,
                   title: field.title,
+                  sorter: entity.sortable && field.sorter,
                   render: (value: any, record: any): React.ReactNode => {
                     return render(record);
                   }

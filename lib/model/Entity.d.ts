@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataSource } from 'webpanel-data';
+import { DataSource, SortInfo } from 'webpanel-data';
 import { IEntityDetailProps } from '../components/pages/detail';
 import { EntityField, IEntityFieldConfig } from './EntityField';
 import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
@@ -18,6 +18,8 @@ export interface IEntityConfig<T> {
         edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
         create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
     };
+    sortable?: boolean;
+    initialSorting?: SortInfo[];
     render?: ((value: T | null) => string);
 }
 export declare class Entity<T> {
@@ -27,8 +29,10 @@ export declare class Entity<T> {
     readonly structureName: string;
     readonly title: string;
     readonly name: string;
+    readonly sortable: boolean;
     readonly dataSource: DataSource;
     readonly render: ((value: T | null) => string);
+    readonly initialSorting: SortInfo[] | undefined;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];

@@ -15,6 +15,7 @@ export interface IEntityFieldConfig<T> {
   hidden?: FieldSections[];
   render?: (record: T) => React.ReactNode;
   rules?: ValidationRule[];
+  sorter?: boolean;
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -36,6 +37,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
   public get fetchField(): string {
     return this.name;
+  }
+  public get sorter(): boolean {
+    return this.config.sorter || false;
   }
 
   public visible(section: FieldSections, strict: boolean = false): boolean {
