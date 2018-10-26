@@ -3,18 +3,20 @@ import * as inflection from 'inflection';
 import { Input, FormField } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
-// import { EntityField } from './_EntityField';
 import { Entity } from './Entity';
 import { ValidationRule } from 'antd/lib/form/Form';
+import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 
 type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 
 export interface IEntityFieldConfig<T> {
-  title?: string;
-  visible?: FieldSections[];
-  hidden?: FieldSections[];
+  title?: Thunk<string>;
+  type?: Thunk<string>;
+  enabled?: Thunk<boolean>;
+  visible?: Thunk<FieldSections[]>;
+  hidden?: Thunk<FieldSections[]>;
   render?: (record: T) => React.ReactNode;
-  rules?: ValidationRule[];
+  rules?: Thunk<ValidationRule[]>;
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -25,10 +27,10 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   ) {}
 
   public get title(): string {
-    return this.config.title || inflection.transform(this.name, [
-      'underscore',
-      'titleize'
-    ]);
+    return (
+      resolveOptionalThunk(this.config.title) ||
+      inflection.transform(this.name, ['underscore', 'titleize'])
+    );
   }
 
   public get columnName(): string {
@@ -39,14 +41,17 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public visible(section: FieldSections, strict: boolean = false): boolean {
-    const { visible, hidden } = this.config;
+    const { visible, hidden, enabled } = this.config;
+    if (enabled === false) {
+      return false;
+    }
     if (strict && !visible) {
       return false;
     }
-    if (visible && visible.indexOf(section) === -1) {
+    if (visible && resolveThunk(visible).indexOf(section) === -1) {
       return false;
     }
-    if (hidden && hidden.indexOf(section) !== -1) {
+    if (hidden && resolveThunk(hidden).indexOf(section) !== -1) {
       return false;
     }
     return true;
@@ -67,7 +72,13 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     const onChangeProp = onChange
       ? (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)
       : undefined;
-    return <Input {...props} onChange={onChangeProp} />;
+    return (
+      <Input
+        {...props}
+        type={resolveOptionalThunk(this.config.type)}
+        onChange={onChangeProp}
+      />
+    );
   }
 
   public get valuePropName(): string {
@@ -86,7 +97,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
         name={field.columnName}
         formContext={formContext}
         valuePropName={this.valuePropName}
-        rules={field.config.rules}
+        rules={resolveOptionalThunk(field.config.rules)}
       >
         {this.inputElement()}
       </FormField>

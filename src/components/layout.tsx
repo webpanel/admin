@@ -16,10 +16,12 @@ export class AdminLayout extends React.Component<ILayoutProps> {
     return (
       <Layout {...props}>
         <Layout.Menu>
-          {menuItems || (entities || []).map(x => x.menuItem())}
+          {menuItems ||
+            (entities || []).filter(x => x.enabled).map(x => x.menuItem())}
         </Layout.Menu>
         <Layout.Structure>
-          {structureItems || (entities || []).map(x => x.structureItem())}
+          {structureItems ||
+            (entities || []).filter(x => x.enabled).map(x => x.structureItem())}
         </Layout.Structure>
       </Layout>
     );

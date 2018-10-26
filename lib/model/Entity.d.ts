@@ -7,12 +7,14 @@ import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
 import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
 import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship';
 import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
+import { Thunk } from 'ts-thunk';
 export interface IEntityConfig<T> {
-    name: string;
-    icon?: string;
-    dataSource: DataSource;
-    title?: string;
-    showDetailPage?: boolean;
+    name: Thunk<string>;
+    icon?: Thunk<string>;
+    dataSource: Thunk<DataSource>;
+    title?: Thunk<string>;
+    enabled?: Thunk<boolean>;
+    showDetailPage?: Thunk<boolean>;
     layouts?: {
         detail?: (props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>;
         edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
@@ -26,6 +28,7 @@ export declare class Entity<T> {
     constructor(config: IEntityConfig<T>);
     readonly structureName: string;
     readonly title: string;
+    readonly enabled: boolean;
     readonly name: string;
     readonly dataSource: DataSource;
     readonly render: ((value: T | null) => string);
@@ -41,6 +44,7 @@ export declare class Entity<T> {
     private getDetailPageLayout;
     private getEditPageLayout;
     private getCreatePageLayout;
+    inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
