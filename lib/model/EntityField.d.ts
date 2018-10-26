@@ -13,6 +13,7 @@ export interface IEntityFieldConfig<T> {
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
+    sortable?: boolean;
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
@@ -22,6 +23,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly title: string;
     readonly columnName: string;
     readonly fetchField: string;
+    readonly sortable: boolean;
     visible(section: FieldSections, strict?: boolean): boolean;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
