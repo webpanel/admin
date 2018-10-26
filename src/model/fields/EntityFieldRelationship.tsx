@@ -7,19 +7,27 @@ import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
+export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
+export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
+
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
   targetEntity: Thunk<Entity<any>>;
-  type?: 'toOne' | 'toMany';
-  mode?: 'default' | 'multiple';
+  type?: IEntityFieldRelationshipType;
 }
 
 export class EntityFieldRelationship<T> extends EntityField<
   T,
   IEntityFieldRelationshipConfig<T>
 > {
+  public get type(): IEntityFieldRelationshipType {
+    return this.config.type === 'toOne' ? 'toOne' : 'toMany';
+  }
   public get columnName(): string {
-    return `${this.name}_${this.config.type === 'toOne' ? 'id' : 'ids'}`;
+    return `${this.name}_${this.type === 'toOne' ? 'id' : 'ids'}`;
+  }
+  public get mode(): IEntityFieldRelationshipSelectMode {
+    return this.type === 'toOne' ? 'default' : 'multiple';
   }
 
   public get fetchField(): string {
@@ -53,7 +61,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     formContext: FormContext,
     key: string | number
   ): React.ReactNode {
-    const { targetEntity, mode } = this.config;
+    const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
     return (
       <ResourceCollectionLayer
@@ -78,7 +86,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                 labelKey={(value: any): string => {
                   return _targetEntity.render(value);
                 }}
-                mode={mode}
+                mode={this.mode}
                 resourceCollection={collection}
               />
             </FormField>
@@ -93,7 +101,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     onChange?: (value: any) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    const { targetEntity, mode } = this.config;
+    const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
     return (
       <ResourceCollectionLayer
@@ -112,7 +120,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               labelKey={(value: any): string => {
                 return _targetEntity.render(value);
               }}
-              mode={mode}
+              mode={this.mode}
               resourceCollection={collection}
             />
           );
