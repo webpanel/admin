@@ -33,13 +33,15 @@ import {
   EntityFieldEnum,
   IEntityFieldEnumConfig
 } from './fields/EntityFieldEnum';
+import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 
 export interface IEntityConfig<T> {
-  name: string;
-  icon?: string;
-  dataSource: DataSource;
-  title?: string;
-  showDetailPage?: boolean;
+  name: Thunk<string>;
+  icon?: Thunk<string>;
+  dataSource: Thunk<DataSource>;
+  title?: Thunk<string>;
+  enabled?: Thunk<boolean>;
+  showDetailPage?: Thunk<boolean>;
   layouts?: {
     detail?: (
       props: IEntityDetailProps
@@ -61,7 +63,7 @@ export class Entity<T> {
   constructor(private readonly config: IEntityConfig<T>) {}
 
   public get structureName(): string {
-    return `${inflection.transform(this.config.name, [
+    return `${inflection.transform(resolveThunk(this.config.name), [
       'tableize',
       'dasherize',
       'pluralize'
@@ -69,15 +71,24 @@ export class Entity<T> {
   }
 
   public get title(): string {
-    return this.config.title || inflection.titleize(this.config.name);
+    return (
+      resolveOptionalThunk(this.config.title) ||
+      inflection.titleize(resolveThunk(this.config.name))
+    );
+  }
+
+  public get enabled(): boolean {
+    return typeof this.config.enabled === 'undefined'
+      ? true
+      : resolveThunk(this.config.enabled);
   }
 
   public get name(): string {
-    return this.config.name;
+    return resolveThunk(this.config.name);
   }
 
   public get dataSource(): DataSource {
-    return this.config.dataSource;
+    return resolveThunk(this.config.dataSource);
   }
 
   public get render(): ((value: T | null) => string) {
@@ -137,7 +148,7 @@ export class Entity<T> {
       <Layout.MenuItem
         key={this.structureName}
         title={this.title}
-        icon={this.config.icon || 'folder'}
+        icon={resolveOptionalThunk(this.config.icon) || 'folder'}
       />
     );
   };
@@ -158,7 +169,7 @@ export class Entity<T> {
         content={
           <EntityList
             entity={this}
-            dataSource={this.config.dataSource}
+            dataSource={this.dataSource}
             detailButtonText={this.config.showDetailPage ? 'Detail' : 'Edit'}
           />
         }
@@ -224,9 +235,13 @@ export class Entity<T> {
   };
 
   // fields
-  public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+  public inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityField(name, config || {}, this));
     return this;
+  }
+  // deprecated
+  public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+    return this.inputField(name, config);
   }
   public textField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityFieldText(name, config || {}, this));

@@ -2,13 +2,16 @@ import * as React from 'react';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Entity } from './Entity';
 import { ValidationRule } from 'antd/lib/form/Form';
+import { Thunk } from 'ts-thunk';
 declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 export interface IEntityFieldConfig<T> {
-    title?: string;
-    visible?: FieldSections[];
-    hidden?: FieldSections[];
+    title?: Thunk<string>;
+    type?: Thunk<string>;
+    enabled?: Thunk<boolean>;
+    visible?: Thunk<FieldSections[]>;
+    hidden?: Thunk<FieldSections[]>;
     render?: (record: T) => React.ReactNode;
-    rules?: ValidationRule[];
+    rules?: Thunk<ValidationRule[]>;
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
