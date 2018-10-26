@@ -54,7 +54,6 @@ export interface IEntityConfig<T> {
     ) => React.ReactElement<IEntityEditLayoutProps>;
   };
 
-  sortable?: boolean;
   initialSorting?: SortInfo[];
   render?: ((value: T | null) => string);
 }
@@ -87,10 +86,6 @@ export class Entity<T> {
 
   public get name(): string {
     return resolveThunk(this.config.name);
-  }
-
-  public get sortable(): boolean {
-    return this.config.sortable || false;
   }
 
   public get dataSource(): DataSource {

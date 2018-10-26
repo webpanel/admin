@@ -20,7 +20,6 @@ export interface IEntityConfig<T> {
         edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
         create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
     };
-    sortable?: boolean;
     initialSorting?: SortInfo[];
     render?: ((value: T | null) => string);
 }
@@ -32,7 +31,6 @@ export declare class Entity<T> {
     readonly title: string;
     readonly enabled: boolean;
     readonly name: string;
-    readonly sortable: boolean;
     readonly dataSource: DataSource;
     readonly render: ((value: T | null) => string);
     readonly initialSorting: SortInfo[] | undefined;

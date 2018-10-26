@@ -38,7 +38,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                   key: i,
                   dataIndex: field.name,
                   title: field.title,
-                  sorter: entity.sortable && field.sorter,
+                  sorter: field.sortable,
                   render: (value: any, record: any): React.ReactNode => {
                     return render(record);
                   }
