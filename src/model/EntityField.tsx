@@ -18,6 +18,7 @@ export interface IEntityFieldConfig<T> {
   render?: (record: T) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
   attributes?: InputProps;
+  sortable?: boolean;
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -39,6 +40,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
   public get fetchField(): string {
     return this.name;
+  }
+  public get sortable(): boolean {
+    return this.config.sortable || false;
   }
 
   public visible(section: FieldSections, strict: boolean = false): boolean {
