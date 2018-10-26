@@ -10,19 +10,16 @@ import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
 import { LoginForm } from 'webpanel-antd';
 
 import { Entity } from './model/Entity';
-import { AdminLayout } from './components/layout';
+import { AdminLayout, ILayoutProps } from './components/layout';
 
 export { Entity } from './model/Entity';
 export { DataGrid } from './components/data-grid';
 export { Layout } from 'webpanel-antd';
 
-export interface IAdminProps {
+export interface IAdminProps extends ILayoutProps {
   auth?: (AuthProps | DummyAuthProps) & {
     type: 'dummy' | 'oauth';
   };
-  entities: Entity<any>[];
-  menuItems?: React.ReactNode[];
-  structureItems?: React.ReactNode[];
 }
 
 export class Admin extends React.Component<IAdminProps> {
