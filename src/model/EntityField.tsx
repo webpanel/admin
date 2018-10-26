@@ -6,17 +6,18 @@ import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Entity } from './Entity';
 import { ValidationRule } from 'antd/lib/form/Form';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
+import { InputProps } from 'antd/lib/input';
 
 type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 
 export interface IEntityFieldConfig<T> {
   title?: Thunk<string>;
-  type?: Thunk<string>;
   enabled?: Thunk<boolean>;
   visible?: Thunk<FieldSections[]>;
   hidden?: Thunk<FieldSections[]>;
   render?: (record: T) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
+  attributes?: InputProps;
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -75,7 +76,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return (
       <Input
         {...props}
-        type={resolveOptionalThunk(this.config.type)}
+        {...this.config.attributes || {}}
         onChange={onChangeProp}
       />
     );
