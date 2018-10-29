@@ -235,7 +235,13 @@ export class Entity<T> {
       return this.editLayout({ entity: this, route });
     }
     return (
-      <EntityEditLayout entity={this} route={route} pushDetailOnCreate={true} />
+      <EntityEditLayout
+        entity={this}
+        route={route}
+        onCreate={(id: string) => {
+          route.history.push('/' + this.structureName);
+        }}
+      />
     );
   };
 
