@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router';
 export interface IEntityEditLayoutProps {
     entity: Entity<any>;
     route: RouteComponentProps<any>;
-    pushDetailOnCreate?: boolean;
+    onCreate?: (id: string) => void;
 }
 export declare class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
     render(): JSX.Element;
