@@ -1,11 +1,11 @@
-import { Card } from 'antd';
+import { Card, Icon } from 'antd';
 import * as React from 'react';
 // import { Link } from 'react-router-dom';
 import { ResourceTable } from 'webpanel-antd';
 import {
   DataSource,
   ResourceCollection,
-  ResourceCollectionLayer,
+  ResourceCollectionLayer
 } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
@@ -13,7 +13,6 @@ import { Entity } from '../../model/Entity';
 export interface IEntityListProps {
   entity: Entity<any>;
   dataSource: DataSource;
-  detailButtonText: string;
 }
 
 export class EntityList extends React.Component<IEntityListProps> {
@@ -44,7 +43,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                   }
                 };
               })}
-              detailButtonText={this.props.detailButtonText}
+              detailButtonText={entity.showDetailPage && <Icon type="edit" />}
             />
           </Card>
         )}

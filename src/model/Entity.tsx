@@ -79,9 +79,11 @@ export class Entity<T> {
   }
 
   public get enabled(): boolean {
-    return typeof this.config.enabled === 'undefined'
-      ? true
-      : resolveThunk(this.config.enabled);
+    return resolveOptionalThunk(this.config.enabled) || true;
+  }
+
+  public get showDetailPage(): boolean {
+    return resolveOptionalThunk(this.config.showDetailPage) || false;
   }
 
   public get name(): string {
@@ -171,13 +173,7 @@ export class Entity<T> {
             </Link>
           )
         }}
-        content={
-          <EntityList
-            entity={this}
-            dataSource={this.dataSource}
-            detailButtonText={this.config.showDetailPage ? 'Detail' : 'Edit'}
-          />
-        }
+        content={<EntityList entity={this} dataSource={this.dataSource} />}
       >
         <Layout.StructureItem
           key="/new"

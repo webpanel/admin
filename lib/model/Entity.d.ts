@@ -30,6 +30,7 @@ export declare class Entity<T> {
     readonly structureName: string;
     readonly title: string;
     readonly enabled: boolean;
+    readonly showDetailPage: boolean;
     readonly name: string;
     readonly dataSource: DataSource;
     readonly render: ((value: T | null) => string);
