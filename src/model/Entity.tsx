@@ -6,7 +6,7 @@ import { Layout, RouteComponentProps, Link } from 'webpanel-antd';
 import { DataSource, SortInfo } from 'webpanel-data';
 import { Button } from 'antd';
 
-import { EntityList } from '../components/pages/list';
+import { EntityList, IEntityListTableProps } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
 import { EntityField, IEntityFieldConfig } from './EntityField';
 import { EntityDetailLayout } from '../components/layouts/entity.detail';
@@ -52,6 +52,9 @@ export interface IEntityConfig<T> {
     create?: (
       props: IEntityEditLayoutProps
     ) => React.ReactElement<IEntityEditLayoutProps>;
+  };
+  list?: {
+    table?: IEntityListTableProps;
   };
 
   initialSorting?: SortInfo[];
@@ -173,7 +176,13 @@ export class Entity<T> {
             </Link>
           )
         }}
-        content={<EntityList entity={this} dataSource={this.dataSource} />}
+        content={
+          <EntityList
+            entity={this}
+            dataSource={this.dataSource}
+            {...this.config.list}
+          />
+        }
       >
         <Layout.StructureItem
           key="/new"
