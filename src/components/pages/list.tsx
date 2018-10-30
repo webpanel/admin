@@ -10,15 +10,19 @@ import {
 
 import { Entity } from '../../model/Entity';
 
+export interface IEntityListTableProps {
+  condensed?: boolean;
+}
+
 export interface IEntityListProps {
   entity: Entity<any>;
   dataSource: DataSource;
+  table?: IEntityListTableProps;
 }
 
 export class EntityList extends React.Component<IEntityListProps> {
   public render() {
-    const { entity } = this.props;
-
+    const { entity, table } = this.props;
     return (
       <ResourceCollectionLayer
         name={entity.name}
@@ -31,6 +35,7 @@ export class EntityList extends React.Component<IEntityListProps> {
               className="entitytable"
               scroll={{ x: true }}
               resourceCollection={resource}
+              {...table}
               columns={entity.listFields.map((field, i) => {
                 const { render } = field;
                 return {
@@ -43,7 +48,9 @@ export class EntityList extends React.Component<IEntityListProps> {
                   }
                 };
               })}
-              detailButtonText={entity.showDetailPage && <Icon type="edit" />}
+              detailButtonText={
+                entity.showDetailPage ? undefined : <Icon type="edit" />
+              }
             />
           </Card>
         )}
