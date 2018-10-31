@@ -239,15 +239,7 @@ export class Entity<T> {
     if (this.editLayout) {
       return this.editLayout({ entity: this, route });
     }
-    return (
-      <EntityEditLayout
-        entity={this}
-        route={route}
-        onCreate={(id: string) => {
-          route.history.push('/' + this.structureName);
-        }}
-      />
-    );
+    return <EntityEditLayout entity={this} route={route} />;
   };
 
   // fields
