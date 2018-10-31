@@ -20,7 +20,7 @@ export class ResourceFormPageButtons extends React.Component<
     const menu = (
       <Menu onClick={(e: ClickParam) => handleSave(e.key as SaveOption)}>
         <Menu.Item key="edit">Save and continue editing</Menu.Item>
-        <Menu.Item key="add">Save and add new</Menu.Item>
+        <Menu.Item key="add">Save and add another</Menu.Item>
       </Menu>
     );
 
