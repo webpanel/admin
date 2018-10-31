@@ -11,12 +11,12 @@ export interface IEntityEditLayoutProps {
 
 export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
   public render() {
-    const { route, onCreate } = this.props;
+    const { route } = this.props;
     return (
       <EntityEdit
         entity={this.props.entity}
         resourceID={route.match.params.id}
-        onCreate={onCreate}
+        route={route}
       />
     );
   }
