@@ -1,6 +1,6 @@
-import { Card } from 'antd';
+import { Card, message } from 'antd';
 import * as React from 'react';
-import { ResourceForm, RouteComponentProps } from 'webpanel-antd';
+import { ResourceForm, RouteComponentProps, Link } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource, ResourceLayer } from 'webpanel-data';
 
@@ -21,6 +21,8 @@ export class EntityEdit extends React.Component<
 > {
   state = { version: 0 };
 
+  private ignoreFormSuccessRedirect = false;
+
   handleSave = async (
     formContext: FormContext,
     option: SaveOption,
@@ -28,7 +30,14 @@ export class EntityEdit extends React.Component<
   ) => {
     const { route, entity } = this.props;
 
-    await formContext.formComponent.submit();
+    this.ignoreFormSuccessRedirect = true;
+    try {
+      await formContext.formComponent.submit();
+    } catch (err) {
+      throw err;
+    } finally {
+      this.ignoreFormSuccessRedirect = false;
+    }
 
     if (!route) {
       return;
@@ -36,14 +45,33 @@ export class EntityEdit extends React.Component<
 
     switch (option) {
       case 'add':
+        Link;
+        route.history.push('/' + entity.structureName + '/new');
         this.setState({ version: this.state.version + 1 });
         break;
       case 'edit':
         route.history.push('/' + entity.structureName + '/' + resource.id);
         break;
-      case 'default':
-        route.history.push('/' + entity.structureName + '/');
-        break;
+    }
+  };
+
+  handleFormSuccess = async (resource: Resource) => {
+    message.success('Form saved!');
+
+    if (this.ignoreFormSuccessRedirect) {
+      return;
+    }
+
+    const { route, entity } = this.props;
+
+    if (!route) {
+      return;
+    }
+
+    if (entity.showDetailPage) {
+      route.history.push('/' + entity.structureName + '/' + resource.id);
+    } else {
+      route.history.push('/' + entity.structureName + '/');
     }
   };
 
@@ -62,6 +90,9 @@ export class EntityEdit extends React.Component<
           <Card>
             <ResourceForm
               formResource={resource}
+              onSuccess={(context: FormContext) =>
+                this.handleFormSuccess(resource)
+              }
               render={(formContext: FormContext) => (
                 <>
                   {entity.editFields.map((field, i) =>
