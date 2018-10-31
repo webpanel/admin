@@ -1,11 +1,9 @@
 import * as React from 'react';
 
-import { Button, Popconfirm, Form, Menu, Dropdown } from 'antd';
+import { Button, Popconfirm, Form, Menu, Dropdown, Icon } from 'antd';
 import { ClickParam } from 'antd/lib/menu';
-// import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-// import { RouteComponentProps } from 'react-router';
 
-export type SaveOption = 'edit' | 'add' | 'default';
+export type SaveOption = 'edit' | 'add';
 
 export interface ResourceFormButtonsProps {
   hasChanges: boolean;
@@ -33,14 +31,11 @@ export class ResourceFormPageButtons extends React.Component<
           sm: { span: 16, offset: 8 }
         }}
       >
-        <Dropdown.Button
-          disabled={!hasChanges}
-          type="primary"
-          overlay={menu}
-          onClick={() => handleSave('default')}
-        >
-          Save
-        </Dropdown.Button>
+        <Dropdown disabled={!hasChanges} overlay={menu}>
+          <Button type="primary" htmlType="submit">
+            Save <Icon type="down" />
+          </Button>
+        </Dropdown>
         <Popconfirm
           title="Reset?"
           cancelText="No"

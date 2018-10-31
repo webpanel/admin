@@ -19,6 +19,8 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
     state: {
         version: number;
     };
+    private ignoreFormSuccessRedirect;
     handleSave: (formContext: FormContext, option: SaveOption, resource: Resource) => Promise<void>;
+    handleFormSuccess: (resource: Resource) => Promise<void>;
     render(): JSX.Element;
 }
