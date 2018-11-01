@@ -82,7 +82,8 @@ export class Entity<T> {
   }
 
   public get enabled(): boolean {
-    return resolveOptionalThunk(this.config.enabled) || true;
+    const val = resolveOptionalThunk(this.config.enabled);
+    return typeof val !== 'undefined' ? val : true;
   }
 
   public get showDetailPage(): boolean {
