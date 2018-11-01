@@ -50,7 +50,11 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
           >
             <Form>
               {entity.detailFields.map((field, i) => (
-                <Form.Item label={field.title} {...formItemLayout}>
+                <Form.Item
+                  key={`${field.name}_${i}`}
+                  label={field.title}
+                  {...formItemLayout}
+                >
                   {resource.data && field.render(resource.data)}
                 </Form.Item>
               ))}
