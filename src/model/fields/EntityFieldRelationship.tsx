@@ -6,6 +6,8 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { Button, Modal } from 'antd';
+import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 
 export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
@@ -24,9 +26,11 @@ export class EntityFieldRelationship<T> extends EntityField<
   public get type(): IEntityFieldRelationshipType {
     return this.config.type === 'toOne' ? 'toOne' : 'toMany';
   }
+
   public get columnName(): string {
     return `${this.name}_${this.type === 'toOne' ? 'id' : 'ids'}`;
   }
+
   public get mode(): IEntityFieldRelationshipSelectMode {
     return this.type === 'toOne' ? 'default' : 'multiple';
   }
@@ -73,6 +77,9 @@ export class EntityFieldRelationship<T> extends EntityField<
           }
         : null;
 
+    const addButtonMargin =
+      config.formLayout === 'horizontal' ? '4px 0 0 4px' : '43px 0 0 4px';
+
     return (
       <ResourceCollectionLayer
         key={key}
@@ -85,12 +92,18 @@ export class EntityFieldRelationship<T> extends EntityField<
         ]}
         initialSorting={_targetEntity.initialSorting}
         dataSource={_targetEntity.dataSource}
-        render={(collection: ResourceCollection) => {
-          return (
+        render={(collection: ResourceCollection) => (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}
+          >
             <FormField
               label={this.title}
               name={this.columnName}
               formContext={formContext}
+              style={{ width: '100%' }}
               {...formItemLayout}
             >
               <ResourceSelect
@@ -102,8 +115,36 @@ export class EntityFieldRelationship<T> extends EntityField<
                 resourceCollection={collection}
               />
             </FormField>
-          );
-        }}
+            <Button
+              size="small"
+              icon="plus"
+              style={{
+                margin: addButtonMargin,
+                height: '32px'
+              }}
+              onClick={() => {
+                const infoWindow = Modal.info({
+                  title: `Add ${_targetEntity.title}`,
+                  maskClosable: true,
+                  okText: 'Close',
+                  style: { minWidth: '60%' },
+                  content: (
+                    <EntityEdit
+                      onCreate={async (id: string) => {
+                        await collection.get();
+                        let updateValues = {};
+                        updateValues[this.columnName] = id;
+                        formContext.form.setFieldsValue(updateValues);
+                        infoWindow.destroy();
+                      }}
+                      entity={_targetEntity}
+                    />
+                  )
+                });
+              }}
+            />
+          </div>
+        )}
       />
     );
   }
