@@ -73,6 +73,7 @@ export class EntityFieldRelationship<T> extends EntityField<
             (x: EntityField<any, any>) => x.name
           )
         ]}
+        initialSorting={_targetEntity.initialSorting}
         dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => {
           return (
