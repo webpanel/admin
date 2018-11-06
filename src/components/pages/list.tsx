@@ -9,6 +9,7 @@ import {
 } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
+import { ColumnProps } from 'antd/lib/table';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -36,18 +37,20 @@ export class EntityList extends React.Component<IEntityListProps> {
               scroll={{ x: true }}
               resourceCollection={resource}
               {...table}
-              columns={entity.listFields.map((field, i) => {
-                const { render } = field;
-                return {
-                  key: i,
-                  dataIndex: field.name,
-                  title: field.title,
-                  sorter: field.sortable,
-                  render: (value: any, record: any): React.ReactNode => {
-                    return render(record);
-                  }
-                };
-              })}
+              columns={entity.listFields.map(
+                (field): ColumnProps<any> => {
+                  const { render } = field;
+                  return {
+                    key: field.name,
+                    dataIndex: field.name,
+                    title: field.title,
+                    sorter: field.sortable,
+                    render: (value: any, record: any): React.ReactNode => {
+                      return render(record);
+                    }
+                  };
+                }
+              )}
               detailButtonText={
                 entity.showDetailPage ? undefined : <Icon type="edit" />
               }
