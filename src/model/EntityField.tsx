@@ -11,7 +11,10 @@ import { InputProps } from 'antd/lib/input';
 type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 
 export interface IEntityFieldConfig<T> {
+  // header titles, bradcrumb names
   title?: Thunk<string>;
+  // table columns title
+  shortTitle?: Thunk<string>;
   enabled?: Thunk<boolean>;
   visible?: Thunk<FieldSections[]>;
   hidden?: Thunk<FieldSections[]>;
@@ -33,6 +36,10 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       resolveOptionalThunk(this.config.title) ||
       inflection.transform(this.name, ['underscore', 'titleize'])
     );
+  }
+
+  public get shortTitle(): string {
+    return resolveOptionalThunk(this.config.shortTitle) || this.title;
   }
 
   public get columnName(): string {

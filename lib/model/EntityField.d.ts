@@ -7,6 +7,7 @@ import { InputProps } from 'antd/lib/input';
 declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
+    shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
     visible?: Thunk<FieldSections[]>;
     hidden?: Thunk<FieldSections[]>;
@@ -21,6 +22,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly entity: Entity<any>;
     constructor(name: string, config: C, entity: Entity<any>);
     readonly title: string;
+    readonly shortTitle: string;
     readonly columnName: string;
     readonly fetchField: string;
     readonly sortable: boolean;
