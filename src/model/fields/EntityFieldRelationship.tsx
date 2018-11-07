@@ -6,6 +6,7 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { FormLayout } from 'antd/lib/form/Form';
 
 export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
 export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
@@ -57,12 +58,21 @@ export class EntityFieldRelationship<T> extends EntityField<
   }
 
   public fieldElement(
-    field: EntityField<T, any>,
     formContext: FormContext,
-    key: string | number
+    key: string | number,
+    config: { formLayout?: FormLayout }
   ): React.ReactNode {
     const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
+
+    const formItemLayout =
+      config.formLayout === 'horizontal'
+        ? {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 }
+          }
+        : null;
+
     return (
       <ResourceCollectionLayer
         key={key}
@@ -81,6 +91,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               label={this.title}
               name={this.columnName}
               formContext={formContext}
+              {...formItemLayout}
             >
               <ResourceSelect
                 valueKey="id"

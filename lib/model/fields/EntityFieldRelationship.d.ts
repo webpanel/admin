@@ -3,6 +3,7 @@ import { Thunk } from 'ts-thunk';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { FormLayout } from 'antd/lib/form/Form';
 export declare type IEntityFieldRelationshipType = 'toOne' | 'toMany';
 export declare type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
@@ -15,7 +16,9 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     readonly mode: IEntityFieldRelationshipSelectMode;
     readonly fetchField: string;
     readonly render: ((record: T) => React.ReactNode);
-    fieldElement(field: EntityField<T, any>, formContext: FormContext, key: string | number): React.ReactNode;
+    fieldElement(formContext: FormContext, key: string | number, config: {
+        formLayout?: FormLayout;
+    }): React.ReactNode;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any) => void;

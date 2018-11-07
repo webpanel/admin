@@ -34,6 +34,7 @@ import {
   IEntityFieldEnumConfig
 } from './fields/EntityFieldEnum';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
+import { IEntityEditFormProps } from '../components/pages/edit';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -56,6 +57,7 @@ export interface IEntityConfig<T> {
   list?: {
     table?: IEntityListTableProps;
   };
+  edit?: { form?: IEntityEditFormProps };
 
   initialSorting?: SortInfo[];
   render?: ((value: T | null) => string);
@@ -233,14 +235,18 @@ export class Entity<T> {
     if (this.editLayout) {
       return this.editLayout({ entity: this, route });
     }
-    return <EntityEditLayout entity={this} route={route} />;
+    return (
+      <EntityEditLayout entity={this} route={route} {...this.config.edit} />
+    );
   };
 
   private getCreatePageLayout = (route: RouteComponentProps<any>) => {
     if (this.editLayout) {
       return this.editLayout({ entity: this, route });
     }
-    return <EntityEditLayout entity={this} route={route} />;
+    return (
+      <EntityEditLayout entity={this} route={route} {...this.config.edit} />
+    );
   };
 
   // fields

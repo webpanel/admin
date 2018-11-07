@@ -4,7 +4,7 @@ import { Input, FormField } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
 import { Entity } from './Entity';
-import { ValidationRule } from 'antd/lib/form/Form';
+import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
 
@@ -98,18 +98,27 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public fieldElement(
-    field: EntityField<T, C>,
     formContext: FormContext,
-    key: string | number
+    key: string | number,
+    config: { formLayout?: FormLayout }
   ): React.ReactNode {
+    const formItemLayout =
+      config.formLayout === 'horizontal'
+        ? {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 }
+          }
+        : null;
+
     return (
       <FormField
         key={key}
-        label={field.title}
-        name={field.columnName}
+        label={this.title}
+        name={this.columnName}
         formContext={formContext}
         valuePropName={this.valuePropName}
-        rules={resolveOptionalThunk(field.config.rules)}
+        rules={resolveOptionalThunk(this.config.rules)}
+        {...formItemLayout}
       >
         {this.inputElement()}
       </FormField>
