@@ -69,7 +69,7 @@ export class EntityFieldRelationship<T> extends EntityField<
       config.formLayout === 'horizontal'
         ? {
             labelCol: { span: 4 },
-            wrapperCol: { span: 14 }
+            wrapperCol: { span: 20 }
           }
         : null;
 
