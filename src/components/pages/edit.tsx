@@ -1,5 +1,6 @@
 import { Card, message } from 'antd';
 import * as React from 'react';
+import { FormLayout } from 'antd/lib/form/Form';
 import { ResourceForm, RouteComponentProps, Link } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource, ResourceLayer } from 'webpanel-data';
@@ -7,12 +8,17 @@ import { Resource, ResourceLayer } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
 import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
 
+export interface IEntityEditFormProps {
+  layout?: FormLayout;
+}
+
 export interface IEntityEditProps {
   entity: Entity<any>;
   resourceID?: string;
   initialValues?: { [key: string]: any };
   route?: RouteComponentProps<any>;
   onCreate?: (id: string) => void;
+  form?: IEntityEditFormProps;
 }
 
 export class EntityEdit extends React.Component<
@@ -76,7 +82,7 @@ export class EntityEdit extends React.Component<
   };
 
   public render() {
-    const { entity, resourceID, initialValues, onCreate } = this.props;
+    const { entity, resourceID, initialValues, onCreate, form } = this.props;
     return (
       <ResourceLayer
         key={this.state.version}
@@ -93,10 +99,13 @@ export class EntityEdit extends React.Component<
               onSuccess={(context: FormContext) =>
                 this.handleFormSuccess(resource)
               }
+              {...form}
               render={(formContext: FormContext) => (
                 <>
                   {entity.editFields.map((field, i) =>
-                    field.fieldElement(field, formContext, i)
+                    field.fieldElement(formContext, i, {
+                      formLayout: form && form.layout
+                    })
                   )}
                   <ResourceFormPageButtons
                     hasChanges={formContext.form.isFieldsTouched()}

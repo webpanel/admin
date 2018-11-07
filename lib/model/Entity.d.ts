@@ -9,6 +9,7 @@ import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
 import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship';
 import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 import { Thunk } from 'ts-thunk';
+import { IEntityEditFormProps } from '../components/pages/edit';
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
@@ -23,6 +24,9 @@ export interface IEntityConfig<T> {
     };
     list?: {
         table?: IEntityListTableProps;
+    };
+    edit?: {
+        form?: IEntityEditFormProps;
     };
     initialSorting?: SortInfo[];
     render?: ((value: T | null) => string);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Entity } from './Entity';
-import { ValidationRule } from 'antd/lib/form/Form';
+import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
 declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
@@ -34,6 +34,8 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
         autoFocus?: boolean;
     }): React.ReactNode;
     readonly valuePropName: string;
-    fieldElement(field: EntityField<T, C>, formContext: FormContext, key: string | number): React.ReactNode;
+    fieldElement(formContext: FormContext, key: string | number, config: {
+        formLayout?: FormLayout;
+    }): React.ReactNode;
 }
 export {};
