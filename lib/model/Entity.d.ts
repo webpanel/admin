@@ -28,6 +28,7 @@ export interface IEntityConfig<T> {
     edit?: {
         form?: IEntityEditFormProps;
     };
+    searchable?: boolean;
     initialSorting?: SortInfo[];
     render?: ((value: T | null) => string);
 }
@@ -43,6 +44,7 @@ export declare class Entity<T> {
     readonly dataSource: DataSource;
     readonly render: ((value: T | null) => string);
     readonly initialSorting: SortInfo[] | undefined;
+    readonly searchable: boolean;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];

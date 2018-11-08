@@ -1,7 +1,7 @@
 import { Card, Icon } from 'antd';
 import * as React from 'react';
 // import { Link } from 'react-router-dom';
-import { ResourceTable } from 'webpanel-antd';
+import { ResourceSearchInput, ResourceTable } from 'webpanel-antd';
 import {
   DataSource,
   ResourceCollection,
@@ -31,7 +31,23 @@ export class EntityList extends React.Component<IEntityListProps> {
         fields={['id', ...entity.listFields.map(x => x.fetchField)]}
         initialSorting={entity.initialSorting}
         render={(resource: ResourceCollection) => (
-          <Card bodyStyle={{ padding: '0' }}>
+          <Card
+            bodyStyle={{ padding: '0' }}
+            title={
+              entity.searchable
+                ? <h1 style={{ fontSize: '20px' }}>
+                  {entity.title}
+                </h1>
+                : undefined
+            }
+            extra={
+              entity.searchable
+                ? <ResourceSearchInput
+                  resourceCollection={resource}
+                />
+                : undefined
+            }
+          >
             <ResourceTable
               className="entitytable"
               scroll={{ x: true }}

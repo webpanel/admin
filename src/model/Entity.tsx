@@ -59,6 +59,7 @@ export interface IEntityConfig<T> {
   };
   edit?: { form?: IEntityEditFormProps };
 
+  searchable?: boolean;
   initialSorting?: SortInfo[];
   render?: ((value: T | null) => string);
 }
@@ -114,6 +115,9 @@ export class Entity<T> {
 
   public get initialSorting(): SortInfo[] | undefined {
     return this.config.initialSorting;
+  }
+  public get searchable(): boolean {
+    return this.config.searchable || false;
   }
 
   public get listFields(): EntityField<T, any>[] {
