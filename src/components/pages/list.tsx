@@ -1,7 +1,7 @@
-import { Card, Icon } from 'antd';
+import { Card, Icon, Button } from 'antd';
 import * as React from 'react';
 // import { Link } from 'react-router-dom';
-import { ResourceSearchInput, ResourceTable } from 'webpanel-antd';
+import { ResourceSearchInput, ResourceTable, Link } from 'webpanel-antd';
 import {
   DataSource,
   ResourceCollection,
@@ -10,6 +10,7 @@ import {
 
 import { Entity } from '../../model/Entity';
 import { ColumnProps } from 'antd/lib/table';
+import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -34,18 +35,18 @@ export class EntityList extends React.Component<IEntityListProps> {
           <Card
             bodyStyle={{ padding: '0' }}
             title={
-              entity.searchable
-                ? <h1 style={{ fontSize: '20px' }}>
-                  {entity.title}
-                </h1>
-                : undefined
+              entity.searchable ? (
+                <h1 style={{ fontSize: '20px' }}>{entity.title}</h1>
+              ) : (
+                undefined
+              )
             }
             extra={
-              entity.searchable
-                ? <ResourceSearchInput
-                  resourceCollection={resource}
-                />
-                : undefined
+              entity.searchable ? (
+                <ResourceSearchInput resourceCollection={resource} />
+              ) : (
+                undefined
+              )
             }
           >
             <ResourceTable
@@ -67,9 +68,22 @@ export class EntityList extends React.Component<IEntityListProps> {
                   };
                 }
               )}
-              detailButtonText={
-                entity.showDetailPage ? undefined : <Icon type="edit" />
-              }
+              actionButtons={[
+                'detail',
+                entity.showDetailPage
+                  ? (props: ActionButtonProps) => (
+                      <Link
+                        key="edit-button-action"
+                        to={`${props.resourceID.toString()}/edit`}
+                      >
+                        <Button size="small">
+                          <Icon type="edit" />
+                        </Button>
+                      </Link>
+                    )
+                  : null,
+                'delete'
+              ].filter(x => x)}
             />
           </Card>
         )}
