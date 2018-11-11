@@ -8,7 +8,11 @@ import { DataSource, SortInfo } from 'webpanel-data';
 
 import { EntityList, IEntityListTableProps } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
-import { EntityField, IEntityFieldConfig } from './EntityField';
+import {
+  EntityField,
+  IEntityFieldConfig,
+  FieldPermission
+} from './EntityField';
 import { EntityDetailLayout } from '../components/layouts/entity.detail';
 import {
   EntityEditLayout,
@@ -121,17 +125,27 @@ export class Entity<T> {
   }
 
   public get listFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('list'));
+    return this.fields.filter(
+      f => f.visible('list') && f.hasPermission('read')
+    );
   }
-
   public get editFields(): EntityField<T, any>[] {
     return this.fields.filter(f => f.visible('edit'));
   }
+  public editFieldsWithPermission(
+    permission: FieldPermission
+  ): EntityField<T, any>[] {
+    return this.editFields.filter(f => f.hasPermission(permission));
+  }
   public get detailFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('detail'));
+    return this.fields.filter(
+      f => f.visible('detail') && f.hasPermission('read')
+    );
   }
   public get searchableFields(): EntityField<T, any>[] {
-    const fields = this.fields.filter(f => f.visible('search', true));
+    const fields = this.fields.filter(
+      f => f.visible('search', true) && f.hasPermission('read')
+    );
     if (fields.length === 0) {
       return [this.listFields[0]];
     }

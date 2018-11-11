@@ -4,13 +4,15 @@ import { Entity } from './Entity';
 import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
-declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
+export declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
+export declare type FieldPermission = 'read' | 'write';
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
     visible?: Thunk<FieldSections[]>;
     hidden?: Thunk<FieldSections[]>;
+    permissions?: Thunk<FieldPermission[]>;
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
@@ -27,6 +29,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly fetchField: string;
     readonly sortable: boolean;
     visible(section: FieldSections, strict?: boolean): boolean;
+    hasPermission(permission: FieldPermission): boolean;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
@@ -38,4 +41,3 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
         formLayout?: FormLayout;
     }): React.ReactNode;
 }
-export {};
