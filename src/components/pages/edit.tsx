@@ -1,7 +1,7 @@
 import { Card, message } from 'antd';
 import * as React from 'react';
 import { FormLayout } from 'antd/lib/form/Form';
-import { ResourceForm, RouteComponentProps, Link } from 'webpanel-antd';
+import { ResourceForm, RouteComponentProps } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource, ResourceLayer } from 'webpanel-data';
 
@@ -51,7 +51,6 @@ export class EntityEdit extends React.Component<
 
     switch (option) {
       case 'add':
-        Link;
         route.history.push('/' + entity.structureName + '/new');
         this.setState({ version: this.state.version + 1 });
         break;
@@ -88,7 +87,7 @@ export class EntityEdit extends React.Component<
         key={this.state.version}
         name={entity.name}
         id={resourceID}
-        fields={entity.editFields.map(f => f.columnName)}
+        fields={entity.editFieldsWithPermission('read').map(f => f.columnName)}
         dataSource={entity.dataSource}
         onCreate={onCreate}
         initialValues={initialValues}
@@ -102,7 +101,7 @@ export class EntityEdit extends React.Component<
               {...form}
               render={(formContext: FormContext) => (
                 <>
-                  {entity.editFields.map((field, i) =>
+                  {entity.editFieldsWithPermission('write').map((field, i) =>
                     field.fieldElement(formContext, i, {
                       formLayout: form && form.layout
                     })

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DataSource, SortInfo } from 'webpanel-data';
 import { IEntityListTableProps } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
-import { EntityField, IEntityFieldConfig } from './EntityField';
+import { EntityField, IEntityFieldConfig, FieldPermission } from './EntityField';
 import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
 import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
 import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
@@ -47,6 +47,7 @@ export declare class Entity<T> {
     readonly searchable: boolean;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
+    editFieldsWithPermission(permission: FieldPermission): EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];
     readonly searchableFields: EntityField<T, any>[];
     readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
