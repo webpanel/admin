@@ -25,6 +25,7 @@ export interface IEntityListProps {
 export class EntityList extends React.Component<IEntityListProps> {
   public render() {
     const { entity, table } = this.props;
+
     return (
       <ResourceCollectionLayer
         name={entity.name}
@@ -35,17 +36,19 @@ export class EntityList extends React.Component<IEntityListProps> {
           <Card
             bodyStyle={{ padding: '0' }}
             title={
-              entity.searchable ? (
-                <h1 style={{ fontSize: '20px' }}>{entity.title}</h1>
-              ) : (
-                undefined
-              )
+              <div>
+                {entity.title}{' '}
+                <Link to="new">
+                  <Button size="small" htmlType="button" icon="plus" />
+                </Link>
+              </div>
             }
             extra={
-              entity.searchable ? (
-                <ResourceSearchInput resourceCollection={resource} />
-              ) : (
-                undefined
+              entity.searchable && (
+                <ResourceSearchInput
+                  resourceCollection={resource}
+                  size="small"
+                />
               )
             }
           >

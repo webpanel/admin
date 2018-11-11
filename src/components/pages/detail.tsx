@@ -1,7 +1,7 @@
-import { Card, Form } from 'antd';
+import { Card, Form, Button } from 'antd';
 import * as React from 'react';
 // import { Link  } from 'react-router-dom';
-import { RouteComponentProps } from 'webpanel-antd';
+import { RouteComponentProps, Link } from 'webpanel-antd';
 import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
@@ -41,12 +41,12 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         fields={['id', ...entity.detailFields.map(x => x.fetchField)]}
         render={(resource: Resource) => (
           <Card
-          // title={entity.title}
-          // extra={
-          //   <Link to={`${id}/edit`}>
-          //     <Button htmlType="button">Edit</Button>
-          //   </Link>
-          // }
+            title={entity.title}
+            extra={
+              <Link to={`${id}/edit`}>
+                <Button size="small" htmlType="button" icon="edit" />
+              </Link>
+            }
           >
             <Form>
               {entity.detailFields.map((field, i) => (
