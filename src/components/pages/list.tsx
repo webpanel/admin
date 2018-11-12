@@ -72,7 +72,16 @@ export class EntityList extends React.Component<IEntityListProps> {
                 }
               )}
               actionButtons={[
-                'detail',
+                (props: ActionButtonProps) => (
+                  <Link
+                    key="edit-button-action"
+                    to={`${props.resourceID.toString()}`}
+                  >
+                    <Button size="small">
+                      <Icon type={entity.showDetailPage ? 'search' : 'edit'} />
+                    </Button>
+                  </Link>
+                ),
                 entity.showDetailPage
                   ? (props: ActionButtonProps) => (
                       <Link
