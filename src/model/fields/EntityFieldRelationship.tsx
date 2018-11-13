@@ -28,7 +28,7 @@ export class EntityFieldRelationship<T> extends EntityField<
   }
 
   public get columnName(): string {
-    return `${this.name}_${this.type === 'toOne' ? 'id' : 'ids'}`;
+    return `${this.name}${this.type === 'toOne' ? 'Id' : 'Ids'}`;
   }
 
   public get mode(): IEntityFieldRelationshipSelectMode {
