@@ -32,6 +32,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         dataSource={this.props.dataSource}
         fields={['id', ...entity.listFields.map(x => x.fetchField)]}
         initialSorting={entity.initialSorting}
+        initialFilters={entity.initialFilters}
         render={(resource: ResourceCollection) => (
           <Card
             bodyStyle={{ padding: '0' }}
