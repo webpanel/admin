@@ -10,6 +10,7 @@ import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship
 import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 import { Thunk } from 'ts-thunk';
 import { IEntityEditFormProps } from '../components/pages/edit';
+import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
@@ -30,6 +31,7 @@ export interface IEntityConfig<T> {
     };
     searchable?: boolean;
     initialSorting?: SortInfo[];
+    initialFilters?: DataSourceArgumentMap;
     render?: ((value: T | null) => string);
 }
 export declare class Entity<T> {
@@ -44,6 +46,7 @@ export declare class Entity<T> {
     readonly dataSource: DataSource;
     readonly render: ((value: T | null) => string);
     readonly initialSorting: SortInfo[] | undefined;
+    readonly initialFilters: DataSourceArgumentMap | undefined;
     readonly searchable: boolean;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];

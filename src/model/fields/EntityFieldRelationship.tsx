@@ -91,6 +91,7 @@ export class EntityFieldRelationship<T> extends EntityField<
           )
         ]}
         initialSorting={_targetEntity.initialSorting}
+        initialFilters={_targetEntity.initialFilters}
         dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => (
           <div

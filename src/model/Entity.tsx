@@ -39,6 +39,7 @@ import {
 } from './fields/EntityFieldEnum';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 import { IEntityEditFormProps } from '../components/pages/edit';
+import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -65,6 +66,7 @@ export interface IEntityConfig<T> {
 
   searchable?: boolean;
   initialSorting?: SortInfo[];
+  initialFilters?: DataSourceArgumentMap;
   render?: ((value: T | null) => string);
 }
 
@@ -119,6 +121,9 @@ export class Entity<T> {
 
   public get initialSorting(): SortInfo[] | undefined {
     return this.config.initialSorting;
+  }
+  public get initialFilters(): DataSourceArgumentMap | undefined {
+    return this.config.initialFilters;
   }
   public get searchable(): boolean {
     return this.config.searchable || false;
