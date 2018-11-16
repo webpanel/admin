@@ -3,6 +3,7 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 import { Select } from 'antd';
 import { Thunk, resolveThunk } from 'ts-thunk';
+import { ResourceCollection } from 'webpanel-data';
 
 export interface IOption {
   value: string;
@@ -29,6 +30,24 @@ export class EntityFieldEnum<T> extends EntityField<
       return '–';
     };
   }
+
+  public filterDropdownInput = (resource: ResourceCollection) => {
+    const selectOptions = resolveThunk(this.config.options).map(
+      (value: IOption) => (
+        <Select.Option value={value.value}>{value.label}</Select.Option>
+      )
+    );
+
+    return (
+      <Select
+        onChange={
+          (value: any) =>
+            this.updateFilterField(resource, 'in', value)
+        }>
+        {selectOptions}
+      </Select>
+    );
+  };
 
   public inputElement(props?: {
     value?: any;

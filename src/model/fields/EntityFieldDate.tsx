@@ -1,8 +1,10 @@
+import { DatePicker as AntdDatePicker } from 'antd';
 import * as React from 'react';
 import * as moment from 'moment';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 import { DatePicker } from '../../components/date-picker';
+import { ResourceCollection } from 'webpanel-data';
 
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
   showTime?: boolean;
@@ -30,6 +32,30 @@ export class EntityFieldDate<T> extends EntityField<
       }
     };
   }
+
+  public filterDropdownInput = (resource: ResourceCollection) => {
+    return (
+      this.range ?
+        (
+          <AntdDatePicker.RangePicker
+            format={this.config.format}
+            onChange={(value: any) => {
+              this.updateFilterField(resource, 'gte', moment(value[0]).startOf('day').toISOString());
+              this.updateFilterField(resource, 'lte', moment(value[1]).endOf('day').toISOString());
+            }}
+          />
+        )
+        :
+        (
+          <DatePicker
+            onChange={(value: string) => {
+              this.updateFilterField(resource, 'gte', moment(value).startOf('day').toISOString());
+              this.updateFilterField(resource, 'lte', moment(value).endOf('day').toISOString());
+            }}
+          />
+        )
+    );
+  };
 
   public inputElement(props?: {
     value?: any;
