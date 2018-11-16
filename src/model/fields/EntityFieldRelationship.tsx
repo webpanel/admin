@@ -6,7 +6,7 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Select } from 'antd';
 import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 
@@ -149,6 +149,84 @@ export class EntityFieldRelationship<T> extends EntityField<
       />
     );
   }
+
+  public updateFilterField = (
+    resource: ResourceCollection,
+    operationName: string,
+    value: string,
+    customName?: string,
+  ) => {
+    const filterName = `${customName || this.name}${operationName ? '_' : ''}${operationName}`;
+    const filters = (
+      resource.filters || {}
+    )[this.name] || {};
+
+    if (value) {
+      filters[this.name] = { [filterName]: value };
+    } else {
+      delete filters[this.name];
+    }
+
+    resource.updateNamedFilters(
+      this.name,
+      filters,
+      true,
+    );
+  };
+
+  public clearFilters = (
+    resource: ResourceCollection,
+  ) => {
+    const filters = (
+      resource.filters || {}
+    )[this.name] || {};
+
+    delete filters[this.name];
+
+    resource.updateNamedFilters(
+      this.name,
+      filters,
+      true,
+    );
+  };
+
+  public filterDropdownInput = (mainResource: ResourceCollection) => {
+    const { targetEntity } = this.config;
+    const _targetEntity = resolveThunk(targetEntity);
+
+    return (
+      <ResourceCollectionLayer
+        name={targetEntity.name}
+        fields={[
+          'id',
+          ..._targetEntity.searchableFields.map(x => x.fetchField)
+        ]}
+        dataSource={_targetEntity.dataSource}
+        render={(resource: ResourceCollection) =>
+          <>
+            <Select
+              style={{ minWidth: '128px' }}
+              onChange={
+                (value: any) =>
+                  this.updateFilterField(mainResource, 'in', value, 'id')
+              }>
+              {
+                (resource.data || []).map(
+                  (value: any) =>
+                    <Select.Option value={value.id}>{value.name}</Select.Option>
+                )
+              }
+            </Select>
+            <Button
+              onClick={() =>
+                this.clearFilters(mainResource)
+              }>
+              Reset
+            </Button>
+          </>
+        }/>
+    );
+  };
 
   public inputElement(props?: {
     value?: any;
