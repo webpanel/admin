@@ -60,12 +60,16 @@ export class EntityList extends React.Component<IEntityListProps> {
               {...table}
               columns={entity.listFields.map(
                 (field): ColumnProps<any> => {
-                  const { render } = field;
+                  const { render, filter } = field;
                   return {
                     key: field.name,
                     dataIndex: field.name,
                     title: field.shortTitle,
                     sorter: field.sortable,
+
+                    filterDropdown: filter ? field.filterDropdown(resource) : undefined,
+                    // onFilter: filter ? field.onFilter : undefined,
+
                     render: (value: any, record: any): React.ReactNode => {
                       return render(record);
                     }

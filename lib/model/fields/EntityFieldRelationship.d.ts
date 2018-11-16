@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ResourceCollection } from 'webpanel-data';
 import { Thunk } from 'ts-thunk';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
@@ -19,6 +20,9 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
+    updateFilterField: (resource: ResourceCollection, operationName: string, value: string, customName?: string | undefined) => void;
+    clearFilters: (resource: ResourceCollection) => void;
+    filterDropdownInput: (mainResource: ResourceCollection) => JSX.Element;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any) => void;
