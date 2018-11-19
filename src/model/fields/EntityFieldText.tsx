@@ -13,6 +13,6 @@ export class EntityFieldText<T, C> extends EntityField<T, C> {
       ? (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)
       : undefined;
 
-    return <Input.TextArea {...props} onChange={onChangeProp} />;
+    return <Input.TextArea {...props} autosize={{minRows:2, maxRows: 8}} onChange={onChangeProp} />;
   }
 }
