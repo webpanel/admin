@@ -75,7 +75,7 @@ export class EntityList extends React.Component<IEntityListProps> {
               actionButtons={[
                 (props: ActionButtonProps) => (
                   <Link
-                    key="edit-button-action"
+                    key="detail-button-action"
                     to={`${props.resourceID.toString()}`}
                   >
                     <Button size="small">
