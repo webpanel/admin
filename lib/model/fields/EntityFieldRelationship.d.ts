@@ -20,12 +20,13 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
-    updateFilterField: (resource: ResourceCollection, operationName: string, value: string, customName?: string | undefined) => void;
-    clearFilters: (resource: ResourceCollection) => void;
-    filterDropdownInput: (mainResource: ResourceCollection) => JSX.Element;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
+    isFiltered(resource: ResourceCollection): boolean;
+    protected updateFilterField: (resource: ResourceCollection, operationName: string | null, value: string | string[], customName?: string | undefined) => void;
+    protected valueForFilterField: (resource: ResourceCollection, operationName: string | null, customName?: string | undefined) => any;
+    filterDropdownInput: (mainResource: ResourceCollection) => JSX.Element;
 }

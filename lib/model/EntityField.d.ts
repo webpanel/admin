@@ -42,10 +42,13 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
         autoFocus?: boolean;
     }): React.ReactNode;
     readonly valuePropName: string;
-    updateFilterField: (resource: ResourceCollection, operationName: string, value: string, customName?: string | undefined) => void;
-    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
-    filterDropdown: (resource: any) => () => JSX.Element;
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
+    isFiltered(resource: ResourceCollection): boolean;
+    protected updateFilterField: (resource: ResourceCollection, operationName: string | null, value: string, customName?: string | undefined) => void;
+    protected valueForFilterField: (resource: ResourceCollection, operationName: string | null, customName?: string | undefined) => any;
+    protected clearFilters: (resource: ResourceCollection) => void;
+    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
+    filterDropdown: (resource: any) => () => JSX.Element;
 }

@@ -6,7 +6,7 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Button, Modal, Select } from 'antd';
+import { Button, Modal } from 'antd';
 import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 
@@ -83,7 +83,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     return (
       <ResourceCollectionLayer
         key={key}
-        name={targetEntity.name}
+        name={_targetEntity.name}
         fields={[
           'id',
           ..._targetEntity.searchableFields.map(
@@ -150,84 +150,6 @@ export class EntityFieldRelationship<T> extends EntityField<
     );
   }
 
-  public updateFilterField = (
-    resource: ResourceCollection,
-    operationName: string,
-    value: string,
-    customName?: string,
-  ) => {
-    const filterName = `${customName || this.name}${operationName ? '_' : ''}${operationName}`;
-    const filters = (
-      resource.filters || {}
-    )[this.name] || {};
-
-    if (value) {
-      filters[this.name] = { [filterName]: value };
-    } else {
-      delete filters[this.name];
-    }
-
-    resource.updateNamedFilters(
-      this.name,
-      filters,
-      true,
-    );
-  };
-
-  public clearFilters = (
-    resource: ResourceCollection,
-  ) => {
-    const filters = (
-      resource.filters || {}
-    )[this.name] || {};
-
-    delete filters[this.name];
-
-    resource.updateNamedFilters(
-      this.name,
-      filters,
-      true,
-    );
-  };
-
-  public filterDropdownInput = (mainResource: ResourceCollection) => {
-    const { targetEntity } = this.config;
-    const _targetEntity = resolveThunk(targetEntity);
-
-    return (
-      <ResourceCollectionLayer
-        name={targetEntity.name}
-        fields={[
-          'id',
-          ..._targetEntity.searchableFields.map(x => x.fetchField)
-        ]}
-        dataSource={_targetEntity.dataSource}
-        render={(resource: ResourceCollection) =>
-          <>
-            <Select
-              style={{ minWidth: '128px' }}
-              onChange={
-                (value: any) =>
-                  this.updateFilterField(mainResource, 'in', value, 'id')
-              }>
-              {
-                (resource.data || []).map(
-                  (value: any) =>
-                    <Select.Option value={value.id}>{value.name}</Select.Option>
-                )
-              }
-            </Select>
-            <Button
-              onClick={() =>
-                this.clearFilters(mainResource)
-              }>
-              Reset
-            </Button>
-          </>
-        }/>
-    );
-  };
-
   public inputElement(props?: {
     value?: any;
     onChange?: (value: any) => void;
@@ -237,11 +159,15 @@ export class EntityFieldRelationship<T> extends EntityField<
     const _targetEntity = resolveThunk(targetEntity);
     return (
       <ResourceCollectionLayer
-        name={targetEntity.name}
+        name={_targetEntity.name}
         fields={[
           'id',
-          ..._targetEntity.searchableFields.map(x => x.fetchField)
+          ..._targetEntity.searchableFields.map(
+            (x: EntityField<any, any>) => x.name
+          )
         ]}
+        initialSorting={_targetEntity.initialSorting}
+        initialFilters={_targetEntity.initialFilters}
         dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => {
           return (
@@ -260,4 +186,89 @@ export class EntityFieldRelationship<T> extends EntityField<
       />
     );
   }
+
+  public isFiltered(resource: ResourceCollection): boolean {
+    return this.valueForFilterField(resource, 'in', 'id');
+  }
+
+  protected updateFilterField = (
+    resource: ResourceCollection,
+    operationName: string | null,
+    value: string | string[],
+    customName?: string
+  ) => {
+    const filterName = `${customName || this.name}${
+      operationName ? '_' : ''
+    }${operationName || ''}`;
+    const filters = resource.namedFilter(this.name) || {};
+    const filter = filters[this.name] || {};
+    filters[this.name] = filter;
+
+    if (value) {
+      filter[filterName] = value;
+    } else {
+      delete filter[filterName];
+    }
+
+    resource.updateNamedFilters(this.name, filters, true);
+  };
+
+  protected valueForFilterField = (
+    resource: ResourceCollection,
+    operationName: string | null,
+    customName?: string
+  ): any | undefined => {
+    const filterName = `${customName || this.name}${
+      operationName ? '_' : ''
+    }${operationName || ''}`;
+
+    const filter = resource.namedFilter(this.name);
+    const fieldFilter = filter && filter[this.name];
+    if (!fieldFilter) {
+      return undefined;
+    }
+    return fieldFilter[filterName];
+  };
+
+  public filterDropdownInput = (mainResource: ResourceCollection) => {
+    const { targetEntity } = this.config;
+    const _targetEntity = resolveThunk(targetEntity);
+
+    return (
+      <ResourceCollectionLayer
+        name={targetEntity.name}
+        fields={[
+          'id',
+          ..._targetEntity.searchableFields.map(x => x.fetchField)
+        ]}
+        dataSource={_targetEntity.dataSource}
+        render={(resource: ResourceCollection) => {
+          const value = this.valueForFilterField(mainResource, 'in', 'id');
+          return (
+            <>
+              <ResourceSelect
+                valueKey="id"
+                labelKey={(value: any): string => {
+                  return _targetEntity.render(value);
+                }}
+                value={value}
+                mode={this.mode}
+                allowClear={false}
+                resourceCollection={resource}
+                style={{ minWidth: '200px' }}
+                onChange={(value: any) =>
+                  this.updateFilterField(mainResource, 'in', [value], 'id')
+                }
+              />
+              <Button
+                disabled={!this.isFiltered(mainResource)}
+                onClick={() => this.clearFilters(mainResource)}
+                icon="delete"
+              />
+            </>
+          );
+        }}
+      />
+    );
+  };
 }

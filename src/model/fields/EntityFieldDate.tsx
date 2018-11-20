@@ -1,4 +1,4 @@
-import { DatePicker as AntdDatePicker } from 'antd';
+import { DatePicker as AntdDatePicker, Button } from 'antd';
 import * as React from 'react';
 import * as moment from 'moment';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
@@ -33,27 +33,67 @@ export class EntityFieldDate<T> extends EntityField<
     };
   }
 
+  public isFiltered(resource: ResourceCollection): boolean {
+    return (
+      this.valueForFilterField(resource, 'gte') ||
+      this.valueForFilterField(resource, 'lte')
+    );
+  }
+
   public filterDropdownInput = (resource: ResourceCollection) => {
     return (
-      this.range ?
-        (
+      <>
+        {this.range ? (
           <AntdDatePicker.RangePicker
             format={this.config.format}
+            defaultValue={[
+              this.valueForFilterField(resource, 'gte'),
+              this.valueForFilterField(resource, 'lte')
+            ]}
             onChange={(value: any) => {
-              this.updateFilterField(resource, 'gte', moment(value[0]).startOf('day').toISOString());
-              this.updateFilterField(resource, 'lte', moment(value[1]).endOf('day').toISOString());
+              this.updateFilterField(
+                resource,
+                'gte',
+                moment(value[0])
+                  .startOf('day')
+                  .toISOString()
+              );
+              this.updateFilterField(
+                resource,
+                'lte',
+                moment(value[1])
+                  .endOf('day')
+                  .toISOString()
+              );
             }}
           />
-        )
-        :
-        (
+        ) : (
           <DatePicker
+            value={this.valueForFilterField(resource, 'gte')}
             onChange={(value: string) => {
-              this.updateFilterField(resource, 'gte', moment(value).startOf('day').toISOString());
-              this.updateFilterField(resource, 'lte', moment(value).endOf('day').toISOString());
+              this.updateFilterField(
+                resource,
+                'gte',
+                moment(value)
+                  .startOf('day')
+                  .toISOString()
+              );
+              this.updateFilterField(
+                resource,
+                'lte',
+                moment(value)
+                  .endOf('day')
+                  .toISOString()
+              );
             }}
           />
-        )
+        )}
+        <Button
+          disabled={!this.isFiltered(resource)}
+          onClick={() => this.clearFilters(resource)}
+          icon="delete"
+        />
+      </>
     );
   };
 
