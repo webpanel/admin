@@ -7,5 +7,6 @@ export declare class EntityFieldNumber<T, C> extends EntityField<T, C> {
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
+    isFiltered(resource: ResourceCollection): boolean;
     filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
 }

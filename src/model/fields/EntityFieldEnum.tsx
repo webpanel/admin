@@ -31,24 +31,6 @@ export class EntityFieldEnum<T> extends EntityField<
     };
   }
 
-  public filterDropdownInput = (resource: ResourceCollection) => {
-    const selectOptions = resolveThunk(this.config.options).map(
-      (value: IOption) => (
-        <Select.Option value={value.value}>{value.label}</Select.Option>
-      )
-    );
-
-    return (
-      <Select
-        onChange={
-          (value: any) =>
-            this.updateFilterField(resource, 'in', value)
-        }>
-        {selectOptions}
-      </Select>
-    );
-  };
-
   public inputElement(props?: {
     value?: any;
     onChange?: (value: any) => void;
@@ -62,4 +44,24 @@ export class EntityFieldEnum<T> extends EntityField<
 
     return <Select {...props}>{selectOptions}</Select>;
   }
+
+  public isFiltered(resource: ResourceCollection): boolean {
+    return this.valueForFilterField(resource, 'in');
+  }
+
+  public filterDropdownInput = (resource: ResourceCollection) => {
+    const selectOptions = resolveThunk(this.config.options).map(
+      (value: IOption) => (
+        <Select.Option value={value.value}>{value.label}</Select.Option>
+      )
+    );
+
+    return (
+      <Select
+        onChange={(value: any) => this.updateFilterField(resource, 'in', value)}
+      >
+        {selectOptions}
+      </Select>
+    );
+  };
 }

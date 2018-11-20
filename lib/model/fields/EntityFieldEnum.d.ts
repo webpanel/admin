@@ -11,10 +11,11 @@ export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
 }
 export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumConfig<T>> {
     readonly render: ((record: T) => React.ReactNode);
-    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
+    isFiltered(resource: ResourceCollection): boolean;
+    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
 }

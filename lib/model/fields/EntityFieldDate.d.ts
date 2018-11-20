@@ -8,6 +8,7 @@ export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldDate<T> extends EntityField<T, IEntityFieldDateConfig<T>> {
     private readonly format;
     readonly render: ((record: T) => React.ReactNode);
+    isFiltered(resource: ResourceCollection): boolean;
     filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
     inputElement(props?: {
         value?: any;

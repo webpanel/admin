@@ -57,7 +57,7 @@ export class EntityList extends React.Component<IEntityListProps> {
               className="entitytable"
               scroll={{ x: true }}
               resourceCollection={resource}
-              pagination={{pageSize:30}}
+              pagination={{ pageSize: 30 }}
               {...table}
               columns={entity.listFields.map(
                 (field): ColumnProps<any> => {
@@ -68,7 +68,12 @@ export class EntityList extends React.Component<IEntityListProps> {
                     title: field.shortTitle,
                     sorter: field.sortable,
 
-                    filterDropdown: filter ? field.filterDropdown(resource) : undefined,
+                    filterDropdown: filter
+                      ? field.filterDropdown(resource)
+                      : undefined,
+                    filteredValue: field.isFiltered(resource)
+                      ? [true]
+                      : undefined,
                     // onFilter: filter ? field.onFilter : undefined,
 
                     render: (value: any, record: any): React.ReactNode => {

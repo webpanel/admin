@@ -1,7 +1,7 @@
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 import * as React from 'react';
 import * as inflection from 'inflection';
-import { FormField  } from 'webpanel-antd';
+import { FormField } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 
 import { Entity } from './Entity';
@@ -117,54 +117,6 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return 'value';
   }
 
-  public updateFilterField = (
-    resource: ResourceCollection,
-    operationName: string,
-    value: string,
-    customName?: string,
-  ) => {
-    const filterName = `${customName || this.name}${operationName ? '_' : ''}${operationName}`;
-    const filters = (
-      resource.filters || {}
-    )[this.name] || {};
-
-    if (value) {
-      filters[filterName] = value;
-    } else {
-      delete filters[filterName];
-    }
-
-    resource.updateNamedFilters(
-      this.name,
-      filters,
-      true,
-    );
-  };
-
-  public filterDropdownInput = (resource: ResourceCollection) => {
-    return (
-      <Input.Search
-        onSearch={
-          (value: string) =>
-            this.updateFilterField(resource, 'like', value)
-        }/>
-    );
-  };
-
-  public filterDropdown = (resource: any) => {
-    return () => (
-      <div style={{
-        display: 'flex',
-        padding: '8px',
-        backgroundColor: 'white',
-        borderRadius: '6px',
-        boxShadow: '0 1px 6px rgba(0, 0, 0, .2)',
-      }}>
-        {this.filterDropdownInput(resource)}
-      </div>
-    );
-  };
-
   public fieldElement(
     formContext: FormContext,
     key: string | number,
@@ -192,4 +144,83 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       </FormField>
     );
   }
+
+  public isFiltered(resource: ResourceCollection): boolean {
+    return !!this.valueForFilterField(resource, 'like');
+  }
+
+  protected updateFilterField = (
+    resource: ResourceCollection,
+    operationName: string | null,
+    value: string,
+    customName?: string
+  ) => {
+    const filterName = `${customName || this.name}${
+      operationName ? '_' : ''
+    }${operationName || ''}`;
+    const filters = (resource.filters || {})[this.name] || {};
+
+    if (value) {
+      filters[filterName] = value;
+    } else {
+      delete filters[filterName];
+    }
+
+    resource.updateNamedFilters(this.name, filters, true);
+  };
+
+  protected valueForFilterField = (
+    resource: ResourceCollection,
+    operationName: string | null,
+    customName?: string
+  ): any | undefined => {
+    const filterName = `${customName || this.name}${
+      operationName ? '_' : ''
+    }${operationName || ''}`;
+
+    const filter = resource.namedFilter(this.name);
+    if (!filter) {
+      return undefined;
+    }
+    return filter[filterName];
+  };
+
+  protected clearFilters = (resource: ResourceCollection) => {
+    resource.updateNamedFilters(this.name, undefined, true);
+  };
+
+  public filterDropdownInput = (resource: ResourceCollection) => {
+    const value = this.valueForFilterField(resource, 'like');
+    return (
+      <>
+        <Input.Search
+          defaultValue={value}
+          onSearch={(value: string) =>
+            this.updateFilterField(resource, 'like', value)
+          }
+        />
+        <Button
+          disabled={!this.isFiltered(resource)}
+          onClick={() => this.clearFilters(resource)}
+          icon="delete"
+        />
+      </>
+    );
+  };
+
+  public filterDropdown = (resource: any) => {
+    return () => (
+      <div
+        style={{
+          display: 'flex',
+          padding: '8px',
+          backgroundColor: 'white',
+          borderRadius: '6px',
+          boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
+        }}
+      >
+        {this.filterDropdownInput(resource)}
+      </div>
+    );
+  };
 }
