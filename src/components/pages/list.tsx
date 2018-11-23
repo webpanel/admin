@@ -57,7 +57,11 @@ export class EntityList extends React.Component<IEntityListProps> {
               className="entitytable"
               scroll={{ x: true }}
               resourceCollection={resource}
-              pagination={{ defaultPageSize: 30, showSizeChanger: true }}
+              pagination={{
+                defaultPageSize: 30,
+                pageSizeOptions: ['10', '20', '30', '50', '100'],
+                showSizeChanger: true
+              }}
               {...table}
               columns={entity.listFields.map(
                 (field): ColumnProps<any> => {
