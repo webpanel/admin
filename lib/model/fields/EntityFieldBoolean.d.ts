@@ -10,4 +10,7 @@ export declare class EntityFieldBoolean<T> extends EntityField<T, IEntityFieldBo
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
+    readonly filterFormatter: ((values: boolean[]) => {
+        [key: string]: any;
+    });
 }

@@ -6,4 +6,7 @@ export declare class EntityFieldText<T, C> extends EntityField<T, C> {
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
+    readonly filterFormatter: ((values: any[]) => {
+        [key: string]: any;
+    });
 }

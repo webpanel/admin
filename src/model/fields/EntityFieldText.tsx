@@ -13,6 +13,24 @@ export class EntityFieldText<T, C> extends EntityField<T, C> {
       ? (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)
       : undefined;
 
-    return <Input.TextArea {...props} autosize={{minRows:2, maxRows: 8}} onChange={onChangeProp} />;
+    return (
+      <Input.TextArea
+        {...props}
+        autosize={{ minRows: 2, maxRows: 8 }}
+        onChange={onChangeProp}
+      />
+    );
+  }
+
+  public get filterFormatter(): ((values: any[]) => { [key: string]: any }) {
+    return (values: string[]) => {
+      let res = {};
+      if (values.length == 1) {
+        res[this.columnName + '_contains'] = values[0];
+      } else if (values.length > 1) {
+        res[this.columnName + '_in'] = values;
+      }
+      return res;
+    };
   }
 }

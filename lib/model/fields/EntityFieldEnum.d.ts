@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from '../EntityField';
 import { Thunk } from 'ts-thunk';
-import { ResourceCollection } from 'webpanel-data';
 export interface IOption {
     value: string;
     label: string;
@@ -16,6 +15,8 @@ export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumC
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
-    isFiltered(resource: ResourceCollection): boolean;
-    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
+    filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
+    readonly filterFormatter: ((values: string[]) => {
+        [key: string]: any;
+    });
 }

@@ -8,10 +8,17 @@ import { Entity } from './Entity';
 import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
-import { ResourceCollection } from 'webpanel-data';
+// import { ResourceCollection } from 'webpanel-data';
 
 export type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 export type FieldPermission = 'read' | 'write';
+
+export interface IEntityFieldFilterProps<T> {
+  selectedKeys: T[];
+  setSelectedKeys: (keys: T[]) => {};
+  confirm: () => {};
+  clearFilters: () => {};
+}
 
 export interface IEntityFieldConfig<T> {
   // header titles, bradcrumb names
@@ -62,6 +69,18 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
   public get range(): boolean {
     return this.config.range || false;
+  }
+
+  public get filterFormatter(): ((values: any[]) => { [key: string]: any }) {
+    return (values: string[]) => {
+      let res = {};
+      if (values.length == 1) {
+        res[this.columnName + '_prefix'] = values[0];
+      } else if (values.length > 1) {
+        res[this.columnName + '_in'] = values;
+      }
+      return res;
+    };
   }
 
   public visible(section: FieldSections, strict: boolean = false): boolean {
@@ -145,82 +164,44 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     );
   }
 
-  public isFiltered(resource: ResourceCollection): boolean {
-    return !!this.valueForFilterField(resource, 'like');
-  }
-
-  protected updateFilterField = (
-    resource: ResourceCollection,
-    operationName: string | null,
-    value: string,
-    customName?: string
-  ) => {
-    const filterName = `${customName || this.name}${
-      operationName ? '_' : ''
-    }${operationName || ''}`;
-    const filters = (resource.filters || {})[this.name] || {};
-
-    if (value) {
-      filters[filterName] = value;
-    } else {
-      delete filters[filterName];
-    }
-
-    resource.updateNamedFilters(this.name, filters, true);
-  };
-
-  protected valueForFilterField = (
-    resource: ResourceCollection,
-    operationName: string | null,
-    customName?: string
-  ): any | undefined => {
-    const filterName = `${customName || this.name}${
-      operationName ? '_' : ''
-    }${operationName || ''}`;
-
-    const filter = resource.namedFilter(this.name);
-    if (!filter) {
-      return undefined;
-    }
-    return filter[filterName];
-  };
-
-  protected clearFilters = (resource: ResourceCollection) => {
-    resource.updateNamedFilters(this.name, undefined, true);
-  };
-
-  public filterDropdownInput = (resource: ResourceCollection) => {
-    const value = this.valueForFilterField(resource, 'like');
+  public filterDropdownInput = (props: IEntityFieldFilterProps<any>) => {
+    const value = props.selectedKeys ? props.selectedKeys[0] : '';
     return (
-      <>
-        <Input.Search
-          defaultValue={value}
-          onSearch={(value: string) =>
-            this.updateFilterField(resource, 'like', value)
-          }
-        />
-        <Button
-          disabled={!this.isFiltered(resource)}
-          onClick={() => this.clearFilters(resource)}
-          icon="delete"
-        />
-      </>
+      <Input
+        value={value}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          props.setSelectedKeys(e.target.value ? [e.target.value] : []);
+        }}
+      />
     );
   };
 
   public filterDropdown = (resource: any) => {
-    return () => (
-      <div
-        style={{
-          display: 'flex',
-          padding: '8px',
-          backgroundColor: 'white',
-          borderRadius: '6px',
-          boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
-        }}
-      >
-        {this.filterDropdownInput(resource)}
-      </div>
-    );
+    return (props: IEntityFieldFilterProps<any>) => {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            padding: '8px',
+            backgroundColor: 'white',
+            borderRadius: '6px',
+            boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
+          }}
+        >
+          {this.filterDropdownInput(props)}
+          <Button
+            disabled={!props.selectedKeys}
+            onClick={() => props.confirm()}
+            type="primary"
+            icon="search"
+          />
+          <Button
+            disabled={!props.selectedKeys}
+            onClick={() => props.clearFilters()}
+            icon="delete"
+          />
+        </div>
+      );
+    };
   };
 }
