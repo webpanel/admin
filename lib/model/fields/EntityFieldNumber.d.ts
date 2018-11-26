@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { EntityField } from '../EntityField';
-import { ResourceCollection } from 'webpanel-data';
+import { EntityField, IEntityFieldFilterProps } from '../EntityField';
 export declare class EntityFieldNumber<T, C> extends EntityField<T, C> {
     inputElement(props?: {
         value?: any;
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
-    isFiltered(resource: ResourceCollection): boolean;
-    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
+    filterDropdownInput: (props: IEntityFieldFilterProps<number>) => JSX.Element;
+    readonly filterFormatter: ((values: any[]) => {
+        [key: string]: any;
+    });
 }

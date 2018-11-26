@@ -2,7 +2,11 @@ import * as React from 'react';
 import { ResourceCollectionLayer, ResourceCollection } from 'webpanel-data';
 import { resolveThunk, Thunk } from 'ts-thunk';
 
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldFilterProps
+} from '../EntityField';
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
@@ -187,50 +191,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     );
   }
 
-  public isFiltered(resource: ResourceCollection): boolean {
-    return this.valueForFilterField(resource, 'in', 'id');
-  }
-
-  protected updateFilterField = (
-    resource: ResourceCollection,
-    operationName: string | null,
-    value: string | string[],
-    customName?: string
-  ) => {
-    const filterName = `${customName || this.name}${
-      operationName ? '_' : ''
-    }${operationName || ''}`;
-    const filters = resource.namedFilter(this.name) || {};
-    const filter = filters[this.name] || {};
-    filters[this.name] = filter;
-
-    if (value) {
-      filter[filterName] = value;
-    } else {
-      delete filter[filterName];
-    }
-
-    resource.updateNamedFilters(this.name, filters, true);
-  };
-
-  protected valueForFilterField = (
-    resource: ResourceCollection,
-    operationName: string | null,
-    customName?: string
-  ): any | undefined => {
-    const filterName = `${customName || this.name}${
-      operationName ? '_' : ''
-    }${operationName || ''}`;
-
-    const filter = resource.namedFilter(this.name);
-    const fieldFilter = filter && filter[this.name];
-    if (!fieldFilter) {
-      return undefined;
-    }
-    return fieldFilter[filterName];
-  };
-
-  public filterDropdownInput = (mainResource: ResourceCollection) => {
+  public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
     const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
 
@@ -243,32 +204,42 @@ export class EntityFieldRelationship<T> extends EntityField<
         ]}
         dataSource={_targetEntity.dataSource}
         render={(resource: ResourceCollection) => {
-          const value = this.valueForFilterField(mainResource, 'in', 'id');
+          const value = props.selectedKeys;
           return (
-            <>
-              <ResourceSelect
-                valueKey="id"
-                labelKey={(value: any): string => {
-                  return _targetEntity.render(value);
-                }}
-                value={value}
-                mode={this.mode}
-                allowClear={false}
-                resourceCollection={resource}
-                style={{ minWidth: '200px' }}
-                onChange={(value: any) =>
-                  this.updateFilterField(mainResource, 'in', [value], 'id')
+            <ResourceSelect
+              valueKey="id"
+              labelKey={(value: any): string => {
+                return _targetEntity.render(value);
+              }}
+              value={value}
+              mode={this.mode}
+              allowClear={false}
+              resourceCollection={resource}
+              style={{ minWidth: '200px' }}
+              onChange={(value: string | string[]) => {
+                if (Array.isArray(value)) {
+                  props.setSelectedKeys(value);
+                } else {
+                  props.setSelectedKeys([value.toString()]);
                 }
-              />
-              <Button
-                disabled={!this.isFiltered(mainResource)}
-                onClick={() => this.clearFilters(mainResource)}
-                icon="delete"
-              />
-            </>
+                // this.updateFilterField(mainResource, 'in', [value], 'id')
+              }}
+            />
           );
         }}
       />
     );
   };
+
+  public get filterFormatter(): ((values: string[]) => { [key: string]: any }) {
+    return (values: string[]) => {
+      let res = {};
+      if (values.length == 1) {
+        res[this.name] = { id: values[0] };
+      } else if (values.length > 1) {
+        res[this.name] = { id_in: values };
+      }
+      return res;
+    };
+  }
 }

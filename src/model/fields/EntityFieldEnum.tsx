@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldFilterProps
+} from '../EntityField';
 
 import { Select } from 'antd';
 import { Thunk, resolveThunk } from 'ts-thunk';
-import { ResourceCollection } from 'webpanel-data';
+// import { ResourceCollection } from 'webpanel-data';
 
 export interface IOption {
   value: string;
@@ -45,23 +49,33 @@ export class EntityFieldEnum<T> extends EntityField<
     return <Select {...props}>{selectOptions}</Select>;
   }
 
-  public isFiltered(resource: ResourceCollection): boolean {
-    return this.valueForFilterField(resource, 'in');
-  }
-
-  public filterDropdownInput = (resource: ResourceCollection) => {
+  public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
     const selectOptions = resolveThunk(this.config.options).map(
       (value: IOption) => (
         <Select.Option value={value.value}>{value.label}</Select.Option>
       )
     );
 
+    const value = props.selectedKeys;
     return (
       <Select
-        onChange={(value: any) => this.updateFilterField(resource, 'in', value)}
+        value={value}
+        onChange={(value: any) => props.setSelectedKeys([value])}
       >
         {selectOptions}
       </Select>
     );
   };
+
+  public get filterFormatter(): ((values: string[]) => { [key: string]: any }) {
+    return (values: string[]) => {
+      let res = {};
+      if (values.length == 1) {
+        res[this.columnName] = values[0];
+      } else if (values.length > 1) {
+        res[this.columnName + '_in'] = values;
+      }
+      return res;
+    };
+  }
 }

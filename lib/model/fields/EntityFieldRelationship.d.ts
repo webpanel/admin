@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { ResourceCollection } from 'webpanel-data';
 import { Thunk } from 'ts-thunk';
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from '../EntityField';
 import { Entity } from '../Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
@@ -25,8 +24,8 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
-    isFiltered(resource: ResourceCollection): boolean;
-    protected updateFilterField: (resource: ResourceCollection, operationName: string | null, value: string | string[], customName?: string | undefined) => void;
-    protected valueForFilterField: (resource: ResourceCollection, operationName: string | null, customName?: string | undefined) => any;
-    filterDropdownInput: (mainResource: ResourceCollection) => JSX.Element;
+    filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
+    readonly filterFormatter: ((values: string[]) => {
+        [key: string]: any;
+    });
 }

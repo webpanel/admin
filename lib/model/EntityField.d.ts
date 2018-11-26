@@ -4,9 +4,14 @@ import { Entity } from './Entity';
 import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
-import { ResourceCollection } from 'webpanel-data';
 export declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 export declare type FieldPermission = 'read' | 'write';
+export interface IEntityFieldFilterProps<T> {
+    selectedKeys: T[];
+    setSelectedKeys: (keys: T[]) => {};
+    confirm: () => {};
+    clearFilters: () => {};
+}
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
     shortTitle?: Thunk<string>;
@@ -33,6 +38,9 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly sortable: boolean;
     readonly filter: boolean;
     readonly range: boolean;
+    readonly filterFormatter: ((values: any[]) => {
+        [key: string]: any;
+    });
     visible(section: FieldSections, strict?: boolean): boolean;
     hasPermission(permission: FieldPermission): boolean;
     readonly render: ((record: T) => React.ReactNode);
@@ -45,10 +53,6 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
-    isFiltered(resource: ResourceCollection): boolean;
-    protected updateFilterField: (resource: ResourceCollection, operationName: string | null, value: string, customName?: string | undefined) => void;
-    protected valueForFilterField: (resource: ResourceCollection, operationName: string | null, customName?: string | undefined) => any;
-    protected clearFilters: (resource: ResourceCollection) => void;
-    filterDropdownInput: (resource: ResourceCollection) => JSX.Element;
-    filterDropdown: (resource: any) => () => JSX.Element;
+    filterDropdownInput: (props: IEntityFieldFilterProps<any>) => JSX.Element;
+    filterDropdown: (resource: any) => (props: IEntityFieldFilterProps<any>) => JSX.Element;
 }

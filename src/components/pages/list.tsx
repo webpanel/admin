@@ -9,8 +9,8 @@ import {
 } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
-import { ColumnProps } from 'antd/lib/table';
 import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
+import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -64,7 +64,7 @@ export class EntityList extends React.Component<IEntityListProps> {
               }}
               {...table}
               columns={entity.listFields.map(
-                (field): ColumnProps<any> => {
+                (field): ResourceTableColumn => {
                   const { render, filter } = field;
                   return {
                     key: field.name,
@@ -75,10 +75,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                     filterDropdown: filter
                       ? field.filterDropdown(resource)
                       : undefined,
-                    filteredValue: field.isFiltered(resource)
-                      ? [true]
-                      : undefined,
-                    // onFilter: filter ? field.onFilter : undefined,
+                    filterFormatter: field.filterFormatter,
 
                     render: (value: any, record: any): React.ReactNode => {
                       return render(record);
