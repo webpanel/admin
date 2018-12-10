@@ -11,6 +11,8 @@ import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 import { Thunk } from 'ts-thunk';
 import { IEntityEditFormProps } from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import { LayoutBuilder } from '../layout-builder';
+import { LayoutBuilderConfig } from '../layout-builder/builder';
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
@@ -48,6 +50,7 @@ export declare class Entity<T> {
     readonly initialSorting: SortInfo[] | undefined;
     readonly initialFilters: DataSourceArgumentMap | undefined;
     readonly searchable: boolean;
+    getField(name: string): EntityField<T, any> | null;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
     editFieldsWithPermission(permission: FieldPermission): EntityField<T, any>[];
@@ -56,6 +59,9 @@ export declare class Entity<T> {
     readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
     readonly editLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
+    private layouts;
+    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
     private getDetailPageLayout;

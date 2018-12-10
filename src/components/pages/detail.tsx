@@ -39,28 +39,36 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         id={id}
         dataSource={entity.dataSource}
         fields={['id', ...entity.detailFields.map(x => x.fetchField)]}
-        render={(resource: Resource) => (
-          <Card
-            title={entity.title}
-            extra={
-              <Link to={`${id}/edit`}>
-                <Button size="small" htmlType="button" icon="edit" />
-              </Link>
-            }
-          >
-            <Form>
-              {entity.detailFields.map((field, i) => (
-                <Form.Item
-                  key={`${field.name}_${i}`}
-                  label={field.title}
-                  {...formItemLayout}
-                >
-                  {resource.data && field.render(resource.data)}
-                </Form.Item>
-              ))}
-            </Form>
-          </Card>
-        )}
+        render={(resource: Resource) => {
+          const layout = entity.getLayout('detail', {
+            entity,
+            id,
+            data: resource.data || {}
+          });
+          if (layout) return layout;
+          return (
+            <Card
+              title={entity.title}
+              extra={
+                <Link to={`${id}/edit`}>
+                  <Button size="small" htmlType="button" icon="edit" />
+                </Link>
+              }
+            >
+              <Form>
+                {entity.detailFields.map((field, i) => (
+                  <Form.Item
+                    key={`${field.name}_${i}`}
+                    label={field.title}
+                    {...formItemLayout}
+                  >
+                    {resource.data && field.render(resource.data)}
+                  </Form.Item>
+                ))}
+              </Form>
+            </Card>
+          );
+        }}
       />
     );
   }
