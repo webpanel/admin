@@ -40,6 +40,8 @@ import {
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 import { IEntityEditFormProps } from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import { LayoutBuilder } from '../layout-builder';
+import { LayoutBuilderConfig } from '../layout-builder/builder';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -112,7 +114,7 @@ export class Entity<T> {
       return this.config.render;
     }
     return (value: any) => {
-      if (value === null) {
+      if (value === null || typeof value !== 'object') {
         return '–';
       }
       return this.searchableFields.map(x => value[x.name]).join(', ');
@@ -127,6 +129,11 @@ export class Entity<T> {
   }
   public get searchable(): boolean {
     return this.config.searchable || false;
+  }
+
+  public getField(name: string): EntityField<T, any> | null {
+    const filtered = this.fields.filter(f => f.name === name);
+    return filtered.length > 0 ? filtered[0] : null;
   }
 
   public get listFields(): EntityField<T, any>[] {
@@ -177,6 +184,28 @@ export class Entity<T> {
       ) => React.ReactElement<IEntityEditLayoutProps>)
     | undefined {
     return this.config.layouts && this.config.layouts.create;
+  }
+
+  private layouts: {
+    [key: string]: (builder: LayoutBuilder) => React.ReactNode;
+  } = {};
+  public setLayout = (
+    type: 'detail' | 'edit',
+    fn: (builder: LayoutBuilder) => React.ReactNode
+  ) => {
+    this.layouts[type] = fn;
+  };
+
+  public getLayout(
+    type: 'detail' | 'edit',
+    config: LayoutBuilderConfig
+  ): React.ReactNode | null {
+    const builder = new LayoutBuilder(config);
+    const fn = this.layouts[type];
+    if (fn) {
+      return fn(builder);
+    }
+    return null;
   }
 
   public menuItem = (): React.ReactNode => {

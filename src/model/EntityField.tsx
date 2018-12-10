@@ -144,8 +144,8 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     const formItemLayout =
       config.formLayout === 'horizontal'
         ? {
-            labelCol: { span: 4 },
-            wrapperCol: { span: 20 }
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 }
           }
         : null;
 

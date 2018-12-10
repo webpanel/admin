@@ -92,31 +92,42 @@ export class EntityEdit extends React.Component<
         onCreate={onCreate}
         initialValues={initialValues}
         render={(resource: Resource) => (
-          <Card>
-            <ResourceForm
-              formResource={resource}
-              onSuccess={(context: FormContext) =>
-                this.handleFormSuccess(resource)
-              }
-              {...form}
-              render={(formContext: FormContext) => (
-                <>
-                  {entity.editFieldsWithPermission('write').map((field, i) =>
-                    field.fieldElement(formContext, i, {
-                      formLayout: form && form.layout
-                    })
-                  )}
-                  <ResourceFormPageButtons
-                    hasChanges={formContext.form.isFieldsTouched()}
-                    handleReset={() => formContext.formComponent.resetFields()}
-                    handleSave={(option: SaveOption) =>
-                      this.handleSave(formContext, option, resource)
-                    }
-                  />
-                </>
-              )}
-            />
-          </Card>
+          <ResourceForm
+            formResource={resource}
+            onSuccess={(context: FormContext) =>
+              this.handleFormSuccess(resource)
+            }
+            {...form}
+            render={(formContext: FormContext) => {
+              const layout = entity.getLayout('edit', {
+                entity,
+                formContext,
+                id: resourceID,
+                data: resource.data || {}
+              });
+              return (
+                <Card>
+                  <>
+                    {layout ||
+                      entity.editFieldsWithPermission('write').map((field, i) =>
+                        field.fieldElement(formContext, i, {
+                          formLayout: form && form.layout
+                        })
+                      )}
+                    <ResourceFormPageButtons
+                      hasChanges={formContext.form.isFieldsTouched()}
+                      handleReset={() =>
+                        formContext.formComponent.resetFields()
+                      }
+                      handleSave={(option: SaveOption) =>
+                        this.handleSave(formContext, option, resource)
+                      }
+                    />
+                  </>
+                </Card>
+              );
+            }}
+          />
         )}
       />
     );
