@@ -203,6 +203,8 @@ export class EntityFieldRelationship<T> extends EntityField<
           ..._targetEntity.searchableFields.map(x => x.fetchField)
         ]}
         dataSource={_targetEntity.dataSource}
+        initialFilters={_targetEntity.initialFilters}
+        initialSorting={_targetEntity.initialSorting}
         render={(resource: ResourceCollection) => {
           const value = props.selectedKeys;
           return (
