@@ -6,6 +6,7 @@ import { ILayoutProps } from './components/layout';
 export { Entity } from './model/Entity';
 export { DataGrid } from './components/data-grid';
 export { Layout } from 'webpanel-antd';
+export * from './layout-builder';
 export interface IAdminProps extends ILayoutProps {
     auth?: (AuthProps | DummyAuthProps) & {
         type: 'dummy' | 'oauth';
