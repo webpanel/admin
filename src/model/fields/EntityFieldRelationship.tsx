@@ -10,7 +10,7 @@ import {
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Input } from 'antd';
 import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 
@@ -98,28 +98,28 @@ export class EntityFieldRelationship<T> extends EntityField<
         initialFilters={_targetEntity.initialFilters}
         dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => (
-          <div
+          <FormField
+            label={this.title}
+            name={this.columnName}
+            formContext={formContext}
             style={{
-              display: 'flex',
-              justifyContent: 'space-between'
+              width: '100%'
             }}
+            {...formItemLayout}
           >
-            <FormField
-              label={this.title}
-              name={this.columnName}
-              formContext={formContext}
-              style={{ width: '100%' }}
-              {...formItemLayout}
-            >
-              <ResourceSelect
-                valueKey="id"
-                labelKey={(value: any): string => {
-                  return _targetEntity.render(value);
-                }}
-                mode={this.mode}
-                resourceCollection={collection}
-              />
-            </FormField>
+            <ResourceSelect
+              valueKey="id"
+              labelKey={(value: any): string => {
+                return _targetEntity.render(value);
+              }}
+              mode={this.mode}
+              resourceCollection={collection}
+              style={{
+                width: '100%',
+                marginRight: '-38px',
+                paddingRight: '38px'
+              }}
+            />
             <Button
               size="small"
               icon="plus"
@@ -148,7 +148,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                 });
               }}
             />
-          </div>
+          </FormField>
         )}
       />
     );
@@ -224,7 +224,6 @@ export class EntityFieldRelationship<T> extends EntityField<
                 } else {
                   props.setSelectedKeys([value.toString()]);
                 }
-                // this.updateFilterField(mainResource, 'in', [value], 'id')
               }}
             />
           );
