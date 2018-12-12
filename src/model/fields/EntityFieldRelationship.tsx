@@ -10,7 +10,7 @@ import {
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Button, Modal, Input } from 'antd';
+import { Button, Modal } from 'antd';
 import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 
@@ -20,7 +20,7 @@ export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
   targetEntity: Thunk<Entity<any>>;
-  type?: IEntityFieldRelationshipType;
+  type: IEntityFieldRelationshipType;
 }
 
 export class EntityFieldRelationship<T> extends EntityField<

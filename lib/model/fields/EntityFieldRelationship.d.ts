@@ -8,7 +8,7 @@ export declare type IEntityFieldRelationshipType = 'toOne' | 'toMany';
 export declare type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
     targetEntity: Thunk<Entity<any>>;
-    type?: IEntityFieldRelationshipType;
+    type: IEntityFieldRelationshipType;
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
     readonly type: IEntityFieldRelationshipType;
