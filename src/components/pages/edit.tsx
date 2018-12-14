@@ -87,7 +87,7 @@ export class EntityEdit extends React.Component<
         key={this.state.version}
         name={entity.name}
         id={resourceID}
-        fields={entity.editFieldsWithPermission('read').map(f => f.columnName)}
+        fields={entity.editFields.map(f => f.columnName)}
         dataSource={entity.dataSource}
         onCreate={onCreate}
         initialValues={initialValues}
@@ -109,7 +109,7 @@ export class EntityEdit extends React.Component<
                 <Card>
                   <>
                     {layout ||
-                      entity.editFieldsWithPermission('write').map((field, i) =>
+                      entity.editFields.map((field, i) =>
                         field.fieldElement(formContext, i, {
                           formLayout: form && form.layout
                         })

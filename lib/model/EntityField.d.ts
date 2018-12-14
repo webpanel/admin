@@ -22,7 +22,6 @@ export interface IEntityFieldConfig<T> {
     listEditable?: Thunk<boolean>;
     visible?: Thunk<FieldSections[]>;
     hidden?: Thunk<FieldSections[]>;
-    permissions?: Thunk<FieldPermission[]>;
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
@@ -45,7 +44,6 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
         [key: string]: any;
     });
     visible(section: FieldSections, strict?: boolean): boolean;
-    hasPermission(permission: FieldPermission): boolean;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
