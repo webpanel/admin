@@ -6,7 +6,7 @@ import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { DataSource, SortInfo } from 'webpanel-data';
 // import { Button } from 'antd';
 
-import { EntityList, IEntityListTableProps } from '../components/pages/list';
+import { EntityList, IEntityListConfig } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
 import {
   EntityField,
@@ -61,9 +61,7 @@ export interface IEntityConfig<T> {
       props: IEntityEditLayoutProps
     ) => React.ReactElement<IEntityEditLayoutProps>;
   };
-  list?: {
-    table?: IEntityListTableProps;
-  };
+  list?: IEntityListConfig;
   edit?: { form?: IEntityEditFormProps };
 
   searchable?: boolean;
@@ -233,13 +231,7 @@ export class Entity<T> {
             // )
           }
         }
-        content={
-          <EntityList
-            entity={this}
-            dataSource={this.dataSource}
-            {...this.config.list}
-          />
-        }
+        content={this.getListView()}
       >
         <Layout.StructureItem
           key="/new"
@@ -304,6 +296,17 @@ export class Entity<T> {
     }
     return (
       <EntityEditLayout entity={this} route={route} {...this.config.edit} />
+    );
+  };
+
+  // views
+  public getListView = (): React.ReactNode => {
+    return (
+      <EntityList
+        entity={this}
+        dataSource={this.dataSource}
+        {...this.config.list}
+      />
     );
   };
 

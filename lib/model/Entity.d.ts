@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataSource, SortInfo } from 'webpanel-data';
-import { IEntityListTableProps } from '../components/pages/list';
+import { IEntityListConfig } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
 import { EntityField, IEntityFieldConfig, FieldPermission } from './EntityField';
 import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
@@ -25,9 +25,7 @@ export interface IEntityConfig<T> {
         edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
         create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
     };
-    list?: {
-        table?: IEntityListTableProps;
-    };
+    list?: IEntityListConfig;
     edit?: {
         form?: IEntityEditFormProps;
     };
@@ -67,6 +65,7 @@ export declare class Entity<T> {
     private getDetailPageLayout;
     private getEditPageLayout;
     private getCreatePageLayout;
+    getListView: () => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;

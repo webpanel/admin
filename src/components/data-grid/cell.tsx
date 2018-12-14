@@ -7,17 +7,13 @@ export interface IDataGridCellProps {
   values: any;
   field: EntityField<any, any>;
   isEditing: boolean;
-  onClick: () => void;
-  onChange: (value: any) => void;
-  onSave: () => void;
-  onCancel: () => void;
+  onClick?: () => void;
+  onChange?: (value: any) => void;
+  onSave?: () => void;
+  onCancel?: () => void;
 }
 
 export class DataGridCell extends React.Component<IDataGridCellProps> {
-  state = {
-    isEditing: false
-  };
-
   // componentDidMount() {
   //   document.addEventListener('click', this.handleClickOutside, true);
   // }
@@ -41,7 +37,7 @@ export class DataGridCell extends React.Component<IDataGridCellProps> {
       // onCancel
     } = this.props;
     return (
-      <span onClick={() => onClick()}>
+      <span onClick={() => onClick && onClick()}>
         {isEditing
           ? // <Popconfirm
             //   title={null}

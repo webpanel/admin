@@ -179,6 +179,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               {...props}
               valueKey="id"
               allowClear={true}
+              style={{ width: '100%' }}
               labelKey={(value: any): string => {
                 return _targetEntity.render(value);
               }}
