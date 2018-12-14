@@ -43,22 +43,19 @@ export class EntityList extends React.Component<IEntityListProps> {
         render={(resource: ResourceCollection) => (
           <Card
             bodyStyle={{ padding: '0' }}
-            title={
-              <div>
-                {entity.title}{' '}
-                <Link to="new">
-                  <Button size="small" htmlType="button" icon="plus" />
-                </Link>
-              </div>
-            }
-            extra={
+            title={entity.title}
+            extra={[
               entity.searchable && (
                 <ResourceSearchInput
                   resourceCollection={resource}
                   size="small"
+                  style={{ width: 300, marginRight: 8 }}
                 />
-              )
-            }
+              ),
+              <Link to="new">
+                <Button size="small" htmlType="button" icon="plus" />
+              </Link>
+            ].filter(x => x)}
           >
             <ResourceTable
               className="entitytable"
