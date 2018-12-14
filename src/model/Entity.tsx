@@ -8,11 +8,7 @@ import { DataSource, SortInfo } from 'webpanel-data';
 
 import { EntityList, IEntityListConfig } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
-import {
-  EntityField,
-  IEntityFieldConfig,
-  FieldPermission
-} from './EntityField';
+import { EntityField, IEntityFieldConfig } from './EntityField';
 import { EntityDetailLayout } from '../components/layouts/entity.detail';
 import {
   EntityEditLayout,
@@ -42,6 +38,7 @@ import { IEntityEditFormProps } from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
+import { entityPermission, componentPermission } from './permissions';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -73,6 +70,8 @@ export interface IEntityConfig<T> {
 export class Entity<T> {
   public fields: EntityField<T, any>[] = [];
 
+  autopermissions?: boolean;
+
   constructor(private readonly config: IEntityConfig<T>) {}
 
   public get structureName(): string {
@@ -92,7 +91,8 @@ export class Entity<T> {
 
   public get enabled(): boolean {
     const val = resolveOptionalThunk(this.config.enabled);
-    return typeof val !== 'undefined' ? val : true;
+    if (typeof val !== 'undefined') return val;
+    return entityPermission(this, 'list');
   }
 
   public get showDetailPage(): boolean {
@@ -135,28 +135,17 @@ export class Entity<T> {
   }
 
   public get listFields(): EntityField<T, any>[] {
-    return this.fields.filter(
-      f => f.visible('list') && f.hasPermission('read')
-    );
+    return this.fields.filter(f => f.visible('list'));
   }
   public get editFields(): EntityField<T, any>[] {
     return this.fields.filter(f => f.visible('edit'));
   }
-  public editFieldsWithPermission(
-    permission: FieldPermission
-  ): EntityField<T, any>[] {
-    return this.editFields.filter(f => f.hasPermission(permission));
-  }
   public get detailFields(): EntityField<T, any>[] {
-    return this.fields.filter(
-      f => f.visible('detail') && f.hasPermission('read')
-    );
+    return this.fields.filter(f => f.visible('detail'));
   }
   public get searchableFields(): EntityField<T, any>[] {
-    const fields = this.fields.filter(
-      f => f.visible('search', true) && f.hasPermission('read')
-    );
-    if (fields.length === 0) {
+    const fields = this.fields.filter(f => f.visible('search', true));
+    if (fields.length === 0 && this.listFields.length > 0) {
       return [this.listFields[0]];
     }
     return fields;
@@ -208,11 +197,13 @@ export class Entity<T> {
 
   public menuItem = (): React.ReactNode => {
     return (
-      <Layout.MenuItem
-        key={this.structureName}
-        title={this.title}
-        icon={resolveOptionalThunk(this.config.icon) || 'folder'}
-      />
+      componentPermission(this.structureName) && (
+        <Layout.MenuItem
+          key={this.structureName}
+          title={this.title}
+          icon={resolveOptionalThunk(this.config.icon) || 'folder'}
+        />
+      )
     );
   };
 

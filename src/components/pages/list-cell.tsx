@@ -2,18 +2,12 @@ import * as React from 'react';
 
 import { EntityField } from '../../model/EntityField';
 import { ResourceCollection } from 'webpanel-data';
-// import { Popconfirm } from 'antd';
 
 export interface IListCellProps {
   collection: ResourceCollection;
   values: any;
   field: EntityField<any, any>;
   editable: boolean;
-  // isEditing: boolean;
-  // onClick?: () => void;
-  // onChange?: (value: any) => void;
-  // onSave?: () => void;
-  // onCancel?: () => void;
 }
 
 export interface ListCellState {
@@ -22,17 +16,6 @@ export interface ListCellState {
 
 export class ListCell extends React.Component<IListCellProps> {
   state = { value: undefined };
-  // componentDidMount() {
-  //   document.addEventListener('click', this.handleClickOutside, true);
-  // }
-
-  // componentWillUnmount() {
-  //   document.removeEventListener('click', this.handleClickOutside, true);
-  // }
-
-  // handleClickOutside = () => {
-  //   this.props.onSave();
-  // };
 
   onChange = async (value: any) => {
     const { collection, field, values } = this.props;
@@ -55,8 +38,7 @@ export class ListCell extends React.Component<IListCellProps> {
             typeof value !== 'undefined' ? value : values[field.columnName],
           onChange: value => {
             this.onChange(value);
-          },
-          autoFocus: true
+          }
         })
       : field.render(values);
   }

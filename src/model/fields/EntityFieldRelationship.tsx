@@ -13,6 +13,7 @@ import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Button, Modal } from 'antd';
 import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
+import { entityPermission } from '../permissions';
 
 export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
 export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
@@ -120,34 +121,36 @@ export class EntityFieldRelationship<T> extends EntityField<
                 paddingRight: '38px'
               }}
             />
-            <Button
-              size="small"
-              icon="plus"
-              style={{
-                margin: addButtonMargin,
-                height: '32px'
-              }}
-              onClick={() => {
-                const infoWindow = Modal.info({
-                  title: `Add ${_targetEntity.title}`,
-                  maskClosable: true,
-                  okText: 'Close',
-                  style: { minWidth: '60%' },
-                  content: (
-                    <EntityEdit
-                      onCreate={async (id: string) => {
-                        await collection.get();
-                        let updateValues = {};
-                        updateValues[this.columnName] = id;
-                        formContext.form.setFieldsValue(updateValues);
-                        infoWindow.destroy();
-                      }}
-                      entity={_targetEntity}
-                    />
-                  )
-                });
-              }}
-            />
+            {entityPermission(_targetEntity, 'create') && (
+              <Button
+                size="small"
+                icon="plus"
+                style={{
+                  margin: addButtonMargin,
+                  height: '32px'
+                }}
+                onClick={() => {
+                  const infoWindow = Modal.info({
+                    title: `Add ${_targetEntity.title}`,
+                    maskClosable: true,
+                    okText: 'Close',
+                    style: { minWidth: '60%' },
+                    content: (
+                      <EntityEdit
+                        onCreate={async (id: string) => {
+                          await collection.get();
+                          let updateValues = {};
+                          updateValues[this.columnName] = id;
+                          formContext.form.setFieldsValue(updateValues);
+                          infoWindow.destroy();
+                        }}
+                        entity={_targetEntity}
+                      />
+                    )
+                  });
+                }}
+              />
+            )}
           </FormField>
         )}
       />
