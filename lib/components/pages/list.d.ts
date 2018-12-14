@@ -4,10 +4,13 @@ import { Entity } from '../../model/Entity';
 export interface IEntityListTableProps {
     condensed?: boolean;
 }
-export interface IEntityListProps {
+export interface IEntityListConfig {
+    table?: IEntityListTableProps;
+    editableFields?: string[];
+}
+export interface IEntityListProps extends IEntityListConfig {
     entity: Entity<any>;
     dataSource: DataSource;
-    table?: IEntityListTableProps;
 }
 export declare class EntityList extends React.Component<IEntityListProps> {
     render(): JSX.Element;

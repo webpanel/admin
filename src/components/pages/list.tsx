@@ -1,6 +1,5 @@
 import { Card, Icon, Button } from 'antd';
 import * as React from 'react';
-// import { Link } from 'react-router-dom';
 import { ResourceSearchInput, ResourceTable, Link } from 'webpanel-antd';
 import {
   DataSource,
@@ -11,21 +10,29 @@ import {
 import { Entity } from '../../model/Entity';
 import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
+import { ListCell } from './list-cell';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
 }
 
-export interface IEntityListProps {
+export interface IEntityListConfig {
+  table?: IEntityListTableProps;
+  editableFields?: string[];
+}
+
+export interface IEntityListProps extends IEntityListConfig {
   entity: Entity<any>;
   dataSource: DataSource;
-  table?: IEntityListTableProps;
 }
 
 export class EntityList extends React.Component<IEntityListProps> {
   public render() {
-    const { entity, table } = this.props;
+    const { entity, table, editableFields } = this.props;
 
+    const rowValues = {};
+
+    const _editableFields = editableFields || [];
     return (
       <ResourceCollectionLayer
         name={entity.name}
@@ -65,7 +72,7 @@ export class EntityList extends React.Component<IEntityListProps> {
               {...table}
               columns={entity.listFields.map(
                 (field): ResourceTableColumn => {
-                  const { render, filter } = field;
+                  const { filter } = field;
                   return {
                     key: field.name,
                     dataIndex: field.name,
@@ -78,7 +85,14 @@ export class EntityList extends React.Component<IEntityListProps> {
                     filterFormatter: field.filterFormatter,
 
                     render: (value: any, record: any): React.ReactNode => {
-                      return render(record);
+                      return (
+                        <ListCell
+                          collection={resource}
+                          values={rowValues[record.id] || record}
+                          field={field}
+                          editable={_editableFields.indexOf(field.name) > -1}
+                        />
+                      );
                     }
                   };
                 }

@@ -12,10 +12,14 @@ export interface IEntityFieldFilterProps<T> {
     confirm: () => {};
     clearFilters: () => {};
 }
+export interface IEntityFieldConfigFilter {
+    range?: boolean;
+}
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
+    listEditable?: Thunk<boolean>;
     visible?: Thunk<FieldSections[]>;
     hidden?: Thunk<FieldSections[]>;
     permissions?: Thunk<FieldPermission[]>;
@@ -23,8 +27,7 @@ export interface IEntityFieldConfig<T> {
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
     sortable?: boolean;
-    filter?: boolean;
-    range?: boolean;
+    filter?: IEntityFieldConfigFilter | boolean;
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;

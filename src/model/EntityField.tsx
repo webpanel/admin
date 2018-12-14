@@ -20,12 +20,22 @@ export interface IEntityFieldFilterProps<T> {
   clearFilters: () => {};
 }
 
+export interface IEntityFieldConfigFilter {
+  range?: boolean;
+}
+const isIEntityFieldConfigFilter = (
+  value: IEntityFieldConfigFilter | boolean | undefined
+): value is IEntityFieldConfigFilter => {
+  return typeof value === 'object';
+};
+
 export interface IEntityFieldConfig<T> {
   // header titles, bradcrumb names
   title?: Thunk<string>;
   // table columns title
   shortTitle?: Thunk<string>;
   enabled?: Thunk<boolean>;
+  listEditable?: Thunk<boolean>;
   visible?: Thunk<FieldSections[]>;
   hidden?: Thunk<FieldSections[]>;
   permissions?: Thunk<FieldPermission[]>;
@@ -33,8 +43,7 @@ export interface IEntityFieldConfig<T> {
   rules?: Thunk<ValidationRule[]>;
   attributes?: InputProps;
   sortable?: boolean;
-  filter?: boolean;
-  range?: boolean;
+  filter?: IEntityFieldConfigFilter | boolean;
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -65,10 +74,17 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return this.config.sortable || false;
   }
   public get filter(): boolean {
-    return this.config.filter || false;
+    if (typeof this.config.filter === 'boolean') {
+      return this.config.filter;
+    }
+    return typeof this.config.filter !== 'undefined' || false;
   }
   public get range(): boolean {
-    return this.config.range || false;
+    const filter = this.config.filter;
+    if (isIEntityFieldConfigFilter(filter)) {
+      return filter.range || false;
+    }
+    return false;
   }
 
   public get filterFormatter(): ((values: any[]) => { [key: string]: any }) {
