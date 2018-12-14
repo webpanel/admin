@@ -8,6 +8,7 @@ import { Entity } from './Entity';
 import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
+import { fieldPermission } from './permissions';
 // import { ResourceCollection } from 'webpanel-data';
 
 export type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
@@ -38,7 +39,6 @@ export interface IEntityFieldConfig<T> {
   listEditable?: Thunk<boolean>;
   visible?: Thunk<FieldSections[]>;
   hidden?: Thunk<FieldSections[]>;
-  permissions?: Thunk<FieldPermission[]>;
   render?: (record: T) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
   attributes?: InputProps;
@@ -113,15 +113,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     if (hidden && resolveThunk(hidden).indexOf(section) !== -1) {
       return false;
     }
-    return true;
-  }
-
-  public hasPermission(permission: FieldPermission): boolean {
-    const { permissions } = this.config;
-    if (permissions && resolveThunk(permissions).indexOf(permission) === -1) {
-      return false;
-    }
-    return true;
+    return fieldPermission(this);
   }
 
   public get render(): ((record: T) => React.ReactNode) {

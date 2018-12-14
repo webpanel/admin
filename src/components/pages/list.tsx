@@ -11,6 +11,7 @@ import { Entity } from '../../model/Entity';
 import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { ListCell } from './list-cell';
+import { entityPermission } from '../../model/permissions';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -47,14 +48,17 @@ export class EntityList extends React.Component<IEntityListProps> {
             extra={[
               entity.searchable && (
                 <ResourceSearchInput
+                  key="searchInput"
                   resourceCollection={resource}
                   size="small"
                   style={{ width: 300, marginRight: 8 }}
                 />
               ),
-              <Link to="new">
-                <Button size="small" htmlType="button" icon="plus" />
-              </Link>
+              entityPermission(entity, 'create') && (
+                <Link to="new" key="newButton">
+                  <Button size="small" htmlType="button" icon="plus" />
+                </Link>
+              )
             ].filter(x => x)}
           >
             <ResourceTable
@@ -95,17 +99,21 @@ export class EntityList extends React.Component<IEntityListProps> {
                 }
               )}
               actionButtons={[
-                (props: ActionButtonProps) => (
-                  <Link
-                    key="detail-button-action"
-                    to={`${props.resourceID.toString()}`}
-                  >
-                    <Button size="small">
-                      <Icon type={entity.showDetailPage ? 'search' : 'edit'} />
-                    </Button>
-                  </Link>
-                ),
-                entity.showDetailPage
+                entity.showDetailPage || entityPermission(entity, 'update')
+                  ? (props: ActionButtonProps) => (
+                      <Link
+                        key="detail-button-action"
+                        to={`${props.resourceID.toString()}`}
+                      >
+                        <Button size="small">
+                          <Icon
+                            type={entity.showDetailPage ? 'search' : 'edit'}
+                          />
+                        </Button>
+                      </Link>
+                    )
+                  : null,
+                entity.showDetailPage && entityPermission(entity, 'update')
                   ? (props: ActionButtonProps) => (
                       <Link
                         key="edit-button-action"
@@ -117,7 +125,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                       </Link>
                     )
                   : null,
-                'delete'
+                entityPermission(entity, 'delete') && 'delete'
               ].filter(x => x)}
             />
           </Card>

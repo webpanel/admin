@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DataSource, SortInfo } from 'webpanel-data';
 import { IEntityListConfig } from '../components/pages/list';
 import { IEntityDetailProps } from '../components/pages/detail';
-import { EntityField, IEntityFieldConfig, FieldPermission } from './EntityField';
+import { EntityField, IEntityFieldConfig } from './EntityField';
 import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
 import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
 import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
@@ -37,6 +37,7 @@ export interface IEntityConfig<T> {
 export declare class Entity<T> {
     private readonly config;
     fields: EntityField<T, any>[];
+    autopermissions?: boolean;
     constructor(config: IEntityConfig<T>);
     readonly structureName: string;
     readonly title: string;
@@ -51,7 +52,6 @@ export declare class Entity<T> {
     getField(name: string): EntityField<T, any> | null;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
-    editFieldsWithPermission(permission: FieldPermission): EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];
     readonly searchableFields: EntityField<T, any>[];
     readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
