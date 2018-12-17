@@ -6,6 +6,7 @@ export interface IEntityListTableProps {
 }
 export interface IEntityListConfig {
     table?: IEntityListTableProps;
+    fields?: string[];
     editableFields?: string[];
 }
 export interface IEntityListProps extends IEntityListConfig {
