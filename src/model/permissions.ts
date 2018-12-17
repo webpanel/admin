@@ -47,9 +47,13 @@ export const entityPermission = (
   return true;
 };
 
-export const fieldPermission = (field: EntityField<any, any>): boolean => {
+export type FieldAction = 'read' | 'write';
+export const fieldPermission = (
+  field: EntityField<any, any>,
+  action: FieldAction
+): boolean => {
   if (_config) {
-    return hasAccess(`${field.entity.name}:${field.name}`);
+    return hasAccess(`${action}:${field.entity.name}:${field.name}`);
   }
   return true;
 };

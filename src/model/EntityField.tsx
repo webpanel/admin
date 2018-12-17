@@ -8,11 +8,10 @@ import { Entity } from './Entity';
 import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
-import { fieldPermission } from './permissions';
+import { fieldPermission, FieldAction } from './permissions';
 // import { ResourceCollection } from 'webpanel-data';
 
 export type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
-export type FieldPermission = 'read' | 'write';
 
 export interface IEntityFieldFilterProps<T> {
   selectedKeys: T[];
@@ -99,7 +98,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     };
   }
 
-  public visible(section: FieldSections, strict: boolean = false): boolean {
+  public visible(
+    section: FieldSections,
+    action: FieldAction,
+    strict: boolean = false
+  ): boolean {
     const { visible, hidden, enabled } = this.config;
     if (enabled === false) {
       return false;
@@ -113,7 +116,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     if (hidden && resolveThunk(hidden).indexOf(section) !== -1) {
       return false;
     }
-    return fieldPermission(this);
+    return fieldPermission(this, action);
   }
 
   public get render(): ((record: T) => React.ReactNode) {
