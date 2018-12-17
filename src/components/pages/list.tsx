@@ -40,7 +40,10 @@ export class EntityList extends React.Component<IEntityListProps> {
       (fields &&
         (fields
           .map(f => entity.getField(f))
-          .filter(x => x && x.visible('list')) as EntityField<any, any>[])) ||
+          .filter(x => x && x.visible('list', 'read')) as EntityField<
+          any,
+          any
+        >[])) ||
       entity.listFields;
 
     return (

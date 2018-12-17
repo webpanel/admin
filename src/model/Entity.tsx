@@ -135,16 +135,16 @@ export class Entity<T> {
   }
 
   public get listFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('list'));
+    return this.fields.filter(f => f.visible('list', 'read'));
   }
   public get editFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('edit'));
+    return this.fields.filter(f => f.visible('edit', 'write'));
   }
   public get detailFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('detail'));
+    return this.fields.filter(f => f.visible('detail', 'read'));
   }
   public get searchableFields(): EntityField<T, any>[] {
-    const fields = this.fields.filter(f => f.visible('search', true));
+    const fields = this.fields.filter(f => f.visible('search', 'read', true));
     if (fields.length === 0 && this.listFields.length > 0) {
       return [this.listFields[0]];
     }

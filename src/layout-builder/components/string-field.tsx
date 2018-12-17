@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Form } from 'antd';
 import { Entity } from '../../model/Entity';
+import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderStringFieldProps {
   name: string;
@@ -45,6 +46,11 @@ export class LayoutBuilderStringField extends React.Component<
     if (field === null) {
       return `unknown field ${name}`;
     }
+
+    if (!fieldPermission(field, 'read')) {
+      return null;
+    }
+
     return (
       <Form.Item
         {...props}
