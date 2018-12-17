@@ -4,8 +4,8 @@ import { Entity } from './Entity';
 import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
 import { Thunk } from 'ts-thunk';
 import { InputProps } from 'antd/lib/input';
+import { FieldAction } from './permissions';
 export declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
-export declare type FieldPermission = 'read' | 'write';
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
     setSelectedKeys: (keys: T[]) => {};
@@ -43,7 +43,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly filterFormatter: ((values: any[]) => {
         [key: string]: any;
     });
-    visible(section: FieldSections, strict?: boolean): boolean;
+    visible(section: FieldSections, action: FieldAction, strict?: boolean): boolean;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
