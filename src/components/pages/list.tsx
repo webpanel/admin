@@ -12,6 +12,7 @@ import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionBu
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { ListCell } from './list-cell';
 import { entityPermission } from '../../model/permissions';
+import { EntityField } from '../../model/EntityField';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -19,6 +20,7 @@ export interface IEntityListTableProps {
 
 export interface IEntityListConfig {
   table?: IEntityListTableProps;
+  fields?: string[];
   editableFields?: string[];
 }
 
@@ -29,16 +31,23 @@ export interface IEntityListProps extends IEntityListConfig {
 
 export class EntityList extends React.Component<IEntityListProps> {
   public render() {
-    const { entity, table, editableFields } = this.props;
+    const { entity, table, editableFields, fields } = this.props;
 
     const rowValues = {};
 
     const _editableFields = editableFields || [];
+    const listFields: EntityField<any, any>[] =
+      (fields &&
+        (fields
+          .map(f => entity.getField(f))
+          .filter(x => x && x.visible('list')) as EntityField<any, any>[])) ||
+      entity.listFields;
+
     return (
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
-        fields={['id', ...entity.listFields.map(x => x.fetchField)]}
+        fields={['id', ...listFields.map(x => x.fetchField)]}
         initialSorting={entity.initialSorting}
         initialFilters={entity.initialFilters}
         render={(resource: ResourceCollection) => (
@@ -71,7 +80,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 showSizeChanger: true
               }}
               {...table}
-              columns={entity.listFields.map(
+              columns={listFields.map(
                 (field): ResourceTableColumn => {
                   const { filter } = field;
                   return {
