@@ -5,10 +5,15 @@ import { InputNumber } from 'antd';
 export class EntityFieldNumber<T, C> extends EntityField<T, C> {
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    return <InputNumber {...props} />;
+    const onChange = props && props.onChange;
+    const onChangeProp = onChange
+      ? (value: number | string | undefined) => onChange(value, value)
+      : undefined;
+
+    return <InputNumber {...props} onChange={onChangeProp} />;
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<number>) => {

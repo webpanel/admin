@@ -2,6 +2,7 @@ import * as React from 'react';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 import { Checkbox } from 'antd';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {}
 
@@ -13,15 +14,24 @@ export class EntityFieldBoolean<T> extends EntityField<
     return 'checked';
   }
 
+  private renderValue(value: boolean): React.ReactNode {
+    return value ? '✓' : '✗';
+  }
+
   public get render(): ((record: T) => React.ReactNode) {
-    return values => (values[this.name] ? '✓' : '✗');
+    return values => this.renderValue(values[this.name]);
   }
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    return <Checkbox {...props} />;
+    const onChange = props && props.onChange;
+    const onChangeProp = onChange
+      ? (event: CheckboxChangeEvent) =>
+          onChange(event.target.value, this.renderValue(event.target.value))
+      : undefined;
+    return <Checkbox {...props} onChange={onChangeProp} />;
   }
 
   public get filterFormatter(): ((

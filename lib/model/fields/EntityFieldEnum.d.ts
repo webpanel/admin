@@ -12,7 +12,7 @@ export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumC
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
-        onChange?: (value: any) => void;
+        onChange?: (value: any, valueElement: React.ReactNode) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
