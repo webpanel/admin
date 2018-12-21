@@ -21,7 +21,7 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     }): React.ReactNode;
     inputElement(props?: {
         value?: any;
-        onChange?: (value: any) => void;
+        onChange?: (value: any, valueElement: React.ReactNode) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;

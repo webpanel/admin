@@ -5,12 +5,13 @@ import { Input } from 'antd';
 export class EntityFieldText<T, C> extends EntityField<T, C> {
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
     const onChange = props && props.onChange;
     const onChangeProp = onChange
-      ? (e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)
+      ? (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          onChange(e.target.value, e.target.value)
       : undefined;
 
     return (

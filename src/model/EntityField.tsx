@@ -127,12 +127,13 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
 
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, stringValue: string) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
     const onChange = props && props.onChange;
     const onChangeProp = onChange
-      ? (e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)
+      ? (e: React.ChangeEvent<HTMLInputElement>) =>
+          onChange(e.target.value, e.target.value)
       : undefined;
     return (
       <Input

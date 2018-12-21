@@ -8,12 +8,18 @@ export interface IListCellProps {
     editable: boolean;
 }
 export interface ListCellState {
+    currentValue?: any;
     value?: any;
+    valueElement?: React.ReactNode;
 }
 export declare class ListCell extends React.Component<IListCellProps> {
     state: {
+        currentValue: undefined;
         value: undefined;
+        valueElement: undefined;
     };
-    onChange: (value: any) => Promise<void>;
-    render(): {} | null | undefined;
+    onChange: (value: any, valueElement: React.ReactNode) => Promise<void>;
+    cancel: () => void;
+    save: () => Promise<void>;
+    render(): JSX.Element;
 }

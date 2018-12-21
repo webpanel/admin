@@ -47,7 +47,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
-        onChange?: (value: any) => void;
+        onChange?: (value: any, stringValue: string) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     readonly valuePropName: string;

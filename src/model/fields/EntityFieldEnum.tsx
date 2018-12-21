@@ -37,7 +37,7 @@ export class EntityFieldEnum<T> extends EntityField<
 
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
     const selectOptions = resolveThunk(this.config.options).map(

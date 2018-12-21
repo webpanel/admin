@@ -7,10 +7,11 @@ export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
 }
 export declare class EntityFieldDate<T> extends EntityField<T, IEntityFieldDateConfig<T>> {
     private readonly format;
+    private renderValue;
     readonly render: ((record: T) => React.ReactNode);
     inputElement(props?: {
         value?: any;
-        onChange?: (value: any) => void;
+        onChange?: (value: any, valueElement: React.ReactNode) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<moment.Moment>) => JSX.Element;

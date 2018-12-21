@@ -159,11 +159,26 @@ export class EntityFieldRelationship<T> extends EntityField<
 
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
     const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
+
+    const onChange = props && props.onChange;
+    const onChangeProp = onChange
+      ? (
+          value: any,
+          option: React.ReactElement<any> | React.ReactElement<any>[]
+        ) => {
+          const options: React.ReactElement<any>[] = Array.isArray(option)
+            ? option
+            : [option];
+          // const array: LabeledValue[] = Array.isArray(value) ? value : [value];
+          onChange(value, options.map(o => o.props.children).join(', '));
+        }
+      : undefined;
+
     return (
       <ResourceCollectionLayer
         name={_targetEntity.name}
@@ -188,6 +203,8 @@ export class EntityFieldRelationship<T> extends EntityField<
               }}
               mode={this.mode}
               resourceCollection={collection}
+              // labelInValue={true}
+              onChange={onChangeProp}
             />
           );
         }}
@@ -222,7 +239,10 @@ export class EntityFieldRelationship<T> extends EntityField<
               allowClear={false}
               resourceCollection={resource}
               style={{ minWidth: '200px' }}
-              onChange={(value: string | string[]) => {
+              onChange={(
+                value: string | string[],
+                option: React.ReactElement<any> | React.ReactElement<any>[]
+              ) => {
                 if (Array.isArray(value)) {
                   props.setSelectedKeys(value);
                 } else {
