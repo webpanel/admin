@@ -26,27 +26,41 @@ export class EntityFieldDate<T> extends EntityField<
     );
   }
 
+  private renderValue(value: moment.Moment | string | null): React.ReactNode {
+    if (value === null) {
+      return '–';
+    }
+
+    const d = moment(value);
+    if (d.isValid()) {
+      return d.format(this.format);
+    } else {
+      return '–';
+    }
+  }
+
   public get render(): ((record: T) => React.ReactNode) {
     return values => {
-      const d = moment(values[this.name]);
-      if (d.isValid()) {
-        return d.format(this.format);
-      } else {
-        return '–';
-      }
+      return this.renderValue(values[this.name]);
     };
   }
 
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
+    const onChange = props && props.onChange;
+    const onChangeProp = onChange
+      ? (value: string | null) => onChange(value, this.renderValue(value))
+      : undefined;
+
     return (
       <DatePicker
         showTime={this.config.showTime}
         format={this.format}
         {...props}
+        onChange={onChangeProp}
       />
     );
   }
