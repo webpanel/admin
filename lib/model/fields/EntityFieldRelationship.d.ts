@@ -14,7 +14,7 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     readonly type: IEntityFieldRelationshipType;
     readonly columnName: string;
     readonly mode: IEntityFieldRelationshipSelectMode;
-    readonly fetchField: string;
+    readonly fetchField: string | null;
     readonly render: ((record: T) => React.ReactNode);
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
