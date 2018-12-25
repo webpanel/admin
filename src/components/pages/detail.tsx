@@ -38,7 +38,12 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         name={entity.name}
         id={id}
         dataSource={entity.dataSource}
-        fields={['id', ...entity.detailFields.map(x => x.fetchField)]}
+        fields={[
+          'id',
+          ...(entity.detailFields
+            .map(x => x.fetchField)
+            .filter(x => x) as string[])
+        ]}
         render={(resource: Resource) => {
           const layout = entity.getLayout('detail', {
             entity,

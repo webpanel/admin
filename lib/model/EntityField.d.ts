@@ -36,7 +36,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly title: string;
     readonly shortTitle: string;
     readonly columnName: string;
-    readonly fetchField: string;
+    readonly fetchField: string | null;
     readonly sortable: boolean;
     readonly filter: boolean;
     readonly range: boolean;

@@ -66,7 +66,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get columnName(): string {
     return this.name;
   }
-  public get fetchField(): string {
+  public get fetchField(): string | null {
     return this.name;
   }
   public get sortable(): boolean {

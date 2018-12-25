@@ -39,6 +39,7 @@ import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
 import { entityPermission, componentPermission } from './permissions';
+import { EntityFieldPasssword } from './fields/EntityFieldPassword';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -316,6 +317,13 @@ export class Entity<T> {
   }
   public numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityFieldNumber(name, config || {}, this));
+    return this;
+  }
+  public passwordField(
+    name: string,
+    config?: IEntityFieldConfig<T>
+  ): Entity<T> {
+    this.fields.push(new EntityFieldPasssword(name, config || {}, this));
     return this;
   }
   public dateField(
