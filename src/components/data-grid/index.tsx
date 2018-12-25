@@ -161,7 +161,10 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
       <ResourceCollectionLayer
         dataSource={entity.dataSource}
         name={entity.name}
-        fields={['id', ...gridFields.map(x => x.fetchField)]}
+        fields={[
+          'id',
+          ...(gridFields.map(x => x.fetchField).filter(x => x) as string[])
+        ]}
         initialFilters={initialFilters}
         render={(resource: ResourceCollection) => {
           const actionButtons = this.actionButtons(resource, gridFields);

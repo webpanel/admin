@@ -50,7 +50,10 @@ export class EntityList extends React.Component<IEntityListProps> {
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
-        fields={['id', ...listFields.map(x => x.fetchField)]}
+        fields={[
+          'id',
+          ...(listFields.map(x => x.fetchField).filter(x => x) as string[])
+        ]}
         initialSorting={entity.initialSorting}
         initialFilters={entity.initialFilters}
         render={(resource: ResourceCollection) => (

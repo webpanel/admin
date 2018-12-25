@@ -70,6 +70,7 @@ export declare class Entity<T> {
     stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    passwordField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     dateField(name: string, config?: IEntityFieldDateConfig<T>): Entity<T>;
     booleanField(name: string, config?: IEntityFieldBooleanConfig<T>): Entity<T>;
     relationshipField(name: string, config: IEntityFieldRelationshipConfig<T>): Entity<T>;
