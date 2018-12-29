@@ -117,6 +117,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               resourceCollection={collection}
               style={{
                 width: '100%',
+                minWidth: '200px',
                 marginRight: '-38px',
                 paddingRight: '38px'
               }}
@@ -197,7 +198,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               {...props}
               valueKey="id"
               allowClear={true}
-              style={{ width: '100%' }}
+              style={{ width: '100%', minWidth: '200px' }}
               labelKey={(value: any): string => {
                 return _targetEntity.render(value);
               }}
