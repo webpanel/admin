@@ -13,6 +13,7 @@ import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { ListCell } from './list-cell';
 import { entityPermission } from '../../model/permissions';
 import { EntityField } from '../../model/EntityField';
+import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -20,8 +21,8 @@ export interface IEntityListTableProps {
 
 export interface IEntityListConfig {
   table?: IEntityListTableProps;
-  fields?: string[];
-  editableFields?: string[];
+  fields?: Thunk<string[]>;
+  editableFields?: Thunk<string[]>;
 }
 
 export interface IEntityListProps extends IEntityListConfig {
@@ -35,10 +36,14 @@ export class EntityList extends React.Component<IEntityListProps> {
 
     const rowValues = {};
 
-    const _editableFields = editableFields || [];
+    const _editableFields =
+      (entityPermission(entity, 'update') &&
+        resolveOptionalThunk(editableFields)) ||
+      [];
+    const _fields = resolveOptionalThunk(fields) || [];
     const listFields: EntityField<any, any>[] =
-      (fields &&
-        (fields
+      (_fields &&
+        (_fields
           .map(f => entity.getField(f))
           .filter(x => x && x.visible('list', 'read')) as EntityField<
           any,
