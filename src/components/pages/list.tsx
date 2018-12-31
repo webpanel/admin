@@ -40,7 +40,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       (entityPermission(entity, 'update') &&
         resolveOptionalThunk(editableFields)) ||
       [];
-    const _fields = resolveOptionalThunk(fields) || [];
+    const _fields = resolveOptionalThunk(fields);
     const listFields: EntityField<any, any>[] =
       (_fields &&
         (_fields
