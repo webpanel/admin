@@ -187,9 +187,9 @@ abs-svg-path@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/abs-svg-path/-/abs-svg-path-0.1.1.tgz#df601c8e8d2ba10d4a76d625e236a9a39c2723bf"
 
-acl-permissions@0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/acl-permissions/-/acl-permissions-0.0.14.tgz#9a1cfbccf679df395e5d9dcda3ead00dcdd654de"
+acl-permissions@0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/acl-permissions/-/acl-permissions-0.0.15.tgz#eb8e9a714f268682d0356f4f257ed580eeef7380"
   dependencies:
     "@types/json5" "^0.0.30"
     deepmerge "^2.2.1"
@@ -1961,16 +1961,16 @@ warning@^4.0.1, warning@~4.0.1:
     react-dom "^16.4.1"
     react-router-dom "^4.3.1"
 
-webpanel-auth@^0.0.22:
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/webpanel-auth/-/webpanel-auth-0.0.22.tgz#0be2dedc7883e575f2007b88ed4e6d3125cadf03"
+webpanel-auth@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/webpanel-auth/-/webpanel-auth-0.0.23.tgz#8c777322904ee8ef8c3dd0d4c4e8596074ecb74e"
   dependencies:
     "@types/jsonwebtoken" "^7.2.7"
     "@types/lodash" "^4.14.109"
     "@types/node" "^10.3.2"
     "@types/node-fetch" "^2.1.1"
     "@types/react" "*"
-    acl-permissions "0.0.14"
+    acl-permissions "0.0.15"
     jsonwebtoken "^8.2.2"
     lodash "^4.17.10"
     node-fetch "^2.1.2"
