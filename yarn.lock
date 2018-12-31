@@ -1961,9 +1961,9 @@ warning@^4.0.1, warning@~4.0.1:
     react-dom "^16.4.1"
     react-router-dom "^4.3.1"
 
-webpanel-auth@^0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/webpanel-auth/-/webpanel-auth-0.0.21.tgz#2e0df692ee0f1761da03da8cc163499aae2666c0"
+webpanel-auth@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/webpanel-auth/-/webpanel-auth-0.0.22.tgz#0be2dedc7883e575f2007b88ed4e6d3125cadf03"
   dependencies:
     "@types/jsonwebtoken" "^7.2.7"
     "@types/lodash" "^4.14.109"
