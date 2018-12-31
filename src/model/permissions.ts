@@ -3,8 +3,8 @@ import { Entity } from './Entity';
 import { hasAccess as _hasAccess } from 'webpanel-auth';
 import { EntityField } from './EntityField';
 
-const hasAccess = (res: string): boolean => {
-  const result = _hasAccess(res);
+const hasAccess = (res: string, strict = false): boolean => {
+  const result = _hasAccess(res, strict);
   global.console.log(`permissions: ${res} => ${result}`);
   return result;
 };
@@ -39,9 +39,9 @@ export const entityPermission = (
           `${inflection.camelize(inflection.pluralize(entity.name), true)}`
         );
       case 'read':
-        return hasAccess(`${inflection.camelize(entity.name, true)}`);
+        return hasAccess(`${inflection.camelize(entity.name, true)}`, true);
       default:
-        return hasAccess(`${action}${entity.name}`);
+        return hasAccess(`${action}${entity.name}`, true);
     }
   }
   return true;
@@ -53,14 +53,14 @@ export const fieldPermission = (
   action: FieldAction
 ): boolean => {
   if (_config) {
-    return hasAccess(`${action}:${field.entity.name}:${field.name}`);
+    return hasAccess(`${action}:${field.entity.name}:${field.name}`, true);
   }
   return true;
 };
 
 export const componentPermission = (resourceName: string): boolean => {
   if (_config) {
-    return hasAccess(`${_config.resourcePrefix}:${resourceName}`);
+    return hasAccess(`${_config.resourcePrefix}:${resourceName}`, true);
   }
   return true;
 };
