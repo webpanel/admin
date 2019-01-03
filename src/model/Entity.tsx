@@ -40,6 +40,10 @@ import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
 import { entityPermission, componentPermission } from './permissions';
 import { EntityFieldPasssword } from './fields/EntityFieldPassword';
+import {
+  EntityFieldComputed,
+  IEntityFieldComputedConfig
+} from './fields/EntityFieldComputed';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -307,10 +311,6 @@ export class Entity<T> {
     this.fields.push(new EntityField(name, config || {}, this));
     return this;
   }
-  // deprecated
-  public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
-    return this.inputField(name, config);
-  }
   public textField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
     this.fields.push(new EntityFieldText(name, config || {}, this));
     return this;
@@ -353,6 +353,13 @@ export class Entity<T> {
   }
   public enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T> {
     this.fields.push(new EntityFieldEnum(name, config, this));
+    return this;
+  }
+  public computedField(
+    name: string,
+    config?: IEntityFieldComputedConfig<T>
+  ): Entity<T> {
+    this.fields.push(new EntityFieldComputed(name, config || {}, this));
     return this;
   }
 }
