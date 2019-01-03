@@ -40,7 +40,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     return this.type === 'toOne' ? 'default' : 'multiple';
   }
 
-  public get fetchField(): string | null {
+  public fetchField(): string | null {
     let name = this.name;
 
     const searchFields = resolveThunk(this.config.targetEntity)
@@ -223,7 +223,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         fields={[
           'id',
           ...(_targetEntity.searchableFields
-            .map(x => x.fetchField)
+            .map(x => x.fetchField())
             .filter(x => x) as string[])
         ]}
         dataSource={_targetEntity.dataSource}

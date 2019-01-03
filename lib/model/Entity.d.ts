@@ -13,6 +13,7 @@ import { IEntityEditFormProps } from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
+import { IEntityFieldComputedConfig } from './fields/EntityFieldComputed';
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
@@ -67,7 +68,6 @@ export declare class Entity<T> {
     private getCreatePageLayout;
     getListView: () => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
-    stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     passwordField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
@@ -76,4 +76,5 @@ export declare class Entity<T> {
     relationshipField(name: string, config: IEntityFieldRelationshipConfig<T>): Entity<T>;
     colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T>;
+    computedField(name: string, config?: IEntityFieldComputedConfig<T>): Entity<T>;
 }

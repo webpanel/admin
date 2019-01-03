@@ -31,15 +31,49 @@ export interface IEntityListProps extends IEntityListConfig {
 }
 
 export class EntityList extends React.Component<IEntityListProps> {
-  public render() {
-    const { entity, table, editableFields, fields } = this.props;
-
-    const rowValues = {};
+  getColumns(
+    listFields: EntityField<any, any>[],
+    resource: ResourceCollection
+  ): ResourceTableColumn[] {
+    const { entity, editableFields } = this.props;
 
     const _editableFields =
       (entityPermission(entity, 'update') &&
         resolveOptionalThunk(editableFields)) ||
       [];
+
+    const rowValues = {};
+
+    return listFields.map(
+      (field): ResourceTableColumn => {
+        const { filter } = field;
+        return {
+          key: field.name,
+          dataIndex: field.name,
+          title: field.shortTitle,
+          sorter: field.sortable,
+
+          filterDropdown: filter ? field.filterDropdown(resource) : undefined,
+          filterFormatter: field.filterFormatter,
+
+          render: (value: any, record: any): React.ReactNode => {
+            return (
+              <ListCell
+                collection={resource}
+                values={rowValues[record.id] || record}
+                field={field}
+                editable={_editableFields.indexOf(field.name) > -1}
+              />
+            );
+          }
+        };
+      }
+    );
+  }
+
+  public render() {
+    const { entity, table, fields } = this.props;
+
     const _fields = resolveOptionalThunk(fields);
     const listFields: EntityField<any, any>[] =
       (_fields &&
@@ -57,7 +91,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         dataSource={this.props.dataSource}
         fields={[
           'id',
-          ...(listFields.map(x => x.fetchField).filter(x => x) as string[])
+          ...(listFields.map(x => x.fetchField()).filter(x => x) as string[])
         ]}
         initialSorting={entity.initialSorting}
         initialFilters={entity.initialFilters}
@@ -91,33 +125,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 showSizeChanger: true
               }}
               {...table}
-              columns={listFields.map(
-                (field): ResourceTableColumn => {
-                  const { filter } = field;
-                  return {
-                    key: field.name,
-                    dataIndex: field.name,
-                    title: field.shortTitle,
-                    sorter: field.sortable,
-
-                    filterDropdown: filter
-                      ? field.filterDropdown(resource)
-                      : undefined,
-                    filterFormatter: field.filterFormatter,
-
-                    render: (value: any, record: any): React.ReactNode => {
-                      return (
-                        <ListCell
-                          collection={resource}
-                          values={rowValues[record.id] || record}
-                          field={field}
-                          editable={_editableFields.indexOf(field.name) > -1}
-                        />
-                      );
-                    }
-                  };
-                }
-              )}
+              columns={this.getColumns(listFields, resource)}
               actionButtons={[
                 entity.showDetailPage || entityPermission(entity, 'update')
                   ? (props: ActionButtonProps) => (

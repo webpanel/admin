@@ -163,7 +163,7 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
         name={entity.name}
         fields={[
           'id',
-          ...(gridFields.map(x => x.fetchField).filter(x => x) as string[])
+          ...(gridFields.map(x => x.fetchField()).filter(x => x) as string[])
         ]}
         initialFilters={initialFilters}
         render={(resource: ResourceCollection) => {
