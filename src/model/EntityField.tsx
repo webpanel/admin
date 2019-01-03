@@ -120,6 +120,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public get render(): ((record: T) => React.ReactNode) {
+    if (this.config.render) {
+      return this.config.render;
+    }
     return (values: any) => {
       return values[this.name];
     };
