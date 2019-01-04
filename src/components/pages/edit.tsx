@@ -87,9 +87,9 @@ export class EntityEdit extends React.Component<
         key={this.state.version}
         name={entity.name}
         id={resourceID}
-        fields={entity.editFields
-          .filter(f => f.fetchField() !== null)
-          .map(f => f.columnName)}
+        fields={
+          entity.editFields.map(f => f.fetchField()).filter(f => f) as string[]
+        }
         dataSource={entity.dataSource}
         onCreate={onCreate}
         initialValues={initialValues}
