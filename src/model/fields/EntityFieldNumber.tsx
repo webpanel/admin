@@ -33,10 +33,10 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName] = parseFloat(values[0]);
+        res[this.columnName()] = parseFloat(values[0]);
       } else if (values.length === 2) {
-        res[this.columnName + '_gte'] = parseFloat(values[0]);
-        res[this.columnName + '_lte'] = parseFloat(values[1]);
+        res[this.columnName() + '_gte'] = parseFloat(values[0]);
+        res[this.columnName() + '_lte'] = parseFloat(values[1]);
       }
       return res;
     };

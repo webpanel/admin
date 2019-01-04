@@ -71,9 +71,9 @@ export class EntityFieldEnum<T> extends EntityField<
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName] = values[0];
+        res[this.columnName()] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName + '_in'] = values;
+        res[this.columnName() + '_in'] = values;
       }
       return res;
     };

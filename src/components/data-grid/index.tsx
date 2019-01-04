@@ -64,7 +64,7 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
     const resourceID = record.id;
     const rowValues = this.state.rowValues;
     const rowValue = rowValues[resourceID] || record;
-    rowValue[field.columnName] = value;
+    rowValue[field.columnName()] = value;
     rowValues[resourceID] = rowValue;
     this.setState({ rowValues });
   };
@@ -81,8 +81,8 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
 
     if (rowValues) {
       for (let field of fields) {
-        const value = rowValues[field.columnName];
-        values[field.columnName] = value;
+        const value = rowValues[field.columnName()];
+        values[field.columnName()] = value;
       }
       item.fields = ['id'];
       await item.update(values);

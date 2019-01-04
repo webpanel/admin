@@ -50,7 +50,7 @@ export class DataGridCell extends React.Component<IDataGridCellProps> {
             //   onCancel={onCancel}
             // >
             field.inputElement({
-              value: values[field.columnName],
+              value: values[field.columnName()],
               onChange: onChange,
               autoFocus: true
             })

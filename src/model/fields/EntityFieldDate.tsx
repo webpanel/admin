@@ -101,10 +101,10 @@ export class EntityFieldDate<T> extends EntityField<
     return (values: moment.Moment[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName] = moment(values[0]).toISOString();
+        res[this.columnName()] = moment(values[0]).toISOString();
       } else if (values.length === 2) {
-        res[this.columnName + '_gte'] = moment(values[0]).toISOString();
-        res[this.columnName + '_lte'] = moment(values[1]).toISOString();
+        res[this.columnName() + '_gte'] = moment(values[0]).toISOString();
+        res[this.columnName() + '_lte'] = moment(values[1]).toISOString();
       }
       return res;
     };

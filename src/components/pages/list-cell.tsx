@@ -39,7 +39,7 @@ export class ListCell extends React.Component<IListCellProps> {
     this.setState({ value });
 
     let data = {};
-    data[field.columnName] = value;
+    data[field.columnName()] = value;
     item.fields = ['id'];
     await item.update(data);
     this.setState({ editing: false, currentValue: this.state.valueElement });
@@ -55,7 +55,9 @@ export class ListCell extends React.Component<IListCellProps> {
           <Popconfirm
             title={field.inputElement({
               value:
-                typeof value !== 'undefined' ? value : values[field.columnName],
+                typeof value !== 'undefined'
+                  ? value
+                  : values[field.columnName()],
               onChange: (value: any, valueElement: React.ReactNode) => {
                 this.onChange(value, valueElement);
               }
