@@ -41,7 +41,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         fields={[
           'id',
           ...(entity.detailFields
-            .map(x => x.fetchField)
+            .map(x => x.fetchField())
             .filter(x => x) as string[])
         ]}
         render={(resource: Resource) => {
