@@ -3,11 +3,12 @@ import { Entity } from './Entity';
 import { hasAccess as _hasAccess } from 'webpanel-auth';
 import { EntityField } from './EntityField';
 
-const hasAccess = (res: string): boolean => {
-  const result = _hasAccess(res);
-  global.console.log(`permissions: ${res} => ${result}`);
-  return result;
-};
+// const hasAccess = (res: string): boolean => {
+//   const result = _hasAccess(res);
+//   global.console.log(`permissions: ${res} => ${result}`);
+//   return result;
+// };
+const hasAccess = _hasAccess;
 
 export interface IAutopermissionConfig {
   // prefix used for UI elements, defaults to "app"
