@@ -10,7 +10,7 @@ import {
 import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Tag } from 'antd';
 import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 import { entityPermission } from '../permissions';
@@ -60,7 +60,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         return value
           .map(x => render && render(x))
           .filter(x => x)
-          .join(', ');
+          .map(x => <Tag key={x}>{x}</Tag>);
       }
       return render && render(value);
     };
