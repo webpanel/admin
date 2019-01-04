@@ -40,7 +40,7 @@ export class EntityFieldBoolean<T> extends EntityField<
     return (values: boolean[]) => {
       let res = {};
       if (values.length >= 1) {
-        res[this.columnName] = !!values[0];
+        res[this.columnName()] = !!values[0];
       }
       return res;
     };

@@ -63,7 +63,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return resolveOptionalThunk(this.config.shortTitle) || this.title;
   }
 
-  public get columnName(): string {
+  public columnName(): string {
     return this.name;
   }
   public fetchField(): string | null {
@@ -90,9 +90,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName + '_prefix'] = values[0];
+        res[this.columnName() + '_prefix'] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName + '_in'] = values;
+        res[this.columnName() + '_in'] = values;
       }
       return res;
     };
@@ -168,7 +168,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       <FormField
         key={key}
         label={this.title}
-        name={this.columnName}
+        name={this.columnName()}
         formContext={formContext}
         valuePropName={this.valuePropName}
         rules={resolveOptionalThunk(this.config.rules)}

@@ -2,12 +2,16 @@ import * as React from 'react';
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
+  columnName?: string;
   fetchField?: string;
 }
 export class EntityFieldComputed<T> extends EntityField<
   T,
   IEntityFieldComputedConfig<T>
 > {
+  public columnName(): string {
+    return this.config.columnName || super.columnName();
+  }
   public fetchField(): string | null {
     return this.config.fetchField || super.fetchField();
   }

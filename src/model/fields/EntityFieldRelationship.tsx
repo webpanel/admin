@@ -32,7 +32,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     return this.config.type === 'toOne' ? 'toOne' : 'toMany';
   }
 
-  public get columnName(): string {
+  public columnName(): string {
     return `${this.name}${this.type === 'toOne' ? 'Id' : 'Ids'}`;
   }
 
@@ -45,9 +45,9 @@ export class EntityFieldRelationship<T> extends EntityField<
 
     const searchFields = resolveThunk(this.config.targetEntity)
       .searchableFields;
-    name += `{ id ${searchFields.map(f => f.name).join(' ')}} ${
-      this.columnName
-    } `;
+    name += `{ id ${searchFields
+      .map(f => f.name)
+      .join(' ')}} ${this.columnName()} `;
     return name;
   }
 
@@ -101,7 +101,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         render={(collection: ResourceCollection) => (
           <FormField
             label={this.title}
-            name={this.columnName}
+            name={this.columnName()}
             formContext={formContext}
             style={{
               width: '100%'
@@ -141,7 +141,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                         onCreate={async (id: string) => {
                           await collection.get();
                           let updateValues = {};
-                          updateValues[this.columnName] = id;
+                          updateValues[this.columnName()] = id;
                           formContext.form.setFieldsValue(updateValues);
                           infoWindow.destroy();
                         }}

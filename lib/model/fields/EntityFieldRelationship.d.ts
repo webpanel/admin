@@ -12,7 +12,7 @@ export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T>
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
     readonly type: IEntityFieldRelationshipType;
-    readonly columnName: string;
+    columnName(): string;
     readonly mode: IEntityFieldRelationshipSelectMode;
     fetchField(): string | null;
     readonly render: ((record: T) => React.ReactNode);
