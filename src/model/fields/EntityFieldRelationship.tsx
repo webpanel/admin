@@ -52,17 +52,17 @@ export class EntityFieldRelationship<T> extends EntityField<
   }
 
   public get render(): ((record: T) => React.ReactNode) {
-    const { targetEntity, type } = this.config;
-    const render = resolveThunk(targetEntity).render;
+    const { targetEntity, type, render } = this.config;
+    const _render = render || resolveThunk(targetEntity).render;
     return values => {
       const value = values[this.name];
       if (type === 'toMany' && Array.isArray(value)) {
         return value
-          .map(x => render && render(x))
+          .map(x => _render && _render(x))
           .filter(x => x)
-          .map(x => <Tag key={x}>{x}</Tag>);
+          .map(x => <Tag key={String(x)}>{x}</Tag>);
       }
-      return render && render(value);
+      return _render && _render(value);
     };
   }
 
