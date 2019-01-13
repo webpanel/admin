@@ -35,7 +35,8 @@ export class Admin extends React.Component<IAdminProps> {
       entities,
       menuItems,
       structureItems,
-      autopermissions
+      autopermissions,
+      ...restProps
     } = this.props;
 
     configurePermissions(autopermissions);
@@ -54,6 +55,7 @@ export class Admin extends React.Component<IAdminProps> {
             menuItems={menuItems}
             structureItems={structureItems}
             {...props}
+            {...restProps}
           />
         )}
         form={(props: AuthFormProps) => <LoginForm authorizationInfo={props} />}
