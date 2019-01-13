@@ -183,6 +183,12 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
+"@types/uuid@^3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-3.4.4.tgz#7af69360fa65ef0decb41fd150bf4ca5c0cefdf5"
+  dependencies:
+    "@types/node" "*"
+
 abs-svg-path@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/abs-svg-path/-/abs-svg-path-0.1.1.tgz#df601c8e8d2ba10d4a76d625e236a9a39c2723bf"
@@ -1908,6 +1914,10 @@ uuid@3.0.x:
   version "3.0.1"
   resolved "http://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz#6544bba2dfda8c1cf17e629a3a305e2bb1fee6c1"
 
+uuid@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+
 value-equal@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/value-equal/-/value-equal-0.4.0.tgz#c5bdd2f54ee093c04839d71ce2e4758a6890abc7"
@@ -1939,8 +1949,8 @@ warning@^4.0.1, warning@~4.0.1:
     loose-envify "^1.0.0"
 
 "webpanel-antd@https://github.com/webpanel/antd.git#develop":
-  version "0.0.25"
-  resolved "https://github.com/webpanel/antd.git#0e7759fa72850b1fe1f6ffbea938bfad1e2eb5f5"
+  version "0.0.29"
+  resolved "https://github.com/webpanel/antd.git#62d3708c60b7b24287301044844b752b81a11bde"
   dependencies:
     "@types/jest" "^23.1.1"
     "@types/jsonwebtoken" "^7.2.7"
@@ -1952,6 +1962,7 @@ warning@^4.0.1, warning@~4.0.1:
     "@types/react-broadcast" "^0.6.0"
     "@types/react-dom" "^16.0.6"
     "@types/react-router-dom" "^4.2.7"
+    "@types/uuid" "^3.4.4"
     jsonwebtoken "^8.2.2"
     lodash "^4.17.10"
     node-fetch "^2.1.2"
@@ -1960,6 +1971,7 @@ warning@^4.0.1, warning@~4.0.1:
     react-broadcast "^0.7.1"
     react-dom "^16.4.1"
     react-router-dom "^4.3.1"
+    uuid "^3.3.2"
 
 webpanel-auth@^0.0.24:
   version "0.0.24"
