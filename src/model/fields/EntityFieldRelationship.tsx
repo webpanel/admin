@@ -229,6 +229,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         dataSource={_targetEntity.dataSource}
         initialFilters={_targetEntity.initialFilters}
         initialSorting={_targetEntity.initialSorting}
+        autoload={false}
         render={(resource: ResourceCollection) => {
           const value = props.selectedKeys;
           return (
