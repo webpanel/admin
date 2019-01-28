@@ -296,12 +296,13 @@ export class Entity<T> {
   };
 
   // views
-  public getListView = (): React.ReactNode => {
+  public getListView = (config?: IEntityListConfig): React.ReactNode => {
     return (
       <EntityList
         entity={this}
         dataSource={this.dataSource}
         {...this.config.list}
+        {...config}
       />
     );
   };
