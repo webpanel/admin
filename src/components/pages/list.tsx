@@ -12,7 +12,7 @@ import { Entity } from '../../model/Entity';
 import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { ListCell } from './list-cell';
-import { entityPermission } from '../../model/permissions';
+import { entityPermission, fieldPermission } from '../../model/permissions';
 import { EntityField } from '../../model/EntityField';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
@@ -67,7 +67,10 @@ export class EntityList extends React.Component<IEntityListProps> {
                 collection={resource}
                 values={rowValues[record.id] || record}
                 field={field}
-                editable={_editableFields.indexOf(field.name) > -1}
+                editable={
+                  _editableFields.indexOf(field.name) > -1 &&
+                  fieldPermission(field,'write')
+                }
               />
             );
           }
