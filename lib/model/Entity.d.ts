@@ -66,7 +66,7 @@ export declare class Entity<T> {
     private getDetailPageLayout;
     private getEditPageLayout;
     private getCreatePageLayout;
-    getListView: () => React.ReactNode;
+    getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
