@@ -69,7 +69,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 field={field}
                 editable={
                   _editableFields.indexOf(field.name) > -1 &&
-                  fieldPermission(field,'write')
+                  fieldPermission(field, 'write')
                 }
               />
             );
@@ -124,7 +124,10 @@ export class EntityList extends React.Component<IEntityListProps> {
                 />
               ),
               entityPermission(entity, 'create') && (
-                <Link to="new" key="newButton">
+                <Link
+                  to={`/${entity.structureName}/new`}
+                  key="newButton"
+                >
                   <Button size="small" htmlType="button" icon="plus" />
                 </Link>
               )
@@ -146,7 +149,9 @@ export class EntityList extends React.Component<IEntityListProps> {
                   ? (props: ActionButtonProps) => (
                       <Link
                         key="detail-button-action"
-                        to={`${props.resourceID.toString()}`}
+                        to={`/${
+                          entity.structureName
+                        }/${props.resourceID.toString()}`}
                       >
                         <Button size="small">
                           <Icon
@@ -160,7 +165,9 @@ export class EntityList extends React.Component<IEntityListProps> {
                   ? (props: ActionButtonProps) => (
                       <Link
                         key="edit-button-action"
-                        to={`${props.resourceID.toString()}/edit`}
+                        to={`/${
+                          entity.structureName
+                        }/${props.resourceID.toString()}/edit`}
                       >
                         <Button size="small">
                           <Icon type="edit" />
