@@ -23,6 +23,7 @@ export interface IEntityListTableProps {
 
 export interface IEntityListConfig {
   table?: IEntityListTableProps;
+  title?: string;
   fields?: Thunk<string[]>;
   editableFields?: Thunk<string[]>;
   initialSorting?: SortInfo[];
@@ -76,7 +77,14 @@ export class EntityList extends React.Component<IEntityListProps> {
   }
 
   public render() {
-    const { entity, table, fields,initialFilters,initialSorting } = this.props;
+    const {
+      entity,
+      table,
+      fields,
+      initialFilters,
+      initialSorting,
+      title
+    } = this.props;
 
     const _fields = resolveOptionalThunk(fields);
     const listFields: EntityField<any, any>[] =
@@ -102,7 +110,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         render={(resource: ResourceCollection) => (
           <Card
             bodyStyle={{ padding: '0' }}
-            title={entity.title}
+            title={title || entity.title}
             extra={[
               entity.searchable && (
                 <ResourceSearchInput
