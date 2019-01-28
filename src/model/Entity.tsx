@@ -67,7 +67,9 @@ export interface IEntityConfig<T> {
   edit?: { form?: IEntityEditFormProps };
 
   searchable?: boolean;
+  // deprecated, user table config directly
   initialSorting?: SortInfo[];
+  // deprecated, user table config directly
   initialFilters?: DataSourceArgumentMap;
   render?: ((value: T | null) => string);
 }

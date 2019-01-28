@@ -4,7 +4,8 @@ import { ResourceSearchInput, ResourceTable, Link } from 'webpanel-antd';
 import {
   DataSource,
   ResourceCollection,
-  ResourceCollectionLayer
+  ResourceCollectionLayer,
+  SortInfo
 } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
@@ -14,6 +15,7 @@ import { ListCell } from './list-cell';
 import { entityPermission } from '../../model/permissions';
 import { EntityField } from '../../model/EntityField';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
+import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -23,6 +25,8 @@ export interface IEntityListConfig {
   table?: IEntityListTableProps;
   fields?: Thunk<string[]>;
   editableFields?: Thunk<string[]>;
+  initialSorting?: SortInfo[];
+  initialFilters?: DataSourceArgumentMap;
 }
 
 export interface IEntityListProps extends IEntityListConfig {
@@ -72,7 +76,7 @@ export class EntityList extends React.Component<IEntityListProps> {
   }
 
   public render() {
-    const { entity, table, fields } = this.props;
+    const { entity, table, fields,initialFilters,initialSorting } = this.props;
 
     const _fields = resolveOptionalThunk(fields);
     const listFields: EntityField<any, any>[] =
@@ -93,8 +97,8 @@ export class EntityList extends React.Component<IEntityListProps> {
           'id',
           ...(listFields.map(x => x.fetchField()).filter(x => x) as string[])
         ]}
-        initialSorting={entity.initialSorting}
-        initialFilters={entity.initialFilters}
+        initialSorting={initialSorting || entity.initialSorting}
+        initialFilters={initialFilters || entity.initialFilters}
         render={(resource: ResourceCollection) => (
           <Card
             bodyStyle={{ padding: '0' }}
