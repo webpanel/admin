@@ -10,6 +10,7 @@ export interface IEntityListTableProps {
 }
 export interface IEntityListConfig {
     table?: IEntityListTableProps;
+    title?: string;
     fields?: Thunk<string[]>;
     editableFields?: Thunk<string[]>;
     initialSorting?: SortInfo[];
