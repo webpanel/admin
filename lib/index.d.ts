@@ -11,6 +11,8 @@ export * from './layout-builder';
 export interface IAdminProps extends ILayoutProps {
     auth?: AuthProps | DummyAuthProps;
     autopermissions?: IAutopermissionConfig | boolean;
+    logoURL?: string;
+    logoCollapsedURL?: string;
 }
 export declare class Admin extends React.Component<IAdminProps> {
     static Entity: typeof Entity;
