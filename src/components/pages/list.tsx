@@ -21,10 +21,23 @@ export interface IEntityListTableProps {
   condensed?: boolean;
 }
 
+export type IEntityListColumnRender = ((
+  value: any,
+  values: any,
+  field: EntityField<any, any>
+) => React.ReactNode);
+
+export type IEntityListColumn =
+  | string
+  | {
+      field: string;
+      render?: IEntityListColumnRender;
+    };
+
 export interface IEntityListConfig {
   table?: IEntityListTableProps;
   title?: string;
-  fields?: Thunk<string[]>;
+  fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
   initialSorting?: SortInfo[];
   initialFilters?: DataSourceArgumentMap;
@@ -37,7 +50,10 @@ export interface IEntityListProps extends IEntityListConfig {
 
 export class EntityList extends React.Component<IEntityListProps> {
   getColumns(
-    listFields: EntityField<any, any>[],
+    listFields: {
+      field: EntityField<any, any>;
+      render?: IEntityListColumnRender;
+    }[],
     resource: ResourceCollection
   ): ResourceTableColumn[] {
     const { entity, editableFields } = this.props;
@@ -50,22 +66,28 @@ export class EntityList extends React.Component<IEntityListProps> {
     const rowValues = {};
 
     return listFields.map(
-      (field): ResourceTableColumn => {
-        const { filter } = field;
+      (column): ResourceTableColumn => {
+        const { field, render } = column;
         return {
           key: field.name,
           dataIndex: field.name,
           title: field.shortTitle,
           sorter: field.sortable,
 
-          filterDropdown: filter ? field.filterDropdown(resource) : undefined,
+          filterDropdown: field.filter
+            ? field.filterDropdown(resource)
+            : undefined,
           filterFormatter: field.filterFormatter,
 
           render: (value: any, record: any): React.ReactNode => {
+            const values = rowValues[record.id] || record;
+            if (render) {
+              return render(value, values, field);
+            }
             return (
               <ListCell
                 collection={resource}
-                values={rowValues[record.id] || record}
+                values={values}
                 field={field}
                 editable={
                   _editableFields.indexOf(field.name) > -1 &&
@@ -90,15 +112,27 @@ export class EntityList extends React.Component<IEntityListProps> {
     } = this.props;
 
     const _fields = resolveOptionalThunk(fields);
-    const listFields: EntityField<any, any>[] =
-      (_fields &&
-        (_fields
-          .map(f => entity.getField(f))
-          .filter(x => x && x.visible('list', 'read')) as EntityField<
-          any,
-          any
-        >[])) ||
-      entity.listFields;
+    let listFields: {
+      field: EntityField<any, any>;
+      render?: IEntityListColumnRender;
+    }[] = [];
+    if (_fields) {
+      for (let f of _fields) {
+        const fieldName = typeof f === 'string' ? f : f.field;
+        const render = (typeof f !== 'string' && f.render) || undefined;
+        const field = entity.getField(fieldName);
+        if (!field) {
+          throw new Error(
+            `Field '${fieldName}' not found in entity '${entity.name}'`
+          );
+        }
+        listFields.push({ field, render });
+      }
+    } else {
+      for (let f of entity.listFields) {
+        listFields.push({ field: f });
+      }
+    }
 
     return (
       <ResourceCollectionLayer
@@ -106,7 +140,9 @@ export class EntityList extends React.Component<IEntityListProps> {
         dataSource={this.props.dataSource}
         fields={[
           'id',
-          ...(listFields.map(x => x.fetchField()).filter(x => x) as string[])
+          ...(listFields
+            .map(x => x.field.fetchField())
+            .filter(x => x) as string[])
         ]}
         initialSorting={initialSorting || entity.initialSorting}
         initialFilters={initialFilters || entity.initialFilters}
@@ -124,10 +160,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 />
               ),
               entityPermission(entity, 'create') && (
-                <Link
-                  to={`/${entity.structureName}/new`}
-                  key="newButton"
-                >
+                <Link to={`/${entity.structureName}/new`} key="newButton">
                   <Button size="small" htmlType="button" icon="plus" />
                 </Link>
               )

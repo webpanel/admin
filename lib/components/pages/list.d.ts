@@ -8,10 +8,15 @@ import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 export interface IEntityListTableProps {
     condensed?: boolean;
 }
+export declare type IEntityListColumnRender = ((value: any, values: any, field: EntityField<any, any>) => React.ReactNode);
+export declare type IEntityListColumn = string | {
+    field: string;
+    render?: IEntityListColumnRender;
+};
 export interface IEntityListConfig {
     table?: IEntityListTableProps;
     title?: string;
-    fields?: Thunk<string[]>;
+    fields?: Thunk<IEntityListColumn[]>;
     editableFields?: Thunk<string[]>;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
@@ -21,6 +26,9 @@ export interface IEntityListProps extends IEntityListConfig {
     dataSource: DataSource;
 }
 export declare class EntityList extends React.Component<IEntityListProps> {
-    getColumns(listFields: EntityField<any, any>[], resource: ResourceCollection): ResourceTableColumn[];
+    getColumns(listFields: {
+        field: EntityField<any, any>;
+        render?: IEntityListColumnRender;
+    }[], resource: ResourceCollection): ResourceTableColumn[];
     render(): JSX.Element;
 }
