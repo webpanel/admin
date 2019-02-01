@@ -1874,7 +1874,7 @@ traverse-chain@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/traverse-chain/-/traverse-chain-0.1.0.tgz#61dbc2d53b69ff6091a12a168fd7d433107e40f1"
 
-ts-thunk@0.0.6:
+ts-thunk@0.0.6, ts-thunk@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/ts-thunk/-/ts-thunk-0.0.6.tgz#47898955e530c6b7229a8b314e79f2e1dc1b2a4f"
 
@@ -1950,7 +1950,7 @@ warning@^4.0.1, warning@~4.0.1:
 
 "webpanel-antd@https://github.com/webpanel/antd.git#develop":
   version "0.0.29"
-  resolved "https://github.com/webpanel/antd.git#62d3708c60b7b24287301044844b752b81a11bde"
+  resolved "https://github.com/webpanel/antd.git#8296a7d4b7a0a87eec05eaf90a9a2a12d2fc11bb"
   dependencies:
     "@types/jest" "^23.1.1"
     "@types/jsonwebtoken" "^7.2.7"
@@ -1971,6 +1971,7 @@ warning@^4.0.1, warning@~4.0.1:
     react-broadcast "^0.7.1"
     react-dom "^16.4.1"
     react-router-dom "^4.3.1"
+    ts-thunk "^0.0.6"
     uuid "^3.3.2"
 
 webpanel-auth@^0.0.24:
