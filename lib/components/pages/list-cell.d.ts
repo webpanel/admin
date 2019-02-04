@@ -7,16 +7,20 @@ export interface IListCellProps {
     field: EntityField<any, any>;
     editable: boolean;
 }
-export interface ListCellState {
+export interface IListCellState {
     currentValue?: any;
     value?: any;
     valueElement?: React.ReactNode;
+    editing: boolean;
+    saving: boolean;
 }
-export declare class ListCell extends React.Component<IListCellProps> {
+export declare class ListCell extends React.Component<IListCellProps, IListCellState> {
     state: {
         currentValue: undefined;
         value: undefined;
         valueElement: undefined;
+        editing: boolean;
+        saving: boolean;
     };
     onChange: (value: any, valueElement: React.ReactNode) => Promise<void>;
     cancel: () => void;
