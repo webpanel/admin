@@ -83,7 +83,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         : null;
 
     const addButtonMargin =
-      config.formLayout === 'horizontal' ? '4px 0 0 4px' : '43px 0 0 4px';
+      config.formLayout === 'horizontal' ? '4px 0 0 4px' : '0 0 0 4px';
 
     return (
       <ResourceCollectionLayer
