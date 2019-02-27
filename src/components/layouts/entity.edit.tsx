@@ -11,10 +11,10 @@ export interface IEntityEditLayoutProps extends IEntityEditConfig {
 
 export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
   public render() {
-    const { route, form, initialValues } = this.props;
+    const { route, form, entity, initialValues } = this.props;
     return (
       <EntityEdit
-        entity={this.props.entity}
+        entity={entity}
         resourceID={route.match.params.id}
         route={route}
         form={form}

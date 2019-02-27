@@ -14,7 +14,7 @@ export interface IEntityEditFormProps {
 
 export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
-  initialValues?: { [key: string]: any };
+  initialValues: { [key: string]: any } | undefined;
 }
 
 export interface IEntityEditProps extends IEntityEditConfig {
@@ -84,7 +84,7 @@ export class EntityEdit extends React.Component<
   };
 
   public render() {
-    const { entity, resourceID, initialValues, onCreate, form } = this.props;
+    const { entity, resourceID, onCreate, form, initialValues } = this.props;
     return (
       <ResourceLayer
         key={this.state.version}

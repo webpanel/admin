@@ -31,9 +31,6 @@ export interface IEntityConfig<T> {
     searchable?: boolean;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
-    initialValues?: {
-        [key: string]: any;
-    };
     render?: ((value: T | null) => string);
 }
 export declare class Entity<T> {
@@ -60,7 +57,7 @@ export declare class Entity<T> {
     readonly editLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
     private layouts;
-    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;

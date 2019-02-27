@@ -10,9 +10,9 @@ export interface IEntityEditFormProps {
 }
 export interface IEntityEditConfig {
     form?: IEntityEditFormProps;
-    initialValues?: {
+    initialValues: {
         [key: string]: any;
-    };
+    } | undefined;
 }
 export interface IEntityEditProps extends IEntityEditConfig {
     entity: Entity<any>;
