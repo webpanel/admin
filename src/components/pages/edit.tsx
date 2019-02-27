@@ -12,13 +12,16 @@ export interface IEntityEditFormProps {
   layout?: FormLayout;
 }
 
-export interface IEntityEditProps {
+export interface IEntityEditConfig {
+  form?: IEntityEditFormProps;
+  initialValues?: { [key: string]: any };
+}
+
+export interface IEntityEditProps extends IEntityEditConfig {
   entity: Entity<any>;
   resourceID?: string;
-  initialValues?: { [key: string]: any };
   route?: RouteComponentProps<any>;
   onCreate?: (id: string) => void;
-  form?: IEntityEditFormProps;
 }
 
 export class EntityEdit extends React.Component<

@@ -46,7 +46,7 @@ export class Admin extends React.Component<IAdminProps> {
     if (!auth) {
       return <AdminLayout entities={entities} logout={() => {}} />;
     }
-    const AuthComp = auth.type === 'dummy' ? DummyAuth : Auth;
+    const AuthComp: DummyAuth | Auth = auth.type === 'dummy' ? DummyAuth : Auth;
 
     return (
       <AuthComp
