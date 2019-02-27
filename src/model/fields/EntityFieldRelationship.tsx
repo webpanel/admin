@@ -11,7 +11,6 @@ import { Entity } from '../Entity';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Button, Modal, Tag } from 'antd';
-import { EntityEdit } from '../../components/pages/edit';
 import { FormLayout } from 'antd/lib/form/Form';
 import { entityPermission } from '../permissions';
 
@@ -142,17 +141,15 @@ export class EntityFieldRelationship<T> extends EntityField<
                     maskClosable: true,
                     okText: 'Close',
                     style: { minWidth: '60%' },
-                    content: (
-                      <EntityEdit
-                        onCreate={async (id: string) => {
-                          await collection.get();
-                          let updateValues = {};
-                          updateValues[this.columnName()] = id;
-                          formContext.form.setFieldsValue(updateValues);
-                          infoWindow.destroy();
-                        }}
-                        entity={_targetEntity}
-                      />
+                    content: _targetEntity.getCreateView(
+                      undefined,
+                      async (id: string | number) => {
+                        await collection.get();
+                        let updateValues = {};
+                        updateValues[this.columnName()] = id;
+                        formContext.form.setFieldsValue(updateValues);
+                        infoWindow.destroy();
+                      }
                     )
                   });
                 }}

@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { FormLayout } from 'antd/lib/form/Form';
-import { RouteComponentProps } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
 import { SaveOption } from '../form/buttons';
+export declare type EntityOnSaveHandler = (id: string | number, option?: SaveOption) => void;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
 }
 export interface IEntityEditConfig {
     form?: IEntityEditFormProps;
-    initialValues: {
+    initialValues?: {
         [key: string]: any;
-    } | undefined;
+    };
 }
 export interface IEntityEditProps extends IEntityEditConfig {
     entity: Entity<any>;
     resourceID?: string;
-    route?: RouteComponentProps<any>;
+    onSave?: EntityOnSaveHandler;
     onCreate?: (id: string) => void;
 }
 export declare class EntityEdit extends React.Component<IEntityEditProps, {
@@ -26,7 +26,7 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
     state: {
         version: number;
     };
-    private ignoreFormSuccessRedirect;
+    private currentSaveOption?;
     handleSave: (formContext: FormContext, option: SaveOption, resource: Resource) => Promise<void>;
     handleFormSuccess: (resource: Resource) => Promise<void>;
     render(): JSX.Element;

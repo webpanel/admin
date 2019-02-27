@@ -34,7 +34,10 @@ import {
   IEntityFieldEnumConfig
 } from './fields/EntityFieldEnum';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
-import { IEntityEditConfig } from '../components/pages/edit';
+import {
+  IEntityEditConfig,
+  EntityOnSaveHandler
+} from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
@@ -44,6 +47,7 @@ import {
   EntityFieldComputed,
   IEntityFieldComputedConfig
 } from './fields/EntityFieldComputed';
+import { SaveOption } from '../components/form/buttons';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -279,21 +283,57 @@ export class Entity<T> {
     return <Redirect to={`${route.match.params.id}/edit`} />;
   };
 
-  private getEditPageLayout = (route: RouteComponentProps<any>) => {
+  private handleFormOnSave = (route: RouteComponentProps<any>) => (
+    id: string | number,
+    option: SaveOption
+  ) => {
+    switch (option) {
+      case 'add':
+        route.history.push('/' + this.structureName + '/new');
+        break;
+      case 'edit':
+        route.history.push('/' + this.structureName + '/' + id + '/edit');
+        break;
+      default:
+        route.history.push('/' + this.structureName + '/');
+        break;
+    }
+  };
+  private getEditPageLayout = (
+    route: RouteComponentProps<any>,
+    config?: IEntityEditConfig
+  ) => {
+    const onSave = this.handleFormOnSave(route);
+    const resourceID = route.match.params.id;
     if (this.editLayout) {
-      return this.editLayout({ entity: this, route });
+      return this.editLayout({ entity: this, onSave });
     }
     return (
-      <EntityEditLayout entity={this} route={route} {...this.config.edit} />
+      <EntityEditLayout
+        entity={this}
+        onSave={onSave}
+        resourceID={resourceID}
+        {...this.config.edit}
+        {...config}
+      />
     );
   };
 
-  private getCreatePageLayout = (route: RouteComponentProps<any>) => {
+  private getCreatePageLayout = (
+    route: RouteComponentProps<any>,
+    config?: IEntityEditConfig
+  ) => {
+    const onSave = this.handleFormOnSave(route);
     if (this.editLayout) {
-      return this.editLayout({ entity: this, route });
+      return this.editLayout({ entity: this, onSave });
     }
     return (
-      <EntityEditLayout entity={this} route={route} {...this.config.edit} />
+      <EntityEditLayout
+        entity={this}
+        onSave={onSave}
+        {...this.config.edit}
+        {...config}
+      />
     );
   };
 
@@ -304,6 +344,40 @@ export class Entity<T> {
         entity={this}
         dataSource={this.dataSource}
         {...this.config.list}
+        {...config}
+      />
+    );
+  };
+
+  public getCreateView = (
+    config?: IEntityEditConfig,
+    onSave?: EntityOnSaveHandler
+  ): React.ReactNode => {
+    if (this.editLayout) {
+      return this.editLayout({ entity: this, onSave });
+    }
+    return (
+      <EntityEditLayout
+        entity={this}
+        onSave={onSave}
+        {...this.config.edit}
+        {...config}
+      />
+    );
+  };
+
+  public getEditView = (
+    config?: IEntityEditConfig,
+    onSave?: EntityOnSaveHandler
+  ): React.ReactNode => {
+    if (this.editLayout) {
+      return this.editLayout({ entity: this, onSave });
+    }
+    return (
+      <EntityEditLayout
+        entity={this}
+        onSave={onSave}
+        {...this.config.edit}
         {...config}
       />
     );

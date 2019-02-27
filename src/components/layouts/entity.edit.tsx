@@ -1,23 +1,35 @@
 import * as React from 'react';
-import { EntityEdit, IEntityEditConfig } from '../pages/edit';
+import {
+  EntityEdit,
+  IEntityEditConfig,
+  EntityOnSaveHandler
+} from '../pages/edit';
 import { Entity } from '../../model/Entity';
-import { RouteComponentProps } from 'react-router';
 
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
+  resourceID?: string;
   entity: Entity<any>;
-  route: RouteComponentProps<any>;
   onCreate?: (id: string) => void;
+  onSave?: EntityOnSaveHandler;
 }
 
 export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
   public render() {
-    const { route, form, entity, initialValues } = this.props;
+    const {
+      resourceID,
+      form,
+      entity,
+      initialValues,
+      onCreate,
+      onSave
+    } = this.props;
     return (
       <EntityEdit
         entity={entity}
-        resourceID={route.match.params.id}
-        route={route}
+        resourceID={resourceID}
         form={form}
+        onCreate={onCreate}
+        onSave={onSave}
         initialValues={initialValues}
       />
     );

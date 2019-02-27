@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { IEntityEditConfig } from '../pages/edit';
+import { IEntityEditConfig, EntityOnSaveHandler } from '../pages/edit';
 import { Entity } from '../../model/Entity';
-import { RouteComponentProps } from 'react-router';
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
+    resourceID?: string;
     entity: Entity<any>;
-    route: RouteComponentProps<any>;
     onCreate?: (id: string) => void;
+    onSave?: EntityOnSaveHandler;
 }
 export declare class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
     render(): JSX.Element;
