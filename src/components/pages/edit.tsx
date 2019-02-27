@@ -1,12 +1,17 @@
 import { Card, message } from 'antd';
 import * as React from 'react';
 import { FormLayout } from 'antd/lib/form/Form';
-import { ResourceForm, RouteComponentProps } from 'webpanel-antd';
+import { ResourceForm } from 'webpanel-antd';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
+
+export type EntityOnSaveHandler = (
+  id: string | number,
+  option?: SaveOption
+) => void;
 
 export interface IEntityEditFormProps {
   layout?: FormLayout;
@@ -14,13 +19,14 @@ export interface IEntityEditFormProps {
 
 export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
-  initialValues: { [key: string]: any } | undefined;
+  initialValues?: { [key: string]: any };
 }
 
 export interface IEntityEditProps extends IEntityEditConfig {
   entity: Entity<any>;
   resourceID?: string;
-  route?: RouteComponentProps<any>;
+  // route?: RouteComponentProps<any>;
+  onSave?: EntityOnSaveHandler;
   onCreate?: (id: string) => void;
 }
 
@@ -30,57 +36,64 @@ export class EntityEdit extends React.Component<
 > {
   state = { version: 0 };
 
-  private ignoreFormSuccessRedirect = false;
+  // private ignoreFormSuccessRedirect = false;
+  private currentSaveOption?: SaveOption = undefined;
 
   handleSave = async (
     formContext: FormContext,
     option: SaveOption,
     resource: Resource
   ) => {
-    const { route, entity } = this.props;
-
-    this.ignoreFormSuccessRedirect = true;
+    // this.ignoreFormSuccessRedirect = true;
+    this.currentSaveOption = option;
     try {
       await formContext.formComponent.submit();
     } catch (err) {
       throw err;
-    } finally {
-      this.ignoreFormSuccessRedirect = false;
+      // } finally {
+      // this.ignoreFormSuccessRedirect = false;
     }
 
-    if (!route) {
-      return;
-    }
+    this.currentSaveOption = undefined;
+    this.setState({ version: this.state.version + 1 });
 
-    switch (option) {
-      case 'add':
-        route.history.push('/' + entity.structureName + '/new');
-        this.setState({ version: this.state.version + 1 });
-        break;
-      case 'edit':
-        route.history.push('/' + entity.structureName + '/' + resource.id);
-        break;
-    }
+    // if (!route) {
+    //   return;
+    // }
+
+    // switch (option) {
+    //   case 'add':
+    //     route.history.push('/' + entity.structureName + '/new');
+    //     this.setState({ version: this.state.version + 1 });
+    //     break;
+    //   case 'edit':
+    //     route.history.push('/' + entity.structureName + '/' + resource.id);
+    //     break;
+    // }
   };
 
   handleFormSuccess = async (resource: Resource) => {
     message.success('Form saved!');
+    const { onSave } = this.props;
 
-    if (this.ignoreFormSuccessRedirect) {
-      return;
+    if (onSave) {
+      onSave(resource.id || 0, this.currentSaveOption);
     }
+    // if (this.ignoreFormSuccessRedirect) {
+    //   return;
+    // }
 
-    const { route, entity } = this.props;
+    // const {  entity } = this.props;
 
-    if (!route) {
-      return;
-    }
+    // if (!route) {
+    //   return;
+    // }
 
-    if (entity.showDetailPage) {
-      route.history.push('/' + entity.structureName + '/' + resource.id);
-    } else {
-      route.history.push('/' + entity.structureName + '/');
-    }
+    // if (entity.showDetailPage) {
+    //   route.history.push('/' + entity.structureName + '/' + resource.id);
+    // } else {
+    //   route.history.push('/' + entity.structureName + '/');
+    // }
   };
 
   public render() {
