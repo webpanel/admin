@@ -8,15 +8,17 @@ import { SaveOption } from '../form/buttons';
 export interface IEntityEditFormProps {
     layout?: FormLayout;
 }
-export interface IEntityEditProps {
-    entity: Entity<any>;
-    resourceID?: string;
+export interface IEntityEditConfig {
+    form?: IEntityEditFormProps;
     initialValues?: {
         [key: string]: any;
     };
+}
+export interface IEntityEditProps extends IEntityEditConfig {
+    entity: Entity<any>;
+    resourceID?: string;
     route?: RouteComponentProps<any>;
     onCreate?: (id: string) => void;
-    form?: IEntityEditFormProps;
 }
 export declare class EntityEdit extends React.Component<IEntityEditProps, {
     version: number;

@@ -34,7 +34,10 @@ import {
   IEntityFieldEnumConfig
 } from './fields/EntityFieldEnum';
 import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
-import { IEntityEditFormProps } from '../components/pages/edit';
+import {
+  IEntityEditFormProps,
+  IEntityEditConfig
+} from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
@@ -64,13 +67,14 @@ export interface IEntityConfig<T> {
     ) => React.ReactElement<IEntityEditLayoutProps>;
   };
   list?: IEntityListConfig;
-  edit?: { form?: IEntityEditFormProps };
+  edit?: IEntityEditConfig;
 
   searchable?: boolean;
   // deprecated, user table config directly
   initialSorting?: SortInfo[];
   // deprecated, user table config directly
   initialFilters?: DataSourceArgumentMap;
+  initialValues?: { [key: string]: any };
   render?: ((value: T | null) => string);
 }
 

@@ -9,7 +9,7 @@ import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
 import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship';
 import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 import { Thunk } from 'ts-thunk';
-import { IEntityEditFormProps } from '../components/pages/edit';
+import { IEntityEditConfig } from '../components/pages/edit';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
@@ -27,12 +27,13 @@ export interface IEntityConfig<T> {
         create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
     };
     list?: IEntityListConfig;
-    edit?: {
-        form?: IEntityEditFormProps;
-    };
+    edit?: IEntityEditConfig;
     searchable?: boolean;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
+    initialValues?: {
+        [key: string]: any;
+    };
     render?: ((value: T | null) => string);
 }
 export declare class Entity<T> {
