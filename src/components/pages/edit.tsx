@@ -170,6 +170,7 @@ export class EntityEdit extends React.Component<
                   })
                 );
 
+              console.log('????', wrapperType);
               switch (wrapperType) {
                 case 'modal':
                   return this.formModalContent(content, formContext, resource);
