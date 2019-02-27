@@ -32,6 +32,7 @@ export class AdminLayout extends React.Component<ILayoutProps & LayoutProps> {
               .filter(x => x.enabled)
               .map(x => x.structureItem())}
         </Layout.Structure>
+        {this.props.children}
       </Layout>
     );
   }
