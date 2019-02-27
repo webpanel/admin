@@ -122,7 +122,7 @@ export class EntityEdit extends React.Component<
     formContext: FormContext,
     resource: Resource
   ): React.ReactNode {
-    return <Modal>{content}</Modal>;
+    return <Modal visible={true}>{content}</Modal>;
   }
 
   public render() {
