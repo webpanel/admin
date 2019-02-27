@@ -7,6 +7,7 @@ import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
+import { ModalProps } from 'antd/lib/modal';
 
 export type EntityOnSaveHandler = (
   id: string | number,
@@ -21,6 +22,7 @@ export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
   initialValues?: { [key: string]: any };
   wrapperType?: 'card' | 'modal';
+  modal?: ModalProps;
 }
 
 export interface IEntityEditProps extends IEntityEditConfig {
@@ -122,7 +124,8 @@ export class EntityEdit extends React.Component<
     formContext: FormContext,
     resource: Resource
   ): React.ReactNode {
-    return <Modal visible={true}>{content}</Modal>;
+    const { modal } = this.props;
+    return <Modal {...modal}>{content}</Modal>;
   }
 
   public render() {

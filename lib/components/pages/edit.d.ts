@@ -4,6 +4,7 @@ import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
 import { SaveOption } from '../form/buttons';
+import { ModalProps } from 'antd/lib/modal';
 export declare type EntityOnSaveHandler = (id: string | number, option?: SaveOption) => void;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
@@ -14,6 +15,7 @@ export interface IEntityEditConfig {
         [key: string]: any;
     };
     wrapperType?: 'card' | 'modal';
+    modal?: ModalProps;
 }
 export interface IEntityEditProps extends IEntityEditConfig {
     entity: Entity<any>;
