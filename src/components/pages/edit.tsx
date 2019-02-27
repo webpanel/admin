@@ -125,7 +125,11 @@ export class EntityEdit extends React.Component<
     resource: Resource
   ): React.ReactNode {
     const { modal } = this.props;
-    return <Modal {...modal}>{content}</Modal>;
+    return (
+      <Modal footer="replace me with buttons" {...modal}>
+        {content}
+      </Modal>
+    );
   }
 
   public render() {
