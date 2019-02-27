@@ -140,6 +140,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       : undefined;
     return (
       <Input
+        key={`string_field_${this.entity.name}_${this.valuePropName}`}
         {...props}
         {...this.config.attributes || {}}
         onChange={onChangeProp}

@@ -57,6 +57,7 @@ export class EntityFieldDate<T> extends EntityField<
 
     return (
       <DatePicker
+        key={`enum_field_${this.entity.name}_${this.valuePropName}`}
         showTime={this.config.showTime}
         format={this.format}
         {...props}

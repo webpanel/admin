@@ -109,6 +109,9 @@ export class EntityFieldRelationship<T> extends EntityField<
             {...formItemLayout}
           >
             <ResourceSelect
+              key={`relationship_field_${this.entity.name}_${
+                this.valuePropName
+              }`}
               valueKey="id"
               labelKey={(value: any): string => {
                 return _targetEntity.render(value);
@@ -124,6 +127,9 @@ export class EntityFieldRelationship<T> extends EntityField<
             />
             {entityPermission(_targetEntity, 'create') && (
               <Button
+                key={`relationship_field_${this.entity.name}_${
+                  this.valuePropName
+                }_add`}
                 size="small"
                 icon="plus"
                 style={{

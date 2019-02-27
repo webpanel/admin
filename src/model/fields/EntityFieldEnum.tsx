@@ -42,7 +42,12 @@ export class EntityFieldEnum<T> extends EntityField<
   }): React.ReactNode {
     const selectOptions = resolveThunk(this.config.options).map(
       (value: IOption) => (
-        <Select.Option value={value.value}>{value.label}</Select.Option>
+        <Select.Option
+          key={`enum_field_${this.entity.name}_${this.valuePropName}`}
+          value={value.value}
+        >
+          {value.label}
+        </Select.Option>
       )
     );
 

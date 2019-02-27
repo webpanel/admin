@@ -35,6 +35,13 @@ export class EntityFieldColor<T, C> extends EntityField<T, C> {
           onChange(event.target.value, this.renderValue(event.target.value))
       : undefined;
 
-    return <input type="color" {...props} onChange={onChangeProp} />;
+    return (
+      <input
+        key={`color_field_${this.entity.name}_${this.valuePropName}`}
+        type="color"
+        {...props}
+        onChange={onChangeProp}
+      />
+    );
   }
 }
