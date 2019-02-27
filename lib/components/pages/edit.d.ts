@@ -13,6 +13,7 @@ export interface IEntityEditConfig {
     initialValues?: {
         [key: string]: any;
     };
+    wrapperType?: 'card' | 'modal';
 }
 export interface IEntityEditProps extends IEntityEditConfig {
     entity: Entity<any>;
@@ -29,5 +30,7 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
     private currentSaveOption?;
     handleSave: (formContext: FormContext, option: SaveOption, resource: Resource) => Promise<void>;
     handleFormSuccess: (resource: Resource) => Promise<void>;
+    private formCardContent;
+    private formModalContent;
     render(): JSX.Element;
 }
