@@ -16,6 +16,7 @@ export class EntityFieldText<T, C> extends EntityField<T, C> {
 
     return (
       <Input.TextArea
+        key={`text_field_${this.entity.name}_${this.valuePropName}`}
         {...props}
         autosize={{ minRows: 2, maxRows: 8 }}
         onChange={onChangeProp}

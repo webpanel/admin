@@ -31,7 +31,13 @@ export class EntityFieldBoolean<T> extends EntityField<
       ? (event: CheckboxChangeEvent) =>
           onChange(event.target.value, this.renderValue(event.target.value))
       : undefined;
-    return <Checkbox {...props} onChange={onChangeProp} />;
+    return (
+      <Checkbox
+        key={`boolean_field_${this.entity.name}_${this.valuePropName}`}
+        {...props}
+        onChange={onChangeProp}
+      />
+    );
   }
 
   public get filterFormatter(): ((
