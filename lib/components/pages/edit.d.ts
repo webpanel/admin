@@ -22,6 +22,7 @@ export interface IEntityEditProps extends IEntityEditConfig {
     resourceID?: string;
     onSave?: EntityOnSaveHandler;
     onCreate?: (id: string) => void;
+    onCancel?: () => void;
 }
 export declare class EntityEdit extends React.Component<IEntityEditProps, {
     version: number;

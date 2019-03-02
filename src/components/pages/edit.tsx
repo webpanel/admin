@@ -31,6 +31,7 @@ export interface IEntityEditProps extends IEntityEditConfig {
   // route?: RouteComponentProps<any>;
   onSave?: EntityOnSaveHandler;
   onCreate?: (id: string) => void;
+  onCancel?: () => void;
 }
 
 export class EntityEdit extends React.Component<
@@ -109,9 +110,9 @@ export class EntityEdit extends React.Component<
     formContext: FormContext,
     resource: Resource
   ): React.ReactNode {
-    const { modal } = this.props;
+    const { modal, onCancel } = this.props;
     return (
-      <Modal onOk={() => this.handleSave(formContext, resource)} confirmLoading={resource.loading} {...modal}>
+      <Modal onOk={() => this.handleSave(formContext, resource)} onCancel={onCancel} confirmLoading={resource.loading} {...modal}>
         {content}
       </Modal>
     );
