@@ -31,7 +31,7 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
         version: number;
     };
     private currentSaveOption?;
-    handleSave: (formContext: FormContext, resource: Resource, option?: "edit" | "add" | undefined) => Promise<void>;
+    handleSave: (formContext: FormContext, resource: Resource, option?: "add" | "edit" | undefined) => Promise<void>;
     handleFormSuccess: (resource: Resource) => Promise<void>;
     private formCardContent;
     private formModalContent;
