@@ -36,7 +36,7 @@ export interface IEntityEditProps extends IEntityEditConfig {
 export class EntityEdit extends React.Component<
   IEntityEditProps,
   { version: number }
-> {
+  > {
   state = { version: 0 };
 
   // private ignoreFormSuccessRedirect = false;
@@ -126,7 +126,7 @@ export class EntityEdit extends React.Component<
   ): React.ReactNode {
     const { modal } = this.props;
     return (
-      <Modal footer="replace me with buttons" {...modal}>
+      <Modal onOk={() => global.console.log('ok')} confirmLoading={true} {...modal}>
         {content}
       </Modal>
     );
