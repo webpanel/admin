@@ -1,53 +1,53 @@
-import * as inflection from 'inflection';
-import * as React from 'react';
-import { Redirect } from 'react-router';
+import * as inflection from "inflection";
+import * as React from "react";
+import { Redirect } from "react-router";
 
-import { Layout, RouteComponentProps } from 'webpanel-antd';
-import { DataSource, SortInfo } from 'webpanel-data';
+import { Layout, RouteComponentProps } from "webpanel-antd";
+import { DataSource, SortInfo } from "webpanel-data";
 // import { Button } from 'antd';
 
-import { EntityList, IEntityListConfig } from '../components/pages/list';
-import { IEntityDetailProps } from '../components/pages/detail';
-import { EntityField, IEntityFieldConfig } from './EntityField';
-import { EntityDetailLayout } from '../components/layouts/entity.detail';
+import { EntityList, IEntityListConfig } from "../components/pages/list";
+import { IEntityDetailProps } from "../components/pages/detail";
+import { EntityField, IEntityFieldConfig } from "./EntityField";
+import { EntityDetailLayout } from "../components/layouts/entity.detail";
 import {
   EntityEditLayout,
   IEntityEditLayoutProps
-} from '../components/layouts/entity.edit';
+} from "../components/layouts/entity.edit";
 import {
   EntityFieldDate,
   IEntityFieldDateConfig
-} from './fields/EntityFieldDate';
-import { EntityFieldNumber } from './fields/EntityFieldNumber';
-import { EntityFieldText } from './fields/EntityFieldText';
+} from "./fields/EntityFieldDate";
+import { EntityFieldNumber } from "./fields/EntityFieldNumber";
+import { EntityFieldText } from "./fields/EntityFieldText";
 import {
   EntityFieldBoolean,
   IEntityFieldBooleanConfig
-} from './fields/EntityFieldBoolean';
+} from "./fields/EntityFieldBoolean";
 import {
   IEntityFieldRelationshipConfig,
   EntityFieldRelationship
-} from './fields/EntityFieldRelationship';
-import { EntityFieldColor } from './fields/EntityFieldColor';
+} from "./fields/EntityFieldRelationship";
+import { EntityFieldColor } from "./fields/EntityFieldColor";
 import {
   EntityFieldEnum,
   IEntityFieldEnumConfig
-} from './fields/EntityFieldEnum';
-import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
+} from "./fields/EntityFieldEnum";
+import { Thunk, resolveThunk, resolveOptionalThunk } from "ts-thunk";
 import {
   IEntityEditConfig,
   EntityOnSaveHandler
-} from '../components/pages/edit';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
-import { LayoutBuilder } from '../layout-builder';
-import { LayoutBuilderConfig } from '../layout-builder/builder';
-import { entityPermission, componentPermission } from './permissions';
-import { EntityFieldPasssword } from './fields/EntityFieldPassword';
+} from "../components/pages/edit";
+import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { LayoutBuilder } from "../layout-builder";
+import { LayoutBuilderConfig } from "../layout-builder/builder";
+import { entityPermission, componentPermission } from "./permissions";
+import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
 import {
   EntityFieldComputed,
   IEntityFieldComputedConfig
-} from './fields/EntityFieldComputed';
-import { SaveOption } from '../components/form/buttons';
+} from "./fields/EntityFieldComputed";
+import { SaveOption } from "../components/form/buttons";
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -75,7 +75,7 @@ export interface IEntityConfig<T> {
   initialSorting?: SortInfo[];
   // deprecated, user table config directly
   initialFilters?: DataSourceArgumentMap;
-  render?: ((value: T | null) => string);
+  render?: (value: T | null) => string;
 }
 
 export class Entity<T> {
@@ -87,9 +87,9 @@ export class Entity<T> {
 
   public get structureName(): string {
     return `${inflection.transform(resolveThunk(this.config.name), [
-      'tableize',
-      'dasherize',
-      'pluralize'
+      "tableize",
+      "dasherize",
+      "pluralize"
     ])}`;
   }
 
@@ -102,8 +102,8 @@ export class Entity<T> {
 
   public get enabled(): boolean {
     const val = resolveOptionalThunk(this.config.enabled);
-    if (typeof val !== 'undefined') return val;
-    return entityPermission(this, 'list');
+    if (typeof val !== "undefined") return val;
+    return entityPermission(this, "list");
   }
 
   public get showDetailPage(): boolean {
@@ -118,15 +118,15 @@ export class Entity<T> {
     return resolveThunk(this.config.dataSource);
   }
 
-  public get render(): ((value: T | null) => string) {
+  public get render(): (value: T | null) => string {
     if (this.config.render) {
       return this.config.render;
     }
     return (value: any) => {
-      if (value === null || typeof value !== 'object') {
-        return '–';
+      if (value === null || typeof value !== "object") {
+        return "–";
       }
-      return this.searchableFields.map(x => value[x.name]).join(', ');
+      return this.searchableFields.map(x => value[x.name]).join(", ");
     };
   }
 
@@ -146,16 +146,16 @@ export class Entity<T> {
   }
 
   public get listFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('list', 'read'));
+    return this.fields.filter(f => f.visible("list", "read"));
   }
   public get editFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('edit', 'write'));
+    return this.fields.filter(f => f.visible("edit", "write"));
   }
   public get detailFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('detail', 'read'));
+    return this.fields.filter(f => f.visible("detail", "read"));
   }
   public get searchableFields(): EntityField<T, any>[] {
-    const fields = this.fields.filter(f => f.visible('search', 'read', true));
+    const fields = this.fields.filter(f => f.visible("search", "read", true));
     if (fields.length === 0 && this.listFields.length > 0) {
       return [this.listFields[0]];
     }
@@ -188,14 +188,14 @@ export class Entity<T> {
     [key: string]: (builder: LayoutBuilder) => React.ReactNode;
   } = {};
   public setLayout = (
-    type: 'detail' | 'edit',
+    type: "detail" | "edit",
     fn: (builder: LayoutBuilder) => React.ReactNode
   ) => {
     this.layouts[type] = fn;
   };
 
   public getLayout(
-    type: 'detail' | 'edit',
+    type: "detail" | "edit",
     config: LayoutBuilderConfig
   ): React.ReactNode | null {
     const builder = new LayoutBuilder(config);
@@ -212,7 +212,7 @@ export class Entity<T> {
         <Layout.MenuItem
           key={this.structureName}
           title={this.title}
-          icon={resolveOptionalThunk(this.config.icon) || 'folder'}
+          icon={resolveOptionalThunk(this.config.icon) || "folder"}
         />
       )
     );
@@ -288,14 +288,14 @@ export class Entity<T> {
     option: SaveOption
   ) => {
     switch (option) {
-      case 'add':
-        route.history.push('/' + this.structureName + '/new');
+      case "add":
+        route.history.push("/" + this.structureName + "/new");
         break;
-      case 'edit':
-        route.history.push('/' + this.structureName + '/' + id + '/edit');
+      case "edit":
+        route.history.push("/" + this.structureName + "/" + id + "/edit");
         break;
       default:
-        route.history.push('/' + this.structureName + '/');
+        route.history.push("/" + this.structureName + "/");
         break;
     }
   };
@@ -351,15 +351,20 @@ export class Entity<T> {
 
   public getCreateView = (
     config?: IEntityEditConfig,
-    onSave?: EntityOnSaveHandler
+    handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
   ): React.ReactNode => {
+    const { onSave, onCancel } = handlers || {
+      onSave: undefined,
+      onCancel: undefined
+    };
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave });
+      return this.editLayout({ entity: this, onSave, onCancel });
     }
     return (
       <EntityEditLayout
         entity={this}
         onSave={onSave}
+        onCancel={onCancel}
         {...this.config.edit}
         {...config}
       />
@@ -368,15 +373,20 @@ export class Entity<T> {
 
   public getEditView = (
     config?: IEntityEditConfig,
-    onSave?: EntityOnSaveHandler
+    handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
   ): React.ReactNode => {
+    const { onSave, onCancel } = handlers || {
+      onSave: undefined,
+      onCancel: undefined
+    };
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave });
+      return this.editLayout({ entity: this, onSave, onCancel });
     }
     return (
       <EntityEditLayout
         entity={this}
         onSave={onSave}
+        onCancel={onCancel}
         {...this.config.edit}
         {...config}
       />

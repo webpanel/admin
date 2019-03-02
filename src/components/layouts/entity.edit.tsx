@@ -1,16 +1,17 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   EntityEdit,
   IEntityEditConfig,
   EntityOnSaveHandler
-} from '../pages/edit';
-import { Entity } from '../../model/Entity';
+} from "../pages/edit";
+import { Entity } from "../../model/Entity";
 
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
   resourceID?: string;
   entity: Entity<any>;
   onCreate?: (id: string) => void;
   onSave?: EntityOnSaveHandler;
+  onCancel?: () => void;
 }
 
 export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
