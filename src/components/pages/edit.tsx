@@ -44,8 +44,8 @@ export class EntityEdit extends React.Component<
 
   handleSave = async (
     formContext: FormContext,
-    option: SaveOption,
-    resource: Resource
+    resource: Resource,
+    option?: SaveOption,
   ) => {
     // this.ignoreFormSuccessRedirect = true;
     this.currentSaveOption = option;
@@ -112,7 +112,7 @@ export class EntityEdit extends React.Component<
             hasChanges={formContext.form.isFieldsTouched()}
             handleReset={() => formContext.formComponent.resetFields()}
             handleSave={(option: SaveOption) =>
-              this.handleSave(formContext, option, resource)
+              this.handleSave(formContext, resource, option)
             }
           />
         </>
@@ -126,7 +126,7 @@ export class EntityEdit extends React.Component<
   ): React.ReactNode {
     const { modal } = this.props;
     return (
-      <Modal onOk={() => global.console.log('ok')} confirmLoading={true} {...modal}>
+      <Modal onOk={() => this.handleSave(formContext, resource)} confirmLoading={true} {...modal}>
         {content}
       </Modal>
     );
@@ -177,7 +177,6 @@ export class EntityEdit extends React.Component<
                   })
                 );
 
-              console.log('????', wrapperType);
               switch (wrapperType) {
                 case 'modal':
                   return this.formModalContent(content, formContext, resource);
