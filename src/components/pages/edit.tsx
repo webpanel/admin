@@ -82,21 +82,6 @@ export class EntityEdit extends React.Component<
     if (onSave) {
       onSave(resource.id || 0, this.currentSaveOption);
     }
-    // if (this.ignoreFormSuccessRedirect) {
-    //   return;
-    // }
-
-    // const {  entity } = this.props;
-
-    // if (!route) {
-    //   return;
-    // }
-
-    // if (entity.showDetailPage) {
-    //   route.history.push('/' + entity.structureName + '/' + resource.id);
-    // } else {
-    //   route.history.push('/' + entity.structureName + '/');
-    // }
   };
 
   private formCardContent(
@@ -126,7 +111,7 @@ export class EntityEdit extends React.Component<
   ): React.ReactNode {
     const { modal } = this.props;
     return (
-      <Modal onOk={() => this.handleSave(formContext, resource)} confirmLoading={true} {...modal}>
+      <Modal onOk={() => this.handleSave(formContext, resource)} confirmLoading={resource.loading} {...modal}>
         {content}
       </Modal>
     );
