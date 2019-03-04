@@ -134,6 +134,8 @@ export class EntityList extends React.Component<IEntityListProps> {
       }
     }
 
+    const size = table && table.condensed ? "small" : "default";
+
     return (
       <ResourceCollectionLayer
         name={entity.name}
@@ -184,7 +186,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                         key="detail-button-action"
                         to={entity.getDetailLink(props.resourceID)}
                       >
-                        <Button size="small">
+                        <Button size={size}>
                           <Icon
                             type={entity.showDetailPage ? "search" : "edit"}
                           />
@@ -198,7 +200,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                         key="edit-button-action"
                         to={entity.getEditLink(props.resourceID)}
                       >
-                        <Button size="small">
+                        <Button size={size}>
                           <Icon type="edit" />
                         </Button>
                       </Link>
