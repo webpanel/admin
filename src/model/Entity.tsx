@@ -373,6 +373,7 @@ export class Entity<T> {
 
   public getEditView = (
     config?: IEntityEditConfig,
+    resourceID?: string | number,
     handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
   ): React.ReactNode => {
     const { onSave, onCancel } = handlers || {
@@ -385,6 +386,7 @@ export class Entity<T> {
     return (
       <EntityEditLayout
         entity={this}
+        resourceID={resourceID}
         onSave={onSave}
         onCancel={onCancel}
         {...this.config.edit}

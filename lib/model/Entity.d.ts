@@ -70,7 +70,7 @@ export declare class Entity<T> {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditView: (config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (config?: IEntityEditConfig | undefined, resourceID?: string | number | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;

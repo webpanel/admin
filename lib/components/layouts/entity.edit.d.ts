@@ -2,7 +2,7 @@ import * as React from "react";
 import { IEntityEditConfig, EntityOnSaveHandler } from "../pages/edit";
 import { Entity } from "../../model/Entity";
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
-    resourceID?: string;
+    resourceID?: string | number;
     entity: Entity<any>;
     onCreate?: (id: string) => void;
     onSave?: EntityOnSaveHandler;

@@ -1,13 +1,13 @@
-import { Card, message, Modal } from 'antd';
-import * as React from 'react';
-import { FormLayout } from 'antd/lib/form/Form';
-import { ResourceForm } from 'webpanel-antd';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Resource, ResourceLayer } from 'webpanel-data';
+import { Card, message, Modal } from "antd";
+import * as React from "react";
+import { FormLayout } from "antd/lib/form/Form";
+import { ResourceForm } from "webpanel-antd";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { Resource, ResourceLayer } from "webpanel-data";
 
-import { Entity } from '../../model/Entity';
-import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
-import { ModalProps } from 'antd/lib/modal';
+import { Entity } from "../../model/Entity";
+import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
+import { ModalProps } from "antd/lib/modal";
 
 export type EntityOnSaveHandler = (
   id: string | number,
@@ -21,13 +21,13 @@ export interface IEntityEditFormProps {
 export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
   initialValues?: { [key: string]: any };
-  wrapperType?: 'card' | 'modal';
+  wrapperType?: "card" | "modal";
   modal?: ModalProps;
 }
 
 export interface IEntityEditProps extends IEntityEditConfig {
   entity: Entity<any>;
-  resourceID?: string;
+  resourceID?: string | number;
   // route?: RouteComponentProps<any>;
   onSave?: EntityOnSaveHandler;
   onCreate?: (id: string) => void;
@@ -37,7 +37,7 @@ export interface IEntityEditProps extends IEntityEditConfig {
 export class EntityEdit extends React.Component<
   IEntityEditProps,
   { version: number }
-  > {
+> {
   state = { version: 0 };
 
   // private ignoreFormSuccessRedirect = false;
@@ -46,7 +46,7 @@ export class EntityEdit extends React.Component<
   handleSave = async (
     formContext: FormContext,
     resource: Resource,
-    option?: SaveOption,
+    option?: SaveOption
   ) => {
     // this.ignoreFormSuccessRedirect = true;
     this.currentSaveOption = option;
@@ -77,7 +77,7 @@ export class EntityEdit extends React.Component<
   };
 
   handleFormSuccess = async (resource: Resource) => {
-    message.success('Form saved!');
+    message.success("Form saved!");
     const { onSave } = this.props;
 
     if (onSave) {
@@ -112,7 +112,12 @@ export class EntityEdit extends React.Component<
   ): React.ReactNode {
     const { modal, onCancel } = this.props;
     return (
-      <Modal onOk={() => this.handleSave(formContext, resource)} onCancel={onCancel} confirmLoading={resource.loading} {...modal}>
+      <Modal
+        onOk={() => this.handleSave(formContext, resource)}
+        onCancel={onCancel}
+        confirmLoading={resource.loading}
+        {...modal}
+      >
         {content}
       </Modal>
     );
@@ -149,7 +154,7 @@ export class EntityEdit extends React.Component<
             }
             {...form}
             render={(formContext: FormContext) => {
-              const layout = entity.getLayout('edit', {
+              const layout = entity.getLayout("edit", {
                 entity,
                 formContext,
                 id: resourceID,
@@ -164,7 +169,7 @@ export class EntityEdit extends React.Component<
                 );
 
               switch (wrapperType) {
-                case 'modal':
+                case "modal":
                   return this.formModalContent(content, formContext, resource);
                 default:
                   return this.formCardContent(content, formContext, resource);
