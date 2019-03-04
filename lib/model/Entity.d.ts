@@ -22,9 +22,9 @@ export interface IEntityConfig<T> {
     enabled?: Thunk<boolean>;
     showDetailPage?: Thunk<boolean>;
     layouts?: {
-        detail?: (props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>;
-        edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
-        create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
+        detail?: (props: IEntityDetailProps) => React.ReactNode;
+        edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
+        create?: (props: IEntityEditLayoutProps) => React.ReactNode;
     };
     list?: IEntityListConfig;
     edit?: IEntityEditConfig;
@@ -53,9 +53,9 @@ export declare class Entity<T> {
     readonly editFields: EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];
     readonly searchableFields: EntityField<T, any>[];
-    readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
-    readonly editLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
-    readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
+    readonly detailLayout: ((props: IEntityDetailProps) => React.ReactNode) | undefined;
+    readonly editLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
+    readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
     setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: "detail" | "edit", config: LayoutBuilderConfig): React.ReactNode | null;

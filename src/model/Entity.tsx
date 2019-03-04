@@ -57,15 +57,9 @@ export interface IEntityConfig<T> {
   enabled?: Thunk<boolean>;
   showDetailPage?: Thunk<boolean>;
   layouts?: {
-    detail?: (
-      props: IEntityDetailProps
-    ) => React.ReactElement<IEntityDetailProps>;
-    edit?: (
-      props: IEntityEditLayoutProps
-    ) => React.ReactElement<IEntityEditLayoutProps>;
-    create?: (
-      props: IEntityEditLayoutProps
-    ) => React.ReactElement<IEntityEditLayoutProps>;
+    detail?: (props: IEntityDetailProps) => React.ReactNode;
+    edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
+    create?: (props: IEntityEditLayoutProps) => React.ReactNode;
   };
   list?: IEntityListConfig;
   edit?: IEntityEditConfig;
@@ -163,23 +157,19 @@ export class Entity<T> {
   }
 
   public get detailLayout():
-    | ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>)
+    | ((props: IEntityDetailProps) => React.ReactNode)
     | undefined {
     return this.config.layouts && this.config.layouts.detail;
   }
 
   public get editLayout():
-    | ((
-        props: IEntityEditLayoutProps
-      ) => React.ReactElement<IEntityEditLayoutProps>)
+    | ((props: IEntityEditLayoutProps) => React.ReactNode)
     | undefined {
     return this.config.layouts && this.config.layouts.edit;
   }
 
   public get createLayout():
-    | ((
-        props: IEntityEditLayoutProps
-      ) => React.ReactElement<IEntityEditLayoutProps>)
+    | ((props: IEntityEditLayoutProps) => React.ReactNode)
     | undefined {
     return this.config.layouts && this.config.layouts.create;
   }
