@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { RowProps } from 'antd/lib/row';
-import { Entity } from '../../model/Entity';
+import * as React from "react";
+import { RowProps } from "antd/lib/row";
+import { Entity } from "../../model/Entity";
 export interface LayoutEditButtonInternalProps extends RowProps {
     entity: Entity<any>;
     data: any;

@@ -21,13 +21,13 @@ export interface IEntityConfig<T> {
     title?: Thunk<string>;
     enabled?: Thunk<boolean>;
     showDetailPage?: Thunk<boolean>;
-    layouts?: {
+    layouts?: Thunk<{
         detail?: (props: IEntityDetailProps) => React.ReactNode;
         edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
         create?: (props: IEntityEditLayoutProps) => React.ReactNode;
-    };
-    list?: IEntityListConfig;
-    edit?: IEntityEditConfig;
+    }>;
+    list?: Thunk<IEntityListConfig>;
+    edit?: Thunk<IEntityEditConfig>;
     searchable?: boolean;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
@@ -54,7 +54,7 @@ export declare class Entity<T> {
     readonly detailFields: EntityField<T, any>[];
     readonly searchableFields: EntityField<T, any>[];
     readonly detailLayout: ((props: IEntityDetailProps) => React.ReactNode) | undefined;
-    readonly editLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
+    readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: string | number) => React.ReactNode) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
     setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
@@ -66,11 +66,12 @@ export declare class Entity<T> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
+    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailProps | undefined) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditView: (config?: IEntityEditConfig | undefined, resourceID?: string | number | undefined, handlers?: {
+    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
@@ -84,4 +85,8 @@ export declare class Entity<T> {
     colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T>;
     computedField(name: string, config?: IEntityFieldComputedConfig<T>): Entity<T>;
+    getListLink(): string;
+    getCreateLink(): string;
+    getDetailLink(id: string | number): string;
+    getEditLink(id: string | number): string;
 }

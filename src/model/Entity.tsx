@@ -56,13 +56,13 @@ export interface IEntityConfig<T> {
   title?: Thunk<string>;
   enabled?: Thunk<boolean>;
   showDetailPage?: Thunk<boolean>;
-  layouts?: {
+  layouts?: Thunk<{
     detail?: (props: IEntityDetailProps) => React.ReactNode;
     edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
     create?: (props: IEntityEditLayoutProps) => React.ReactNode;
-  };
-  list?: IEntityListConfig;
-  edit?: IEntityEditConfig;
+  }>;
+  list?: Thunk<IEntityListConfig>;
+  edit?: Thunk<IEntityEditConfig>;
 
   searchable?: boolean;
   // deprecated, user table config directly
@@ -159,19 +159,26 @@ export class Entity<T> {
   public get detailLayout():
     | ((props: IEntityDetailProps) => React.ReactNode)
     | undefined {
-    return this.config.layouts && this.config.layouts.detail;
+    const layouts = resolveOptionalThunk(this.config.layouts);
+    if (!layouts) return undefined;
+    return layouts.detail;
   }
 
   public get editLayout():
-    | ((props: IEntityEditLayoutProps) => React.ReactNode)
+    | ((
+        props: IEntityEditLayoutProps,
+        resourceID: string | number
+      ) => React.ReactNode)
     | undefined {
-    return this.config.layouts && this.config.layouts.edit;
+    const layouts = resolveOptionalThunk(this.config.layouts);
+    return layouts && layouts.edit;
   }
 
   public get createLayout():
     | ((props: IEntityEditLayoutProps) => React.ReactNode)
     | undefined {
-    return this.config.layouts && this.config.layouts.create;
+    const layouts = resolveOptionalThunk(this.config.layouts);
+    return layouts && layouts.create;
   }
 
   private layouts: {
@@ -211,7 +218,7 @@ export class Entity<T> {
   public structureItem = (): React.ReactNode => {
     return (
       <Layout.StructureItem
-        key={`/${this.structureName}`}
+        key={this.getListLink()}
         name={this.title}
         header={
           {
@@ -263,14 +270,15 @@ export class Entity<T> {
   };
 
   private getDetailPageLayout = (route: RouteComponentProps<any>) => {
+    const resourceID = route.match.params.id;
     if (this.config.showDetailPage) {
       if (this.detailLayout) {
-        return this.detailLayout({ entity: this, route });
+        return this.detailLayout({ entity: this, resourceID });
       }
-      return <EntityDetailLayout entity={this} route={route} />;
+      return <EntityDetailLayout entity={this} resourceID={resourceID} />;
     }
 
-    return <Redirect to={`${route.match.params.id}/edit`} />;
+    return <Redirect to={`${resourceID}/edit`} />;
   };
 
   private handleFormOnSave = (route: RouteComponentProps<any>) => (
@@ -279,13 +287,13 @@ export class Entity<T> {
   ) => {
     switch (option) {
       case "add":
-        route.history.push("/" + this.structureName + "/new");
+        route.history.push(this.getCreateLink());
         break;
       case "edit":
-        route.history.push("/" + this.structureName + "/" + id + "/edit");
+        route.history.push(this.getEditLink(id));
         break;
       default:
-        route.history.push("/" + this.structureName + "/");
+        route.history.push(this.getListLink());
         break;
     }
   };
@@ -296,7 +304,7 @@ export class Entity<T> {
     const onSave = this.handleFormOnSave(route);
     const resourceID = route.match.params.id;
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave });
+      return this.editLayout({ entity: this, onSave }, resourceID);
     }
     return (
       <EntityEditLayout
@@ -314,9 +322,9 @@ export class Entity<T> {
     config?: IEntityEditConfig
   ) => {
     const onSave = this.handleFormOnSave(route);
-    if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave });
-    }
+    // if (this.editLayout) {
+    //   return this.editLayout({ entity: this, onSave });
+    // }
     return (
       <EntityEditLayout
         entity={this}
@@ -339,6 +347,18 @@ export class Entity<T> {
     );
   };
 
+  public getDetailView = (
+    resourceID: string | number,
+    config?: IEntityDetailProps
+  ): React.ReactNode => {
+    if (this.detailLayout) {
+      return this.detailLayout({ entity: this, resourceID });
+    }
+    return (
+      <EntityDetailLayout entity={this} resourceID={resourceID} {...config} />
+    );
+  };
+
   public getCreateView = (
     config?: IEntityEditConfig,
     handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
@@ -347,9 +367,9 @@ export class Entity<T> {
       onSave: undefined,
       onCancel: undefined
     };
-    if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave, onCancel });
-    }
+    // if (this.editLayout) {
+    //   return this.editLayout({ entity: this, onSave, onCancel });
+    // }
     return (
       <EntityEditLayout
         entity={this}
@@ -362,8 +382,8 @@ export class Entity<T> {
   };
 
   public getEditView = (
+    resourceID: string | number,
     config?: IEntityEditConfig,
-    resourceID?: string | number,
     handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
   ): React.ReactNode => {
     const { onSave, onCancel } = handlers || {
@@ -371,7 +391,7 @@ export class Entity<T> {
       onCancel: undefined
     };
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave, onCancel });
+      return this.editLayout({ entity: this, onSave, onCancel }, resourceID);
     }
     return (
       <EntityEditLayout
@@ -440,5 +460,19 @@ export class Entity<T> {
   ): Entity<T> {
     this.fields.push(new EntityFieldComputed(name, config || {}, this));
     return this;
+  }
+
+  // links
+  public getListLink(): string {
+    return `/${this.structureName}`;
+  }
+  public getCreateLink(): string {
+    return `/${this.structureName}/new`;
+  }
+  public getDetailLink(id: string | number): string {
+    return `/${this.structureName}/${id}`;
+  }
+  public getEditLink(id: string | number): string {
+    return `/${this.structureName}/${id}/edit`;
   }
 }

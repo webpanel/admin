@@ -1,31 +1,31 @@
-import { Card, Icon, Button } from 'antd';
-import * as React from 'react';
-import { ResourceSearchInput, ResourceTable, Link } from 'webpanel-antd';
+import { Card, Icon, Button } from "antd";
+import * as React from "react";
+import { ResourceSearchInput, ResourceTable, Link } from "webpanel-antd";
 import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
   SortInfo
-} from 'webpanel-data';
+} from "webpanel-data";
 
-import { Entity } from '../../model/Entity';
-import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
-import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
-import { ListCell } from './list-cell';
-import { entityPermission, fieldPermission } from '../../model/permissions';
-import { EntityField } from '../../model/EntityField';
-import { Thunk, resolveOptionalThunk } from 'ts-thunk';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import { Entity } from "../../model/Entity";
+import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
+import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
+import { ListCell } from "./list-cell";
+import { entityPermission, fieldPermission } from "../../model/permissions";
+import { EntityField } from "../../model/EntityField";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
+import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 
 export interface IEntityListTableProps {
   condensed?: boolean;
 }
 
-export type IEntityListColumnRender = ((
+export type IEntityListColumnRender = (
   value: any,
   values: any,
   field: EntityField<any, any>
-) => React.ReactNode);
+) => React.ReactNode;
 
 export type IEntityListColumn =
   | string
@@ -59,7 +59,7 @@ export class EntityList extends React.Component<IEntityListProps> {
     const { entity, editableFields } = this.props;
 
     const _editableFields =
-      (entityPermission(entity, 'update') &&
+      (entityPermission(entity, "update") &&
         resolveOptionalThunk(editableFields)) ||
       [];
 
@@ -91,7 +91,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 field={field}
                 editable={
                   _editableFields.indexOf(field.name) > -1 &&
-                  fieldPermission(field, 'write')
+                  fieldPermission(field, "write")
                 }
               />
             );
@@ -118,8 +118,8 @@ export class EntityList extends React.Component<IEntityListProps> {
     }[] = [];
     if (_fields) {
       for (let f of _fields) {
-        const fieldName = typeof f === 'string' ? f : f.field;
-        const render = (typeof f !== 'string' && f.render) || undefined;
+        const fieldName = typeof f === "string" ? f : f.field;
+        const render = (typeof f !== "string" && f.render) || undefined;
         const field = entity.getField(fieldName);
         if (!field) {
           throw new Error(
@@ -139,7 +139,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         name={entity.name}
         dataSource={this.props.dataSource}
         fields={[
-          'id',
+          "id",
           ...(listFields
             .map(x => x.field.fetchField())
             .filter(x => x) as string[])
@@ -148,7 +148,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         initialFilters={initialFilters || entity.initialFilters}
         render={(resource: ResourceCollection) => (
           <Card
-            bodyStyle={{ padding: '0' }}
+            bodyStyle={{ padding: "0" }}
             title={title || entity.title}
             extra={[
               entity.searchable && (
@@ -159,8 +159,8 @@ export class EntityList extends React.Component<IEntityListProps> {
                   style={{ width: 300, marginRight: 8 }}
                 />
               ),
-              entityPermission(entity, 'create') && (
-                <Link to={`/${entity.structureName}/new`} key="newButton">
+              entityPermission(entity, "create") && (
+                <Link to={entity.getCreateLink()} key="newButton">
                   <Button size="small" htmlType="button" icon="plus" />
                 </Link>
               )
@@ -172,35 +172,31 @@ export class EntityList extends React.Component<IEntityListProps> {
               resourceCollection={resource}
               pagination={{
                 defaultPageSize: 30,
-                pageSizeOptions: ['10', '20', '30', '50', '100'],
+                pageSizeOptions: ["10", "20", "30", "50", "100"],
                 showSizeChanger: true
               }}
               {...table}
               columns={this.getColumns(listFields, resource)}
               actionButtons={[
-                entity.showDetailPage || entityPermission(entity, 'update')
+                entity.showDetailPage || entityPermission(entity, "update")
                   ? (props: ActionButtonProps) => (
                       <Link
                         key="detail-button-action"
-                        to={`/${
-                          entity.structureName
-                        }/${props.resourceID.toString()}`}
+                        to={entity.getDetailLink(props.resourceID)}
                       >
                         <Button size="small">
                           <Icon
-                            type={entity.showDetailPage ? 'search' : 'edit'}
+                            type={entity.showDetailPage ? "search" : "edit"}
                           />
                         </Button>
                       </Link>
                     )
                   : null,
-                entity.showDetailPage && entityPermission(entity, 'update')
+                entity.showDetailPage && entityPermission(entity, "update")
                   ? (props: ActionButtonProps) => (
                       <Link
                         key="edit-button-action"
-                        to={`/${
-                          entity.structureName
-                        }/${props.resourceID.toString()}/edit`}
+                        to={entity.getEditLink(props.resourceID)}
                       >
                         <Button size="small">
                           <Icon type="edit" />
@@ -208,7 +204,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                       </Link>
                     )
                   : null,
-                entityPermission(entity, 'delete') && 'delete'
+                entityPermission(entity, "delete") && "delete"
               ].filter(x => x)}
             />
           </Card>
