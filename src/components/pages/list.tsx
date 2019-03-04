@@ -1,24 +1,26 @@
-import { Card, Icon, Button } from "antd";
 import * as React from "react";
-import { ResourceSearchInput, ResourceTable, Link } from "webpanel-antd";
+
+import { Button, Card, Icon } from "antd";
 import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
   SortInfo
 } from "webpanel-data";
-
-import { Entity } from "../../model/Entity";
-import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
-import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
-import { ListCell } from "./list-cell";
-import { entityPermission, fieldPermission } from "../../model/permissions";
-import { EntityField } from "../../model/EntityField";
+import { Link, ResourceSearchInput, ResourceTable } from "webpanel-antd";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
+import { entityPermission, fieldPermission } from "../../model/permissions";
+
+import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { Entity } from "../../model/Entity";
+import { EntityField } from "../../model/EntityField";
+import { ListCell } from "./list-cell";
+import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 
 export interface IEntityListTableProps {
   condensed?: boolean;
+  searchable?: boolean;
 }
 
 export type IEntityListColumnRender = (
@@ -135,6 +137,10 @@ export class EntityList extends React.Component<IEntityListProps> {
     }
 
     const size = table && table.condensed ? "small" : "default";
+    const searchable =
+      table && typeof table.searchable !== "undefined"
+        ? table.searchable
+        : entity.searchable;
 
     return (
       <ResourceCollectionLayer
@@ -153,7 +159,7 @@ export class EntityList extends React.Component<IEntityListProps> {
             bodyStyle={{ padding: "0" }}
             title={title || entity.title}
             extra={[
-              entity.searchable && (
+              searchable && (
                 <ResourceSearchInput
                   key="searchInput"
                   resourceCollection={resource}
