@@ -351,9 +351,6 @@ export class Entity<T> {
     resourceID: string | number,
     config?: IEntityDetailProps
   ): React.ReactNode => {
-    if (this.detailLayout) {
-      return this.detailLayout({ entity: this, resourceID });
-    }
     return (
       <EntityDetailLayout entity={this} resourceID={resourceID} {...config} />
     );
