@@ -1,53 +1,54 @@
-import * as inflection from "inflection";
 import * as React from "react";
-import { Redirect } from "react-router";
+import * as inflection from "inflection";
 
-import { Layout, RouteComponentProps } from "webpanel-antd";
 import { DataSource, SortInfo } from "webpanel-data";
-// import { Button } from 'antd';
-
-import { EntityList, IEntityListConfig } from "../components/pages/list";
-import { IEntityDetailProps } from "../components/pages/detail";
-import { EntityField, IEntityFieldConfig } from "./EntityField";
-import { EntityDetailLayout } from "../components/layouts/entity.detail";
 import {
   EntityEditLayout,
   IEntityEditLayoutProps
 } from "../components/layouts/entity.edit";
-import {
-  EntityFieldDate,
-  IEntityFieldDateConfig
-} from "./fields/EntityFieldDate";
-import { EntityFieldNumber } from "./fields/EntityFieldNumber";
-import { EntityFieldText } from "./fields/EntityFieldText";
+import { EntityField, IEntityFieldConfig } from "./EntityField";
 import {
   EntityFieldBoolean,
   IEntityFieldBooleanConfig
 } from "./fields/EntityFieldBoolean";
 import {
-  IEntityFieldRelationshipConfig,
-  EntityFieldRelationship
-} from "./fields/EntityFieldRelationship";
-import { EntityFieldColor } from "./fields/EntityFieldColor";
+  EntityFieldComputed,
+  IEntityFieldComputedConfig
+} from "./fields/EntityFieldComputed";
+import {
+  EntityFieldDate,
+  IEntityFieldDateConfig
+} from "./fields/EntityFieldDate";
 import {
   EntityFieldEnum,
   IEntityFieldEnumConfig
 } from "./fields/EntityFieldEnum";
-import { Thunk, resolveThunk, resolveOptionalThunk } from "ts-thunk";
 import {
-  IEntityEditConfig,
-  EntityOnSaveHandler
+  EntityFieldRelationship,
+  IEntityFieldRelationshipConfig
+} from "./fields/EntityFieldRelationship";
+import { EntityList, IEntityListConfig } from "../components/pages/list";
+import {
+  EntityOnSaveHandler,
+  IEntityEditConfig
 } from "../components/pages/edit";
+import { Layout, RouteComponentProps } from "webpanel-antd";
+import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
+import { componentPermission, entityPermission } from "./permissions";
+
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { EntityDetailLayout } from "../components/layouts/entity.detail";
+import { EntityFieldColor } from "./fields/EntityFieldColor";
+import { EntityFieldNumber } from "./fields/EntityFieldNumber";
+import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
+import { EntityFieldText } from "./fields/EntityFieldText";
+import { IEntityDetailProps } from "../components/pages/detail";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
-import { entityPermission, componentPermission } from "./permissions";
-import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
-import {
-  EntityFieldComputed,
-  IEntityFieldComputedConfig
-} from "./fields/EntityFieldComputed";
+import { Redirect } from "react-router";
 import { SaveOption } from "../components/form/buttons";
+
+// import { Button } from 'antd';
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
@@ -125,10 +126,12 @@ export class Entity<T> {
   }
 
   public get initialSorting(): SortInfo[] | undefined {
-    return this.config.initialSorting;
+    const list = resolveOptionalThunk(this.config.list);
+    return (list && list.initialSorting) || this.config.initialSorting;
   }
   public get initialFilters(): DataSourceArgumentMap | undefined {
-    return this.config.initialFilters;
+    const list = resolveOptionalThunk(this.config.list);
+    return (list && list.initialFilters) || this.config.initialFilters;
   }
   public get searchable(): boolean {
     return this.config.searchable || false;

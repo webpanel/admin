@@ -1,19 +1,19 @@
 import * as React from "react";
 import { DataSource, SortInfo } from "webpanel-data";
-import { IEntityListConfig } from "../components/pages/list";
-import { IEntityDetailProps } from "../components/pages/detail";
-import { EntityField, IEntityFieldConfig } from "./EntityField";
 import { IEntityEditLayoutProps } from "../components/layouts/entity.edit";
-import { IEntityFieldDateConfig } from "./fields/EntityFieldDate";
+import { EntityField, IEntityFieldConfig } from "./EntityField";
 import { IEntityFieldBooleanConfig } from "./fields/EntityFieldBoolean";
-import { IEntityFieldRelationshipConfig } from "./fields/EntityFieldRelationship";
+import { IEntityFieldComputedConfig } from "./fields/EntityFieldComputed";
+import { IEntityFieldDateConfig } from "./fields/EntityFieldDate";
 import { IEntityFieldEnumConfig } from "./fields/EntityFieldEnum";
+import { IEntityFieldRelationshipConfig } from "./fields/EntityFieldRelationship";
+import { IEntityListConfig } from "../components/pages/list";
+import { EntityOnSaveHandler, IEntityEditConfig } from "../components/pages/edit";
 import { Thunk } from "ts-thunk";
-import { IEntityEditConfig, EntityOnSaveHandler } from "../components/pages/edit";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { IEntityDetailProps } from "../components/pages/detail";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
-import { IEntityFieldComputedConfig } from "./fields/EntityFieldComputed";
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
