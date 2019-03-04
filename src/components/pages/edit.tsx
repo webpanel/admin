@@ -1,12 +1,13 @@
-import { Card, message } from 'antd';
-import * as React from 'react';
-import { FormLayout } from 'antd/lib/form/Form';
-import { ResourceForm } from 'webpanel-antd';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Resource, ResourceLayer } from 'webpanel-data';
+import { Card, message, Modal } from "antd";
+import * as React from "react";
+import { FormLayout } from "antd/lib/form/Form";
+import { ResourceForm } from "webpanel-antd";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { Resource, ResourceLayer } from "webpanel-data";
 
-import { Entity } from '../../model/Entity';
-import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
+import { Entity } from "../../model/Entity";
+import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
+import { ModalProps } from "antd/lib/modal";
 
 export type EntityOnSaveHandler = (
   id: string | number,
@@ -20,14 +21,17 @@ export interface IEntityEditFormProps {
 export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
   initialValues?: { [key: string]: any };
+  wrapperType?: "card" | "modal";
+  modal?: ModalProps;
 }
 
 export interface IEntityEditProps extends IEntityEditConfig {
   entity: Entity<any>;
-  resourceID?: string;
+  resourceID?: string | number;
   // route?: RouteComponentProps<any>;
   onSave?: EntityOnSaveHandler;
   onCreate?: (id: string) => void;
+  onCancel?: () => void;
 }
 
 export class EntityEdit extends React.Component<
@@ -41,8 +45,8 @@ export class EntityEdit extends React.Component<
 
   handleSave = async (
     formContext: FormContext,
-    option: SaveOption,
-    resource: Resource
+    resource: Resource,
+    option?: SaveOption
   ) => {
     // this.ignoreFormSuccessRedirect = true;
     this.currentSaveOption = option;
@@ -73,31 +77,61 @@ export class EntityEdit extends React.Component<
   };
 
   handleFormSuccess = async (resource: Resource) => {
-    message.success('Form saved!');
+    message.success("Form saved!");
     const { onSave } = this.props;
 
     if (onSave) {
       onSave(resource.id || 0, this.currentSaveOption);
     }
-    // if (this.ignoreFormSuccessRedirect) {
-    //   return;
-    // }
-
-    // const {  entity } = this.props;
-
-    // if (!route) {
-    //   return;
-    // }
-
-    // if (entity.showDetailPage) {
-    //   route.history.push('/' + entity.structureName + '/' + resource.id);
-    // } else {
-    //   route.history.push('/' + entity.structureName + '/');
-    // }
   };
 
+  private formCardContent(
+    content: React.ReactNode,
+    formContext: FormContext,
+    resource: Resource
+  ): React.ReactNode {
+    return (
+      <Card>
+        <>
+          {content}
+          <ResourceFormPageButtons
+            hasChanges={formContext.form.isFieldsTouched()}
+            handleReset={() => formContext.formComponent.resetFields()}
+            handleSave={(option: SaveOption) =>
+              this.handleSave(formContext, resource, option)
+            }
+          />
+        </>
+      </Card>
+    );
+  }
+  private formModalContent(
+    content: React.ReactNode,
+    formContext: FormContext,
+    resource: Resource
+  ): React.ReactNode {
+    const { modal, onCancel } = this.props;
+    return (
+      <Modal
+        onOk={() => this.handleSave(formContext, resource)}
+        onCancel={onCancel}
+        confirmLoading={resource.loading}
+        {...modal}
+      >
+        {content}
+      </Modal>
+    );
+  }
+
   public render() {
-    const { entity, resourceID, onCreate, form, initialValues } = this.props;
+    const {
+      entity,
+      resourceID,
+      onCreate,
+      form,
+      initialValues,
+      wrapperType
+    } = this.props;
     return (
       <ResourceLayer
         key={this.state.version}
@@ -120,33 +154,26 @@ export class EntityEdit extends React.Component<
             }
             {...form}
             render={(formContext: FormContext) => {
-              const layout = entity.getLayout('edit', {
+              const layout = entity.getLayout("edit", {
                 entity,
                 formContext,
                 id: resourceID,
                 data: resource.data || {}
               });
-              return (
-                <Card>
-                  <>
-                    {layout ||
-                      entity.editFields.map((field, i) =>
-                        field.fieldElement(formContext, i, {
-                          formLayout: form && form.layout
-                        })
-                      )}
-                    <ResourceFormPageButtons
-                      hasChanges={formContext.form.isFieldsTouched()}
-                      handleReset={() =>
-                        formContext.formComponent.resetFields()
-                      }
-                      handleSave={(option: SaveOption) =>
-                        this.handleSave(formContext, option, resource)
-                      }
-                    />
-                  </>
-                </Card>
-              );
+              const content =
+                layout ||
+                entity.editFields.map((field, i) =>
+                  field.fieldElement(formContext, i, {
+                    formLayout: form && form.layout
+                  })
+                );
+
+              switch (wrapperType) {
+                case "modal":
+                  return this.formModalContent(content, formContext, resource);
+                default:
+                  return this.formCardContent(content, formContext, resource);
+              }
             }}
           />
         )}

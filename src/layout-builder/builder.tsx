@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Thunk, resolveThunk } from 'ts-thunk';
+import * as React from "react";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { Thunk, resolveThunk } from "ts-thunk";
 
-import { LayoutBuilderTabs, LayoutBuilderTabsProps } from './components/tabs';
-import { LayoutBuilderRow, LayoutBuilderRowProps } from './components/row';
-import { LayoutBuilderCol, LayoutBuilderColProps } from './components/col';
+import { LayoutBuilderTabs, LayoutBuilderTabsProps } from "./components/tabs";
+import { LayoutBuilderRow, LayoutBuilderRowProps } from "./components/row";
+import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
 // import {
 //   LayoutBuilderContent,
 //   BuilderContentFunctionProps
@@ -13,18 +13,18 @@ import { LayoutBuilderCol, LayoutBuilderColProps } from './components/col';
 import {
   LayoutBuilderStringField,
   LayoutBuilderStringFieldProps
-} from './components/string-field';
-import { LayoutBuilderCard, LayoutBuilderCardProps } from './components/card';
-import { Entity } from '../model/Entity';
-import { LayoutBuilderEditButton } from './components/edit-button';
+} from "./components/string-field";
+import { LayoutBuilderCard, LayoutBuilderCardProps } from "./components/card";
+import { Entity } from "../model/Entity";
+import { LayoutBuilderEditButton } from "./components/edit-button";
 import {
   LayoutBuilderEditField,
   LayoutBuilderEditFieldProps
-} from './components/edit-field';
+} from "./components/edit-field";
 
 export interface LayoutBuilderConfig {
   entity: Entity<any>;
-  id?: string;
+  id?: string | number;
   data: any;
   formContext?: FormContext;
 }
@@ -75,7 +75,7 @@ export class LayoutBuilder {
     const formContext = this.config.formContext;
 
     if (!formContext) {
-      throw new Error('cannot create editField without formContext');
+      throw new Error("cannot create editField without formContext");
     }
 
     return (

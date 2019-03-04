@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { RouteComponentProps } from 'webpanel-antd';
-import { Entity } from '../../model/Entity';
+import * as React from "react";
+import { Entity } from "../../model/Entity";
 export interface IEntityDetailProps {
     entity: Entity<any>;
-    route: RouteComponentProps<any>;
+    resourceID: string | number;
 }
 export declare class EntityDetail extends React.Component<IEntityDetailProps> {
     render(): JSX.Element;
