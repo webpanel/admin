@@ -188,6 +188,7 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
                   entity={entity}
                   onCreate={() => this.setState({ addingNewEntity: false })}
                   initialValues={newItemInitialValues}
+                  wrapperType="card"
                 />
               </Modal>
               <ResourceTable

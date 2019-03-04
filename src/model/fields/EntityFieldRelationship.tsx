@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { ResourceCollectionLayer, ResourceCollection } from 'webpanel-data';
-import { resolveThunk, Thunk } from 'ts-thunk';
+import * as React from "react";
+import { ResourceCollectionLayer, ResourceCollection } from "webpanel-data";
+import { resolveThunk, Thunk } from "ts-thunk";
 
 import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps
-} from '../EntityField';
-import { Entity } from '../Entity';
-import { FormField, ResourceSelect } from 'webpanel-antd';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Button, Modal, Tag } from 'antd';
-import { FormLayout } from 'antd/lib/form/Form';
-import { entityPermission } from '../permissions';
+} from "../EntityField";
+import { Entity } from "../Entity";
+import { FormField, ResourceSelect } from "webpanel-antd";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { Button, Modal, Tag } from "antd";
+import { FormLayout } from "antd/lib/form/Form";
+import { entityPermission } from "../permissions";
 
-export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
-export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
+export type IEntityFieldRelationshipType = "toOne" | "toMany";
+export type IEntityFieldRelationshipSelectMode = "default" | "multiple";
 
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
@@ -28,15 +28,15 @@ export class EntityFieldRelationship<T> extends EntityField<
   IEntityFieldRelationshipConfig<T>
 > {
   public get type(): IEntityFieldRelationshipType {
-    return this.config.type === 'toOne' ? 'toOne' : 'toMany';
+    return this.config.type === "toOne" ? "toOne" : "toMany";
   }
 
   public columnName(): string {
-    return `${this.name}${this.type === 'toOne' ? 'Id' : 'Ids'}`;
+    return `${this.name}${this.type === "toOne" ? "Id" : "Ids"}`;
   }
 
   public get mode(): IEntityFieldRelationshipSelectMode {
-    return this.type === 'toOne' ? 'default' : 'multiple';
+    return this.type === "toOne" ? "default" : "multiple";
   }
 
   public fetchField(): string | null {
@@ -46,16 +46,16 @@ export class EntityFieldRelationship<T> extends EntityField<
       .searchableFields;
     name += `{ id ${searchFields
       .map(f => f.name)
-      .join(' ')}} ${this.columnName()} `;
+      .join(" ")}} ${this.columnName()} `;
     return name;
   }
 
-  public get render(): ((record: T) => React.ReactNode) {
+  public get render(): (record: T) => React.ReactNode {
     const { targetEntity, type, render } = this.config;
     const _render = render || resolveThunk(targetEntity).render;
     return values => {
       const value = values[this.name];
-      if (type === 'toMany' && Array.isArray(value)) {
+      if (type === "toMany" && Array.isArray(value)) {
         return value
           .map(x => _render && _render(x))
           .filter(x => x)
@@ -74,7 +74,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     const _targetEntity = resolveThunk(targetEntity);
 
     const formItemLayout =
-      config.formLayout === 'horizontal'
+      config.formLayout === "horizontal"
         ? {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 }
@@ -82,14 +82,14 @@ export class EntityFieldRelationship<T> extends EntityField<
         : null;
 
     const addButtonMargin =
-      config.formLayout === 'horizontal' ? '4px 0 0 4px' : '0 0 0 4px';
+      config.formLayout === "horizontal" ? "4px 0 0 4px" : "0 0 0 4px";
 
     return (
       <ResourceCollectionLayer
         key={key}
         name={_targetEntity.name}
         fields={[
-          'id',
+          "id",
           ..._targetEntity.searchableFields.map(
             (x: EntityField<any, any>) => x.name
           )
@@ -103,7 +103,7 @@ export class EntityFieldRelationship<T> extends EntityField<
             name={this.columnName()}
             formContext={formContext}
             style={{
-              width: '100%'
+              width: "100%"
             }}
             {...formItemLayout}
           >
@@ -118,13 +118,13 @@ export class EntityFieldRelationship<T> extends EntityField<
               mode={this.mode}
               resourceCollection={collection}
               style={{
-                width: '100%',
-                minWidth: '200px',
-                marginRight: '-38px',
-                paddingRight: '38px'
+                width: "100%",
+                minWidth: "200px",
+                marginRight: "-38px",
+                paddingRight: "38px"
               }}
             />
-            {entityPermission(_targetEntity, 'create') && (
+            {entityPermission(_targetEntity, "create") && (
               <Button
                 key={`relationship_field_${this.entity.name}_${
                   this.valuePropName
@@ -133,24 +133,23 @@ export class EntityFieldRelationship<T> extends EntityField<
                 icon="plus"
                 style={{
                   margin: addButtonMargin,
-                  height: '32px'
+                  height: "32px"
                 }}
                 onClick={() => {
                   const infoWindow = Modal.info({
                     title: `Add ${_targetEntity.title}`,
                     maskClosable: true,
-                    okText: 'Close',
-                    style: { minWidth: '60%' },
-                    content: _targetEntity.getCreateView(
-                      undefined,
-                      async (id: string | number) => {
+                    okText: "Close",
+                    style: { minWidth: "60%" },
+                    content: _targetEntity.getCreateView(undefined, {
+                      onSave: async (id: string | number) => {
                         await collection.get();
                         let updateValues = {};
                         updateValues[this.columnName()] = id;
                         formContext.form.setFieldsValue(updateValues);
                         infoWindow.destroy();
                       }
-                    )
+                    })
                   });
                 }}
               />
@@ -179,7 +178,7 @@ export class EntityFieldRelationship<T> extends EntityField<
             ? option
             : [option];
           // const array: LabeledValue[] = Array.isArray(value) ? value : [value];
-          onChange(value, options.map(o => o.props.children).join(', '));
+          onChange(value, options.map(o => o.props.children).join(", "));
         }
       : undefined;
 
@@ -187,7 +186,7 @@ export class EntityFieldRelationship<T> extends EntityField<
       <ResourceCollectionLayer
         name={_targetEntity.name}
         fields={[
-          'id',
+          "id",
           ..._targetEntity.searchableFields.map(
             (x: EntityField<any, any>) => x.name
           )
@@ -201,7 +200,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               {...props}
               valueKey="id"
               allowClear={true}
-              style={{ width: '100%', minWidth: '200px' }}
+              style={{ width: "100%", minWidth: "200px" }}
               labelKey={(value: any): string => {
                 return _targetEntity.render(value);
               }}
@@ -224,7 +223,7 @@ export class EntityFieldRelationship<T> extends EntityField<
       <ResourceCollectionLayer
         name={targetEntity.name}
         fields={[
-          'id',
+          "id",
           ...(_targetEntity.searchableFields
             .map(x => x.fetchField())
             .filter(x => x) as string[])
@@ -245,7 +244,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               mode={this.mode}
               allowClear={false}
               resourceCollection={resource}
-              style={{ minWidth: '200px' }}
+              style={{ minWidth: "200px" }}
               onChange={(
                 value: string | string[],
                 option: React.ReactElement<any> | React.ReactElement<any>[]
@@ -263,7 +262,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     );
   };
 
-  public get filterFormatter(): ((values: string[]) => { [key: string]: any }) {
+  public get filterFormatter(): (values: string[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {

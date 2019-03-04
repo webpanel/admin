@@ -1,19 +1,19 @@
-import * as React from 'react';
-import { DataSource, SortInfo } from 'webpanel-data';
-import { IEntityListConfig } from '../components/pages/list';
-import { IEntityDetailProps } from '../components/pages/detail';
-import { EntityField, IEntityFieldConfig } from './EntityField';
-import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
-import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
-import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
-import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship';
-import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
-import { Thunk } from 'ts-thunk';
-import { IEntityEditConfig, EntityOnSaveHandler } from '../components/pages/edit';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
-import { LayoutBuilder } from '../layout-builder';
-import { LayoutBuilderConfig } from '../layout-builder/builder';
-import { IEntityFieldComputedConfig } from './fields/EntityFieldComputed';
+import * as React from "react";
+import { DataSource, SortInfo } from "webpanel-data";
+import { IEntityEditLayoutProps } from "../components/layouts/entity.edit";
+import { EntityField, IEntityFieldConfig } from "./EntityField";
+import { IEntityFieldBooleanConfig } from "./fields/EntityFieldBoolean";
+import { IEntityFieldComputedConfig } from "./fields/EntityFieldComputed";
+import { IEntityFieldDateConfig } from "./fields/EntityFieldDate";
+import { IEntityFieldEnumConfig } from "./fields/EntityFieldEnum";
+import { IEntityFieldRelationshipConfig } from "./fields/EntityFieldRelationship";
+import { IEntityListConfig } from "../components/pages/list";
+import { EntityOnSaveHandler, IEntityEditConfig } from "../components/pages/edit";
+import { Thunk } from "ts-thunk";
+import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { IEntityDetailProps } from "../components/pages/detail";
+import { LayoutBuilder } from "../layout-builder";
+import { LayoutBuilderConfig } from "../layout-builder/builder";
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
@@ -21,17 +21,17 @@ export interface IEntityConfig<T> {
     title?: Thunk<string>;
     enabled?: Thunk<boolean>;
     showDetailPage?: Thunk<boolean>;
-    layouts?: {
-        detail?: (props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>;
-        edit?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
-        create?: (props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>;
-    };
-    list?: IEntityListConfig;
-    edit?: IEntityEditConfig;
+    layouts?: Thunk<{
+        detail?: (props: IEntityDetailProps) => React.ReactNode;
+        edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
+        create?: (props: IEntityEditLayoutProps) => React.ReactNode;
+    }>;
+    list?: Thunk<IEntityListConfig>;
+    edit?: Thunk<IEntityEditConfig>;
     searchable?: boolean;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
-    render?: ((value: T | null) => string);
+    render?: (value: T | null) => string;
 }
 export declare class Entity<T> {
     private readonly config;
@@ -44,7 +44,7 @@ export declare class Entity<T> {
     readonly showDetailPage: boolean;
     readonly name: string;
     readonly dataSource: DataSource;
-    readonly render: ((value: T | null) => string);
+    readonly render: (value: T | null) => string;
     readonly initialSorting: SortInfo[] | undefined;
     readonly initialFilters: DataSourceArgumentMap | undefined;
     readonly searchable: boolean;
@@ -53,12 +53,12 @@ export declare class Entity<T> {
     readonly editFields: EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];
     readonly searchableFields: EntityField<T, any>[];
-    readonly detailLayout: ((props: IEntityDetailProps) => React.ReactElement<IEntityDetailProps>) | undefined;
-    readonly editLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
-    readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactElement<IEntityEditLayoutProps>) | undefined;
+    readonly detailLayout: ((props: IEntityDetailProps) => React.ReactNode) | undefined;
+    readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: string | number) => React.ReactNode) | undefined;
+    readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
     setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
-    getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
+    getLayout(type: "detail" | "edit", config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
     private getDetailPageLayout;
@@ -66,8 +66,15 @@ export declare class Entity<T> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
-    getCreateView: (config?: IEntityEditConfig | undefined, onSave?: EntityOnSaveHandler | undefined) => React.ReactNode;
-    getEditView: (config?: IEntityEditConfig | undefined, onSave?: EntityOnSaveHandler | undefined) => React.ReactNode;
+    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailProps | undefined) => React.ReactNode;
+    getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
+        onSave?: EntityOnSaveHandler | undefined;
+        onCancel?: (() => void) | undefined;
+    } | undefined) => React.ReactNode;
+    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
+        onSave?: EntityOnSaveHandler | undefined;
+        onCancel?: (() => void) | undefined;
+    } | undefined) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
@@ -78,4 +85,8 @@ export declare class Entity<T> {
     colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T>;
     computedField(name: string, config?: IEntityFieldComputedConfig<T>): Entity<T>;
+    getListLink(): string;
+    getCreateLink(): string;
+    getDetailLink(id: string | number): string;
+    getEditLink(id: string | number): string;
 }

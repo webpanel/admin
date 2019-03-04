@@ -1,14 +1,15 @@
-import * as React from 'react';
-import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
-import { Entity } from '../../model/Entity';
-import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
-import { EntityField } from '../../model/EntityField';
-import { Thunk } from 'ts-thunk';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import * as React from "react";
+import { DataSource, ResourceCollection, SortInfo } from "webpanel-data";
+import { Thunk } from "ts-thunk";
+import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { Entity } from "../../model/Entity";
+import { EntityField } from "../../model/EntityField";
+import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 export interface IEntityListTableProps {
     condensed?: boolean;
+    searchable?: boolean;
 }
-export declare type IEntityListColumnRender = ((value: any, values: any, field: EntityField<any, any>) => React.ReactNode);
+export declare type IEntityListColumnRender = (value: any, values: any, field: EntityField<any, any>) => React.ReactNode;
 export declare type IEntityListColumn = string | {
     field: string;
     render?: IEntityListColumnRender;

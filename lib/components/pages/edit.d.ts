@@ -1,9 +1,10 @@
-import * as React from 'react';
-import { FormLayout } from 'antd/lib/form/Form';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Resource } from 'webpanel-data';
-import { Entity } from '../../model/Entity';
-import { SaveOption } from '../form/buttons';
+import * as React from "react";
+import { FormLayout } from "antd/lib/form/Form";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { Resource } from "webpanel-data";
+import { Entity } from "../../model/Entity";
+import { SaveOption } from "../form/buttons";
+import { ModalProps } from "antd/lib/modal";
 export declare type EntityOnSaveHandler = (id: string | number, option?: SaveOption) => void;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
@@ -13,12 +14,15 @@ export interface IEntityEditConfig {
     initialValues?: {
         [key: string]: any;
     };
+    wrapperType?: "card" | "modal";
+    modal?: ModalProps;
 }
 export interface IEntityEditProps extends IEntityEditConfig {
     entity: Entity<any>;
-    resourceID?: string;
+    resourceID?: string | number;
     onSave?: EntityOnSaveHandler;
     onCreate?: (id: string) => void;
+    onCancel?: () => void;
 }
 export declare class EntityEdit extends React.Component<IEntityEditProps, {
     version: number;
@@ -27,7 +31,9 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
         version: number;
     };
     private currentSaveOption?;
-    handleSave: (formContext: FormContext, option: SaveOption, resource: Resource) => Promise<void>;
+    handleSave: (formContext: FormContext, resource: Resource, option?: "edit" | "add" | undefined) => Promise<void>;
     handleFormSuccess: (resource: Resource) => Promise<void>;
+    private formCardContent;
+    private formModalContent;
     render(): JSX.Element;
 }

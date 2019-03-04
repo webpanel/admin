@@ -1,26 +1,19 @@
-import { Card, Form, Button } from 'antd';
-import * as React from 'react';
+import { Card, Form, Button } from "antd";
+import * as React from "react";
 // import { Link  } from 'react-router-dom';
-import { RouteComponentProps, Link } from 'webpanel-antd';
-import { Resource, ResourceLayer } from 'webpanel-data';
+import { Link } from "webpanel-antd";
+import { Resource, ResourceLayer } from "webpanel-data";
 
-import { Entity } from '../../model/Entity';
+import { Entity } from "../../model/Entity";
 
 export interface IEntityDetailProps {
   entity: Entity<any>;
-  route: RouteComponentProps<any>;
+  resourceID: string | number;
 }
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {
   public render() {
-    const { entity } = this.props;
-    const {
-      route: {
-        match: {
-          params: { id }
-        }
-      }
-    } = this.props;
+    const { entity, resourceID } = this.props;
 
     const formItemLayout = {
       labelCol: {
@@ -36,18 +29,18 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
     return (
       <ResourceLayer
         name={entity.name}
-        id={id}
+        id={resourceID}
         dataSource={entity.dataSource}
         fields={[
-          'id',
+          "id",
           ...(entity.detailFields
             .map(x => x.fetchField())
             .filter(x => x) as string[])
         ]}
         render={(resource: Resource) => {
-          const layout = entity.getLayout('detail', {
+          const layout = entity.getLayout("detail", {
             entity,
-            id,
+            id: resourceID,
             data: resource.data || {}
           });
           if (layout) return layout;
@@ -55,7 +48,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             <Card
               title={entity.title}
               extra={
-                <Link to={`${id}/edit`}>
+                <Link to={`${resourceID}/edit`}>
                   <Button size="small" htmlType="button" icon="edit" />
                 </Link>
               }
