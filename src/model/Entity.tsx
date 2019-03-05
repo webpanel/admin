@@ -340,11 +340,12 @@ export class Entity<T> {
 
   // views
   public getListView = (config?: IEntityListConfig): React.ReactNode => {
+    const listConfig = resolveOptionalThunk(this.config.list);
     return (
       <EntityList
         entity={this}
         dataSource={this.dataSource}
-        {...this.config.list}
+        {...listConfig}
         {...config}
       />
     );
