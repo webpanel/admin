@@ -1,12 +1,14 @@
-import * as React from 'react';
+import * as React from "react";
+
 import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps
-} from '../EntityField';
+} from "../EntityField";
+import { Thunk, resolveThunk } from "ts-thunk";
 
-import { Select } from 'antd';
-import { Thunk, resolveThunk } from 'ts-thunk';
+import { Select } from "antd";
+
 // import { ResourceCollection } from 'webpanel-data';
 
 export interface IOption {
@@ -31,7 +33,7 @@ export class EntityFieldEnum<T> extends EntityField<
           return option.label;
         }
       }
-      return '–';
+      return "–";
     };
   }
 
@@ -51,7 +53,16 @@ export class EntityFieldEnum<T> extends EntityField<
       )
     );
 
-    return <Select {...props}>{selectOptions}</Select>;
+    return (
+      <Select
+        style={{
+          width: "100%"
+        }}
+        {...props}
+      >
+        {selectOptions}
+      </Select>
+    );
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
@@ -78,7 +89,7 @@ export class EntityFieldEnum<T> extends EntityField<
       if (values.length == 1) {
         res[this.columnName()] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName() + '_in'] = values;
+        res[this.columnName() + "_in"] = values;
       }
       return res;
     };
