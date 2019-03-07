@@ -1,6 +1,8 @@
-import * as React from 'react';
-import { EntityField, IEntityFieldFilterProps } from '../EntityField';
-import { InputNumber } from 'antd';
+import * as React from "react";
+
+import { EntityField, IEntityFieldFilterProps } from "../EntityField";
+
+import { InputNumber } from "antd";
 
 export class EntityFieldNumber<T, C> extends EntityField<T, C> {
   public inputElement(props?: {
@@ -20,6 +22,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
     const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
     return (
       <InputNumber
+        key={`number_field_${this.entity.name}_${this.valuePropName}`}
         placeholder="Number"
         value={value}
         onChange={(value: number) =>
@@ -35,8 +38,8 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
       if (values.length == 1) {
         res[this.columnName()] = parseFloat(values[0]);
       } else if (values.length === 2) {
-        res[this.columnName() + '_gte'] = parseFloat(values[0]);
-        res[this.columnName() + '_lte'] = parseFloat(values[1]);
+        res[this.columnName() + "_gte"] = parseFloat(values[0]);
+        res[this.columnName() + "_lte"] = parseFloat(values[1]);
       }
       return res;
     };

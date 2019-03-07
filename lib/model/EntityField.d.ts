@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Entity } from './Entity';
-import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
-import { Thunk } from 'ts-thunk';
-import { InputProps } from 'antd/lib/input';
-import { FieldAction } from './permissions';
-export declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
+import * as React from "react";
+import { FieldAction } from "./permissions";
+import { FormLayout, ValidationRule } from "antd/lib/form/Form";
+import { Thunk } from "ts-thunk";
+import { Entity } from "./Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { InputProps } from "antd/lib/input";
+export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
     setSelectedKeys: (keys: T[]) => {};

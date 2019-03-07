@@ -1,6 +1,6 @@
-import * as React from 'react';
-import * as moment from 'moment';
-import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from '../EntityField';
+import * as React from "react";
+import * as moment from "moment";
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
     showTime?: boolean;
     format?: string;
