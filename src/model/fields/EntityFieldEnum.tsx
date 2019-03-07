@@ -45,7 +45,9 @@ export class EntityFieldEnum<T> extends EntityField<
     const selectOptions = resolveThunk(this.config.options).map(
       (value: IOption) => (
         <Select.Option
-          key={`enum_field_${this.entity.name}_${this.valuePropName}`}
+          key={`enum_field_${this.entity.name}_${this.valuePropName}_${
+            value.value
+          }`}
           value={value.value}
         >
           {value.label}
@@ -58,6 +60,7 @@ export class EntityFieldEnum<T> extends EntityField<
         style={{
           width: "100%"
         }}
+        key={`enum_field_${this.entity.name}_${this.valuePropName}`}
         {...props}
       >
         {selectOptions}
