@@ -66,11 +66,14 @@ export interface IEntityConfig<T> {
   edit?: Thunk<IEntityEditConfig>;
 
   searchable?: boolean;
+  // render loaded entity to string (in search fields etc.)
+  // only fields with {visible:['search']} are loaded for rendering
+  render?: (value: T | null) => string;
+
   // deprecated, user table config directly
   initialSorting?: SortInfo[];
   // deprecated, user table config directly
   initialFilters?: DataSourceArgumentMap;
-  render?: (value: T | null) => string;
 }
 
 export class Entity<T> {
