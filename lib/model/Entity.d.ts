@@ -29,9 +29,9 @@ export interface IEntityConfig<T> {
     list?: Thunk<IEntityListConfig>;
     edit?: Thunk<IEntityEditConfig>;
     searchable?: boolean;
+    render?: (value: T | null) => string;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
-    render?: (value: T | null) => string;
 }
 export declare class Entity<T> {
     private readonly config;
