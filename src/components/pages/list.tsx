@@ -1,5 +1,9 @@
 import * as React from "react";
 
+import {
+  ActionButtonProps,
+  ResourceTablePropsActionButton
+} from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import { Button, Card, Icon } from "antd";
 import {
   DataSource,
@@ -11,7 +15,6 @@ import { Link, ResourceSearchInput, ResourceTable } from "webpanel-antd";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 import { entityPermission, fieldPermission } from "../../model/permissions";
 
-import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
@@ -21,6 +24,7 @@ import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 export interface IEntityListTableProps {
   condensed?: boolean;
   searchable?: boolean;
+  actionButtons?: ResourceTablePropsActionButton[];
 }
 
 export type IEntityListColumnRender = (
@@ -183,8 +187,6 @@ export class EntityList extends React.Component<IEntityListProps> {
                 pageSizeOptions: ["10", "20", "30", "50", "100"],
                 showSizeChanger: true
               }}
-              {...table}
-              columns={this.getColumns(listFields, resource)}
               actionButtons={[
                 entity.showDetailPage || entityPermission(entity, "update")
                   ? (props: ActionButtonProps) => (
@@ -214,6 +216,8 @@ export class EntityList extends React.Component<IEntityListProps> {
                   : null,
                 entityPermission(entity, "delete") && "delete"
               ].filter(x => x)}
+              {...table}
+              columns={this.getColumns(listFields, resource)}
             />
           </Card>
         )}
