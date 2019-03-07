@@ -1,4 +1,5 @@
 import * as React from "react";
+import { ResourceTablePropsActionButton } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import { DataSource, ResourceCollection, SortInfo } from "webpanel-data";
 import { Thunk } from "ts-thunk";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
@@ -8,6 +9,7 @@ import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 export interface IEntityListTableProps {
     condensed?: boolean;
     searchable?: boolean;
+    actionButtons?: ResourceTablePropsActionButton[];
 }
 export declare type IEntityListColumnRender = (value: any, values: any, field: EntityField<any, any>) => React.ReactNode;
 export declare type IEntityListColumn = string | {
