@@ -19,12 +19,13 @@ import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
 import { ListCell } from "./list-cell";
+import { PaginationConfig } from "antd/lib/table";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 
 export interface IEntityListTableProps {
   condensed?: boolean;
-  searchable?: boolean;
   actionButtons?: ResourceTablePropsActionButton[];
+  pagination?: PaginationConfig | false;
 }
 
 export type IEntityListColumnRender = (
@@ -42,6 +43,9 @@ export type IEntityListColumn =
 
 export interface IEntityListConfig {
   table?: IEntityListTableProps;
+  card?: { extra?: React.ReactNode };
+  searchable?: boolean;
+  showAddButton?: boolean;
   title?: string;
   fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
@@ -111,6 +115,9 @@ export class EntityList extends React.Component<IEntityListProps> {
     const {
       entity,
       table,
+      card,
+      searchable,
+      showAddButton,
       fields,
       initialFilters,
       initialSorting,
@@ -141,10 +148,10 @@ export class EntityList extends React.Component<IEntityListProps> {
     }
 
     const size = table && table.condensed ? "small" : "default";
-    const searchable =
-      table && typeof table.searchable !== "undefined"
-        ? table.searchable
-        : entity.searchable;
+    const _searchable =
+      typeof searchable !== "undefined" ? searchable : entity.searchable;
+    const _showAddButton =
+      typeof showAddButton !== "undefined" ? showAddButton : true;
 
     return (
       <ResourceCollectionLayer
@@ -163,7 +170,7 @@ export class EntityList extends React.Component<IEntityListProps> {
             bodyStyle={{ padding: "0" }}
             title={title || entity.title}
             extra={[
-              searchable && (
+              _searchable && (
                 <ResourceSearchInput
                   key="searchInput"
                   resourceCollection={resource}
@@ -171,11 +178,12 @@ export class EntityList extends React.Component<IEntityListProps> {
                   style={{ width: 300, marginRight: 8 }}
                 />
               ),
-              entityPermission(entity, "create") && (
+              _showAddButton && entityPermission(entity, "create") && (
                 <Link to={entity.getCreateLink()} key="newButton">
                   <Button size="small" htmlType="button" icon="plus" />
                 </Link>
-              )
+              ),
+              card && card.extra
             ].filter(x => x)}
           >
             <ResourceTable
