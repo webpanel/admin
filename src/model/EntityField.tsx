@@ -1,17 +1,19 @@
-import { Input, Button } from 'antd';
-import * as React from 'react';
-import * as inflection from 'inflection';
-import { FormField } from 'webpanel-antd';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import * as React from "react";
+import * as inflection from "inflection";
 
-import { Entity } from './Entity';
-import { ValidationRule, FormLayout } from 'antd/lib/form/Form';
-import { Thunk, resolveThunk, resolveOptionalThunk } from 'ts-thunk';
-import { InputProps } from 'antd/lib/input';
-import { fieldPermission, FieldAction } from './permissions';
+import { Button, Input } from "antd";
+import { FieldAction, fieldPermission } from "./permissions";
+import { FormLayout, ValidationRule } from "antd/lib/form/Form";
+import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
+
+import { Entity } from "./Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormField } from "webpanel-antd";
+import { InputProps } from "antd/lib/input";
+
 // import { ResourceCollection } from 'webpanel-data';
 
-export type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
+export type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 
 export interface IEntityFieldFilterProps<T> {
   selectedKeys: T[];
@@ -26,7 +28,7 @@ export interface IEntityFieldConfigFilter {
 const isIEntityFieldConfigFilter = (
   value: IEntityFieldConfigFilter | boolean | undefined
 ): value is IEntityFieldConfigFilter => {
-  return typeof value === 'object';
+  return typeof value === "object";
 };
 
 export interface IEntityFieldConfig<T> {
@@ -55,7 +57,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get title(): string {
     return (
       resolveOptionalThunk(this.config.title) ||
-      inflection.transform(this.name, ['underscore', 'titleize'])
+      inflection.transform(this.name, ["underscore", "titleize"])
     );
   }
 
@@ -73,10 +75,10 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return this.config.sortable || false;
   }
   public get filter(): boolean {
-    if (typeof this.config.filter === 'boolean') {
+    if (typeof this.config.filter === "boolean") {
       return this.config.filter;
     }
-    return typeof this.config.filter !== 'undefined' || false;
+    return typeof this.config.filter !== "undefined" || false;
   }
   public get range(): boolean {
     const filter = this.config.filter;
@@ -90,9 +92,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName() + '_prefix'] = values[0];
+        res[this.columnName() + "_prefix"] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName() + '_in'] = values;
+        res[this.columnName() + "_in"] = values;
       }
       return res;
     };
@@ -149,7 +151,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public get valuePropName(): string {
-    return 'value';
+    return "value";
   }
 
   public fieldElement(
@@ -158,7 +160,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     config: { formLayout?: FormLayout }
   ): React.ReactNode {
     const formItemLayout =
-      config.formLayout === 'horizontal'
+      config.formLayout === "horizontal"
         ? {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 }
@@ -181,7 +183,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<any>) => {
-    const value = props.selectedKeys ? props.selectedKeys[0] : '';
+    const value = props.selectedKeys ? props.selectedKeys[0] : "";
     return (
       <Input
         value={value}
@@ -197,11 +199,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return (
         <div
           style={{
-            display: 'flex',
-            padding: '8px',
-            backgroundColor: 'white',
-            borderRadius: '6px',
-            boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
+            display: "flex",
+            padding: "8px",
+            backgroundColor: "white",
+            borderRadius: "6px",
+            boxShadow: "0 1px 6px rgba(0, 0, 0, .2)"
           }}
         >
           {this.filterDropdownInput(props)}
