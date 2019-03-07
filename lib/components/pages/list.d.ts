@@ -5,11 +5,12 @@ import { Thunk } from "ts-thunk";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
+import { PaginationConfig } from "antd/lib/table";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 export interface IEntityListTableProps {
     condensed?: boolean;
-    searchable?: boolean;
     actionButtons?: ResourceTablePropsActionButton[];
+    pagination?: PaginationConfig | false;
 }
 export declare type IEntityListColumnRender = (value: any, values: any, field: EntityField<any, any>) => React.ReactNode;
 export declare type IEntityListColumn = string | {
@@ -18,6 +19,11 @@ export declare type IEntityListColumn = string | {
 };
 export interface IEntityListConfig {
     table?: IEntityListTableProps;
+    card?: {
+        extra?: React.ReactNode;
+    };
+    searchable?: boolean;
+    showAddButton?: boolean;
     title?: string;
     fields?: Thunk<IEntityListColumn[]>;
     editableFields?: Thunk<string[]>;
