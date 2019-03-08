@@ -1,13 +1,14 @@
-import { Card, message, Modal } from "antd";
 import * as React from "react";
-import { FormLayout } from "antd/lib/form/Form";
-import { ResourceForm } from "webpanel-antd";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+
+import { Card, Modal, message } from "antd";
 import { Resource, ResourceLayer } from "webpanel-data";
+import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
 
 import { Entity } from "../../model/Entity";
-import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormLayout } from "antd/lib/form/Form";
 import { ModalProps } from "antd/lib/modal";
+import { ResourceForm } from "webpanel-antd";
 
 export type EntityOnSaveHandler = (
   id: string | number,

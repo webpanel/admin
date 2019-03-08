@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IEntityEditConfig, EntityOnSaveHandler } from "../pages/edit";
+import { EntityOnSaveHandler, IEntityEditConfig } from "../pages/edit";
 import { Entity } from "../../model/Entity";
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
     resourceID?: string | number;

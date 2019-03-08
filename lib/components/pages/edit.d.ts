@@ -1,9 +1,9 @@
 import * as React from "react";
-import { FormLayout } from "antd/lib/form/Form";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { Resource } from "webpanel-data";
-import { Entity } from "../../model/Entity";
 import { SaveOption } from "../form/buttons";
+import { Entity } from "../../model/Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormLayout } from "antd/lib/form/Form";
 import { ModalProps } from "antd/lib/modal";
 export declare type EntityOnSaveHandler = (id: string | number, option?: SaveOption) => void;
 export interface IEntityEditFormProps {

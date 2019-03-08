@@ -317,7 +317,7 @@ export class Entity<T> {
         entity={this}
         onSave={onSave}
         resourceID={resourceID}
-        {...this.config.edit}
+        {...resolveOptionalThunk(this.config.edit)}
         {...config}
       />
     );
@@ -335,7 +335,7 @@ export class Entity<T> {
       <EntityEditLayout
         entity={this}
         onSave={onSave}
-        {...this.config.edit}
+        {...resolveOptionalThunk(this.config.edit)}
         {...config}
       />
     );
@@ -379,7 +379,7 @@ export class Entity<T> {
         entity={this}
         onSave={onSave}
         onCancel={onCancel}
-        {...this.config.edit}
+        {...resolveOptionalThunk(this.config.edit)}
         {...config}
       />
     );
@@ -403,7 +403,7 @@ export class Entity<T> {
         resourceID={resourceID}
         onSave={onSave}
         onCancel={onCancel}
-        {...this.config.edit}
+        {...resolveOptionalThunk(this.config.edit)}
         {...config}
       />
     );
