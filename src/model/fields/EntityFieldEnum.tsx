@@ -25,6 +25,9 @@ export class EntityFieldEnum<T> extends EntityField<
   IEntityFieldEnumConfig<T>
 > {
   public get render(): ((record: T) => React.ReactNode) {
+    if (this.config.render) {
+      return this.config.render;
+    }
     const options = resolveThunk(this.config.options);
     return values => {
       const keyValue = values[this.name];
