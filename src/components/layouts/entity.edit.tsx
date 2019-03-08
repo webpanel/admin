@@ -1,9 +1,11 @@
 import * as React from "react";
+
 import {
   EntityEdit,
-  IEntityEditConfig,
-  EntityOnSaveHandler
+  EntityOnSaveHandler,
+  IEntityEditConfig
 } from "../pages/edit";
+
 import { Entity } from "../../model/Entity";
 
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
