@@ -1,6 +1,6 @@
-import * as React from "react";
-import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
-import { Thunk } from "ts-thunk";
+import * as React from 'react';
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from '../EntityField';
+import { Thunk } from 'ts-thunk';
 export interface IOption {
     value: string;
     label: string;

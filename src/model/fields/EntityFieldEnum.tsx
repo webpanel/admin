@@ -1,13 +1,13 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps
-} from "../EntityField";
-import { Thunk, resolveThunk } from "ts-thunk";
+} from '../EntityField';
+import { Thunk, resolveThunk } from 'ts-thunk';
 
-import { Select } from "antd";
+import { Select } from 'antd';
 
 // import { ResourceCollection } from 'webpanel-data';
 
@@ -36,7 +36,7 @@ export class EntityFieldEnum<T> extends EntityField<
           return option.label;
         }
       }
-      return "–";
+      return '–';
     };
   }
 
@@ -61,9 +61,10 @@ export class EntityFieldEnum<T> extends EntityField<
     return (
       <Select
         style={{
-          width: "100%"
+          width: '100%'
         }}
         key={`enum_field_${this.entity.name}_${this.valuePropName}`}
+        showSearch={true}
         {...props}
       >
         {selectOptions}
@@ -83,6 +84,7 @@ export class EntityFieldEnum<T> extends EntityField<
       <Select
         value={value}
         onChange={(value: any) => props.setSelectedKeys([value])}
+        showSearch={true}
       >
         {selectOptions}
       </Select>
@@ -95,7 +97,7 @@ export class EntityFieldEnum<T> extends EntityField<
       if (values.length == 1) {
         res[this.columnName()] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName() + "_in"] = values;
+        res[this.columnName() + '_in'] = values;
       }
       return res;
     };
