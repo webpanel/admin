@@ -8,7 +8,7 @@ import {
 } from '../EntityField';
 import { FormField, ResourceSelect } from 'webpanel-antd';
 import { ResourceCollection, ResourceCollectionLayer } from 'webpanel-data';
-import { Thunk, resolveThunk } from 'ts-thunk';
+import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 
 import { Entity } from '../Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
@@ -106,6 +106,7 @@ export class EntityFieldRelationship<T> extends EntityField<
             style={{
               width: '100%'
             }}
+            rules={resolveOptionalThunk(this.config.rules)}
             {...formItemLayout}
           >
             <ResourceSelect
