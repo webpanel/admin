@@ -1,14 +1,14 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Card, Modal, message } from "antd";
-import { Resource, ResourceLayer } from "webpanel-data";
-import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
+import { Card, Modal, message } from 'antd';
+import { Resource, ResourceLayer } from 'webpanel-data';
+import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
 
-import { Entity } from "../../model/Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
-import { FormLayout } from "antd/lib/form/Form";
-import { ModalProps } from "antd/lib/modal";
-import { ResourceForm } from "webpanel-antd";
+import { Entity } from '../../model/Entity';
+import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { FormLayout } from 'antd/lib/form/Form';
+import { ModalProps } from 'antd/lib/modal';
+import { ResourceForm } from 'webpanel-antd';
 
 export type EntityOnSaveHandler = (
   id: string | number,
@@ -22,7 +22,7 @@ export interface IEntityEditFormProps {
 export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
   initialValues?: { [key: string]: any };
-  wrapperType?: "card" | "modal";
+  wrapperType?: 'card' | 'modal';
   modal?: ModalProps;
 }
 
@@ -78,7 +78,7 @@ export class EntityEdit extends React.Component<
   };
 
   handleFormSuccess = async (resource: Resource) => {
-    message.success("Form saved!");
+    message.success('Form saved!');
     const { onSave } = this.props;
 
     if (onSave) {
@@ -155,7 +155,7 @@ export class EntityEdit extends React.Component<
             }
             {...form}
             render={(formContext: FormContext) => {
-              const layout = entity.getLayout("edit", {
+              const layout = entity.getLayout('edit', {
                 entity,
                 formContext,
                 id: resourceID,
@@ -170,7 +170,7 @@ export class EntityEdit extends React.Component<
                 );
 
               switch (wrapperType) {
-                case "modal":
+                case 'modal':
                   return this.formModalContent(content, formContext, resource);
                 default:
                   return this.formCardContent(content, formContext, resource);
