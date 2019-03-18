@@ -62,6 +62,11 @@ export class EntityFieldRelationship<T> extends EntityField<
           .filter(x => x)
           .map(x => <Tag key={String(x)}>{x}</Tag>);
       }
+
+      if (!value) {
+        return '–';
+      }
+
       return _render && _render(value);
     };
   }

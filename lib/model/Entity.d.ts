@@ -67,12 +67,12 @@ export declare class Entity<T> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
-    getDetailView: (resourceID: string | number, config?: IEntityDetailProps | undefined) => React.ReactNode;
+    getDetailView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityDetailProps | undefined) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditView: (resourceID: string | number, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
