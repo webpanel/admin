@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { EntityField, IEntityFieldFilterProps } from "../EntityField";
+import { EntityField, IEntityFieldFilterProps } from '../EntityField';
 
-import { InputNumber } from "antd";
+import { InputNumber } from 'antd';
 
 export class EntityFieldNumber<T, C> extends EntityField<T, C> {
   public inputElement(props?: {
@@ -15,7 +15,13 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
       ? (value: number | string | undefined) => onChange(value, value)
       : undefined;
 
-    return <InputNumber {...props} onChange={onChangeProp} />;
+    return (
+      <InputNumber
+        key={`number_field_${this.entity.name}_${this.valuePropName}`}
+        {...props}
+        onChange={onChangeProp}
+      />
+    );
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<number>) => {
@@ -38,8 +44,8 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
       if (values.length == 1) {
         res[this.columnName()] = parseFloat(values[0]);
       } else if (values.length === 2) {
-        res[this.columnName() + "_gte"] = parseFloat(values[0]);
-        res[this.columnName() + "_lte"] = parseFloat(values[1]);
+        res[this.columnName() + '_gte'] = parseFloat(values[0]);
+        res[this.columnName() + '_lte'] = parseFloat(values[1]);
       }
       return res;
     };
