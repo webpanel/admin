@@ -1,12 +1,12 @@
-import * as React from "react";
-import { ResourceTablePropsActionButton } from "webpanel-antd/lib/table/ResourceTableActionButtons";
-import { DataSource, ResourceCollection, SortInfo } from "webpanel-data";
-import { Thunk } from "ts-thunk";
-import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
-import { Entity } from "../../model/Entity";
-import { EntityField } from "../../model/EntityField";
-import { PaginationConfig } from "antd/lib/table";
-import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
+import * as React from 'react';
+import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
+import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
+import { Thunk } from 'ts-thunk';
+import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import { Entity } from '../../model/Entity';
+import { EntityField } from '../../model/EntityField';
+import { PaginationConfig } from 'antd/lib/table';
+import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 export interface IEntityListTableProps {
     condensed?: boolean;
     actionButtons?: ResourceTablePropsActionButton[];
@@ -15,6 +15,7 @@ export interface IEntityListTableProps {
 export declare type IEntityListColumnRender = (value: any, values: any, field: EntityField<any, any>) => React.ReactNode;
 export declare type IEntityListColumn = string | {
     field: string;
+    hidden?: boolean;
     render?: IEntityListColumnRender;
 };
 export interface IEntityListConfig {
