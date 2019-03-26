@@ -233,6 +233,9 @@ export class EntityList extends React.Component<IEntityListProps> {
                   : null,
                 entityPermission(entity, 'delete') && 'delete'
               ].filter(x => x)}
+              customDetailURL={(resourceID: string) => {
+                return entity.getDetailLink(resourceID);
+              }}
               {...table}
               columns={this.getColumns(
                 listFields.filter(x => !x.hidden),
