@@ -25,6 +25,8 @@ import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 export interface IEntityListTableProps {
   condensed?: boolean;
   actionButtons?: ResourceTablePropsActionButton[];
+  actionButtonsTitle?: React.ReactNode;
+  actionButtonsFixed?: boolean;
   pagination?: PaginationConfig | false;
 }
 
