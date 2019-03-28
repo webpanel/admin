@@ -230,7 +230,7 @@ export class EntityFieldRelationship<T> extends EntityField<
 
     return (
       <ResourceCollectionLayer
-        name={targetEntity.name}
+        name={_targetEntity.name}
         fields={[
           'id',
           ...(_targetEntity.searchableFields
