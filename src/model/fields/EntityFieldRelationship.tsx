@@ -227,7 +227,7 @@ export class EntityFieldRelationship<T> extends EntityField<
   public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
     const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
-
+    const value = props.selectedKeys;
     return (
       <ResourceCollectionLayer
         name={_targetEntity.name}
@@ -240,9 +240,8 @@ export class EntityFieldRelationship<T> extends EntityField<
         dataSource={_targetEntity.dataSource}
         initialFilters={_targetEntity.initialFilters}
         initialSorting={_targetEntity.initialSorting}
-        autoload={false}
+        autoload={!!value}
         render={(resource: ResourceCollection) => {
-          const value = props.selectedKeys;
           return (
             <ResourceSelect
               valueKey="id"
@@ -286,7 +285,13 @@ export class EntityFieldRelationship<T> extends EntityField<
   public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
     return (values: { [key: string]: any }) => {
       let res: any[] = [];
-      const value = values[this.columnName()] || values[this.columnName().replace('Ids','').replace('Id','')];
+      const value =
+        values[this.columnName()] ||
+        values[
+          this.columnName()
+            .replace('Ids', '')
+            .replace('Id', '')
+        ];
       if (value) {
         if (value.id) {
           res = [value.id];
