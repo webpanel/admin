@@ -94,7 +94,8 @@ export class EntityList extends React.Component<IEntityListProps> {
           filterDropdown: field.filter
             ? field.filterDropdown(resource)
             : undefined,
-          filterFormatter: field.filterFormatter,
+          filterNormalize: field.filterNormalize,
+          filterDenormalize: field.filterDenormalize,
 
           render: (value: any, record: any): React.ReactNode => {
             const values = rowValues[record.id] || record;
@@ -166,7 +167,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
-        autopersistConfigKey={`${entity.name}_list_${this.props.key}`}
+        autopersistConfigKey={`${entity.name}_list`}
         fields={[
           'id',
           ...(listFields

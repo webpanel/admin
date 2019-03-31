@@ -1,7 +1,7 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { EntityField } from "../EntityField";
-import { Input } from "antd";
+import { EntityField } from '../EntityField';
+import { Input } from 'antd';
 
 export class EntityFieldText<T, C> extends EntityField<T, C> {
   public inputElement(props?: {
@@ -25,13 +25,25 @@ export class EntityFieldText<T, C> extends EntityField<T, C> {
     );
   }
 
-  public get filterFormatter(): ((values: any[]) => { [key: string]: any }) {
+  public get filterNormalize(): (values: any[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName() + "_contains"] = values[0];
+        res[this.columnName() + '_contains'] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName() + "_in"] = values;
+        res[this.columnName() + '_in'] = values;
+      }
+      return res;
+    };
+  }
+
+  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+    return (values: { [key: string]: any }) => {
+      let res: any[] = [];
+      if (values[this.columnName() + '_contains']) {
+        res = [values[this.columnName() + '_contains']];
+      } else if (values[this.columnName() + '_in']) {
+        res = values[this.columnName() + '_in'];
       }
       return res;
     };

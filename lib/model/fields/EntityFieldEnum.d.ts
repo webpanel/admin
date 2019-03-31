@@ -16,7 +16,10 @@ export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumC
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
-    readonly filterFormatter: ((values: string[]) => {
+    readonly filterNormalize: ((values: string[]) => {
         [key: string]: any;
     });
+    readonly filterDenormalize: (values: {
+        [key: string]: any;
+    }) => any[];
 }

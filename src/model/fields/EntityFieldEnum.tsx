@@ -91,13 +91,24 @@ export class EntityFieldEnum<T> extends EntityField<
     );
   };
 
-  public get filterFormatter(): ((values: string[]) => { [key: string]: any }) {
+  public get filterNormalize(): ((values: string[]) => { [key: string]: any }) {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
         res[this.columnName()] = values[0];
       } else if (values.length > 1) {
         res[this.columnName() + '_in'] = values;
+      }
+      return res;
+    };
+  }
+  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+    return (values: { [key: string]: any }) => {
+      let res: any[] = [];
+      if (values[this.columnName()]) {
+        res = [values[this.columnName()].toString()];
+      } else if (values[this.columnName() + '_in']) {
+        res = values[this.columnName() + '_in'];
       }
       return res;
     };

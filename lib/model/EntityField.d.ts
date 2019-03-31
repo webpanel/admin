@@ -1,11 +1,11 @@
-import * as React from "react";
-import { FieldAction } from "./permissions";
-import { FormLayout, ValidationRule } from "antd/lib/form/Form";
-import { Thunk } from "ts-thunk";
-import { Entity } from "./Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
-import { InputProps } from "antd/lib/input";
-export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
+import * as React from 'react';
+import { FieldAction } from './permissions';
+import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
+import { Thunk } from 'ts-thunk';
+import { Entity } from './Entity';
+import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { InputProps } from 'antd/lib/input';
+export declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
     setSelectedKeys: (keys: T[]) => {};
@@ -40,11 +40,14 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly sortable: boolean;
     readonly filter: boolean;
     readonly range: boolean;
-    readonly filterFormatter: ((values: any[]) => {
+    readonly filterNormalize: (values: any[]) => {
         [key: string]: any;
-    });
+    };
+    readonly filterDenormalize: (values: {
+        [key: string]: any;
+    }) => any[];
     visible(section: FieldSections, action: FieldAction, strict?: boolean): boolean;
-    readonly render: ((record: T) => React.ReactNode);
+    readonly render: (record: T) => React.ReactNode;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, stringValue: string) => void;

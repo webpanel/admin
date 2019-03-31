@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 import { Checkbox } from 'antd';
@@ -40,13 +41,22 @@ export class EntityFieldBoolean<T> extends EntityField<
     );
   }
 
-  public get filterFormatter(): ((
+  public get filterNormalize(): ((
     values: boolean[]
   ) => { [key: string]: any }) {
     return (values: boolean[]) => {
       let res = {};
       if (values.length >= 1) {
         res[this.columnName()] = !!values[0];
+      }
+      return res;
+    };
+  }
+  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+    return (values: { [key: string]: any }) => {
+      let res: any[] = [];
+      if (values[this.columnName()]) {
+        res = [values[this.columnName()]];
       }
       return res;
     };
