@@ -1,19 +1,19 @@
-import * as React from "react";
-import * as inflection from "inflection";
+import * as React from 'react';
+import * as inflection from 'inflection';
 
-import { Button, Input } from "antd";
-import { FieldAction, fieldPermission } from "./permissions";
-import { FormLayout, ValidationRule } from "antd/lib/form/Form";
-import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
+import { Button, Input } from 'antd';
+import { FieldAction, fieldPermission } from './permissions';
+import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
+import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 
-import { Entity } from "./Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
-import { FormField } from "webpanel-antd";
-import { InputProps } from "antd/lib/input";
+import { Entity } from './Entity';
+import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { FormField } from 'webpanel-antd';
+import { InputProps } from 'antd/lib/input';
 
 // import { ResourceCollection } from 'webpanel-data';
 
-export type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
+export type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
 
 export interface IEntityFieldFilterProps<T> {
   selectedKeys: T[];
@@ -28,7 +28,7 @@ export interface IEntityFieldConfigFilter {
 const isIEntityFieldConfigFilter = (
   value: IEntityFieldConfigFilter | boolean | undefined
 ): value is IEntityFieldConfigFilter => {
-  return typeof value === "object";
+  return typeof value === 'object';
 };
 
 export interface IEntityFieldConfig<T> {
@@ -57,7 +57,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get title(): string {
     return (
       resolveOptionalThunk(this.config.title) ||
-      inflection.transform(this.name, ["underscore", "titleize"])
+      inflection.transform(this.name, ['underscore', 'titleize'])
     );
   }
 
@@ -75,10 +75,10 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return this.config.sortable || false;
   }
   public get filter(): boolean {
-    if (typeof this.config.filter === "boolean") {
+    if (typeof this.config.filter === 'boolean') {
       return this.config.filter;
     }
-    return typeof this.config.filter !== "undefined" || false;
+    return typeof this.config.filter !== 'undefined' || false;
   }
   public get range(): boolean {
     const filter = this.config.filter;
@@ -88,13 +88,25 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return false;
   }
 
-  public get filterFormatter(): ((values: any[]) => { [key: string]: any }) {
+  public get filterNormalize(): (values: any[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName() + "_prefix"] = values[0];
+        res[this.columnName() + '_prefix'] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName() + "_in"] = values;
+        res[this.columnName() + '_in'] = values;
+      }
+      return res;
+    };
+  }
+
+  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+    return (values: { [key: string]: any }) => {
+      let res: any[] = [];
+      if (values[this.columnName() + '_prefix']) {
+        res = [values[this.columnName() + '_prefix']];
+      } else if (values[this.columnName() + '_in']) {
+        res = values[this.columnName() + '_in'];
       }
       return res;
     };
@@ -121,7 +133,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return fieldPermission(this, action);
   }
 
-  public get render(): ((record: T) => React.ReactNode) {
+  public get render(): (record: T) => React.ReactNode {
     if (this.config.render) {
       return this.config.render;
     }
@@ -151,7 +163,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public get valuePropName(): string {
-    return "value";
+    return 'value';
   }
 
   public fieldElement(
@@ -160,7 +172,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     config: { formLayout?: FormLayout }
   ): React.ReactNode {
     const formItemLayout =
-      config.formLayout === "horizontal"
+      config.formLayout === 'horizontal'
         ? {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 }
@@ -183,7 +195,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<any>) => {
-    const value = props.selectedKeys ? props.selectedKeys[0] : "";
+    const value = props.selectedKeys ? props.selectedKeys[0] : '';
     return (
       <Input
         value={value}
@@ -199,11 +211,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return (
         <div
           style={{
-            display: "flex",
-            padding: "8px",
-            backgroundColor: "white",
-            borderRadius: "6px",
-            boxShadow: "0 1px 6px rgba(0, 0, 0, .2)"
+            display: 'flex',
+            padding: '8px',
+            backgroundColor: 'white',
+            borderRadius: '6px',
+            boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
           }}
         >
           {this.filterDropdownInput(props)}

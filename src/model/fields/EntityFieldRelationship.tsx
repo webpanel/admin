@@ -272,13 +272,27 @@ export class EntityFieldRelationship<T> extends EntityField<
     );
   };
 
-  public get filterFormatter(): (values: string[]) => { [key: string]: any } {
+  public get filterNormalize(): (values: string[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
         res[this.name] = { id: values[0] };
       } else if (values.length > 1) {
         res[this.name] = { id_in: values };
+      }
+      return res;
+    };
+  }
+  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+    return (values: { [key: string]: any }) => {
+      let res: any[] = [];
+      const value = values[this.columnName()];
+      if (value) {
+        if (value.id) {
+          res = [value.id];
+        } else if (value.id_in) {
+          res = value.id_in;
+        }
       }
       return res;
     };

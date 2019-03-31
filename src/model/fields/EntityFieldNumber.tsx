@@ -38,7 +38,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
     );
   };
 
-  public get filterFormatter(): ((values: any[]) => { [key: string]: any }) {
+  public get filterNormalize(): ((values: any[]) => { [key: string]: any }) {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
@@ -46,6 +46,23 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
       } else if (values.length === 2) {
         res[this.columnName() + '_gte'] = parseFloat(values[0]);
         res[this.columnName() + '_lte'] = parseFloat(values[1]);
+      }
+      return res;
+    };
+  }
+  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+    return (values: { [key: string]: any }) => {
+      let res: any[] = [];
+      if (values[this.columnName()]) {
+        res = [values[this.columnName()].toString()];
+      } else if (
+        values[this.columnName() + '_gte'] &&
+        values[this.columnName() + '_lte']
+      ) {
+        res = [
+          values[this.columnName() + '_gte'].toString(),
+          values[this.columnName() + '_lte'].toString()
+        ];
       }
       return res;
     };

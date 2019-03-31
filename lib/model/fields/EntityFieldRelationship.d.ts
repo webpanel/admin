@@ -25,7 +25,10 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
-    readonly filterFormatter: (values: string[]) => {
+    readonly filterNormalize: (values: string[]) => {
         [key: string]: any;
     };
+    readonly filterDenormalize: (values: {
+        [key: string]: any;
+    }) => any[];
 }
