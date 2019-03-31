@@ -58,6 +58,7 @@ export interface IEntityListConfig {
   editableFields?: Thunk<string[]>;
   initialSorting?: SortInfo[];
   initialFilters?: DataSourceArgumentMap;
+  autopersistConfigKey?: string;
 }
 
 export interface IEntityListProps extends IEntityListConfig {
@@ -129,7 +130,8 @@ export class EntityList extends React.Component<IEntityListProps> {
       fields,
       initialFilters,
       initialSorting,
-      title
+      title,
+      autopersistConfigKey
     } = this.props;
 
     const _fields = resolveOptionalThunk(fields);
@@ -167,7 +169,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
-        autopersistConfigKey={`${entity.name}_list`}
+        autopersistConfigKey={autopersistConfigKey}
         fields={[
           'id',
           ...(listFields

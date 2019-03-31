@@ -32,6 +32,7 @@ export interface IEntityListConfig {
     editableFields?: Thunk<string[]>;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
+    autopersistConfigKey?: string;
 }
 export interface IEntityListProps extends IEntityListConfig {
     entity: Entity<any>;
