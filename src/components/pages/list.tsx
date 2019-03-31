@@ -166,6 +166,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       <ResourceCollectionLayer
         name={entity.name}
         dataSource={this.props.dataSource}
+        autopersistConfigKey={`${entity.name}_list_${this.props.key}`}
         fields={[
           'id',
           ...(listFields
