@@ -1,10 +1,12 @@
-import * as React from "react";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
-import { Thunk, resolveThunk } from "ts-thunk";
+import * as React from 'react';
 
-import { LayoutBuilderTabs, LayoutBuilderTabsProps } from "./components/tabs";
-import { LayoutBuilderRow, LayoutBuilderRowProps } from "./components/row";
-import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
+import { LayoutBuilderCard, LayoutBuilderCardProps } from './components/card';
+import { LayoutBuilderCol, LayoutBuilderColProps } from './components/col';
+import {
+  LayoutBuilderEditField,
+  LayoutBuilderEditFieldProps
+} from './components/edit-field';
+import { LayoutBuilderRow, LayoutBuilderRowProps } from './components/row';
 // import {
 //   LayoutBuilderContent,
 //   BuilderContentFunctionProps
@@ -13,14 +15,17 @@ import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
 import {
   LayoutBuilderStringField,
   LayoutBuilderStringFieldProps
-} from "./components/string-field";
-import { LayoutBuilderCard, LayoutBuilderCardProps } from "./components/card";
-import { Entity } from "../model/Entity";
-import { LayoutBuilderEditButton } from "./components/edit-button";
+} from './components/string-field';
+import { LayoutBuilderTabs, LayoutBuilderTabsProps } from './components/tabs';
 import {
-  LayoutBuilderEditField,
-  LayoutBuilderEditFieldProps
-} from "./components/edit-field";
+  LayoutBuilderValue,
+  LayoutBuilderValueProps
+} from './components/value';
+import { Thunk, resolveThunk } from 'ts-thunk';
+
+import { Entity } from '../model/Entity';
+import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { LayoutBuilderEditButton } from './components/edit-button';
 
 export interface LayoutBuilderConfig {
   entity: Entity<any>;
@@ -57,6 +62,18 @@ export class LayoutBuilder {
     return <LayoutBuilderTabs {...resolveThunk(props, this.config)} />;
   }
 
+  value(
+    props: Thunk<LayoutBuilderValueProps, LayoutBuilderConfig>
+  ): React.ReactNode {
+    return (
+      <LayoutBuilderValue
+        {...resolveThunk(props, this.config)}
+        entity={this.config.entity}
+        data={this.config.data}
+      />
+    );
+  }
+
   stringField(
     props: Thunk<LayoutBuilderStringFieldProps, LayoutBuilderConfig>
   ): React.ReactNode {
@@ -75,7 +92,7 @@ export class LayoutBuilder {
     const formContext = this.config.formContext;
 
     if (!formContext) {
-      throw new Error("cannot create editField without formContext");
+      throw new Error('cannot create editField without formContext');
     }
 
     return (
