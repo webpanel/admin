@@ -9,11 +9,13 @@ import { LayoutBuilderValueProps } from './components/value';
 import { Thunk } from 'ts-thunk';
 import { Entity } from '../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import { Resource } from 'webpanel-data';
 export interface LayoutBuilderConfig {
     entity: Entity<any>;
     id?: string | number;
     data: any;
     formContext?: FormContext;
+    resource: Resource;
 }
 export declare class LayoutBuilder {
     readonly config: LayoutBuilderConfig;

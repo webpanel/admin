@@ -157,6 +157,7 @@ export class EntityEdit extends React.Component<
             render={(formContext: FormContext) => {
               const layout = entity.getLayout('edit', {
                 entity,
+                resource,
                 formContext,
                 id: resourceID,
                 data: resource.data || {}

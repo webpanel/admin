@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Entity } from "../../model/Entity";
+import * as React from 'react';
+import { Entity } from '../../model/Entity';
 export interface IEntityDetailProps {
     entity: Entity<any>;
     resourceID: string | number;
