@@ -1,10 +1,11 @@
-import { Card, Form, Button } from "antd";
-import * as React from "react";
-// import { Link  } from 'react-router-dom';
-import { Link } from "webpanel-antd";
-import { Resource, ResourceLayer } from "webpanel-data";
+import * as React from 'react';
 
-import { Entity } from "../../model/Entity";
+import { Button, Card, Form } from 'antd';
+import { Resource, ResourceLayer } from 'webpanel-data';
+
+import { Entity } from '../../model/Entity';
+// import { Link  } from 'react-router-dom';
+import { Link } from 'webpanel-antd';
 
 export interface IEntityDetailProps {
   entity: Entity<any>;
@@ -32,14 +33,15 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         id={resourceID}
         dataSource={entity.dataSource}
         fields={[
-          "id",
+          'id',
           ...(entity.detailFields
             .map(x => x.fetchField())
             .filter(x => x) as string[])
         ]}
         render={(resource: Resource) => {
-          const layout = entity.getLayout("detail", {
+          const layout = entity.getLayout('detail', {
             entity,
+            resource,
             id: resourceID,
             data: resource.data || {}
           });
