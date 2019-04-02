@@ -138,7 +138,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return this.config.render;
     }
     return (values: any) => {
-      return values[this.name];
+      return values[this.name] || null;
     };
   }
 
