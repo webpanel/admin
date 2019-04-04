@@ -10,9 +10,9 @@ import { IEntityFieldFileConfig } from './fields/EntityFieldFile';
 import { IEntityFieldRelationshipConfig } from './fields/EntityFieldRelationship';
 import { IEntityListConfig } from '../components/pages/list';
 import { EntityOnSaveHandler, IEntityEditConfig } from '../components/pages/edit';
+import { IEntityDetailConfig, IEntityDetailProps } from '../components/pages/detail';
 import { Thunk } from 'ts-thunk';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
-import { IEntityDetailProps } from '../components/pages/detail';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
 export interface IEntityConfig<T> {
@@ -29,6 +29,7 @@ export interface IEntityConfig<T> {
     }>;
     list?: Thunk<IEntityListConfig>;
     edit?: Thunk<IEntityEditConfig>;
+    detail?: Thunk<IEntityDetailConfig>;
     searchable?: boolean;
     render?: (value: T | null) => string;
     initialSorting?: SortInfo[];
@@ -67,12 +68,12 @@ export declare class Entity<T> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
-    getDetailView: (resourceID: string | number, config?: IEntityDetailProps | undefined) => React.ReactNode;
+    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailProps | undefined) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditView: (resourceID: string | number, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;

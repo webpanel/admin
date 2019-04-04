@@ -7,14 +7,17 @@ import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
 import { Link } from 'webpanel-antd';
 
-export interface IEntityDetailProps {
+export interface IEntityDetailConfig {
+  pollInterval?: number;
+}
+export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity<any>;
   resourceID: string | number;
 }
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {
   public render() {
-    const { entity, resourceID } = this.props;
+    const { entity, resourceID, pollInterval } = this.props;
 
     const formItemLayout = {
       labelCol: {
@@ -38,6 +41,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             .map(x => x.fetchField())
             .filter(x => x) as string[])
         ]}
+        pollInterval={pollInterval}
         render={(resource: Resource) => {
           const layout = entity.getLayout('detail', {
             entity,

@@ -33,6 +33,7 @@ export interface IEntityListConfig {
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
     autopersistConfigKey?: string;
+    pollInterval?: number;
 }
 export interface IEntityListProps extends IEntityListConfig {
     entity: Entity<any>;
