@@ -29,6 +29,6 @@
     "antd": "3.11.2",
     "webpanel-antd": "https://github.com/webpanel/antd.git#develop",
     "webpanel-auth": "^0.0.24",
-    "webpanel-data": "https://github.com/webpanel/data.git#develop"
+    "webpanel-data": "0.0.33"
   }
 }

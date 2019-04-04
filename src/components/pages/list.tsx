@@ -59,6 +59,7 @@ export interface IEntityListConfig {
   initialSorting?: SortInfo[];
   initialFilters?: DataSourceArgumentMap;
   autopersistConfigKey?: string;
+  pollInterval?: number;
 }
 
 export interface IEntityListProps extends IEntityListConfig {
@@ -131,7 +132,8 @@ export class EntityList extends React.Component<IEntityListProps> {
       initialFilters,
       initialSorting,
       title,
-      autopersistConfigKey
+      autopersistConfigKey,
+      pollInterval
     } = this.props;
 
     const _fields = resolveOptionalThunk(fields);
@@ -178,6 +180,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         ]}
         initialSorting={initialSorting || entity.initialSorting}
         initialFilters={initialFilters || entity.initialFilters}
+        pollInterval={pollInterval}
         render={(resource: ResourceCollection) => (
           <Card
             bodyStyle={{ padding: '0' }}

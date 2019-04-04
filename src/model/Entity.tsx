@@ -36,6 +36,10 @@ import {
   EntityOnSaveHandler,
   IEntityEditConfig
 } from '../components/pages/edit';
+import {
+  IEntityDetailConfig,
+  IEntityDetailProps
+} from '../components/pages/detail';
 import { Layout, RouteComponentProps } from 'webpanel-antd';
 import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 import { componentPermission, entityPermission } from './permissions';
@@ -46,7 +50,6 @@ import { EntityFieldColor } from './fields/EntityFieldColor';
 import { EntityFieldNumber } from './fields/EntityFieldNumber';
 import { EntityFieldPasssword } from './fields/EntityFieldPassword';
 import { EntityFieldText } from './fields/EntityFieldText';
-import { IEntityDetailProps } from '../components/pages/detail';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
 import { Redirect } from 'react-router';
@@ -68,6 +71,7 @@ export interface IEntityConfig<T> {
   }>;
   list?: Thunk<IEntityListConfig>;
   edit?: Thunk<IEntityEditConfig>;
+  detail?: Thunk<IEntityDetailConfig>;
 
   searchable?: boolean;
   // render loaded entity to string (in search fields etc.)
@@ -279,13 +283,27 @@ export class Entity<T> {
     );
   };
 
-  private getDetailPageLayout = (route: RouteComponentProps<any>) => {
+  private getDetailPageLayout = (
+    route: RouteComponentProps<any>,
+    config?: IEntityDetailConfig
+  ) => {
     const resourceID = route.match.params.id;
     if (this.config.showDetailPage) {
       if (this.detailLayout) {
-        return this.detailLayout({ entity: this, resourceID });
+        return this.detailLayout({
+          entity: this,
+          resourceID,
+          ...(config || this.config.detail)
+        });
       }
-      return <EntityDetailLayout entity={this} resourceID={resourceID} />;
+      return (
+        <EntityDetailLayout
+          entity={this}
+          resourceID={resourceID}
+          {...resolveOptionalThunk(this.config.detail)}
+          {...config}
+        />
+      );
     }
 
     return <Redirect to={`${resourceID}/edit`} />;
@@ -314,7 +332,7 @@ export class Entity<T> {
     const onSave = this.handleFormOnSave(route);
     const resourceID = route.match.params.id;
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave }, resourceID);
+      return this.editLayout({ entity: this, onSave, ...config }, resourceID);
     }
     return (
       <EntityEditLayout
@@ -363,7 +381,12 @@ export class Entity<T> {
     config?: IEntityDetailProps
   ): React.ReactNode => {
     return (
-      <EntityDetailLayout entity={this} resourceID={resourceID} {...config} />
+      <EntityDetailLayout
+        entity={this}
+        resourceID={resourceID}
+        {...this.config.detail}
+        {...config}
+      />
     );
   };
 
