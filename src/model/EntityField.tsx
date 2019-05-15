@@ -34,6 +34,7 @@ const isIEntityFieldConfigFilter = (
 export interface IEntityFieldConfig<T> {
   // header titles, bradcrumb names
   title?: Thunk<string>;
+  description?: React.ReactNode;
   // table columns title
   shortTitle?: Thunk<string>;
   enabled?: Thunk<boolean>;
@@ -183,6 +184,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       <FormField
         key={key}
         label={this.title}
+        extra={this.config.description}
         name={this.columnName()}
         formContext={formContext}
         valuePropName={this.valuePropName}
