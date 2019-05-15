@@ -17,6 +17,7 @@ export interface IEntityFieldConfigFilter {
 }
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
+    description?: React.ReactNode;
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
     listEditable?: Thunk<boolean>;

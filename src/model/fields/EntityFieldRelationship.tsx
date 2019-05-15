@@ -106,6 +106,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         render={(collection: ResourceCollection) => (
           <FormField
             label={this.title}
+            extra={this.config.description}
             name={this.columnName()}
             formContext={formContext}
             style={{
