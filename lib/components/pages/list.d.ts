@@ -32,6 +32,7 @@ export interface IEntityListConfig {
     editableFields?: Thunk<string[]>;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
+    initialLimit?: number;
     autopersistConfigKey?: string;
     pollInterval?: number;
 }
