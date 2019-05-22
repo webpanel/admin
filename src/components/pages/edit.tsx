@@ -92,7 +92,7 @@ export class EntityEdit extends React.Component<
     resource: Resource
   ): React.ReactNode {
     return (
-      <Card>
+      <Card loading={resource.loading}>
         <>
           {content}
           <ResourceFormPageButtons
