@@ -39,6 +39,10 @@ export interface LayoutBuilderConfig {
 export class LayoutBuilder {
   constructor(public readonly config: LayoutBuilderConfig) {}
 
+  isLoading(): boolean {
+    return this.config.resource.loading;
+  }
+
   card(
     props: Thunk<LayoutBuilderCardProps, LayoutBuilderConfig>
   ): React.ReactNode {
