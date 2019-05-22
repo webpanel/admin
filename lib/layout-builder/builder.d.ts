@@ -20,7 +20,8 @@ export interface LayoutBuilderConfig {
 export declare class LayoutBuilder {
     readonly config: LayoutBuilderConfig;
     constructor(config: LayoutBuilderConfig);
-    showLoading(): boolean;
+    isLoading(): boolean;
+    isInitLoading(): boolean;
     card(props: Thunk<LayoutBuilderCardProps, LayoutBuilderConfig>): React.ReactNode;
     row(props: Thunk<LayoutBuilderRowProps, LayoutBuilderConfig>): React.ReactNode;
     col(props: Thunk<LayoutBuilderColProps, LayoutBuilderConfig>): React.ReactNode;
