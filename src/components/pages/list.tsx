@@ -181,6 +181,10 @@ export class EntityList extends React.Component<IEntityListProps> {
         initialSorting={initialSorting || entity.initialSorting}
         initialFilters={initialFilters || entity.initialFilters}
         pollInterval={pollInterval}
+        initialLimit={
+          (table && table.pagination && table.pagination.defaultPageSize) ||
+          undefined
+        }
         render={(resource: ResourceCollection) => (
           <Card
             bodyStyle={{ padding: '0' }}
@@ -206,11 +210,13 @@ export class EntityList extends React.Component<IEntityListProps> {
               className="entitytable"
               scroll={{ x: true }}
               resourceCollection={resource}
-              pagination={{
-                defaultPageSize: 30,
-                pageSizeOptions: ['10', '20', '30', '50', '100'],
-                showSizeChanger: true
-              }}
+              pagination={
+                (table && table.pagination) || {
+                  defaultPageSize: 30,
+                  pageSizeOptions: ['10', '20', '30', '50', '100'],
+                  showSizeChanger: true
+                }
+              }
               actionButtons={[
                 entity.showDetailPage || entityPermission(entity, 'update')
                   ? (props: ActionButtonProps) => (

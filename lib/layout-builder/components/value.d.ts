@@ -1,3 +1,4 @@
+/// <reference types="lodash" />
 import * as React from 'react';
 import { Entity } from '../../model/Entity';
 export interface LayoutBuilderValueProps {
@@ -8,5 +9,5 @@ export interface LayoutBuilderValueInternalProps {
     data: any;
 }
 export declare class LayoutBuilderValue extends React.Component<LayoutBuilderValueProps & LayoutBuilderValueInternalProps> {
-    render(): {} | null | undefined;
+    render(): import("lodash").NotVoid;
 }
