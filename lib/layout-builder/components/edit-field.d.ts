@@ -1,3 +1,4 @@
+/// <reference types="lodash" />
 import * as React from 'react';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
@@ -11,5 +12,5 @@ export interface LayoutBuilderEditFieldInternalProps {
     formContext: FormContext;
 }
 export declare class LayoutBuilderEditField extends React.Component<LayoutBuilderEditFieldProps & LayoutBuilderEditFieldInternalProps> {
-    render(): {} | null | undefined;
+    render(): import("lodash").NotVoid;
 }
