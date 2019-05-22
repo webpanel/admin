@@ -53,7 +53,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
           return (
             <Card
               title={entity.title}
-              loading={resource.loading}
+              loading={resource.loading && !resource.polling}
               extra={
                 <Link to={`${resourceID}/edit`}>
                   <Button size="small" htmlType="button" icon="edit" />
