@@ -39,7 +39,10 @@ export interface LayoutBuilderConfig {
 export class LayoutBuilder {
   constructor(public readonly config: LayoutBuilderConfig) {}
 
-  showLoading(): boolean {
+  isLoading(): boolean {
+    return this.config.resource.loading;
+  }
+  isInitLoading(): boolean {
     const resource = this.config.resource;
     return resource.loading && !resource.polling;
   }
