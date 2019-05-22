@@ -9,7 +9,9 @@
     "test": "react-scripts-ts test --env=jsdom"
   },
   "dependencies": {
+    "@types/inflection": "^1.5.28",
     "@types/numeral": "^0.0.25",
+    "inflection": "^1.12.0",
     "numeral": "^2.0.6",
     "ts-thunk": "0.0.6"
   },
@@ -29,6 +31,6 @@
     "antd": "3.11.2",
     "webpanel-antd": "https://github.com/webpanel/antd.git#develop",
     "webpanel-auth": "^0.0.24",
-    "webpanel-data": "0.0.33"
+    "webpanel-data": "^0.0.38"
   }
 }

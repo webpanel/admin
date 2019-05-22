@@ -127,7 +127,8 @@
 
 "@types/inflection@^1.5.28":
   version "1.5.28"
-  resolved "http://registry.npmjs.org/@types/inflection/-/inflection-1.5.28.tgz#43d55e0d72cf333a2dffd9c4ec0407455a1b0931"
+  resolved "https://registry.yarnpkg.com/@types/inflection/-/inflection-1.5.28.tgz#43d55e0d72cf333a2dffd9c4ec0407455a1b0931"
+  integrity sha1-Q9VeDXLPMzot/9nE7AQHRVobCTE=
 
 "@types/jest@^23.1.1":
   version "23.3.9"
@@ -143,7 +144,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/lodash@^4.14.109", "@types/lodash@^4.14.110":
+"@types/lodash@^4.14.109":
   version "4.14.118"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.118.tgz#247bab39bfcc6d910d4927c6e06cbc70ec376f27"
 
@@ -892,6 +893,7 @@ immutable@~3.7.4:
 inflection@^1.12.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/inflection/-/inflection-1.12.0.tgz#a200935656d6f5f6bc4dc7502e1aecb703228416"
+  integrity sha1-ogCTVlbW9fa8TcdQLhrstwMihBY=
 
 inflight@^1.0.4:
   version "1.0.6"
@@ -2124,16 +2126,11 @@ webpanel-auth@^0.0.24:
     node-fetch "^2.1.2"
     react "*"
 
-webpanel-data@0.0.33:
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/webpanel-data/-/webpanel-data-0.0.33.tgz#78073c69617934e566305cc5f88bd54f2ecd648a"
-  integrity sha512-eT3+BgmZ2gIfgiWklioxbUTZSIyQeWtHd8vrM2m1jj6KNaCi6uI9n1ob4TKmln2mSi2nsA8kMb8zVEA3wPLrDw==
+webpanel-data@^0.0.38:
+  version "0.0.38"
+  resolved "https://registry.yarnpkg.com/webpanel-data/-/webpanel-data-0.0.38.tgz#ba787ce798b687a9414af6603f7a906e8dab3cd3"
+  integrity sha512-LfdVupDmDfw/+vNKjsMKTv87Ddi+TWJWNqbGZZ+mMdEsYdYjI0HL4ocB3qYA2AusrmiP590i+0pXCgahRtqFsA==
   dependencies:
-    "@types/inflection" "^1.5.28"
-    "@types/lodash" "^4.14.110"
-    "@types/node" "^10.3.2"
-    "@types/node-fetch" "^2.1.1"
-    "@types/react" "*"
     inflection "^1.12.0"
     lodash "^4.17.10"
     node-fetch "^2.1.2"
