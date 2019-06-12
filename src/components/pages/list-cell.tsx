@@ -1,8 +1,9 @@
 import * as React from 'react';
 
+import { Button, Icon, Popconfirm } from 'antd';
+
 import { EntityField } from '../../model/EntityField';
 import { ResourceCollection } from 'webpanel-data';
-import { Button, Popconfirm, Icon } from 'antd';
 
 export interface IListCellProps {
   collection: ResourceCollection;
@@ -53,7 +54,7 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
     });
   };
 
-  render() {
+  render(): React.ReactNode {
     const { values, field, editable } = this.props;
     const { currentValue, value, saving } = this.state;
     return (

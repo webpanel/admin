@@ -35,5 +35,5 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
     handleFormSuccess: (resource: Resource) => Promise<void>;
     private formCardContent;
     private formModalContent;
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

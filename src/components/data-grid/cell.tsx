@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { EntityField } from '../../model/EntityField';
+
 // import { Popconfirm } from 'antd';
 
 export interface IDataGridCellProps {
@@ -26,7 +27,7 @@ export class DataGridCell extends React.Component<IDataGridCellProps> {
   //   this.props.onSave();
   // };
 
-  render() {
+  render(): React.ReactNode {
     const {
       values,
       field,

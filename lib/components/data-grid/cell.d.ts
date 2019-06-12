@@ -10,5 +10,5 @@ export interface IDataGridCellProps {
     onCancel?: () => void;
 }
 export declare class DataGridCell extends React.Component<IDataGridCellProps> {
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

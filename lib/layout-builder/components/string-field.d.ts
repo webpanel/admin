@@ -10,5 +10,5 @@ export interface LayoutBuilderStringFieldInternalProps {
 }
 export declare class LayoutBuilderStringField extends React.Component<LayoutBuilderStringFieldProps & LayoutBuilderStringFieldInternalProps> {
     private layouts;
-    render(): string | JSX.Element | null;
+    render(): React.ReactNode;
 }

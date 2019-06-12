@@ -25,5 +25,5 @@ export declare class ListCell extends React.Component<IListCellProps, IListCellS
     onChange: (value: any, valueElement: React.ReactNode) => Promise<void>;
     cancel: () => void;
     save: () => Promise<void>;
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

@@ -122,7 +122,7 @@ export class EntityList extends React.Component<IEntityListProps> {
     );
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {
       entity,
       table,

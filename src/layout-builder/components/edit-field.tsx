@@ -1,7 +1,8 @@
 import * as React from 'react';
+
+import { Entity } from '../../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
-import { Entity } from '../../model/Entity';
 import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderEditFieldProps {
@@ -16,7 +17,7 @@ export interface LayoutBuilderEditFieldInternalProps {
 export class LayoutBuilderEditField extends React.Component<
   LayoutBuilderEditFieldProps & LayoutBuilderEditFieldInternalProps
 > {
-  render() {
+  render(): React.ReactNode {
     const { formContext, name, entity, formLayout } = this.props;
     const field = entity.getField(name);
 

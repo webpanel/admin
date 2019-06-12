@@ -1,8 +1,8 @@
-import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import '../../../styles/data-grid.css';
 import * as React from 'react';
 import { ResourceCollection } from 'webpanel-data';
-import '../../../styles/data-grid.css';
+import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
+import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 export interface IDataGridProps {
@@ -37,5 +37,5 @@ export declare class DataGrid extends React.Component<IDataGridProps, IDataGridS
     saveChange: (resource: ResourceCollection, record: any, fields: EntityField<any, any>[]) => Promise<void>;
     deleteRow: (resource: ResourceCollection, resourceID: string) => Promise<void>;
     actionButtons: (resource: ResourceCollection, fields: EntityField<any, any>[]) => ((props: ActionButtonProps) => JSX.Element)[] | undefined;
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

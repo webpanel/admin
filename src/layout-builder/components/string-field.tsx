@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Form } from 'antd';
+
 import { Entity } from '../../model/Entity';
+import { Form } from 'antd';
 import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderStringFieldProps {
@@ -39,7 +40,7 @@ export class LayoutBuilderStringField extends React.Component<
     }
   };
 
-  render() {
+  render(): React.ReactNode {
     const { entity, name, data, layout, ...props } = this.props;
     const field = entity.getField(name);
 

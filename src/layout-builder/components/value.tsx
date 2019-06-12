@@ -15,7 +15,7 @@ export interface LayoutBuilderValueInternalProps {
 export class LayoutBuilderValue extends React.Component<
   LayoutBuilderValueProps & LayoutBuilderValueInternalProps
 > {
-  render() {
+  render(): React.ReactNode {
     const { entity, name, data } = this.props;
     const field = entity.getField(name);
 

@@ -45,5 +45,5 @@ export declare class EntityList extends React.Component<IEntityListProps> {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
     }[], resource: ResourceCollection): ResourceTableColumn[];
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

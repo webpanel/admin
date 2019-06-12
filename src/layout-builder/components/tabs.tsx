@@ -1,6 +1,8 @@
-import { Tabs } from 'antd';
 import * as React from 'react';
+
 import { TabPaneProps, TabsProps } from 'antd/lib/tabs';
+
+import { Tabs } from 'antd';
 
 export type LayoutBuilderTabsItem = TabPaneProps & {
   key: string;
@@ -21,7 +23,7 @@ export class LayoutBuilderTabs extends React.Component<
 > {
   state = {};
 
-  render() {
+  render(): React.ReactNode {
     const { tabList, ...props } = this.props;
 
     return (

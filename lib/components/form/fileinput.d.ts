@@ -24,6 +24,6 @@ export declare class FileInput extends React.Component<IFileInputProps, IFileInp
     udpateValue(file: IFile | null): void;
     renderFile(): React.ReactNode;
     clearValue(): void;
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }
 export {};
