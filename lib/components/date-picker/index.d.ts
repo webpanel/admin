@@ -6,5 +6,5 @@ export declare class DatePicker extends React.Component<{
     format?: string;
 }> {
     getFormat(): string;
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

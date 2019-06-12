@@ -6,5 +6,5 @@ export interface ResourceFormButtonsProps {
     handleReset: () => void;
 }
 export declare class ResourceFormPageButtons extends React.Component<ResourceFormButtonsProps> {
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

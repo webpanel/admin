@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { Card } from 'antd';
 import { CardProps } from 'antd/lib/card';
 
@@ -7,7 +8,7 @@ export interface LayoutBuilderCardProps extends CardProps {
 }
 
 export class LayoutBuilderCard extends React.Component<LayoutBuilderCardProps> {
-  render() {
+  render(): React.ReactNode {
     const { children, ...props } = this.props;
     return <Card {...props}>{children}</Card>;
   }

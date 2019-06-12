@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Button, Popconfirm, Form, Menu, Dropdown, Icon } from 'antd';
+import { Button, Dropdown, Form, Icon, Menu, Popconfirm } from 'antd';
+
 import { ClickParam } from 'antd/lib/menu';
 
 export type SaveOption = 'edit' | 'add';
@@ -14,7 +15,7 @@ export interface ResourceFormButtonsProps {
 export class ResourceFormPageButtons extends React.Component<
   ResourceFormButtonsProps
 > {
-  render() {
+  render(): React.ReactNode {
     const { handleReset, handleSave, hasChanges } = this.props;
 
     const menu = (

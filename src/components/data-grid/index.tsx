@@ -1,16 +1,17 @@
-import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
-import { Button, Icon, Popconfirm, Modal } from 'antd';
-import * as React from 'react';
-import { ResourceCollectionLayer, ResourceCollection } from 'webpanel-data';
-import { ResourceTable } from 'webpanel-antd';
-
 import '../../../styles/data-grid.css';
 
-import { Entity } from '../../model/Entity';
-import { EntityField } from '../../model/EntityField';
+import * as React from 'react';
+
+import { Button, Icon, Modal, Popconfirm } from 'antd';
+import { ResourceCollection, ResourceCollectionLayer } from 'webpanel-data';
+
+import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { DataGridCell } from './cell';
+import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
+import { Entity } from '../../model/Entity';
 import { EntityEdit } from '../pages/edit';
+import { EntityField } from '../../model/EntityField';
+import { ResourceTable } from 'webpanel-antd';
 
 export interface IDataGridProps {
   entity: Entity<any>;
@@ -149,7 +150,7 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
       : undefined;
   };
 
-  render() {
+  render(): React.ReactNode {
     const { entity, fields, initialFilters, newItemInitialValues } = this.props;
     const { rowValues, addingNewEntity } = this.state;
 

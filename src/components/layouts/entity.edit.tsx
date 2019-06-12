@@ -1,12 +1,12 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   EntityEdit,
   EntityOnSaveHandler,
   IEntityEditConfig
-} from "../pages/edit";
+} from '../pages/edit';
 
-import { Entity } from "../../model/Entity";
+import { Entity } from '../../model/Entity';
 
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
   resourceID?: string | number;
@@ -17,7 +17,7 @@ export interface IEntityEditLayoutProps extends IEntityEditConfig {
 }
 
 export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
-  public render() {
+  public render(): React.ReactNode {
     // const {
     //   resourceID,
     //   form,

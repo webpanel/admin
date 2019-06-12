@@ -98,7 +98,7 @@ export class FileInput extends React.Component<
     this.setState({ value: null });
   }
 
-  render() {
+  render(): React.ReactNode {
     const { value } = this.state;
     const { uploadURL: fileUploadURL } = this.props;
 

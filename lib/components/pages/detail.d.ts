@@ -8,5 +8,5 @@ export interface IEntityDetailProps extends IEntityDetailConfig {
     resourceID: string | number;
 }
 export declare class EntityDetail extends React.Component<IEntityDetailProps> {
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

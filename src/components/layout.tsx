@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { Thunk, resolveOptionalThunk } from 'ts-thunk';
+
 import { Entity } from '../model/Entity';
+import { HeaderConfig } from 'webpanel-antd/lib/layout/Header';
 import { Layout } from 'webpanel-antd';
 import { LayoutProps } from 'webpanel-antd/lib/layout/Layout';
-import { Thunk, resolveOptionalThunk } from 'ts-thunk';
-import { HeaderConfig } from 'webpanel-antd/lib/layout/Header';
 import { MenuConfig } from 'webpanel-antd/lib/layout/Menu';
 
 export interface ILayoutProps {
@@ -16,7 +17,7 @@ export interface ILayoutProps {
 }
 
 export class AdminLayout extends React.Component<ILayoutProps & LayoutProps> {
-  render() {
+  render(): React.ReactNode {
     const { entities, menuItems, structureItems, menu, ...props } = this.props;
     return (
       <Layout {...props}>

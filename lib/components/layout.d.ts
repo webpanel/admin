@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Entity } from '../model/Entity';
-import { LayoutProps } from 'webpanel-antd/lib/layout/Layout';
 import { Thunk } from 'ts-thunk';
+import { Entity } from '../model/Entity';
 import { HeaderConfig } from 'webpanel-antd/lib/layout/Header';
+import { LayoutProps } from 'webpanel-antd/lib/layout/Layout';
 import { MenuConfig } from 'webpanel-antd/lib/layout/Menu';
 export interface ILayoutProps {
     entities?: Thunk<Entity<any>[]>;
@@ -12,5 +12,5 @@ export interface ILayoutProps {
     menu?: MenuConfig;
 }
 export declare class AdminLayout extends React.Component<ILayoutProps & LayoutProps> {
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }

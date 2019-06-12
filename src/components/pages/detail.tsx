@@ -16,7 +16,7 @@ export interface IEntityDetailProps extends IEntityDetailConfig {
 }
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {
-  public render() {
+  public render(): React.ReactNode {
     const { entity, resourceID, pollInterval } = this.props;
 
     const formItemLayout = {

@@ -12,6 +12,6 @@ interface LayoutBuilderTabsState {
 }
 export declare class LayoutBuilderTabs extends React.Component<LayoutBuilderTabsProps, LayoutBuilderTabsState> {
     state: {};
-    render(): JSX.Element;
+    render(): React.ReactNode;
 }
 export {};

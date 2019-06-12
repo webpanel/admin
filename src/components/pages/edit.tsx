@@ -124,7 +124,7 @@ export class EntityEdit extends React.Component<
     );
   }
 
-  public render() {
+  public render(): React.ReactNode {
     const {
       entity,
       resourceID,
