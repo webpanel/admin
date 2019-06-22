@@ -35,6 +35,7 @@ export interface IEntityListConfig {
     initialLimit?: number;
     autopersistConfigKey?: string;
     pollInterval?: number;
+    displayMode?: 'card' | 'plain';
 }
 export interface IEntityListProps extends IEntityListConfig {
     entity: Entity<any>;
@@ -45,5 +46,8 @@ export declare class EntityList extends React.Component<IEntityListProps> {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
     }[], resource: ResourceCollection): ResourceTableColumn[];
+    private getListFields;
+    private cardContent;
+    private tableContent;
     render(): React.ReactNode;
 }

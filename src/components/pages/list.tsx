@@ -61,6 +61,8 @@ export interface IEntityListConfig {
   initialLimit?: number;
   autopersistConfigKey?: string;
   pollInterval?: number;
+  // default: card
+  displayMode?: 'card' | 'plain';
 }
 
 export interface IEntityListProps extends IEntityListConfig {
@@ -122,21 +124,12 @@ export class EntityList extends React.Component<IEntityListProps> {
     );
   }
 
-  public render(): React.ReactNode {
-    const {
-      entity,
-      table,
-      card,
-      searchable,
-      showAddButton,
-      fields,
-      initialFilters,
-      initialSorting,
-      initialLimit,
-      title,
-      autopersistConfigKey,
-      pollInterval
-    } = this.props;
+  private getListFields(): {
+    field: EntityField<any, any>;
+    hidden: boolean;
+    render?: IEntityListColumnRender;
+  }[] {
+    const { entity, fields } = this.props;
 
     const _fields = resolveOptionalThunk(fields);
     let listFields: {
@@ -162,12 +155,116 @@ export class EntityList extends React.Component<IEntityListProps> {
         listFields.push({ field: f, hidden: false });
       }
     }
+    return listFields;
+  }
 
-    const size = table && table.condensed ? 'small' : 'default';
+  private cardContent(resource: ResourceCollection): React.ReactNode {
+    const {
+      entity,
+      table,
+      card,
+      title,
+      searchable,
+      showAddButton
+    } = this.props;
+
     const _searchable =
       typeof searchable !== 'undefined' ? searchable : entity.searchable;
     const _showAddButton =
       typeof showAddButton !== 'undefined' ? showAddButton : true;
+
+    return (
+      <Card
+        bodyStyle={{ padding: '0' }}
+        title={title || entity.title}
+        extra={[
+          _searchable && (
+            <ResourceSearchInput
+              key="searchInput"
+              resourceCollection={resource}
+              size="small"
+              style={{ width: 300, marginRight: 8 }}
+            />
+          ),
+          _showAddButton && entityPermission(entity, 'create') && (
+            <Link to={entity.getCreateLink()} key="newButton">
+              <Button size="small" htmlType="button" icon="plus" />
+            </Link>
+          ),
+          card && card.extra
+        ].filter(x => x)}
+      >
+        {this.tableContent(resource)}
+      </Card>
+    );
+  }
+
+  private tableContent(resource: ResourceCollection): React.ReactNode {
+    const { entity, table } = this.props;
+
+    const size = table && table.condensed ? 'small' : 'default';
+
+    return (
+      <ResourceTable
+        className="entitytable"
+        scroll={{ x: true }}
+        resourceCollection={resource}
+        pagination={
+          (table && table.pagination) || {
+            defaultPageSize: 30,
+            pageSizeOptions: ['10', '20', '30', '50', '100'],
+            showSizeChanger: true
+          }
+        }
+        actionButtons={[
+          entity.showDetailPage || entityPermission(entity, 'update')
+            ? (props: ActionButtonProps) => (
+                <Link
+                  key="detail-button-action"
+                  to={entity.getDetailLink(props.resourceID)}
+                >
+                  <Button size={size}>
+                    <Icon type={entity.showDetailPage ? 'search' : 'edit'} />
+                  </Button>
+                </Link>
+              )
+            : null,
+          entity.showDetailPage && entityPermission(entity, 'update')
+            ? (props: ActionButtonProps) => (
+                <Link
+                  key="edit-button-action"
+                  to={entity.getEditLink(props.resourceID)}
+                >
+                  <Button size={size}>
+                    <Icon type="edit" />
+                  </Button>
+                </Link>
+              )
+            : null,
+          entityPermission(entity, 'delete') && 'delete'
+        ].filter(x => x)}
+        customDetailURL={(resourceID: string) => {
+          return entity.getDetailLink(resourceID);
+        }}
+        {...table}
+        columns={this.getColumns(
+          this.getListFields().filter(x => !x.hidden),
+          resource
+        )}
+      />
+    );
+  }
+
+  public render(): React.ReactNode {
+    const {
+      entity,
+      initialFilters,
+      initialSorting,
+      initialLimit,
+      autopersistConfigKey,
+      pollInterval,
+      displayMode
+    } = this.props;
 
     return (
       <ResourceCollectionLayer
@@ -176,7 +273,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         autopersistConfigKey={autopersistConfigKey}
         fields={[
           'id',
-          ...(listFields
+          ...(this.getListFields()
             .map(x => x.field.fetchField())
             .filter(x => x) as string[])
         ]}
@@ -184,78 +281,11 @@ export class EntityList extends React.Component<IEntityListProps> {
         initialFilters={initialFilters || entity.initialFilters}
         initialLimit={initialLimit}
         pollInterval={pollInterval}
-        render={(resource: ResourceCollection) => (
-          <Card
-            bodyStyle={{ padding: '0' }}
-            title={title || entity.title}
-            extra={[
-              _searchable && (
-                <ResourceSearchInput
-                  key="searchInput"
-                  resourceCollection={resource}
-                  size="small"
-                  style={{ width: 300, marginRight: 8 }}
-                />
-              ),
-              _showAddButton && entityPermission(entity, 'create') && (
-                <Link to={entity.getCreateLink()} key="newButton">
-                  <Button size="small" htmlType="button" icon="plus" />
-                </Link>
-              ),
-              card && card.extra
-            ].filter(x => x)}
-          >
-            <ResourceTable
-              className="entitytable"
-              scroll={{ x: true }}
-              resourceCollection={resource}
-              pagination={
-                (table && table.pagination) || {
-                  defaultPageSize: 30,
-                  pageSizeOptions: ['10', '20', '30', '50', '100'],
-                  showSizeChanger: true
-                }
-              }
-              actionButtons={[
-                entity.showDetailPage || entityPermission(entity, 'update')
-                  ? (props: ActionButtonProps) => (
-                      <Link
-                        key="detail-button-action"
-                        to={entity.getDetailLink(props.resourceID)}
-                      >
-                        <Button size={size}>
-                          <Icon
-                            type={entity.showDetailPage ? 'search' : 'edit'}
-                          />
-                        </Button>
-                      </Link>
-                    )
-                  : null,
-                entity.showDetailPage && entityPermission(entity, 'update')
-                  ? (props: ActionButtonProps) => (
-                      <Link
-                        key="edit-button-action"
-                        to={entity.getEditLink(props.resourceID)}
-                      >
-                        <Button size={size}>
-                          <Icon type="edit" />
-                        </Button>
-                      </Link>
-                    )
-                  : null,
-                entityPermission(entity, 'delete') && 'delete'
-              ].filter(x => x)}
-              customDetailURL={(resourceID: string) => {
-                return entity.getDetailLink(resourceID);
-              }}
-              {...table}
-              columns={this.getColumns(
-                listFields.filter(x => !x.hidden),
-                resource
-              )}
-            />
-          </Card>
-        )}
+        render={(resource: ResourceCollection) =>
+          displayMode && displayMode === 'plain'
+            ? this.tableContent(resource)
+            : this.cardContent(resource)
+        }
       />
     );
   }
