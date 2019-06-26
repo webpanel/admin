@@ -244,7 +244,7 @@ export class Entity<T> {
             // )
           }
         }
-        content={this.getListView()}
+        content={this.getListView(resolveOptionalThunk(this.config.list))}
       >
         <Layout.StructureItem
           key="/new"
@@ -365,12 +365,12 @@ export class Entity<T> {
 
   // views
   public getListView = (config?: IEntityListConfig): React.ReactNode => {
-    const listConfig = resolveOptionalThunk(this.config.list);
+    // const listConfig = resolveOptionalThunk(this.config.list);
     return (
       <EntityList
         entity={this}
         dataSource={this.dataSource}
-        {...listConfig}
+        // {...listConfig}
         {...config}
       />
     );
