@@ -217,7 +217,7 @@ export class EntityList extends React.Component<IEntityListProps> {
           }
         }
         actionButtons={[
-          entity.showDetailPage || entityPermission(entity, 'update')
+          entity.showDetailPage
             ? (props: ActionButtonProps) => (
                 <Link
                   key="detail-button-action"
@@ -229,7 +229,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 </Link>
               )
             : null,
-          entity.showDetailPage && entityPermission(entity, 'update')
+          entityPermission(entity, 'update')
             ? (props: ActionButtonProps) => (
                 <Link
                   key="edit-button-action"
