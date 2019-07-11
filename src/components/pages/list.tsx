@@ -11,6 +11,10 @@ import {
   ResourceCollectionLayer,
   SortInfo
 } from 'webpanel-data';
+import {
+  EntityAddButton,
+  IEntityAddButtonProps
+} from '../buttons/EntityAddButton';
 import { Link, ResourceSearchInput, ResourceTable } from 'webpanel-antd';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 import { entityPermission, fieldPermission } from '../../model/permissions';
@@ -52,7 +56,9 @@ export interface IEntityListConfig {
   table?: IEntityListTableProps;
   card?: { extra?: React.ReactNode };
   searchable?: boolean;
+  // deprecated, please use addButton property
   showAddButton?: boolean;
+  addButton?: boolean | IEntityAddButtonProps;
   title?: string;
   fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
@@ -161,17 +167,26 @@ export class EntityList extends React.Component<IEntityListProps> {
   private cardContent(resource: ResourceCollection): React.ReactNode {
     const {
       entity,
-      table,
       card,
       title,
       searchable,
-      showAddButton
+      showAddButton,
+      addButton
     } = this.props;
 
     const _searchable =
       typeof searchable !== 'undefined' ? searchable : entity.searchable;
-    const _showAddButton =
-      typeof showAddButton !== 'undefined' ? showAddButton : true;
+
+    let _addButton = addButton;
+    if (typeof showAddButton !== 'undefined') {
+      _addButton = showAddButton;
+    }
+
+    if (typeof _addButton === 'undefined' || _addButton === true) {
+      _addButton = {
+        flow: 'redirect'
+      };
+    }
 
     return (
       <Card
@@ -186,10 +201,12 @@ export class EntityList extends React.Component<IEntityListProps> {
               style={{ width: 300, marginRight: 8 }}
             />
           ),
-          _showAddButton && entityPermission(entity, 'create') && (
-            <Link to={entity.getCreateLink()} key="newButton">
-              <Button size="small" htmlType="button" icon="plus" />
-            </Link>
+          _addButton && entityPermission(entity, 'create') && (
+            <EntityAddButton
+              entity={entity}
+              onCreate={() => resource.reload()}
+              {..._addButton}
+            />
           ),
           card && card.extra
         ].filter(x => x)}
