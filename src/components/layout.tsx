@@ -19,14 +19,18 @@ export interface ILayoutProps {
 export class AdminLayout extends React.Component<ILayoutProps & LayoutProps> {
   render(): React.ReactNode {
     const { entities, menuItems, structureItems, menu, ...props } = this.props;
+
+    const _menuItems =
+      resolveOptionalThunk(menuItems) ||
+      (resolveOptionalThunk(entities) || [])
+        .filter(x => x.enabled)
+        .map(x => x.menuItem());
+
     return (
       <Layout {...props}>
-        <Layout.Menu {...menu}>
-          {resolveOptionalThunk(menuItems) ||
-            (resolveOptionalThunk(entities) || [])
-              .filter(x => x.enabled)
-              .map(x => x.menuItem())}
-        </Layout.Menu>
+        {_menuItems.length > 0 && (
+          <Layout.Menu {...menu}>{_menuItems}</Layout.Menu>
+        )}
         <Layout.Structure>
           {resolveOptionalThunk(structureItems) ||
             (resolveOptionalThunk(entities) || [])
