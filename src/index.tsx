@@ -48,22 +48,25 @@ export class Admin extends React.Component<IAdminProps> {
     if (!auth) {
       return <AdminLayout entities={entities} logout={() => {}} />;
     }
-    const AuthComp: DummyAuth | Auth = auth.type === 'dummy' ? DummyAuth : Auth;
 
-    return (
-      <AuthComp
-        {...auth}
-        content={(props: AuthContentProps) => (
-          <AdminLayout
-            entities={entities}
-            menuItems={menuItems}
-            structureItems={structureItems}
-            {...props}
-            {...restProps}
-          />
-        )}
-        form={(props: AuthFormProps) => <LoginForm authorizationInfo={props} />}
+    const content = (props: AuthContentProps) => (
+      <AdminLayout
+        entities={entities}
+        menuItems={menuItems}
+        structureItems={structureItems}
+        {...props}
+        {...restProps}
       />
+    );
+
+    const form = (props: AuthFormProps) => (
+      <LoginForm authorizationInfo={props} />
+    );
+
+    return auth.type === 'dummy' ? (
+      <DummyAuth {...auth} content={content} form={form} />
+    ) : (
+      <Auth {...auth} content={content} form={form} />
     );
   }
 }
