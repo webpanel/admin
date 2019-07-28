@@ -24,7 +24,7 @@ export class EntityFieldEnum<T> extends EntityField<
   T,
   IEntityFieldEnumConfig<T>
 > {
-  public get render(): ((record: T) => React.ReactNode) {
+  public get render(): (record: T) => React.ReactNode {
     if (this.config.render) {
       return this.config.render;
     }
@@ -65,6 +65,7 @@ export class EntityFieldEnum<T> extends EntityField<
         }}
         key={`enum_field_${this.entity.name}_${this.valuePropName}`}
         showSearch={true}
+        allowClear={true}
         {...props}
       >
         {selectOptions}
@@ -85,13 +86,14 @@ export class EntityFieldEnum<T> extends EntityField<
         value={value}
         onChange={(value: any) => props.setSelectedKeys([value])}
         showSearch={true}
+        allowClear={true}
       >
         {selectOptions}
       </Select>
     );
   };
 
-  public get filterNormalize(): ((values: string[]) => { [key: string]: any }) {
+  public get filterNormalize(): (values: string[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
