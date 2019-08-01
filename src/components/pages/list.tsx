@@ -25,6 +25,7 @@ import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
+import { TFunction } from 'i18next';
 import { Translation } from 'react-i18next';
 
 export interface IEntityListTableProps {
@@ -83,7 +84,8 @@ export class EntityList extends React.Component<IEntityListProps> {
       field: EntityField<any, any>;
       render?: IEntityListColumnRender;
     }[],
-    resource: ResourceCollection
+    resource: ResourceCollection,
+    t: TFunction
   ): ResourceTableColumn[] {
     const { entity, editableFields } = this.props;
 
@@ -100,7 +102,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         return {
           key: field.name,
           dataIndex: field.name,
-          title: field.shortTitle,
+          title: t(field.name, { defaultValue: field.shortTitle }),
           sorter: field.sortable,
 
           filterDropdown: field.filter
@@ -165,7 +167,10 @@ export class EntityList extends React.Component<IEntityListProps> {
     return listFields;
   }
 
-  private cardContent(resource: ResourceCollection): React.ReactNode {
+  private cardContent(
+    resource: ResourceCollection,
+    t: TFunction
+  ): React.ReactNode {
     const {
       entity,
       card,
@@ -192,7 +197,7 @@ export class EntityList extends React.Component<IEntityListProps> {
     return (
       <Card
         bodyStyle={{ padding: '0' }}
-        title={title || entity.title}
+        title={title || t(entity.title, { count: 5 })}
         extra={[
           _searchable && (
             <ResourceSearchInput
@@ -212,12 +217,15 @@ export class EntityList extends React.Component<IEntityListProps> {
           card && card.extra
         ].filter(x => x)}
       >
-        {this.tableContent(resource)}
+        {this.tableContent(resource, t)}
       </Card>
     );
   }
 
-  private tableContent(resource: ResourceCollection): React.ReactNode {
+  private tableContent(
+    resource: ResourceCollection,
+    t: TFunction
+  ): React.ReactNode {
     const { entity, table } = this.props;
 
     const size = table && table.condensed ? 'small' : 'default';
@@ -267,7 +275,8 @@ export class EntityList extends React.Component<IEntityListProps> {
         {...table}
         columns={this.getColumns(
           this.getListFields().filter(x => !x.hidden),
-          resource
+          resource,
+          t
         )}
       />
     );
@@ -288,7 +297,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       <Translation>
         {t => (
           <ResourceCollectionLayer
-            name={t(entity.name, { count: 5 })}
+            name={entity.name}
             dataSource={this.props.dataSource}
             autopersistConfigKey={autopersistConfigKey}
             fields={[
@@ -303,8 +312,8 @@ export class EntityList extends React.Component<IEntityListProps> {
             pollInterval={pollInterval}
             render={(resource: ResourceCollection) =>
               displayMode && displayMode === 'plain'
-                ? this.tableContent(resource)
-                : this.cardContent(resource)
+                ? this.tableContent(resource, t)
+                : this.cardContent(resource, t)
             }
           />
         )}
