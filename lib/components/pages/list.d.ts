@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as i18next from 'i18next';
 import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
 import { IEntityAddButtonProps } from '../buttons/EntityAddButton';
@@ -9,6 +8,7 @@ import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
+import i18next from 'i18next';
 export interface IEntityListTableProps {
     condensed?: boolean;
     actionButtons?: ResourceTablePropsActionButton[];
