@@ -25,6 +25,7 @@ import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
+import { Translation } from 'react-i18next';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
@@ -284,26 +285,30 @@ export class EntityList extends React.Component<IEntityListProps> {
     } = this.props;
 
     return (
-      <ResourceCollectionLayer
-        name={entity.name}
-        dataSource={this.props.dataSource}
-        autopersistConfigKey={autopersistConfigKey}
-        fields={[
-          'id',
-          ...(this.getListFields()
-            .map(x => x.field.fetchField())
-            .filter(x => x) as string[])
-        ]}
-        initialSorting={initialSorting || entity.initialSorting}
-        initialFilters={initialFilters || entity.initialFilters}
-        initialLimit={initialLimit}
-        pollInterval={pollInterval}
-        render={(resource: ResourceCollection) =>
-          displayMode && displayMode === 'plain'
-            ? this.tableContent(resource)
-            : this.cardContent(resource)
-        }
-      />
+      <Translation>
+        {t => (
+          <ResourceCollectionLayer
+            name={t(entity.name, { count: 5 })}
+            dataSource={this.props.dataSource}
+            autopersistConfigKey={autopersistConfigKey}
+            fields={[
+              'id',
+              ...(this.getListFields()
+                .map(x => x.field.fetchField())
+                .filter(x => x) as string[])
+            ]}
+            initialSorting={initialSorting || entity.initialSorting}
+            initialFilters={initialFilters || entity.initialFilters}
+            initialLimit={initialLimit}
+            pollInterval={pollInterval}
+            render={(resource: ResourceCollection) =>
+              displayMode && displayMode === 'plain'
+                ? this.tableContent(resource)
+                : this.cardContent(resource)
+            }
+          />
+        )}
+      </Translation>
     );
   }
 }

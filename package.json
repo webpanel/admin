@@ -18,6 +18,7 @@
   "peerDependencies": {
     "ant-design-pro": "^1.4.4",
     "antd": "3.11.2",
+    "react-i18next": "*",
     "webpanel-antd": "*",
     "webpanel-auth": "*",
     "webpanel-data": "*"
@@ -29,6 +30,8 @@
   "devDependencies": {
     "ant-design-pro": "^1.4.4",
     "antd": "3.11.2",
+    "i18next": "^17.0.8",
+    "react-i18next": "^10.11.4",
     "webpanel-antd": "https://github.com/webpanel/antd.git#develop",
     "webpanel-auth": "^0.0.24",
     "webpanel-data": "^0.0.38"
