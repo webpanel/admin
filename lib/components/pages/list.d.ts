@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as i18next from 'i18next';
 import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
 import { IEntityAddButtonProps } from '../buttons/EntityAddButton';
@@ -8,7 +9,6 @@ import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
-import { TFunction } from 'i18next';
 export interface IEntityListTableProps {
     condensed?: boolean;
     actionButtons?: ResourceTablePropsActionButton[];
@@ -48,7 +48,7 @@ export declare class EntityList extends React.Component<IEntityListProps> {
     getColumns(listFields: {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
-    }[], resource: ResourceCollection, t: TFunction): ResourceTableColumn[];
+    }[], resource: ResourceCollection, t: i18next.TFunction): ResourceTableColumn[];
     private getListFields;
     private cardContent;
     private tableContent;
