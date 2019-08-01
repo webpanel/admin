@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as i18next from 'i18next';
 
 import {
   ActionButtonProps,
@@ -25,7 +26,6 @@ import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
-import { TFunction } from 'i18next';
 import { Translation } from 'react-i18next';
 
 export interface IEntityListTableProps {
@@ -85,7 +85,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       render?: IEntityListColumnRender;
     }[],
     resource: ResourceCollection,
-    t: TFunction
+    t: i18next.TFunction
   ): ResourceTableColumn[] {
     const { entity, editableFields } = this.props;
 
@@ -169,7 +169,7 @@ export class EntityList extends React.Component<IEntityListProps> {
 
   private cardContent(
     resource: ResourceCollection,
-    t: TFunction
+    t: i18next.TFunction
   ): React.ReactNode {
     const {
       entity,
@@ -224,7 +224,7 @@ export class EntityList extends React.Component<IEntityListProps> {
 
   private tableContent(
     resource: ResourceCollection,
-    t: TFunction
+    t: i18next.TFunction
   ): React.ReactNode {
     const { entity, table } = this.props;
 
