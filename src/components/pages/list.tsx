@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as i18next from 'i18next';
 
 import {
   ActionButtonProps,
@@ -27,6 +26,7 @@ import { ListCell } from './list-cell';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { Translation } from 'react-i18next';
+import i18next from 'i18next';
 
 export interface IEntityListTableProps {
   condensed?: boolean;
