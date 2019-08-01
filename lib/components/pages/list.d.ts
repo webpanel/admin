@@ -8,6 +8,7 @@ import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
+import { TFunction } from 'i18next';
 export interface IEntityListTableProps {
     condensed?: boolean;
     actionButtons?: ResourceTablePropsActionButton[];
@@ -47,7 +48,7 @@ export declare class EntityList extends React.Component<IEntityListProps> {
     getColumns(listFields: {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
-    }[], resource: ResourceCollection): ResourceTableColumn[];
+    }[], resource: ResourceCollection, t: TFunction): ResourceTableColumn[];
     private getListFields;
     private cardContent;
     private tableContent;
