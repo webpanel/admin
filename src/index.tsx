@@ -66,6 +66,7 @@ export class Admin extends React.Component<IAdminProps> {
                       onClick={value => {
                         options.i18n.changeLanguage(value.key);
                       }}
+                      selectedKeys={[options.i18n.language]}
                     >
                       <Menu.Item key="cs">🇨🇿 Česky</Menu.Item>
                       <Menu.Item key="en">🇬🇧 English</Menu.Item>
