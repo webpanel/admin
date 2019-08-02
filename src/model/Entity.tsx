@@ -221,74 +221,86 @@ export class Entity<T> {
   public menuItem = (): React.ReactNode => {
     return (
       componentPermission(this.structureName) && (
-        <Translation>
-          {t => (
-            <Layout.MenuItem
-              key={this.structureName}
-              title={t(this.name, { defaultValue: this.title })}
-              icon={resolveOptionalThunk(this.config.icon) || 'folder'}
-            />
-          )}
-        </Translation>
+        <Layout.MenuItem
+          key={this.structureName}
+          title={
+            <Translation>
+              {t => t(this.name, { defaultValue: this.title })}
+            </Translation>
+          }
+          icon={resolveOptionalThunk(this.config.icon) || 'folder'}
+        />
       )
     );
   };
 
   public structureItem = (): React.ReactNode => {
     return (
-      <Translation>
-        {t => (
-          <Layout.StructureItem
-            key={this.getListLink()}
-            name={t(this.name, { defaultValue: this.title })}
-            header={
-              {
-                // title: undefined //this.title,
-                // action: (
-                //   <Link to="new">
-                //     <Button htmlType="button">+</Button>
-                //   </Link>
-                // )
-              }
+      <Layout.StructureItem
+        key={this.getListLink()}
+        name={
+          <Translation>
+            {t => t(this.name, { defaultValue: this.title })}
+          </Translation>
+        }
+        header={
+          {
+            // title: undefined //this.title,
+            // action: (
+            //   <Link to="new">
+            //     <Button htmlType="button">+</Button>
+            //   </Link>
+            // )
+          }
+        }
+        content={this.getListView(resolveOptionalThunk(this.config.list))}
+      >
+        <Layout.StructureItem
+          key="/new"
+          name={
+            <Translation>
+              {t => t('common.new', { defaultValue: 'New' })}
+            </Translation>
+          }
+          header={
+            {
+              // title: 'New'
             }
-            content={this.getListView(resolveOptionalThunk(this.config.list))}
-          >
-            <Layout.StructureItem
-              key="/new"
-              name={t('common.new', { defaultValue: 'New' })}
-              header={
-                {
-                  // title: 'New'
-                }
-              }
-              content={this.getCreatePageLayout}
-            />
-            <Layout.StructureItem
-              key="/:id"
-              name={t('common.detail', { defaultValue: 'Detail' })}
-              header={(route: RouteComponentProps<any>) => ({
-                // title: `Detail`,
-                // action: (
-                //   <Link to={`${route.match.params.id}/edit`}>
-                //     <Button htmlType="button">Edit</Button>
-                //   </Link>
-                // )
-              })}
-              content={this.getDetailPageLayout}
-            />
-            <Layout.StructureItem
-              key="/:id/edit"
-              name={t('common.edit', { defaultValue: 'Edit' })}
-              header={
-                {
-                  // title: 'Edit'
-                }
-              }
-              content={this.getEditPageLayout}
-            />
-          </Layout.StructureItem>
-        )}
-      </Translation>
+          }
+          content={this.getCreatePageLayout}
+        />
+        <Layout.StructureItem
+          key="/:id"
+          name={
+            <Translation>
+              {t => t('common.detail', { defaultValue: 'Detail' })}
+            </Translation>
+          }
+          header={(route: RouteComponentProps<any>) => ({
+            // title: `Detail`,
+            // action: (
+            //   <Link to={`${route.match.params.id}/edit`}>
+            //     <Button htmlType="button">Edit</Button>
+            //   </Link>
+            // )
+          })}
+          content={this.getDetailPageLayout}
+        />
+        <Layout.StructureItem
+          key="/:id/edit"
+          name={
+            <Translation>
+              {t => t('common.edit', { defaultValue: 'Edit' })}
+            </Translation>
+          }
+          header={
+            {
+              // title: 'Edit'
+            }
+          }
+          content={this.getEditPageLayout}
+        />
+      </Layout.StructureItem>
     );
   };
 
