@@ -226,7 +226,7 @@ export class Entity<T> {
           title={
             <Translation>
               {t =>
-                t(`${this.name}.title`, {
+                t(`${this.name}._title`, {
                   count: 100,
                   defaultValue: this.title
                 })
@@ -246,7 +246,7 @@ export class Entity<T> {
         name={
           <Translation>
             {t =>
-              t(`${this.name}.title`, { count: 100, defaultValue: this.title })
+              t(`${this.name}._title`, { count: 100, defaultValue: this.title })
             }
           </Translation>
         }
