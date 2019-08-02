@@ -180,7 +180,6 @@ export class DataGrid extends React.Component<IDataGridProps, IDataGridState> {
                 +
               </Button>
               <Modal
-                align={{}}
                 title="Add new"
                 visible={addingNewEntity}
                 afterClose={() => resource.get()}
