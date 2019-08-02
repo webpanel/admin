@@ -109,7 +109,7 @@ export class EntityFieldRelationship<T> extends EntityField<
             {t => (
               <FormField
                 label={t(`${this.entity.name}.${this.name}`, {
-                  default: this.title
+                  defaultValue: this.title
                 })}
                 extra={this.config.description}
                 name={this.columnName()}
