@@ -197,7 +197,9 @@ export class EntityList extends React.Component<IEntityListProps> {
     return (
       <Card
         bodyStyle={{ padding: '0' }}
-        title={title || t(entity.title, { count: 5 })}
+        title={
+          title || t(entity.name, { count: 5, defaultValue: entity.title })
+        }
         extra={[
           _searchable && (
             <ResourceSearchInput

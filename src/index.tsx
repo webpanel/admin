@@ -7,6 +7,7 @@ import {
   AuthFormProps,
   DummyAuth
 } from 'webpanel-auth';
+import { Dropdown, Icon, Menu } from 'antd';
 import {
   IAutopermissionConfig,
   configurePermissions
@@ -16,6 +17,7 @@ import { AuthProps } from 'webpanel-auth/lib/Auth';
 import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
 import { Entity } from './model/Entity';
 import { LoginForm } from 'webpanel-antd';
+import { Translation } from 'react-i18next';
 
 export { Entity } from './model/Entity';
 export { DataGrid } from './components/data-grid';
@@ -54,6 +56,30 @@ export class Admin extends React.Component<IAdminProps> {
         entities={entities}
         menuItems={menuItems}
         structureItems={structureItems}
+        header={{
+          items: [
+            <Translation>
+              {(t, options) => (
+                <Dropdown
+                  overlay={
+                    <Menu
+                      onClick={value => {
+                        options.i18n.changeLanguage(value.key);
+                      }}
+                    >
+                      <Menu.Item key="cs">🇨🇿 Česky</Menu.Item>
+                      <Menu.Item key="en">🇬🇧 English</Menu.Item>
+                    </Menu>
+                  }
+                >
+                  <span className="antd-header-content-item">
+                    <Icon type="global" />
+                  </span>
+                </Dropdown>
+              )}
+            </Translation>
+          ]
+        }}
         {...props}
         {...restProps}
       />

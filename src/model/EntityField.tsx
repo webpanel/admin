@@ -10,6 +10,7 @@ import { Entity } from './Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormField } from 'webpanel-antd';
 import { InputProps } from 'antd/lib/input';
+import { Translation } from 'react-i18next';
 
 // import { ResourceCollection } from 'webpanel-data';
 
@@ -181,18 +182,24 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
         : null;
 
     return (
-      <FormField
-        key={key}
-        label={this.title}
-        extra={this.config.description}
-        name={this.columnName()}
-        formContext={formContext}
-        valuePropName={this.valuePropName}
-        rules={resolveOptionalThunk(this.config.rules)}
-        {...formItemLayout}
-      >
-        {this.inputElement()}
-      </FormField>
+      <Translation>
+        {t => (
+          <FormField
+            key={key}
+            label={t(`${this.entity.name}.${this.name}`, {
+              default: this.title
+            })}
+            extra={this.config.description}
+            name={this.columnName()}
+            formContext={formContext}
+            valuePropName={this.valuePropName}
+            rules={resolveOptionalThunk(this.config.rules)}
+            {...formItemLayout}
+          >
+            {this.inputElement()}
+          </FormField>
+        )}
+      </Translation>
     );
   }
 

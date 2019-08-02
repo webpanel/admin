@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Button } from 'antd';
 import { Entity } from '../../model/Entity';
 import { Link } from 'webpanel-antd';
+import { Translation } from 'react-i18next';
 
 export interface IEntityAddButtonProps {
   flow: 'modal' | 'redirect';
@@ -35,34 +36,40 @@ export class EntityAddButton extends React.Component<
     }
 
     return (
-      <>
-        {entity.getCreateView(
-          {
-            initialValues,
-            wrapperType: 'modal',
-            modal: {
-              title: `Create ${entity.title}`,
-              visible: this.state.showModal,
-              destroyOnClose: true
-            }
-          },
-          {
-            onCancel: this.hideModal,
-            onSave: () => {
-              this.hideModal();
-              const fn = this.props.onCreate;
-              if (fn) {
-                fn();
+      <Translation>
+        {t => (
+          <>
+            {entity.getCreateView(
+              {
+                initialValues,
+                wrapperType: 'modal',
+                modal: {
+                  title: t(`${entity.name}.title.create`, {
+                    defaultValue: `Create ${entity.title}`
+                  }),
+                  visible: this.state.showModal,
+                  destroyOnClose: true
+                }
+              },
+              {
+                onCancel: this.hideModal,
+                onSave: () => {
+                  this.hideModal();
+                  const fn = this.props.onCreate;
+                  if (fn) {
+                    fn();
+                  }
+                }
               }
-            }
-          }
+            )}
+            <Button
+              size="small"
+              icon="plus"
+              onClick={() => this.setState({ showModal: true })}
+            />
+          </>
         )}
-        <Button
-          size="small"
-          icon="plus"
-          onClick={() => this.setState({ showModal: true })}
-        />
-      </>
+      </Translation>
     );
   }
 

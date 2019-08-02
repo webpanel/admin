@@ -13,6 +13,7 @@ import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 import { Entity } from '../Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
+import { Translation } from 'react-i18next';
 import { entityPermission } from '../permissions';
 
 export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
@@ -104,66 +105,72 @@ export class EntityFieldRelationship<T> extends EntityField<
         initialFilters={_targetEntity.initialFilters}
         dataSource={_targetEntity.dataSource}
         render={(collection: ResourceCollection) => (
-          <FormField
-            label={this.title}
-            extra={this.config.description}
-            name={this.columnName()}
-            formContext={formContext}
-            style={{
-              width: '100%'
-            }}
-            rules={resolveOptionalThunk(this.config.rules)}
-            {...formItemLayout}
-          >
-            <ResourceSelect
-              key={`relationship_field_${this.entity.name}_${
-                this.valuePropName
-              }`}
-              valueKey="id"
-              labelKey={(value: any): string => {
-                return _targetEntity.render(value);
-              }}
-              mode={this.mode}
-              resourceCollection={collection}
-              showSearch={true}
-              style={{
-                width: '100%',
-                minWidth: '200px',
-                marginRight: '-38px',
-                paddingRight: '38px'
-              }}
-            />
-            {entityPermission(_targetEntity, 'create') && (
-              <Button
-                key={`relationship_field_${this.entity.name}_${
-                  this.valuePropName
-                }_add`}
-                size="small"
-                icon="plus"
+          <Translation>
+            {t => (
+              <FormField
+                label={t(`${this.entity.name}.${this.name}`, {
+                  default: this.title
+                })}
+                extra={this.config.description}
+                name={this.columnName()}
+                formContext={formContext}
                 style={{
-                  margin: addButtonMargin,
-                  height: '32px'
+                  width: '100%'
                 }}
-                onClick={() => {
-                  const infoWindow = Modal.info({
-                    title: `Add ${_targetEntity.title}`,
-                    maskClosable: true,
-                    okText: 'Close',
-                    style: { minWidth: '60%' },
-                    content: _targetEntity.getCreateView(undefined, {
-                      onSave: async (id: string | number) => {
-                        await collection.get();
-                        let updateValues = {};
-                        updateValues[this.columnName()] = id;
-                        formContext.form.setFieldsValue(updateValues);
-                        infoWindow.destroy();
-                      }
-                    })
-                  });
-                }}
-              />
+                rules={resolveOptionalThunk(this.config.rules)}
+                {...formItemLayout}
+              >
+                <ResourceSelect
+                  key={`relationship_field_${this.entity.name}_${
+                    this.valuePropName
+                  }`}
+                  valueKey="id"
+                  labelKey={(value: any): string => {
+                    return _targetEntity.render(value);
+                  }}
+                  mode={this.mode}
+                  resourceCollection={collection}
+                  showSearch={true}
+                  style={{
+                    width: '100%',
+                    minWidth: '200px',
+                    marginRight: '-38px',
+                    paddingRight: '38px'
+                  }}
+                />
+                {entityPermission(_targetEntity, 'create') && (
+                  <Button
+                    key={`relationship_field_${this.entity.name}_${
+                      this.valuePropName
+                    }_add`}
+                    size="small"
+                    icon="plus"
+                    style={{
+                      margin: addButtonMargin,
+                      height: '32px'
+                    }}
+                    onClick={() => {
+                      const infoWindow = Modal.info({
+                        title: `Add ${_targetEntity.title}`,
+                        maskClosable: true,
+                        okText: 'Close',
+                        style: { minWidth: '60%' },
+                        content: _targetEntity.getCreateView(undefined, {
+                          onSave: async (id: string | number) => {
+                            await collection.get();
+                            let updateValues = {};
+                            updateValues[this.columnName()] = id;
+                            formContext.form.setFieldsValue(updateValues);
+                            infoWindow.destroy();
+                          }
+                        })
+                      });
+                    }}
+                  />
+                )}
+              </FormField>
             )}
-          </FormField>
+          </Translation>
         )}
       />
     );

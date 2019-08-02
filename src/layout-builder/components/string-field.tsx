@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Entity } from '../../model/Entity';
 import { Form } from 'antd';
+import { Translation } from 'react-i18next';
 import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderStringFieldProps {
@@ -53,16 +54,20 @@ export class LayoutBuilderStringField extends React.Component<
     }
 
     return (
-      <Form.Item
-        {...props}
-        //   key={key}
-        label={field.title}
-        colon={field.title ? true : false}
-        //   className={`${item.value === null ? '' : 'rounded'} job-info__item`}
-        {...this.layouts[layout || 'horizontal']}
-      >
-        {field.render(data)}
-      </Form.Item>
+      <Translation>
+        {t => (
+          <Form.Item
+            {...props}
+            //   key={key}
+            label={t(field.name, { defaultValue: field.title })}
+            colon={field.title ? true : false}
+            //   className={`${item.value === null ? '' : 'rounded'} job-info__item`}
+            {...this.layouts[layout || 'horizontal']}
+          >
+            {field.render(data)}
+          </Form.Item>
+        )}
+      </Translation>
     );
   }
 }
