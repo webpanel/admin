@@ -55,7 +55,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               if (layout) return layout;
               return (
                 <Card
-                  title={t(entity.title)}
+                  title={t(entity.name, { default: entity.title })}
                   loading={resource.loading && !resource.polling}
                   extra={
                     <Link to={`${resourceID}/edit`}>
@@ -67,7 +67,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                     {entity.detailFields.map((field, i) => (
                       <Form.Item
                         key={`${field.name}_${i}`}
-                        label={t(field.title)}
+                        label={t(field.name, { default: field.title })}
                         {...formItemLayout}
                       >
                         {resource.data && field.render(resource.data)}
