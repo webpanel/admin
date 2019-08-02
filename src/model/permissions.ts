@@ -1,7 +1,8 @@
 import * as inflection from 'inflection';
+
 import { Entity } from './Entity';
-import { hasAccess as _hasAccess } from 'webpanel-auth';
 import { EntityField } from './EntityField';
+import { hasAccess as _hasAccess } from 'webpanel-auth';
 
 // const hasAccess = (res: string): boolean => {
 //   const result = _hasAccess(res);

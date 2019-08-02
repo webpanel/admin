@@ -187,7 +187,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
           <FormField
             key={key}
             label={t(`${this.entity.name}.${this.name}`, {
-              default: this.title
+              defaultValue: this.title
             })}
             extra={this.config.description}
             name={this.columnName()}

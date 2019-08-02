@@ -70,7 +70,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                       <Form.Item
                         key={`${field.name}_${i}`}
                         label={t(`${entity.name}.${field.name}`, {
-                          default: field.title
+                          defaultValue: field.title
                         })}
                         {...formItemLayout}
                       >
