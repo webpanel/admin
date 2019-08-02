@@ -55,7 +55,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               if (layout) return layout;
               return (
                 <Card
-                  title={t(entity.name, { default: entity.title })}
+                  title={t(`${entity.name}.title`, { default: entity.title })}
                   loading={resource.loading && !resource.polling}
                   extra={
                     <Link to={`${resourceID}/edit`}>

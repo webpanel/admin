@@ -225,7 +225,12 @@ export class Entity<T> {
           key={this.structureName}
           title={
             <Translation>
-              {t => t(this.name, { count: 5, defaultValue: this.title })}
+              {t =>
+                t(`${this.name}.title`, {
+                  count: 100,
+                  defaultValue: this.title
+                })
+              }
             </Translation>
           }
           icon={resolveOptionalThunk(this.config.icon) || 'folder'}
@@ -240,7 +245,9 @@ export class Entity<T> {
         key={this.getListLink()}
         name={
           <Translation>
-            {t => t(this.name, { count: 5, defaultValue: this.title })}
+            {t =>
+              t(`${this.name}.title`, { count: 100, defaultValue: this.title })
+            }
           </Translation>
         }
         header={
