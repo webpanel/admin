@@ -102,7 +102,9 @@ export class EntityList extends React.Component<IEntityListProps> {
         return {
           key: field.name,
           dataIndex: field.name,
-          title: t(field.name, { defaultValue: field.shortTitle }),
+          title: t(`${field.entity.name}.${field.name}`, {
+            defaultValue: field.shortTitle
+          }),
           sorter: field.sortable,
 
           filterDropdown: field.filter
