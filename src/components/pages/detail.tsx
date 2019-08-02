@@ -67,7 +67,9 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                     {entity.detailFields.map((field, i) => (
                       <Form.Item
                         key={`${field.name}_${i}`}
-                        label={t(field.name, { default: field.title })}
+                        label={t(`${entity.name}.${field.name}`, {
+                          default: field.title
+                        })}
                         {...formItemLayout}
                       >
                         {resource.data && field.render(resource.data)}

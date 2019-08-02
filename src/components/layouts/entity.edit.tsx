@@ -18,26 +18,6 @@ export interface IEntityEditLayoutProps extends IEntityEditConfig {
 
 export class EntityEditLayout extends React.Component<IEntityEditLayoutProps> {
   public render(): React.ReactNode {
-    // const {
-    //   resourceID,
-    //   form,
-    //   entity,
-    //   initialValues,
-    //   onCreate,
-    //   onSave,
-    //   wrapperType
-    // } = this.props;
-    return (
-      <EntityEdit
-        // entity={entity}
-        // resourceID={resourceID}
-        // form={form}
-        // onCreate={onCreate}
-        // onSave={onSave}
-        // wrapperType={wrapperType}
-        // initialValues={initialValues}
-        {...this.props}
-      />
-    );
+    return <EntityEdit {...this.props} />;
   }
 }
