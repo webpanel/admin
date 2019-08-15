@@ -94,7 +94,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName() + '_prefix'] = values[0];
+        res[this.columnName() + '_like'] = values[0] + '*';
       } else if (values.length > 1) {
         res[this.columnName() + '_in'] = values;
       }
@@ -105,8 +105,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
     return (values: { [key: string]: any }) => {
       let res: any[] = [];
-      if (values[this.columnName() + '_prefix']) {
-        res = [values[this.columnName() + '_prefix']];
+      if (values[this.columnName() + '_like']) {
+        const val = values[this.columnName() + '_like'];
+        res = [val.substring(0, val.length - 1)];
       } else if (values[this.columnName() + '_in']) {
         res = values[this.columnName() + '_in'];
       }
