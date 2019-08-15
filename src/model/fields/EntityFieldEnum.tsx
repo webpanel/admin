@@ -61,7 +61,8 @@ export class EntityFieldEnum<T> extends EntityField<
     return (
       <Select
         style={{
-          width: '100%'
+          width: '100%',
+          minWidth: '200px'
         }}
         key={`enum_field_${this.entity.name}_${this.valuePropName}`}
         showSearch={true}
@@ -83,6 +84,9 @@ export class EntityFieldEnum<T> extends EntityField<
     const value = props.selectedKeys;
     return (
       <Select
+        style={{
+          minWidth: '200px'
+        }}
         value={value}
         onChange={(value: any) => props.setSelectedKeys([value])}
         showSearch={true}
