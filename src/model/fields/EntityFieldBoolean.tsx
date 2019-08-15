@@ -1,8 +1,12 @@
 import * as React from 'react';
 
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import { Checkbox, Select } from 'antd';
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldFilterProps
+} from '../EntityField';
 
-import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {}
@@ -19,7 +23,7 @@ export class EntityFieldBoolean<T> extends EntityField<
     return value ? '✓' : '✗';
   }
 
-  public get render(): ((record: T) => React.ReactNode) {
+  public get render(): (record: T) => React.ReactNode {
     return values => this.renderValue(values[this.name]);
   }
   public inputElement(props?: {
@@ -41,9 +45,26 @@ export class EntityFieldBoolean<T> extends EntityField<
     );
   }
 
-  public get filterNormalize(): ((
-    values: boolean[]
-  ) => { [key: string]: any }) {
+  public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
+    const value =
+      props.selectedKeys.length == 1 ? (props.selectedKeys[0] ? 1 : 0) : null;
+    return (
+      <Select
+        style={{
+          minWidth: '200px'
+        }}
+        value={value}
+        onChange={(value: any) => props.setSelectedKeys([value])}
+        showSearch={false}
+        allowClear={false}
+      >
+        <Select.Option value={0}>✗</Select.Option>
+        <Select.Option value={1}>✓</Select.Option>
+      </Select>
+    );
+  };
+
+  public get filterNormalize(): (values: boolean[]) => { [key: string]: any } {
     return (values: boolean[]) => {
       let res = {};
       if (values.length >= 1) {
