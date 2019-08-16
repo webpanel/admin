@@ -20,6 +20,9 @@ export class EntityFieldBoolean<T> extends EntityField<
   }
 
   private renderValue(value: boolean): React.ReactNode {
+    if (value === null || typeof value === 'undefined') {
+      return '–';
+    }
     return value ? '✓' : '✗';
   }
 
