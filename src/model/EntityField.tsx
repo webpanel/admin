@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as inflection from 'inflection';
 
-import { Button, Input } from 'antd';
+import { Button, Input, Tooltip } from 'antd';
 import { FieldAction, fieldPermission } from './permissions';
 import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
 import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
@@ -141,7 +141,12 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return this.config.render;
     }
     return (values: any) => {
-      return values[this.name] || null;
+      const value = values[this.name] || '';
+      if (!value || !value.substring || value.length < 50) {
+        return value;
+      }
+      const shortValue = value.substring(0, 50) + '...';
+      return <Tooltip title={value}>{shortValue}</Tooltip>;
     };
   }
 
