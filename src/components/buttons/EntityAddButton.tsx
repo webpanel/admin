@@ -39,29 +39,31 @@ export class EntityAddButton extends React.Component<
       <Translation>
         {t => (
           <>
-            {entity.getCreateView(
-              {
-                initialValues,
-                wrapperType: 'modal',
-                modal: {
-                  title: t(`${entity.name}.title.create`, {
-                    defaultValue: `Create ${entity.title}`
-                  }),
-                  visible: this.state.showModal,
-                  destroyOnClose: true
-                }
-              },
-              {
-                onCancel: this.hideModal,
-                onSave: () => {
-                  this.hideModal();
-                  const fn = this.props.onCreate;
-                  if (fn) {
-                    fn();
+            <div style={{ position: 'absolute' }}>
+              {entity.getCreateView(
+                {
+                  initialValues,
+                  wrapperType: 'modal',
+                  modal: {
+                    title: t(`${entity.name}.title.create`, {
+                      defaultValue: `Create ${entity.title}`
+                    }),
+                    visible: this.state.showModal,
+                    destroyOnClose: true
+                  }
+                },
+                {
+                  onCancel: this.hideModal,
+                  onSave: () => {
+                    this.hideModal();
+                    const fn = this.props.onCreate;
+                    if (fn) {
+                      fn();
+                    }
                   }
                 }
-              }
-            )}
+              )}
+            </div>
             <Button
               size="small"
               icon="plus"
