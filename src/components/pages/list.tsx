@@ -209,7 +209,12 @@ export class EntityList extends React.Component<IEntityListProps> {
               key="searchInput"
               resourceCollection={resource}
               size="small"
-              style={{ width: 300, marginRight: 8 }}
+              style={{
+                width: '100%',
+                minWidth: 100,
+                maxWidth: 150,
+                marginRight: 8
+              }}
             />
           ),
           _addButton && entityPermission(entity, 'create') && (
