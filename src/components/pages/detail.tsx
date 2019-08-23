@@ -6,6 +6,7 @@ import { Resource, ResourceLayer } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
 import { Link } from 'webpanel-antd';
+import { TFunction } from 'i18next';
 import { Translation } from 'react-i18next';
 
 export interface IEntityDetailConfig {
@@ -14,11 +15,12 @@ export interface IEntityDetailConfig {
 export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity<any>;
   resourceID: string | number;
+  wrapperType?: 'card' | 'plain';
 }
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {
   public render(): React.ReactNode {
-    const { entity, resourceID, pollInterval } = this.props;
+    const { entity, resourceID, pollInterval, wrapperType } = this.props;
 
     const formItemLayout = {
       labelCol: {
@@ -30,6 +32,22 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         sm: { span: 16 }
       }
     };
+
+    const contentFn = (resource: Resource, t: TFunction) => (
+      <Form>
+        {entity.detailFields.map((field, i) => (
+          <Form.Item
+            key={`${field.name}_${i}`}
+            label={t(`${entity.name}.${field.name}`, {
+              defaultValue: field.title
+            })}
+            {...formItemLayout}
+          >
+            {resource.data && field.render(resource.data)}
+          </Form.Item>
+        ))}
+      </Form>
+    );
 
     return (
       <Translation>
@@ -53,7 +71,9 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                 data: resource.data || {}
               });
               if (layout) return layout;
-              return (
+              return wrapperType === 'plain' ? (
+                contentFn(resource, t)
+              ) : (
                 <Card
                   title={t(`${entity.name}._title`, {
                     defaultValue: entity.title
@@ -65,19 +85,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                     </Link>
                   }
                 >
-                  <Form>
-                    {entity.detailFields.map((field, i) => (
-                      <Form.Item
-                        key={`${field.name}_${i}`}
-                        label={t(`${entity.name}.${field.name}`, {
-                          defaultValue: field.title
-                        })}
-                        {...formItemLayout}
-                      >
-                        {resource.data && field.render(resource.data)}
-                      </Form.Item>
-                    ))}
-                  </Form>
+                  {contentFn(resource, t)}
                 </Card>
               );
             }}
