@@ -406,7 +406,7 @@ export class Entity<T> {
 
   public getDetailView = (
     resourceID: string | number,
-    config?: IEntityDetailProps
+    config?: IEntityDetailConfig
   ): React.ReactNode => {
     return (
       <EntityDetailLayout
