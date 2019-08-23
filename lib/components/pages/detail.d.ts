@@ -1,3 +1,4 @@
+import '../../../styles/form-detail.css';
 import * as React from 'react';
 import { Entity } from '../../model/Entity';
 export interface IEntityDetailConfig {
