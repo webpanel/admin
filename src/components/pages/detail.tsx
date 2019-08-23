@@ -11,11 +11,11 @@ import { Translation } from 'react-i18next';
 
 export interface IEntityDetailConfig {
   pollInterval?: number;
+  wrapperType?: 'card' | 'plain';
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity<any>;
   resourceID: string | number;
-  wrapperType?: 'card' | 'plain';
 }
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {
