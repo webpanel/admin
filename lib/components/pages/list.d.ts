@@ -38,7 +38,7 @@ export interface IEntityListConfig {
     initialLimit?: number;
     autopersistConfigKey?: string;
     pollInterval?: number;
-    displayMode?: 'card' | 'plain';
+    wrapperType?: 'card' | 'plain';
 }
 export interface IEntityListProps extends IEntityListConfig {
     entity: Entity<any>;

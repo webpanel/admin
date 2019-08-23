@@ -70,7 +70,7 @@ export interface IEntityListConfig {
   autopersistConfigKey?: string;
   pollInterval?: number;
   // default: card
-  displayMode?: 'card' | 'plain';
+  wrapperType?: 'card' | 'plain';
 }
 
 export interface IEntityListProps extends IEntityListConfig {
@@ -300,7 +300,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       initialLimit,
       autopersistConfigKey,
       pollInterval,
-      displayMode
+      wrapperType
     } = this.props;
 
     return (
@@ -321,7 +321,7 @@ export class EntityList extends React.Component<IEntityListProps> {
             initialLimit={initialLimit}
             pollInterval={pollInterval}
             render={(resource: ResourceCollection) =>
-              displayMode && displayMode === 'plain'
+              wrapperType === 'plain'
                 ? this.tableContent(resource, t)
                 : this.cardContent(resource, t)
             }
