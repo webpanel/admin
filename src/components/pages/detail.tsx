@@ -1,3 +1,5 @@
+import '../../../styles/form-detail.css';
+
 import * as React from 'react';
 
 import { Button, Card, Form } from 'antd';
@@ -34,7 +36,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
     };
 
     const contentFn = (resource: Resource, t: TFunction) => (
-      <Form>
+      <Form className="webpanel-form-detail">
         {entity.detailFields.map((field, i) => (
           <Form.Item
             key={`${field.name}_${i}`}
