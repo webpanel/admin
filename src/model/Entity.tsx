@@ -260,7 +260,7 @@ export class Entity<T> {
             // )
           }
         }
-        content={this.getListView(resolveOptionalThunk(this.config.list))}
+        content={() => this.getListView(resolveOptionalThunk(this.config.list))}
       >
         <Layout.StructureItem
           key="/new"
