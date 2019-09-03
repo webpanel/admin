@@ -219,6 +219,7 @@ export class EntityList extends React.Component<IEntityListProps> {
           ),
           _addButton && entityPermission(entity, 'create') && (
             <EntityAddButton
+              key="addButton"
               entity={entity}
               onCreate={() => resource.reload()}
               {..._addButton}
