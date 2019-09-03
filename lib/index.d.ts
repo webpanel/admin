@@ -14,6 +14,7 @@ export interface IAdminProps extends ILayoutProps {
     autopermissions?: IAutopermissionConfig | boolean;
     logoURL?: string;
     logoCollapsedURL?: string;
+    loggedInContentWrapper?: (content: React.ReactNode) => React.ReactNode;
 }
 export declare class Admin extends React.Component<IAdminProps> {
     static Entity: typeof Entity;
