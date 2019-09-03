@@ -30,6 +30,7 @@ export interface IAdminProps extends ILayoutProps {
   autopermissions?: IAutopermissionConfig | boolean;
   logoURL?: string;
   logoCollapsedURL?: string;
+  loggedInContentWrapper?: (content: React.ReactNode) => React.ReactNode;
 }
 
 export class Admin extends React.Component<IAdminProps> {
@@ -42,6 +43,7 @@ export class Admin extends React.Component<IAdminProps> {
       menuItems,
       structureItems,
       autopermissions,
+      loggedInContentWrapper,
       ...restProps
     } = this.props;
 
@@ -51,40 +53,43 @@ export class Admin extends React.Component<IAdminProps> {
       return <AdminLayout entities={entities} logout={() => {}} />;
     }
 
-    const content = (props: AuthContentProps) => (
-      <AdminLayout
-        entities={entities}
-        menuItems={menuItems}
-        structureItems={structureItems}
-        header={{
-          items: [
-            <Translation>
-              {(t, options) => (
-                <Dropdown
-                  overlay={
-                    <Menu
-                      onClick={value => {
-                        options.i18n.changeLanguage(value.key);
-                      }}
-                      selectedKeys={[options.i18n.language]}
-                    >
-                      <Menu.Item key="cs">🇨🇿 Česky</Menu.Item>
-                      <Menu.Item key="en">🇬🇧 English</Menu.Item>
-                    </Menu>
-                  }
-                >
-                  <span className="antd-header-content-item">
-                    <Icon type="global" />
-                  </span>
-                </Dropdown>
-              )}
-            </Translation>
-          ]
-        }}
-        {...props}
-        {...restProps}
-      />
-    );
+    const _loggedInContentWrapper = loggedInContentWrapper || (x => x);
+
+    let content = (props: AuthContentProps): React.ReactNode =>
+      _loggedInContentWrapper(
+        <AdminLayout
+          entities={entities}
+          menuItems={menuItems}
+          structureItems={structureItems}
+          header={{
+            items: [
+              <Translation>
+                {(t, options) => (
+                  <Dropdown
+                    overlay={
+                      <Menu
+                        onClick={value => {
+                          options.i18n.changeLanguage(value.key);
+                        }}
+                        selectedKeys={[options.i18n.language]}
+                      >
+                        <Menu.Item key="cs">🇨🇿 Česky</Menu.Item>
+                        <Menu.Item key="en">🇬🇧 English</Menu.Item>
+                      </Menu>
+                    }
+                  >
+                    <span className="antd-header-content-item">
+                      <Icon type="global" />
+                    </span>
+                  </Dropdown>
+                )}
+              </Translation>
+            ]
+          }}
+          {...props}
+          {...restProps}
+        />
+      );
 
     const form = (props: AuthFormProps) => (
       <LoginForm authorizationInfo={props} />
