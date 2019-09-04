@@ -16,6 +16,7 @@ import {
   IEntityAddButtonProps
 } from '../buttons/EntityAddButton';
 import { Link, ResourceSearchInput, ResourceTable } from 'webpanel-antd';
+import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 import { entityPermission, fieldPermission } from '../../model/permissions';
 
@@ -23,12 +24,12 @@ import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
-import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { Translation } from 'react-i18next';
 import i18next from 'i18next';
 
-export interface IEntityListTableProps {
+export interface IEntityListTableProps extends TableProps<any> {
+  // deprecated, use size instead
   condensed?: boolean;
   actionButtons?: ResourceTablePropsActionButton[];
   actionButtonsTitle?: React.ReactNode;
@@ -190,10 +191,10 @@ export class EntityList extends React.Component<IEntityListProps> {
       _addButton = showAddButton;
     }
 
-    if (typeof _addButton === 'undefined' || _addButton === true) {	
-      _addButton = {	
-        flow: 'redirect'	
-      };	
+    if (typeof _addButton === 'undefined' || _addButton === true) {
+      _addButton = {
+        flow: 'redirect'
+      };
     }
 
     return (
@@ -239,7 +240,10 @@ export class EntityList extends React.Component<IEntityListProps> {
   ): React.ReactNode {
     const { entity, table } = this.props;
 
-    const size = table && table.condensed ? 'small' : 'default';
+    const size =
+      table && (table.condensed || table.size === 'small')
+        ? 'small'
+        : 'default';
 
     return (
       <ResourceTable
