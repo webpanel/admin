@@ -240,11 +240,12 @@ export class EntityList extends React.Component<IEntityListProps> {
   ): React.ReactNode {
     const { entity, table } = this.props;
 
-    const size =
-      table && (table.condensed || table.size === 'small')
-        ? 'small'
-        : 'default';
+    if (table && table.condensed) {
+      table.size = 'small';
+    }
+    const size = table && table.size === 'small' ? 'small' : 'default';
 
+    console.log('table??', table);
     return (
       <ResourceTable
         className="entitytable"
