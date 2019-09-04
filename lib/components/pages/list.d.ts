@@ -2,14 +2,14 @@ import * as React from 'react';
 import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
 import { IEntityAddButtonProps } from '../buttons/EntityAddButton';
+import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk } from 'ts-thunk';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
-import { PaginationConfig } from 'antd/lib/table';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import i18next from 'i18next';
-export interface IEntityListTableProps {
+export interface IEntityListTableProps extends TableProps<any> {
     condensed?: boolean;
     actionButtons?: ResourceTablePropsActionButton[];
     actionButtonsTitle?: React.ReactNode;
