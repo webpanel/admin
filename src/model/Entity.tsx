@@ -85,7 +85,7 @@ export interface IEntityConfig<T> {
   initialFilters?: DataSourceArgumentMap;
 }
 
-export class Entity<T> {
+export class Entity<T = any> {
   public fields: EntityField<T, any>[] = [];
 
   autopermissions?: boolean;

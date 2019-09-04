@@ -6,7 +6,7 @@ import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 export interface IDataGridProps {
-    entity: Entity<any>;
+    entity: Entity;
     fields?: string[];
     editWholeRows?: boolean;
     initialFilters?: DataSourceArgumentMap;

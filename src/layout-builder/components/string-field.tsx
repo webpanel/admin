@@ -11,7 +11,7 @@ export interface LayoutBuilderStringFieldProps {
 }
 
 export interface LayoutBuilderStringFieldInternalProps {
-  entity: Entity<any>;
+  entity: Entity;
   data: any;
 }
 

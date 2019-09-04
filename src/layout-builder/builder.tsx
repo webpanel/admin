@@ -29,7 +29,7 @@ import { LayoutBuilderEditButton } from './components/edit-button';
 import { Resource } from 'webpanel-data';
 
 export interface LayoutBuilderConfig {
-  entity: Entity<any>;
+  entity: Entity;
   id?: string | number;
   data: any;
   formContext?: FormContext;

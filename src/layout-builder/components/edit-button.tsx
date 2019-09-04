@@ -6,7 +6,7 @@ import { Link } from 'webpanel-antd';
 import { RowProps } from 'antd/lib/row';
 
 export interface LayoutEditButtonInternalProps extends RowProps {
-  entity: Entity<any>;
+  entity: Entity;
   data: any;
 }
 

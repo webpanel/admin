@@ -4,7 +4,7 @@ export interface LayoutBuilderValueProps {
     name: string;
 }
 export interface LayoutBuilderValueInternalProps {
-    entity: Entity<any>;
+    entity: Entity;
     data: any;
 }
 export declare class LayoutBuilderValue extends React.Component<LayoutBuilderValueProps & LayoutBuilderValueInternalProps> {

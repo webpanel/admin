@@ -74,7 +74,7 @@ export interface IEntityListConfig {
 }
 
 export interface IEntityListProps extends IEntityListConfig {
-  entity: Entity<any>;
+  entity: Entity;
   dataSource: DataSource;
 }
 

@@ -6,7 +6,7 @@ export interface IEntityDetailConfig {
     wrapperType?: 'card' | 'plain';
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
-    entity: Entity<any>;
+    entity: Entity;
     resourceID: string | number;
 }
 export declare class EntityDetail extends React.Component<IEntityDetailProps> {

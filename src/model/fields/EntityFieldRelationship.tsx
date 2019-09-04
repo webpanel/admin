@@ -21,7 +21,7 @@ export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
 
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
-  targetEntity: Thunk<Entity<any>>;
+  targetEntity: Thunk<Entity>;
   type: IEntityFieldRelationshipType;
 }
 

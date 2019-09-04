@@ -18,7 +18,7 @@ export interface IEntityEditConfig {
     modal?: ModalProps;
 }
 export interface IEntityEditProps extends IEntityEditConfig {
-    entity: Entity<any>;
+    entity: Entity;
     resourceID?: string | number;
     onSave?: EntityOnSaveHandler;
     onCreate?: (id: string) => void;

@@ -14,7 +14,7 @@ import { EntityField } from '../../model/EntityField';
 import { ResourceTable } from 'webpanel-antd';
 
 export interface IDataGridProps {
-  entity: Entity<any>;
+  entity: Entity;
   fields?: string[];
   editWholeRows?: boolean;
   initialFilters?: DataSourceArgumentMap;

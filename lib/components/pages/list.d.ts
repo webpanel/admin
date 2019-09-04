@@ -41,7 +41,7 @@ export interface IEntityListConfig {
     wrapperType?: 'card' | 'plain';
 }
 export interface IEntityListProps extends IEntityListConfig {
-    entity: Entity<any>;
+    entity: Entity;
     dataSource: DataSource;
 }
 export declare class EntityList extends React.Component<IEntityListProps> {

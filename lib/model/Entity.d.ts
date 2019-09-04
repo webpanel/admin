@@ -35,7 +35,7 @@ export interface IEntityConfig<T> {
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
 }
-export declare class Entity<T> {
+export declare class Entity<T = any> {
     private readonly config;
     fields: EntityField<T, any>[];
     autopermissions?: boolean;
@@ -59,7 +59,7 @@ export declare class Entity<T> {
     readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: string | number) => React.ReactNode) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
-    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
@@ -68,12 +68,12 @@ export declare class Entity<T> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
-    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailView: (resourceID: string | number, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: string | number, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;

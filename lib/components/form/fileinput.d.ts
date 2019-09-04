@@ -9,7 +9,7 @@ interface IFile {
     contentType?: string;
 }
 interface IFileInputProps {
-    entity: Entity<any>;
+    entity: Entity;
     uploadURL?: string;
     value?: string;
     onChange?: (newValue: string | null) => void;

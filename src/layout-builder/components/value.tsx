@@ -8,7 +8,7 @@ export interface LayoutBuilderValueProps {
 }
 
 export interface LayoutBuilderValueInternalProps {
-  entity: Entity<any>;
+  entity: Entity;
   data: any;
 }
 

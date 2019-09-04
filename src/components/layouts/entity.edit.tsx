@@ -10,7 +10,7 @@ import { Entity } from '../../model/Entity';
 
 export interface IEntityEditLayoutProps extends IEntityEditConfig {
   resourceID?: string | number;
-  entity: Entity<any>;
+  entity: Entity;
   onCreate?: (id: string) => void;
   onSave?: EntityOnSaveHandler;
   onCancel?: () => void;
