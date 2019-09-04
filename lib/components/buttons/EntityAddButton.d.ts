@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { Entity } from '../../model/Entity';
+import { ModalProps } from 'antd/lib/modal';
 export interface IEntityAddButtonProps {
     flow: 'modal' | 'redirect';
     initialValues?: {
         [key: string]: any;
     };
+    modal?: ModalProps;
 }
 interface IEntityAddButtonComponentProps extends IEntityAddButtonProps {
     entity: Entity;

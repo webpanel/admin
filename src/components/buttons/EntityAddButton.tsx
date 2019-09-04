@@ -3,11 +3,13 @@ import * as React from 'react';
 import { Button } from 'antd';
 import { Entity } from '../../model/Entity';
 import { Link } from 'webpanel-antd';
+import { ModalProps } from 'antd/lib/modal';
 import { Translation } from 'react-i18next';
 
 export interface IEntityAddButtonProps {
   flow: 'modal' | 'redirect';
   initialValues?: { [key: string]: any };
+  modal?: ModalProps;
 }
 interface IEntityAddButtonComponentProps extends IEntityAddButtonProps {
   entity: Entity;
@@ -25,7 +27,7 @@ export class EntityAddButton extends React.Component<
   public state = { showModal: false };
 
   public render() {
-    const { entity, initialValues, flow } = this.props;
+    const { entity, initialValues, flow, modal } = this.props;
 
     if (flow === 'redirect') {
       return (
@@ -48,6 +50,7 @@ export class EntityAddButton extends React.Component<
                     title: t(`${entity.name}.title.create`, {
                       defaultValue: `Create ${entity.title}`
                     }),
+                    ...modal,
                     visible: this.state.showModal,
                     destroyOnClose: true
                   }
