@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { Entity } from '../../model/Entity';
 import { ModalProps } from 'antd/lib/modal';
+export interface IEntityAddButtonModalFlow {
+    type: 'modal';
+    modal?: ModalProps;
+}
+declare type FlowType = 'redirect' | IEntityAddButtonModalFlow;
 export interface IEntityAddButtonProps {
-    flow: 'modal' | 'redirect';
     initialValues?: {
         [key: string]: any;
     };
-    modal?: ModalProps;
+    flow?: FlowType;
 }
 interface IEntityAddButtonComponentProps extends IEntityAddButtonProps {
     entity: Entity;
@@ -19,7 +23,7 @@ export declare class EntityAddButton extends React.Component<IEntityAddButtonCom
     state: {
         showModal: boolean;
     };
-    render(): JSX.Element;
+    render(): JSX.Element | "unexpected flow";
     private hideModal;
 }
 export {};

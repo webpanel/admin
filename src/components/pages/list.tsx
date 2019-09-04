@@ -190,10 +190,10 @@ export class EntityList extends React.Component<IEntityListProps> {
       _addButton = showAddButton;
     }
 
-    if (typeof _addButton === 'undefined' || _addButton === true) {
-      _addButton = {
-        flow: 'redirect'
-      };
+    if (typeof _addButton === 'undefined' || _addButton === true) {	
+      _addButton = {	
+        flow: 'redirect'	
+      };	
     }
 
     return (
