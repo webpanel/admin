@@ -10,7 +10,7 @@ export interface IEntityAddButtonProps {
   initialValues?: { [key: string]: any };
 }
 interface IEntityAddButtonComponentProps extends IEntityAddButtonProps {
-  entity: Entity<any>;
+  entity: Entity;
   // called only if flow='modal'
   onCreate?: () => void;
 }

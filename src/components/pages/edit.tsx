@@ -27,7 +27,7 @@ export interface IEntityEditConfig {
 }
 
 export interface IEntityEditProps extends IEntityEditConfig {
-  entity: Entity<any>;
+  entity: Entity;
   resourceID?: string | number;
   // route?: RouteComponentProps<any>;
   onSave?: EntityOnSaveHandler;

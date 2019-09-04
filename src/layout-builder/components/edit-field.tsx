@@ -10,7 +10,7 @@ export interface LayoutBuilderEditFieldProps {
   formLayout?: FormLayout;
 }
 export interface LayoutBuilderEditFieldInternalProps {
-  entity: Entity<any>;
+  entity: Entity;
   formContext: FormContext;
 }
 

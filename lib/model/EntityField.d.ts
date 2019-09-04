@@ -32,8 +32,8 @@ export interface IEntityFieldConfig<T> {
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
     protected readonly config: C;
-    readonly entity: Entity<any>;
-    constructor(name: string, config: C, entity: Entity<any>);
+    readonly entity: Entity;
+    constructor(name: string, config: C, entity: Entity);
     readonly title: string;
     readonly shortTitle: string;
     columnName(): string;

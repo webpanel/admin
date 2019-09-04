@@ -9,7 +9,7 @@ import { LayoutProps } from 'webpanel-antd/lib/layout/Layout';
 import { MenuConfig } from 'webpanel-antd/lib/layout/Menu';
 
 export interface ILayoutProps {
-  entities?: Thunk<Entity<any>[]>;
+  entities?: Thunk<Entity[]>;
   menuItems?: Thunk<React.ReactNode[]>;
   structureItems?: Thunk<React.ReactNode[]>;
   header?: HeaderConfig;

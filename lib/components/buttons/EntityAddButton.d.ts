@@ -7,7 +7,7 @@ export interface IEntityAddButtonProps {
     };
 }
 interface IEntityAddButtonComponentProps extends IEntityAddButtonProps {
-    entity: Entity<any>;
+    entity: Entity;
     onCreate?: () => void;
 }
 interface IEntityAddButtonState {

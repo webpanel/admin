@@ -7,7 +7,7 @@ import { FormLayout } from 'antd/lib/form/Form';
 export declare type IEntityFieldRelationshipType = 'toOne' | 'toMany';
 export declare type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
-    targetEntity: Thunk<Entity<any>>;
+    targetEntity: Thunk<Entity>;
     type: IEntityFieldRelationshipType;
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {

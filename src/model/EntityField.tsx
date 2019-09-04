@@ -53,7 +53,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   constructor(
     public readonly name: string,
     protected readonly config: C,
-    public readonly entity: Entity<any>
+    public readonly entity: Entity
   ) {}
 
   public get title(): string {

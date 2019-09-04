@@ -31,7 +31,7 @@ export const configurePermissions = (
 
 export type EntityAction = 'list' | 'read' | 'create' | 'update' | 'delete';
 export const entityPermission = (
-  entity: Entity<any>,
+  entity: Entity,
   action: EntityAction
 ): boolean => {
   if (_config) {

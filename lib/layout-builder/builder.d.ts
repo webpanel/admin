@@ -11,7 +11,7 @@ import { Entity } from '../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { Resource } from 'webpanel-data';
 export interface LayoutBuilderConfig {
-    entity: Entity<any>;
+    entity: Entity;
     id?: string | number;
     data: any;
     formContext?: FormContext;

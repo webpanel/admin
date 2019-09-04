@@ -5,7 +5,7 @@ export interface LayoutBuilderStringFieldProps {
     layout?: 'horizontal' | 'vertical';
 }
 export interface LayoutBuilderStringFieldInternalProps {
-    entity: Entity<any>;
+    entity: Entity;
     data: any;
 }
 export declare class LayoutBuilderStringField extends React.Component<LayoutBuilderStringFieldProps & LayoutBuilderStringFieldInternalProps> {
