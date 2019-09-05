@@ -245,7 +245,6 @@ export class EntityList extends React.Component<IEntityListProps> {
     }
     const size = table && table.size === 'small' ? 'small' : 'default';
 
-    console.log('table??', table);
     return (
       <ResourceTable
         className="entitytable"
