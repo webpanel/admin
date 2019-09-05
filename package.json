@@ -18,6 +18,7 @@
   "peerDependencies": {
     "ant-design-pro": "*",
     "antd": "*",
+    "i18next": "*",
     "react-i18next": "*",
     "webpanel-antd": "*",
     "webpanel-auth": "*",
