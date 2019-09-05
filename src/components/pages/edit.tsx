@@ -112,7 +112,6 @@ export class EntityEdit extends React.Component<
     resource: Resource
   ): React.ReactNode {
     const { modal, onCancel } = this.props;
-    console.log('???????', modal);
     return (
       <Modal
         onOk={() => this.handleSave(formContext, resource)}
