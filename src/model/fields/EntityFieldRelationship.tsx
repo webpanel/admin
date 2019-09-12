@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Button, Modal, Tag } from 'antd';
+import { Button, Tag } from 'antd';
 import {
   EntityField,
   IEntityFieldConfig,
@@ -13,6 +13,7 @@ import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 import { Entity } from '../Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
+import { IEntityEditConfig } from '../../components/pages/edit';
 import { Translation } from 'react-i18next';
 import { entityPermission } from '../permissions';
 
@@ -88,9 +89,6 @@ export class EntityFieldRelationship<T> extends EntityField<
           }
         : null;
 
-    const addButtonMargin =
-      config.formLayout === 'horizontal' ? '4px 0 0 4px' : '0 0 0 4px';
-
     return (
       <ResourceCollectionLayer
         key={key}
@@ -121,9 +119,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                 {...formItemLayout}
               >
                 <ResourceSelect
-                  key={`relationship_field_${this.entity.name}_${
-                    this.valuePropName
-                  }`}
+                  key={`relationship_field_${this.entity.name}_${this.valuePropName}`}
                   valueKey="id"
                   labelKey={(value: any): string => {
                     return _targetEntity.render(value);
@@ -139,32 +135,16 @@ export class EntityFieldRelationship<T> extends EntityField<
                   }}
                 />
                 {entityPermission(_targetEntity, 'create') && (
-                  <Button
-                    key={`relationship_field_${this.entity.name}_${
-                      this.valuePropName
-                    }_add`}
-                    size="small"
-                    icon="plus"
-                    style={{
-                      margin: addButtonMargin,
-                      height: '32px'
-                    }}
-                    onClick={() => {
-                      const infoWindow = Modal.info({
-                        title: `Add ${_targetEntity.title}`,
-                        maskClosable: true,
-                        okText: 'Close',
-                        style: { minWidth: '60%' },
-                        content: _targetEntity.getCreateView(undefined, {
-                          onSave: async (id: string | number) => {
-                            await collection.get();
-                            let updateValues = {};
-                            updateValues[this.columnName()] = id;
-                            formContext.form.setFieldsValue(updateValues);
-                            infoWindow.destroy();
-                          }
-                        })
-                      });
+                  <CreateEntityButton
+                    key={`relationship_field_${this.entity.name}_${this.valuePropName}_add`}
+                    entity={_targetEntity}
+                    formLayout={config.formLayout}
+                    modalTitle={`Add ${_targetEntity.title}`}
+                    onCreate={async (id: string | number) => {
+                      await collection.get();
+                      let updateValues = {};
+                      updateValues[this.columnName()] = id;
+                      formContext.form.setFieldsValue(updateValues);
                     }}
                   />
                 )}
@@ -310,4 +290,61 @@ export class EntityFieldRelationship<T> extends EntityField<
       return res;
     };
   }
+}
+
+interface CreateEntityButtonProps extends IEntityEditConfig {
+  entity: Entity;
+  modalTitle: string;
+  onCreate: (id: string | number) => void;
+  formLayout?: FormLayout;
+}
+export class CreateEntityButton extends React.Component<
+  CreateEntityButtonProps,
+  { showModal: boolean }
+> {
+  public state = { showModal: false };
+
+  public render() {
+    const { entity, modalTitle, onCreate, formLayout, ...options } = this.props;
+
+    const addButtonMargin =
+      formLayout === 'horizontal' ? '4px 0 0 4px' : '0 0 0 4px';
+
+    return (
+      <>
+        <Button
+          tabIndex={-1}
+          size="small"
+          icon="plus"
+          style={{
+            margin: addButtonMargin,
+            height: '32px'
+          }}
+          onClick={() => this.setState({ showModal: true })}
+        />
+        {entity.getCreateView(
+          {
+            wrapperType: 'modal',
+            modal: {
+              title: modalTitle,
+              visible: this.state.showModal,
+              destroyOnClose: true
+            },
+            ...options
+          },
+          {
+            onCancel: this.hideModal,
+            onSave: (id: string | number) => {
+              this.hideModal();
+              onCreate(id);
+            }
+          }
+        )}
+      </>
+    );
+  }
+
+  private hideModal = () => {
+    this.setState({ showModal: false });
+  };
 }
