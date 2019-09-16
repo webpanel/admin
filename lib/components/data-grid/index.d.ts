@@ -34,8 +34,8 @@ export declare class DataGrid extends React.Component<IDataGridProps, IDataGridS
     toggleEditing: (resourceID: string, fields: EntityField<any, any>[], force?: boolean) => void;
     isEditing: (resourceID: string, field?: EntityField<any, any> | undefined) => boolean;
     onValueChange: (record: any, field: EntityField<any, any>, value: any) => void;
-    saveChange: (resource: ResourceCollection, record: any, fields: EntityField<any, any>[]) => Promise<void>;
-    deleteRow: (resource: ResourceCollection, resourceID: string) => Promise<void>;
-    actionButtons: (resource: ResourceCollection, fields: EntityField<any, any>[]) => ((props: ActionButtonProps) => JSX.Element)[] | undefined;
+    saveChange: (resource: ResourceCollection<any[] | null, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig>, record: any, fields: EntityField<any, any>[]) => Promise<void>;
+    deleteRow: (resource: ResourceCollection<any[] | null, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig>, resourceID: string) => Promise<void>;
+    actionButtons: (resource: ResourceCollection<any[] | null, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig>, fields: EntityField<any, any>[]) => ((props: ActionButtonProps) => JSX.Element)[] | undefined;
     render(): React.ReactNode;
 }

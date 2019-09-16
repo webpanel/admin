@@ -1,7 +1,11 @@
 import * as React from 'react';
 import * as inflection from 'inflection';
 
-import { DataSource, SortInfo } from 'webpanel-data';
+import {
+  CreateEntityButton,
+  CreateEntityProps
+} from '../components/buttons/EntityAddButton';
+import { DataSource, ResourceID, SortInfo } from 'webpanel-data';
 import {
   EntityEditLayout,
   IEntityEditLayoutProps
@@ -40,10 +44,11 @@ import {
   IEntityDetailConfig,
   IEntityDetailProps
 } from '../components/pages/detail';
-import { Layout, RouteComponentProps } from 'webpanel-antd';
+import { Layout, Link, RouteComponentProps } from 'webpanel-antd';
 import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 import { componentPermission, entityPermission } from './permissions';
 
+import { Button } from 'antd';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { EntityDetailLayout } from '../components/layouts/entity.detail';
 import { EntityFieldColor } from './fields/EntityFieldColor';
@@ -440,6 +445,10 @@ export class Entity<T = any> {
     );
   };
 
+  public getCreateButton = (props: CreateEntityProps): React.ReactNode => {
+    return <CreateEntityButton entity={this} {...props} />;
+  };
+
   public getEditView = (
     resourceID: string | number,
     config?: IEntityEditConfig,
@@ -461,6 +470,14 @@ export class Entity<T = any> {
         {...resolveOptionalThunk(this.config.edit)}
         {...config}
       />
+    );
+  };
+
+  public getEditButton = (resourceID: ResourceID): React.ReactNode => {
+    return (
+      <Link to={this.getEditLink(resourceID)}>
+        <Button size="small" htmlType="button" icon="edit" />
+      </Link>
     );
   };
 
@@ -535,10 +552,10 @@ export class Entity<T = any> {
   public getCreateLink(): string {
     return `/${this.structureName}/new`;
   }
-  public getDetailLink(id: string | number): string {
+  public getDetailLink(id: ResourceID): string {
     return `/${this.structureName}/${id}`;
   }
-  public getEditLink(id: string | number): string {
+  public getEditLink(id: ResourceID): string {
     return `/${this.structureName}/${id}/edit`;
   }
 }

@@ -11,15 +11,12 @@ import {
   ResourceCollectionLayer,
   SortInfo
 } from 'webpanel-data';
-import {
-  EntityAddButton,
-  IEntityAddButtonProps
-} from '../buttons/EntityAddButton';
 import { Link, ResourceSearchInput, ResourceTable } from 'webpanel-antd';
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 import { entityPermission, fieldPermission } from '../../model/permissions';
 
+import { CreateEntityProps } from '../buttons/EntityAddButton';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
@@ -61,7 +58,7 @@ export interface IEntityListConfig {
   searchable?: boolean;
   // deprecated, please use addButton property
   showAddButton?: boolean;
-  addButton?: boolean | IEntityAddButtonProps;
+  addButton?: boolean | CreateEntityProps;
   title?: string;
   fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
@@ -218,14 +215,19 @@ export class EntityList extends React.Component<IEntityListProps> {
               }}
             />
           ),
-          _addButton && entityPermission(entity, 'create') && (
-            <EntityAddButton
-              key="addButton"
-              entity={entity}
-              onCreate={() => resource.reload()}
-              {..._addButton}
-            />
-          ),
+          _addButton &&
+            entityPermission(entity, 'create') &&
+            entity.getCreateButton({
+              button: { size: 'small' },
+              onCreate: () => resource.reload(),
+              ...(typeof _addButton === 'object' ? _addButton : {})
+            }),
+          // <EntityAddButton
+          //   key="addButton"
+          //   entity={entity}
+          //   onCreate={() => resource.reload()}
+          //   {..._addButton}
+          // />
           card && card.extra
         ].filter(x => x)}
       >

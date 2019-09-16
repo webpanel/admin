@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { DataSource, SortInfo } from 'webpanel-data';
+import { CreateEntityProps } from '../components/buttons/EntityAddButton';
+import { DataSource, ResourceID, SortInfo } from 'webpanel-data';
 import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
 import { EntityField, IEntityFieldConfig } from './EntityField';
 import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
@@ -59,7 +60,7 @@ export declare class Entity<T = any> {
     readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: string | number) => React.ReactNode) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
-    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
@@ -68,15 +69,17 @@ export declare class Entity<T = any> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
-    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailView: (resourceID: string | number, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
+    getCreateButton: (props: CreateEntityProps) => React.ReactNode;
+    getEditView: (resourceID: string | number, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
+    getEditButton: (resourceID: string | number) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
@@ -90,6 +93,6 @@ export declare class Entity<T = any> {
     computedField(name: string, config?: IEntityFieldComputedConfig<T>): Entity<T>;
     getListLink(): string;
     getCreateLink(): string;
-    getDetailLink(id: string | number): string;
-    getEditLink(id: string | number): string;
+    getDetailLink(id: ResourceID): string;
+    getEditLink(id: ResourceID): string;
 }

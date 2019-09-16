@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
-import { IEntityAddButtonProps } from '../buttons/EntityAddButton';
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk } from 'ts-thunk';
+import { CreateEntityProps } from '../buttons/EntityAddButton';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
@@ -29,7 +29,7 @@ export interface IEntityListConfig {
     };
     searchable?: boolean;
     showAddButton?: boolean;
-    addButton?: boolean | IEntityAddButtonProps;
+    addButton?: boolean | CreateEntityProps;
     title?: string;
     fields?: Thunk<IEntityListColumn[]>;
     editableFields?: Thunk<string[]>;
