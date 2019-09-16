@@ -2,12 +2,11 @@ import '../../../styles/form-detail.css';
 
 import * as React from 'react';
 
-import { Button, Card, Form } from 'antd';
+import { Card, Form } from 'antd';
 import { Resource, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
-import { Link } from 'webpanel-antd';
 import { TFunction } from 'i18next';
 import { Translation } from 'react-i18next';
 
@@ -81,11 +80,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                     defaultValue: entity.title
                   })}
                   loading={resource.loading && !resource.polling}
-                  extra={
-                    <Link to={`${resourceID}/edit`}>
-                      <Button size="small" htmlType="button" icon="edit" />
-                    </Link>
-                  }
+                  extra={entity.getEditButton(resourceID)}
                 >
                   {contentFn(resource, t)}
                 </Card>

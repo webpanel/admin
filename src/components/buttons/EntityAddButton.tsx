@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 import { Button } from 'antd';
+import { ButtonProps } from 'antd/lib/button';
 import { Entity } from '../../model/Entity';
+import { IEntityEditConfig } from '../pages/edit';
 import { Link } from 'webpanel-antd';
 import { ModalProps } from 'antd/lib/modal';
 import { Translation } from 'react-i18next';
@@ -11,35 +13,32 @@ export interface IEntityAddButtonModalFlow {
   modal?: ModalProps;
 }
 type FlowType = 'redirect' | IEntityAddButtonModalFlow;
-export interface IEntityAddButtonProps {
-  initialValues?: { [key: string]: any };
+export interface CreateEntityProps extends IEntityEditConfig {
+  modalTitle?: string;
+  onCreate?: (id: string | number) => void;
   flow?: FlowType;
+  key?: string;
+  button?: ButtonProps;
 }
 
-interface IEntityAddButtonComponentProps extends IEntityAddButtonProps {
+export interface CreateEntityButtonProps extends CreateEntityProps {
   entity: Entity;
-  // called only if flow='modal'
-  onCreate?: () => void;
 }
-interface IEntityAddButtonState {
-  showModal: boolean;
-}
-
-export class EntityAddButton extends React.Component<
-  IEntityAddButtonComponentProps,
-  IEntityAddButtonState
+export class CreateEntityButton extends React.Component<
+  CreateEntityButtonProps,
+  { showModal: boolean }
 > {
   public state = { showModal: false };
 
   public render() {
-    const { entity, initialValues, flow } = this.props;
+    const { entity, initialValues, flow, onCreate, button } = this.props;
 
     let _flow = flow || 'redirect';
 
     if (_flow === 'redirect') {
       return (
         <Link to={entity.getCreateLink()} key="newButton">
-          <Button size="small" htmlType="button" icon="plus" />
+          <Button htmlType="button" icon="plus" {...button} />
         </Link>
       );
     }
@@ -66,19 +65,18 @@ export class EntityAddButton extends React.Component<
                   },
                   {
                     onCancel: this.hideModal,
-                    onSave: () => {
+                    onSave: id => {
                       this.hideModal();
-                      const fn = this.props.onCreate;
-                      if (fn) {
-                        fn();
+                      if (onCreate) {
+                        onCreate(id);
                       }
                     }
                   }
                 )}
               </div>
               <Button
-                size="small"
                 icon="plus"
+                {...button}
                 onClick={() => this.setState({ showModal: true })}
               />
             </>
