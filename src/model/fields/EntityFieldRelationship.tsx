@@ -6,7 +6,11 @@ import {
   IEntityFieldFilterProps
 } from '../EntityField';
 import { FormField, ResourceSelect } from 'webpanel-antd';
-import { ResourceCollection, ResourceCollectionLayer } from 'webpanel-data';
+import {
+  ResourceCollection,
+  ResourceCollectionLayer,
+  ResourceID
+} from 'webpanel-data';
 import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 
 // import { CreateEntityButton } from '../../components/buttons/EntityAddButton';
@@ -153,7 +157,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                         width: '70%'
                       }
                     },
-                    onCreate: async (id: string | number) => {
+                    onCreate: async (id: ResourceID) => {
                       await collection.get();
                       let updateValues = {};
                       updateValues[this.columnName()] = id;

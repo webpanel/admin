@@ -57,10 +57,10 @@ export declare class Entity<T = any> {
     readonly detailFields: EntityField<T, any>[];
     readonly searchableFields: EntityField<T, any>[];
     readonly detailLayout: ((props: IEntityDetailProps) => React.ReactNode) | undefined;
-    readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: string | number) => React.ReactNode) | undefined;
+    readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: ResourceID) => React.ReactNode) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
-    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
@@ -69,17 +69,17 @@ export declare class Entity<T = any> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
-    getDetailView: (resourceID: string | number, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: string | number, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: string | number) => React.ReactNode;
+    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;

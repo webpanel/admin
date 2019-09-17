@@ -21,16 +21,16 @@ import {
   LayoutBuilderValue,
   LayoutBuilderValueProps
 } from './components/value';
+import { Resource, ResourceID } from 'webpanel-data';
 import { Thunk, resolveThunk } from 'ts-thunk';
 
 import { Entity } from '../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { LayoutBuilderEditButton } from './components/edit-button';
-import { Resource } from 'webpanel-data';
 
 export interface LayoutBuilderConfig {
   entity: Entity;
-  id?: string | number;
+  id?: ResourceID;
   data: any;
   formContext?: FormContext;
   resource: Resource;

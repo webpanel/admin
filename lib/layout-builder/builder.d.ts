@@ -6,13 +6,13 @@ import { LayoutBuilderRowProps } from './components/row';
 import { LayoutBuilderStringFieldProps } from './components/string-field';
 import { LayoutBuilderTabsProps } from './components/tabs';
 import { LayoutBuilderValueProps } from './components/value';
+import { Resource, ResourceID } from 'webpanel-data';
 import { Thunk } from 'ts-thunk';
 import { Entity } from '../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { Resource } from 'webpanel-data';
 export interface LayoutBuilderConfig {
     entity: Entity;
-    id?: string | number;
+    id?: ResourceID;
     data: any;
     formContext?: FormContext;
     resource: Resource;
