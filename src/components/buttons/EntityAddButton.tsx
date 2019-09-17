@@ -6,6 +6,7 @@ import { Entity } from '../../model/Entity';
 import { IEntityEditConfig } from '../pages/edit';
 import { Link } from 'webpanel-antd';
 import { ModalProps } from 'antd/lib/modal';
+import { ResourceID } from 'webpanel-data';
 import { Translation } from 'react-i18next';
 
 export interface IEntityAddButtonModalFlow {
@@ -14,7 +15,7 @@ export interface IEntityAddButtonModalFlow {
 }
 type FlowType = 'redirect' | IEntityAddButtonModalFlow;
 export interface CreateEntityProps extends IEntityEditConfig {
-  onCreate?: (id: string | number) => void;
+  onCreate?: (id: ResourceID) => void;
   flow?: FlowType;
   key?: string;
   button?: ButtonProps;

@@ -3,13 +3,14 @@ import { ButtonProps } from 'antd/lib/button';
 import { Entity } from '../../model/Entity';
 import { IEntityEditConfig } from '../pages/edit';
 import { ModalProps } from 'antd/lib/modal';
+import { ResourceID } from 'webpanel-data';
 export interface IEntityAddButtonModalFlow {
     type: 'modal';
     modal?: ModalProps;
 }
 declare type FlowType = 'redirect' | IEntityAddButtonModalFlow;
 export interface CreateEntityProps extends IEntityEditConfig {
-    onCreate?: (id: string | number) => void;
+    onCreate?: (id: ResourceID) => void;
     flow?: FlowType;
     key?: string;
     button?: ButtonProps;

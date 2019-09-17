@@ -3,7 +3,7 @@ import '../../../styles/form-detail.css';
 import * as React from 'react';
 
 import { Card, Form } from 'antd';
-import { Resource, ResourceLayer } from 'webpanel-data';
+import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 
 import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
@@ -16,7 +16,7 @@ export interface IEntityDetailConfig {
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity;
-  resourceID: string | number;
+  resourceID: ResourceID;
 }
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {

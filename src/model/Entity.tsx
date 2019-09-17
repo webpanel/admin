@@ -187,7 +187,7 @@ export class Entity<T = any> {
   public get editLayout():
     | ((
         props: IEntityEditLayoutProps,
-        resourceID: string | number
+        resourceID: ResourceID
       ) => React.ReactNode)
     | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
@@ -343,7 +343,7 @@ export class Entity<T = any> {
   };
 
   private handleFormOnSave = (route: RouteComponentProps<any>) => (
-    id: string | number,
+    id: ResourceID,
     option: SaveOption
   ) => {
     switch (option) {
@@ -410,7 +410,7 @@ export class Entity<T = any> {
   };
 
   public getDetailView = (
-    resourceID: string | number,
+    resourceID: ResourceID,
     config?: IEntityDetailConfig
   ): React.ReactNode => {
     return (
@@ -450,7 +450,7 @@ export class Entity<T = any> {
   };
 
   public getEditView = (
-    resourceID: string | number,
+    resourceID: ResourceID,
     config?: IEntityEditConfig,
     handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
   ): React.ReactNode => {

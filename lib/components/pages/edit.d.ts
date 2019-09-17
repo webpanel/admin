@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Resource } from 'webpanel-data';
+import { Resource, ResourceID } from 'webpanel-data';
 import { SaveOption } from '../form/buttons';
 import { Entity } from '../../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
 import { ModalProps } from 'antd/lib/modal';
-export declare type EntityOnSaveHandler = (id: string | number, option?: SaveOption) => void;
+export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
 }
@@ -19,7 +19,7 @@ export interface IEntityEditConfig {
 }
 export interface IEntityEditProps extends IEntityEditConfig {
     entity: Entity;
-    resourceID?: string | number;
+    resourceID?: ResourceID;
     onSave?: EntityOnSaveHandler;
     onCreate?: (id: string) => void;
     onCancel?: () => void;

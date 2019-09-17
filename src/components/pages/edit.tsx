@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Card, Modal, message } from 'antd';
-import { Resource, ResourceLayer } from 'webpanel-data';
+import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
 
 import { Entity } from '../../model/Entity';
@@ -10,10 +10,7 @@ import { FormLayout } from 'antd/lib/form/Form';
 import { ModalProps } from 'antd/lib/modal';
 import { ResourceForm } from 'webpanel-antd';
 
-export type EntityOnSaveHandler = (
-  id: string | number,
-  option?: SaveOption
-) => void;
+export type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 
 export interface IEntityEditFormProps {
   layout?: FormLayout;
@@ -28,7 +25,7 @@ export interface IEntityEditConfig {
 
 export interface IEntityEditProps extends IEntityEditConfig {
   entity: Entity;
-  resourceID?: string | number;
+  resourceID?: ResourceID;
   // route?: RouteComponentProps<any>;
   onSave?: EntityOnSaveHandler;
   onCreate?: (id: string) => void;
@@ -49,32 +46,15 @@ export class EntityEdit extends React.Component<
     resource: Resource,
     option?: SaveOption
   ) => {
-    // this.ignoreFormSuccessRedirect = true;
     this.currentSaveOption = option;
     try {
       await formContext.formComponent.submit();
     } catch (err) {
       throw err;
-      // } finally {
-      // this.ignoreFormSuccessRedirect = false;
     }
 
     this.currentSaveOption = undefined;
     this.setState({ version: this.state.version + 1 });
-
-    // if (!route) {
-    //   return;
-    // }
-
-    // switch (option) {
-    //   case 'add':
-    //     route.history.push('/' + entity.structureName + '/new');
-    //     this.setState({ version: this.state.version + 1 });
-    //     break;
-    //   case 'edit':
-    //     route.history.push('/' + entity.structureName + '/' + resource.id);
-    //     break;
-    // }
   };
 
   handleFormSuccess = async (resource: Resource) => {
