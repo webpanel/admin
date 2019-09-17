@@ -146,7 +146,13 @@ export class EntityFieldRelationship<T> extends EntityField<
                             : '0 0 0 4px'
                       }
                     },
-                    modalTitle: `Add ${_targetEntity.title}`,
+                    flow: {
+                      type: 'modal',
+                      modal: {
+                        title: `Add ${_targetEntity.title}`,
+                        width: '70%'
+                      }
+                    },
                     onCreate: async (id: string | number) => {
                       await collection.get();
                       let updateValues = {};

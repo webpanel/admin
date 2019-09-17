@@ -14,7 +14,6 @@ export interface IEntityAddButtonModalFlow {
 }
 type FlowType = 'redirect' | IEntityAddButtonModalFlow;
 export interface CreateEntityProps extends IEntityEditConfig {
-  modalTitle?: string;
   onCreate?: (id: string | number) => void;
   flow?: FlowType;
   key?: string;
