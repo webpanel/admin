@@ -20,7 +20,6 @@ import { FormLayout } from 'antd/lib/form/Form';
 import { Tag } from 'antd';
 // import { IEntityEditConfig } from '../../components/pages/edit';
 import { Translation } from 'react-i18next';
-import { entityPermission } from '../permissions';
 
 export type IEntityFieldRelationshipType = 'toOne' | 'toMany';
 export type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
@@ -139,7 +138,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                     paddingRight: '38px'
                   }}
                 />
-                {entityPermission(_targetEntity, 'create') &&
+                {_targetEntity.creatable &&
                   _targetEntity.getCreateButton({
                     key: `relationship_field_${this.entity.name}_${this.valuePropName}_add`,
                     button: {

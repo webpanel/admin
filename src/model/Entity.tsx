@@ -46,7 +46,6 @@ import {
 } from '../components/pages/detail';
 import { Layout, Link, RouteComponentProps } from 'webpanel-antd';
 import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
-import { componentPermission, entityPermission } from './permissions';
 
 import { Button } from 'antd';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
@@ -60,6 +59,7 @@ import { LayoutBuilderConfig } from '../layout-builder/builder';
 import { Redirect } from 'react-router';
 import { SaveOption } from '../components/form/buttons';
 import { Translation } from 'react-i18next';
+import { componentPermission } from './permissions';
 
 // import { Button } from 'antd';
 
@@ -73,6 +73,9 @@ export interface IEntityConfig<T> {
   dataSource: Thunk<DataSource>;
   title?: Thunk<string>;
   enabled?: Thunk<boolean>;
+  creatable?: Thunk<boolean>;
+  updateable?: Thunk<boolean>;
+  deletable?: Thunk<boolean>;
   showDetailPage?: Thunk<boolean>;
   layouts?: Thunk<{
     detail?: (props: IEntityDetailProps) => React.ReactNode;
@@ -119,7 +122,22 @@ export class Entity<T = any> {
   public get enabled(): boolean {
     const val = resolveOptionalThunk(this.config.enabled);
     if (typeof val !== 'undefined') return val;
-    return entityPermission(this, 'list');
+    return true;
+  }
+  public get creatable(): boolean {
+    const val = resolveOptionalThunk(this.config.creatable);
+    if (typeof val !== 'undefined') return val;
+    return true;
+  }
+  public get updateable(): boolean {
+    const val = resolveOptionalThunk(this.config.updateable);
+    if (typeof val !== 'undefined') return val;
+    return true;
+  }
+  public get deletable(): boolean {
+    const val = resolveOptionalThunk(this.config.deletable);
+    if (typeof val !== 'undefined') return val;
+    return true;
   }
 
   public get showDetailPage(): boolean {

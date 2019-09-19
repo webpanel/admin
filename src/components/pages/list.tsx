@@ -14,7 +14,6 @@ import {
 import { Link, ResourceSearchInput, ResourceTable } from 'webpanel-antd';
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
-import { entityPermission, fieldPermission } from '../../model/permissions';
 
 import { CreateEntityProps } from '../buttons/EntityAddButton';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
@@ -23,6 +22,7 @@ import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { Translation } from 'react-i18next';
+import { fieldPermission } from '../../model/permissions';
 import i18next from 'i18next';
 
 export interface IEntityListTableProps extends TableProps<any> {
@@ -88,9 +88,7 @@ export class EntityList extends React.Component<IEntityListProps> {
     const { entity, editableFields } = this.props;
 
     const _editableFields =
-      (entityPermission(entity, 'update') &&
-        resolveOptionalThunk(editableFields)) ||
-      [];
+      (entity.updateable && resolveOptionalThunk(editableFields)) || [];
 
     const rowValues = {};
 
@@ -216,7 +214,7 @@ export class EntityList extends React.Component<IEntityListProps> {
             />
           ),
           _addButton &&
-            entityPermission(entity, 'create') &&
+            entity.creatable &&
             entity.getCreateButton({
               button: { size: 'small' },
               onCreate: () => resource.reload(),
@@ -272,7 +270,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 </Link>
               )
             : null,
-          entityPermission(entity, 'update')
+          entity.updateable
             ? (props: ActionButtonProps) => (
                 <Link
                   key="edit-button-action"
@@ -284,7 +282,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 </Link>
               )
             : null,
-          entityPermission(entity, 'delete') && 'delete'
+          entity.deletable && 'delete'
         ].filter(x => x)}
         customDetailURL={(resourceID: string) => {
           return entity.getDetailLink(resourceID);
