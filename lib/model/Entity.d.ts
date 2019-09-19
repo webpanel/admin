@@ -25,6 +25,9 @@ export interface IEntityConfig<T> {
     dataSource: Thunk<DataSource>;
     title?: Thunk<string>;
     enabled?: Thunk<boolean>;
+    creatable?: Thunk<boolean>;
+    updateable?: Thunk<boolean>;
+    deletable?: Thunk<boolean>;
     showDetailPage?: Thunk<boolean>;
     layouts?: Thunk<{
         detail?: (props: IEntityDetailProps) => React.ReactNode;
@@ -47,6 +50,9 @@ export declare class Entity<T = any> {
     readonly structureName: string;
     readonly title: string;
     readonly enabled: boolean;
+    readonly creatable: boolean;
+    readonly updateable: boolean;
+    readonly deletable: boolean;
     readonly showDetailPage: boolean;
     readonly name: string;
     readonly dataSource: DataSource;
