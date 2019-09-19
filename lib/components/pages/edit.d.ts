@@ -5,12 +5,14 @@ import { Entity } from '../../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
 import { ModalProps } from 'antd/lib/modal';
+import { Thunk } from 'ts-thunk';
 export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
 }
 export interface IEntityEditConfig {
     form?: IEntityEditFormProps;
+    fields?: Thunk<string[]>;
     initialValues?: {
         [key: string]: any;
     };

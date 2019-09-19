@@ -63,6 +63,10 @@ import { Translation } from 'react-i18next';
 
 // import { Button } from 'antd';
 
+interface IEntitySearchableConfig {
+  fields: Thunk<string[]>;
+}
+
 export interface IEntityConfig<T> {
   name: Thunk<string>;
   icon?: Thunk<string>;
@@ -79,7 +83,7 @@ export interface IEntityConfig<T> {
   edit?: Thunk<IEntityEditConfig>;
   detail?: Thunk<IEntityDetailConfig>;
 
-  searchable?: boolean;
+  searchable?: Thunk<boolean | IEntitySearchableConfig>;
   // render loaded entity to string (in search fields etc.)
   // only fields with {visible:['search']} are loaded for rendering
   render?: (value: T | null) => string;
@@ -151,7 +155,7 @@ export class Entity<T = any> {
     return (list && list.initialFilters) || this.config.initialFilters;
   }
   public get searchable(): boolean {
-    return this.config.searchable || false;
+    return typeof this.config.searchable !== 'undefined';
   }
 
   public getField(name: string): EntityField<T, any> | null {
@@ -160,16 +164,47 @@ export class Entity<T = any> {
   }
 
   public get listFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('list', 'read'));
+    const listConfig = resolveOptionalThunk(this.config.list);
+    if (listConfig) {
+      const listFields = resolveOptionalThunk(listConfig.fields);
+      if (listFields) {
+        const _listFields = listFields.map(f =>
+          typeof f === 'string' ? f : f.field
+        );
+        return this.fields.filter(f => _listFields.indexOf(f.name) !== -1);
+      }
+    }
+    return this.fields;
   }
   public get editFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('edit', 'write'));
+    const editConfig = resolveOptionalThunk(this.config.edit);
+    if (editConfig) {
+      const listFields = resolveOptionalThunk(editConfig.fields);
+      if (listFields) {
+        return this.fields.filter(f => listFields.indexOf(f.name) !== -1);
+      }
+    }
+    return this.fields;
   }
   public get detailFields(): EntityField<T, any>[] {
-    return this.fields.filter(f => f.visible('detail', 'read'));
+    const detailConfig = resolveOptionalThunk(this.config.detail);
+    if (detailConfig) {
+      const listFields = resolveOptionalThunk(detailConfig.fields);
+      if (listFields) {
+        return this.fields.filter(f => listFields.indexOf(f.name) !== -1);
+      }
+    }
+    return this.fields;
   }
   public get searchableFields(): EntityField<T, any>[] {
-    const fields = this.fields.filter(f => f.visible('search', 'read', true));
+    const search = resolveOptionalThunk(this.config.searchable);
+    let fields: EntityField<T, any>[] = [];
+    if (search && typeof search !== 'boolean') {
+      const searchFields = resolveOptionalThunk(search.fields);
+      if (searchFields) {
+        fields = this.fields.filter(f => searchFields.indexOf(f.name) !== -1);
+      }
+    }
     if (fields.length === 0 && this.listFields.length > 0) {
       return [this.listFields[0]];
     }
