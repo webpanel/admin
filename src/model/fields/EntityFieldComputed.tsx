@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { EntityField, FieldSections, IEntityFieldConfig } from '../EntityField';
+import { EntityField, IEntityFieldConfig } from '../EntityField';
 
-import { FieldAction } from '../permissions';
+// import { FieldAction } from '../permissions';
 
 export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
   columnName?: string;
@@ -27,14 +27,14 @@ export class EntityFieldComputed<T> extends EntityField<
     return 'cannot edit computed field';
   }
 
-  public visible(
-    section: FieldSections,
-    action: FieldAction,
-    strict: boolean = false
-  ): boolean {
-    if (section === 'edit') {
-      return false;
-    }
-    return super.visible(section, action, strict);
-  }
+  // public visible(
+  //   section: FieldSections,
+  //   action: FieldAction,
+  //   strict: boolean = false
+  // ): boolean {
+  //   if (section === 'edit') {
+  //     return false;
+  //   }
+  //   return super.visible(section, action, strict);
+  // }
 }

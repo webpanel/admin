@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { FieldAction } from './permissions';
 import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
 import { Thunk } from 'ts-thunk';
 import { Entity } from './Entity';
@@ -20,8 +19,6 @@ export interface IEntityFieldConfig<T> {
     description?: React.ReactNode;
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
-    listEditable?: Thunk<boolean>;
-    visible?: Thunk<FieldSections[]>;
     hidden?: Thunk<FieldSections[]>;
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
@@ -47,7 +44,6 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly filterDenormalize: (values: {
         [key: string]: any;
     }) => any[];
-    visible(section: FieldSections, action: FieldAction, strict?: boolean): boolean;
     readonly render: (record: T) => React.ReactNode;
     inputElement(props?: {
         value?: any;

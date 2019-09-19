@@ -2,9 +2,9 @@ import * as React from 'react';
 import * as inflection from 'inflection';
 
 import { Button, Input, Tooltip } from 'antd';
-import { FieldAction, fieldPermission } from './permissions';
+// import { FieldAction, fieldPermission } from './permissions';
 import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
-import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
+import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
 import { Entity } from './Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
@@ -39,8 +39,7 @@ export interface IEntityFieldConfig<T> {
   // table columns title
   shortTitle?: Thunk<string>;
   enabled?: Thunk<boolean>;
-  listEditable?: Thunk<boolean>;
-  visible?: Thunk<FieldSections[]>;
+  // visible?: Thunk<FieldSections[]>;
   hidden?: Thunk<FieldSections[]>;
   render?: (record: T) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
@@ -115,26 +114,26 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     };
   }
 
-  public visible(
-    section: FieldSections,
-    action: FieldAction,
-    strict: boolean = false
-  ): boolean {
-    const { visible, hidden, enabled } = this.config;
-    if (enabled === false) {
-      return false;
-    }
-    if (strict && !visible) {
-      return false;
-    }
-    if (visible && resolveThunk(visible).indexOf(section) === -1) {
-      return false;
-    }
-    if (hidden && resolveThunk(hidden).indexOf(section) !== -1) {
-      return false;
-    }
-    return fieldPermission(this, action);
-  }
+  // public visible(
+  //   section: FieldSections,
+  //   action: FieldAction,
+  //   strict: boolean = false
+  // ): boolean {
+  //   const { visible, hidden, enabled } = this.config;
+  //   if (enabled === false) {
+  //     return false;
+  //   }
+  //   if (strict && !visible) {
+  //     return false;
+  //   }
+  //   if (visible && resolveThunk(visible).indexOf(section) === -1) {
+  //     return false;
+  //   }
+  //   if (hidden && resolveThunk(hidden).indexOf(section) !== -1) {
+  //     return false;
+  //   }
+  //   return fieldPermission(this, action);
+  // }
 
   public get render(): (record: T) => React.ReactNode {
     if (this.config.render) {
@@ -164,7 +163,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       <Input
         key={`string_field_${this.entity.name}_${this.valuePropName}`}
         {...props}
-        {...this.config.attributes || {}}
+        {...(this.config.attributes || {})}
         onChange={onChangeProp}
       />
     );

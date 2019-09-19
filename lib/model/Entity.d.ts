@@ -16,6 +16,9 @@ import { Thunk } from 'ts-thunk';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
+interface IEntitySearchableConfig {
+    fields: Thunk<string[]>;
+}
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     icon?: Thunk<string>;
@@ -31,7 +34,7 @@ export interface IEntityConfig<T> {
     list?: Thunk<IEntityListConfig>;
     edit?: Thunk<IEntityEditConfig>;
     detail?: Thunk<IEntityDetailConfig>;
-    searchable?: boolean;
+    searchable?: Thunk<boolean | IEntitySearchableConfig>;
     render?: (value: T | null) => string;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
@@ -96,3 +99,4 @@ export declare class Entity<T = any> {
     getDetailLink(id: ResourceID): string;
     getEditLink(id: ResourceID): string;
 }
+export {};

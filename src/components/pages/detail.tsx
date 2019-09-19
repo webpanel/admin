@@ -8,9 +8,11 @@ import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
 import { TFunction } from 'i18next';
+import { Thunk } from 'ts-thunk';
 import { Translation } from 'react-i18next';
 
 export interface IEntityDetailConfig {
+  fields?: Thunk<string[]>;
   pollInterval?: number;
   wrapperType?: 'card' | 'plain';
 }
