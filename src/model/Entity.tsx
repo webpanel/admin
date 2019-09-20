@@ -189,30 +189,36 @@ export class Entity<T = any> {
         const _listFields = listFields.map(f =>
           typeof f === 'string' ? f : f.field
         );
-        return this.fields.filter(f => _listFields.indexOf(f.name) !== -1);
+        return this.fields.filter(
+          f => f.enabled && _listFields.indexOf(f.name) !== -1
+        );
       }
     }
-    return this.fields;
+    return this.fields.filter(f => f.readable);
   }
   public get editFields(): EntityField<T, any>[] {
     const editConfig = resolveOptionalThunk(this.config.edit);
     if (editConfig) {
       const listFields = resolveOptionalThunk(editConfig.fields);
       if (listFields) {
-        return this.fields.filter(f => listFields.indexOf(f.name) !== -1);
+        return this.fields.filter(
+          f => f.writeable && listFields.indexOf(f.name) !== -1
+        );
       }
     }
-    return this.fields;
+    return this.fields.filter(f => f.writeable);
   }
   public get detailFields(): EntityField<T, any>[] {
     const detailConfig = resolveOptionalThunk(this.config.detail);
     if (detailConfig) {
       const listFields = resolveOptionalThunk(detailConfig.fields);
       if (listFields) {
-        return this.fields.filter(f => listFields.indexOf(f.name) !== -1);
+        return this.fields.filter(
+          f => f.readable && listFields.indexOf(f.name) !== -1
+        );
       }
     }
-    return this.fields;
+    return this.fields.filter(f => f.readable);
   }
   public get searchableFields(): EntityField<T, any>[] {
     const search = resolveOptionalThunk(this.config.searchable);
@@ -220,7 +226,9 @@ export class Entity<T = any> {
     if (search && typeof search !== 'boolean') {
       const searchFields = resolveOptionalThunk(search.fields);
       if (searchFields) {
-        fields = this.fields.filter(f => searchFields.indexOf(f.name) !== -1);
+        fields = this.fields.filter(
+          f => f.readable && searchFields.indexOf(f.name) !== -1
+        );
       }
     }
     if (fields.length === 0 && this.listFields.length > 0) {

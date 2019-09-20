@@ -19,6 +19,8 @@ export interface IEntityFieldConfig<T> {
     description?: React.ReactNode;
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
+    readable?: Thunk<boolean>;
+    writable?: Thunk<boolean>;
     hidden?: Thunk<FieldSections[]>;
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
@@ -44,6 +46,9 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly filterDenormalize: (values: {
         [key: string]: any;
     }) => any[];
+    readonly enabled: boolean;
+    readonly readable: boolean;
+    readonly writeable: boolean;
     readonly render: (record: T) => React.ReactNode;
     inputElement(props?: {
         value?: any;
