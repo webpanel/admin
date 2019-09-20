@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Entity } from '../../model/Entity';
-import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderValueProps {
   name: string;
@@ -23,7 +22,7 @@ export class LayoutBuilderValue extends React.Component<
       return `unknown field ${name}`;
     }
 
-    if (!fieldPermission(field, 'read')) {
+    if (!field.readable) {
       return null;
     }
 

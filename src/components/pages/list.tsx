@@ -22,7 +22,6 @@ import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import { Translation } from 'react-i18next';
-import { fieldPermission } from '../../model/permissions';
 import i18next from 'i18next';
 
 export interface IEntityListTableProps extends TableProps<any> {
@@ -120,8 +119,7 @@ export class EntityList extends React.Component<IEntityListProps> {
                 values={values}
                 field={field}
                 editable={
-                  _editableFields.indexOf(field.name) > -1 &&
-                  fieldPermission(field, 'write')
+                  _editableFields.indexOf(field.name) > -1 && field.writeable
                 }
               />
             );

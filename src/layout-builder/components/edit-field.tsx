@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Entity } from '../../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
-import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderEditFieldProps {
   name: string;
@@ -24,7 +23,7 @@ export class LayoutBuilderEditField extends React.Component<
     if (field === null) {
       return `unknown field ${name}`;
     }
-    if (!fieldPermission(field, 'write')) {
+    if (!field.writeable) {
       return null;
     }
     return field.fieldElement(formContext, name, { formLayout });

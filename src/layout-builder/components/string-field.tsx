@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Entity } from '../../model/Entity';
 import { Form } from 'antd';
 import { Translation } from 'react-i18next';
-import { fieldPermission } from '../../model/permissions';
 
 export interface LayoutBuilderStringFieldProps {
   name: string;
@@ -49,7 +48,7 @@ export class LayoutBuilderStringField extends React.Component<
       return `unknown field ${name}`;
     }
 
-    if (!fieldPermission(field, 'read')) {
+    if (!field.readable) {
       return null;
     }
 
