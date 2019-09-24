@@ -40,8 +40,6 @@ export interface IEntityFieldConfig<T> {
   enabled?: Thunk<boolean>;
   readable?: Thunk<boolean>;
   writable?: Thunk<boolean>;
-  // visible?: Thunk<FieldSections[]>;
-  hidden?: Thunk<FieldSections[]>;
   render?: (record: T) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
   attributes?: InputProps;
