@@ -18,6 +18,9 @@ export class EntityFieldComputed<T> extends EntityField<
   public fetchField(): string | null {
     return this.config.fetchField || super.fetchField();
   }
+  public get writeable(): boolean {
+    return false;
+  }
 
   public inputElement(props?: {
     value?: any;

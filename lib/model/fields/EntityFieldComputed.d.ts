@@ -7,6 +7,7 @@ export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldComputed<T> extends EntityField<T, IEntityFieldComputedConfig<T>> {
     columnName(): string;
     fetchField(): string | null;
+    readonly writeable: boolean;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, valueElement: React.ReactNode) => void;

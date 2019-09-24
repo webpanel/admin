@@ -3,13 +3,13 @@ import * as React from 'react';
 import { Card, Modal, message } from 'antd';
 import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
+import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
 import { Entity } from '../../model/Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
 import { FormLayout } from 'antd/lib/form/Form';
 import { ModalProps } from 'antd/lib/modal';
 import { ResourceForm } from 'webpanel-antd';
-import { Thunk } from 'ts-thunk';
 
 export type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 
@@ -113,16 +113,24 @@ export class EntityEdit extends React.Component<
       onCreate,
       form,
       initialValues,
-      wrapperType
+      wrapperType,
+      fields
     } = this.props;
+    let entityFields = entity.editFields.filter(
+      f => f && f.fetchField() && f.writeable
+    );
+    const _fields = resolveOptionalThunk(fields);
+    if (typeof _fields !== 'undefined') {
+      entityFields = _fields.map(name => entity.getFieldOrFail(name));
+    }
     return (
       <ResourceLayer
         key={this.state.version}
         name={entity.name}
         id={resourceID}
         fields={
-          entity.editFields
-            .filter(f => f && f.fetchField())
+          entityFields
+            .filter(f => f && f.fetchField() && f.writeable)
             .map(f => f.columnName())
             .filter(f => f) as string[]
         }
@@ -146,7 +154,7 @@ export class EntityEdit extends React.Component<
               });
               const content =
                 layout ||
-                entity.editFields.map((field, i) =>
+                entityFields.map((field, i) =>
                   field.fieldElement(formContext, i, {
                     formLayout: form && form.layout
                   })
