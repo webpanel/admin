@@ -31,7 +31,14 @@ export class CreateEntityButton extends React.Component<
   public state = { showModal: false };
 
   public render() {
-    const { entity, initialValues, flow, onCreate, button } = this.props;
+    const {
+      entity,
+      initialValues,
+      fields,
+      flow,
+      onCreate,
+      button
+    } = this.props;
 
     let _flow = flow || 'redirect';
 
@@ -53,6 +60,7 @@ export class CreateEntityButton extends React.Component<
                 {entity.getCreateView(
                   {
                     initialValues,
+                    fields,
                     wrapperType: 'modal',
                     modal: {
                       title: t(`${entity.name}.title.create`, {

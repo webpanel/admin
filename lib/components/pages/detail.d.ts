@@ -1,8 +1,8 @@
 import '../../../styles/form-detail.css';
 import * as React from 'react';
 import { ResourceID } from 'webpanel-data';
-import { Entity } from '../../model/Entity';
 import { Thunk } from 'ts-thunk';
+import { Entity } from '../../model/Entity';
 export interface IEntityDetailConfig {
     fields?: Thunk<string[]>;
     pollInterval?: number;

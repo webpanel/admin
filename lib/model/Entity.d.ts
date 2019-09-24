@@ -61,6 +61,7 @@ export declare class Entity<T = any> {
     readonly initialFilters: DataSourceArgumentMap | undefined;
     readonly searchable: boolean;
     getField(name: string): EntityField<T, any> | null;
+    getFieldOrFail(name: string): EntityField<T, any>;
     readonly listFields: EntityField<T, any>[];
     readonly editFields: EntityField<T, any>[];
     readonly detailFields: EntityField<T, any>[];

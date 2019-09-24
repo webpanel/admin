@@ -4,11 +4,11 @@ import * as React from 'react';
 
 import { Card, Form } from 'antd';
 import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
+import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
 import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
 import { TFunction } from 'i18next';
-import { Thunk } from 'ts-thunk';
 import { Translation } from 'react-i18next';
 
 export interface IEntityDetailConfig {
@@ -23,7 +23,13 @@ export interface IEntityDetailProps extends IEntityDetailConfig {
 
 export class EntityDetail extends React.Component<IEntityDetailProps> {
   public render(): React.ReactNode {
-    const { entity, resourceID, pollInterval, wrapperType } = this.props;
+    const {
+      entity,
+      resourceID,
+      pollInterval,
+      wrapperType,
+      fields
+    } = this.props;
 
     const formItemLayout = {
       labelCol: {
@@ -36,9 +42,15 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       }
     };
 
+    let entityFields = entity.detailFields;
+    const _fields = resolveOptionalThunk(fields);
+    if (typeof _fields !== 'undefined') {
+      entityFields = _fields.map(name => entity.getFieldOrFail(name));
+    }
+
     const contentFn = (resource: Resource, t: TFunction) => (
       <Form className="webpanel-form-detail">
-        {entity.detailFields.map((field, i) => (
+        {entityFields.map((field, i) => (
           <Form.Item
             key={`${field.name}_${i}`}
             label={t(`${entity.name}.${field.name}`, {
@@ -61,7 +73,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             dataSource={entity.dataSource}
             fields={[
               'id',
-              ...(entity.detailFields
+              ...(entityFields
                 .map(x => x.fetchField())
                 .filter(x => x) as string[])
             ]}

@@ -180,6 +180,13 @@ export class Entity<T = any> {
     const filtered = this.fields.filter(f => f.name === name);
     return filtered.length > 0 ? filtered[0] : null;
   }
+  public getFieldOrFail(name: string): EntityField<T, any> {
+    const filtered = this.fields.filter(f => f.name === name);
+    if (filtered.length === 0) {
+      throw new Error(`Cannot find field ${name} on entity ${this.name}`);
+    }
+    return filtered[0];
+  }
 
   public get listFields(): EntityField<T, any>[] {
     const listConfig = resolveOptionalThunk(this.config.list);
