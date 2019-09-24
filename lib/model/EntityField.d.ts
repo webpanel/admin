@@ -21,7 +21,6 @@ export interface IEntityFieldConfig<T> {
     enabled?: Thunk<boolean>;
     readable?: Thunk<boolean>;
     writable?: Thunk<boolean>;
-    hidden?: Thunk<FieldSections[]>;
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
