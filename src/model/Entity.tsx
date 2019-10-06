@@ -7,6 +7,10 @@ import {
 } from '../components/buttons/EntityAddButton';
 import { DataSource, ResourceID, SortInfo } from 'webpanel-data';
 import {
+  DetailEntityButton,
+  DetailEntityProps
+} from '../components/buttons/EntityDetailButton';
+import {
   EntityEditLayout,
   IEntityEditLayoutProps
 } from '../components/layouts/entity.edit';
@@ -489,6 +493,13 @@ export class Entity<T = any> {
         {...config}
       />
     );
+  };
+
+  public getDetailButton = (
+    id: ResourceID,
+    props: DetailEntityProps
+  ): React.ReactNode => {
+    return <DetailEntityButton entity={this} entityId={id} {...props} />;
   };
 
   public getCreateView = (
