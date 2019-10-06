@@ -3,6 +3,7 @@ import '../../../styles/form-detail.css';
 import * as React from 'react';
 
 import { Card, Form } from 'antd';
+import Modal, { ModalProps } from 'antd/lib/modal';
 import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
@@ -14,7 +15,8 @@ import { Translation } from 'react-i18next';
 export interface IEntityDetailConfig {
   fields?: Thunk<string[]>;
   pollInterval?: number;
-  wrapperType?: 'card' | 'plain';
+  wrapperType?: 'card' | 'plain' | 'modal';
+  modal?: ModalProps;
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity;
@@ -28,7 +30,8 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       resourceID,
       pollInterval,
       wrapperType,
-      fields
+      fields,
+      modal
     } = this.props;
 
     const formItemLayout = {
@@ -86,19 +89,25 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                 data: resource.data || {}
               });
               if (layout) return layout;
-              return wrapperType === 'plain' ? (
-                contentFn(resource, t)
-              ) : (
-                <Card
-                  title={t(`${entity.name}._title`, {
-                    defaultValue: entity.title
-                  })}
-                  loading={resource.loading && !resource.polling}
-                  extra={entity.getEditButton(resourceID)}
-                >
-                  {contentFn(resource, t)}
-                </Card>
-              );
+              const content = contentFn(resource, t);
+              switch (wrapperType) {
+                case 'plain':
+                  return content;
+                case 'modal':
+                  return <Modal {...modal}>{content}</Modal>;
+                default:
+                  return (
+                    <Card
+                      title={t(`${entity.name}._title`, {
+                        defaultValue: entity.title
+                      })}
+                      loading={resource.loading && !resource.polling}
+                      extra={entity.getEditButton(resourceID)}
+                    >
+                      {content}
+                    </Card>
+                  );
+              }
             }}
           />
         )}
