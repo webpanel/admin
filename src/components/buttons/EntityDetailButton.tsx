@@ -62,6 +62,7 @@ export class DetailEntityButton extends React.Component<
                       flow: 'redirect',
                       button: { icon: 'select' }
                     }),
+                    width: '80%',
                     ...modal,
                     visible: this.state.showModal,
                     destroyOnClose: true

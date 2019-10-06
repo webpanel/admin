@@ -2,7 +2,7 @@ import '../../../styles/form-detail.css';
 
 import * as React from 'react';
 
-import { Card, Form } from 'antd';
+import { Card, Descriptions } from 'antd';
 import Modal, { ModalProps } from 'antd/lib/modal';
 import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
@@ -34,17 +34,6 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       modal
     } = this.props;
 
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    };
-
     let entityFields = entity.detailFields;
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== 'undefined') {
@@ -52,19 +41,22 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
     }
 
     const contentFn = (resource: Resource, t: TFunction) => (
-      <Form className="webpanel-form-detail">
+      <Descriptions
+        bordered={false}
+        size="small"
+        column={{ md: 2, xs: 1 }}
+      >
         {entityFields.map((field, i) => (
-          <Form.Item
+          <Descriptions.Item
             key={`${field.name}_${i}`}
             label={t(`${entity.name}.${field.name}`, {
               defaultValue: field.title
             })}
-            {...formItemLayout}
           >
-            {resource.data && field.render(resource.data)}
-          </Form.Item>
+            {(resource.data && field.render(resource.data)) || '–'}
+          </Descriptions.Item>
         ))}
-      </Form>
+      </Descriptions>
     );
 
     return (
