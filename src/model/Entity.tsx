@@ -24,6 +24,10 @@ import {
   IEntityFieldComputedConfig
 } from './fields/EntityFieldComputed';
 import {
+  EntityFieldCustom,
+  IEntityFieldCustomConfig
+} from './fields/EntityFieldCustom';
+import {
   EntityFieldDate,
   IEntityFieldDateConfig
 } from './fields/EntityFieldDate';
@@ -627,6 +631,13 @@ export class Entity<T = any> {
     config?: IEntityFieldComputedConfig<T>
   ): Entity<T> {
     this.fields.push(new EntityFieldComputed(name, config || {}, this));
+    return this;
+  }
+  public customField(
+    name: string,
+    config: IEntityFieldCustomConfig<T>
+  ): Entity<T> {
+    this.fields.push(new EntityFieldCustom(name, config, this));
     return this;
   }
 

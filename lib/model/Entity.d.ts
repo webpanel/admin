@@ -6,6 +6,7 @@ import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
 import { EntityField, IEntityFieldConfig } from './EntityField';
 import { IEntityFieldBooleanConfig } from './fields/EntityFieldBoolean';
 import { IEntityFieldComputedConfig } from './fields/EntityFieldComputed';
+import { IEntityFieldCustomConfig } from './fields/EntityFieldCustom';
 import { IEntityFieldDateConfig } from './fields/EntityFieldDate';
 import { IEntityFieldEnumConfig } from './fields/EntityFieldEnum';
 import { IEntityFieldFileConfig } from './fields/EntityFieldFile';
@@ -71,7 +72,7 @@ export declare class Entity<T = any> {
     readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: ResourceID) => React.ReactNode) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
-    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
@@ -104,6 +105,7 @@ export declare class Entity<T = any> {
     colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T>;
     computedField(name: string, config?: IEntityFieldComputedConfig<T>): Entity<T>;
+    customField(name: string, config: IEntityFieldCustomConfig<T>): Entity<T>;
     getListLink(): string;
     getCreateLink(): string;
     getDetailLink(id: ResourceID): string;
