@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as inflection from 'inflection';
 
-import { Button, Input, Tooltip } from 'antd';
+import { Button, Tooltip } from 'antd';
 import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
@@ -150,19 +150,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     onChange?: (value: any, stringValue: string) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    const onChange = props && props.onChange;
-    const onChangeProp = onChange
-      ? (e: React.ChangeEvent<HTMLInputElement>) =>
-          onChange(e.target.value, e.target.value)
-      : undefined;
-    return (
-      <Input
-        key={`string_field_${this.entity.name}_${this.valuePropName}`}
-        {...props}
-        {...(this.config.attributes || {})}
-        onChange={onChangeProp}
-      />
-    );
+    return 'input element is empty';
   }
 
   public get valuePropName(): string {
@@ -204,16 +192,10 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     );
   }
 
-  public filterDropdownInput = (props: IEntityFieldFilterProps<any>) => {
-    const value = props.selectedKeys ? props.selectedKeys[0] : '';
-    return (
-      <Input
-        value={value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          props.setSelectedKeys(e.target.value ? [e.target.value] : []);
-        }}
-      />
-    );
+  public filterDropdownInput = (
+    props: IEntityFieldFilterProps<any>
+  ): React.ReactNode => {
+    return 'empty filter input';
   };
 
   public filterDropdown = (resource: any) => {

@@ -58,6 +58,6 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
-    filterDropdownInput: (props: IEntityFieldFilterProps<any>) => JSX.Element;
+    filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
     filterDropdown: (resource: any) => (props: IEntityFieldFilterProps<any>) => JSX.Element;
 }

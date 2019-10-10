@@ -57,6 +57,7 @@ import { EntityDetailLayout } from '../components/layouts/entity.detail';
 import { EntityFieldColor } from './fields/EntityFieldColor';
 import { EntityFieldNumber } from './fields/EntityFieldNumber';
 import { EntityFieldPasssword } from './fields/EntityFieldPassword';
+import { EntityFieldString } from './fields/EntityFieldString';
 import { EntityFieldText } from './fields/EntityFieldText';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
@@ -561,8 +562,13 @@ export class Entity<T = any> {
   };
 
   // fields
+  // deprecated, use stringField
   public inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
-    this.fields.push(new EntityField(name, config || {}, this));
+    this.fields.push(new EntityFieldString(name, config || {}, this));
+    return this;
+  }
+  public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+    this.fields.push(new EntityFieldString(name, config || {}, this));
     return this;
   }
   public textField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
