@@ -93,6 +93,7 @@ export declare class Entity<T = any> {
     } | undefined) => React.ReactNode;
     getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     passwordField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
