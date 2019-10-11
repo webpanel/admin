@@ -242,19 +242,20 @@ export class EntityList extends React.Component<IEntityListProps> {
       table.size = 'small';
     }
     const size = table && table.size === 'small' ? 'small' : 'default';
+    const defaultPagination: PaginationConfig = {
+      defaultPageSize: 30,
+      pageSizeOptions: ['10', '20', '30', '50', '100'],
+      showSizeChanger: true,
+      showTotal: (total: number, range: [number, number]) =>
+        `${range[0]}-${range[1]} / ${total}`
+    };
 
     return (
       <ResourceTable
         className="entitytable"
         scroll={{ x: true }}
         resourceCollection={resource}
-        pagination={
-          (table && table.pagination) || {
-            defaultPageSize: 30,
-            pageSizeOptions: ['10', '20', '30', '50', '100'],
-            showSizeChanger: true
-          }
-        }
+        pagination={{ ...defaultPagination, ...(table && table.pagination) }}
         actionButtons={[
           entity.showDetailPage
             ? (props: ActionButtonProps) => (
