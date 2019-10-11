@@ -80,9 +80,9 @@ export class EntityEdit extends React.Component<
           <ResourceFormPageButtons
             hasChanges={formContext.form.isFieldsTouched()}
             handleReset={() => formContext.formComponent.resetFields()}
-            handleSave={(option: SaveOption) =>
-              this.handleSave(formContext, resource, option)
-            }
+            // handleSave={(option: SaveOption) =>
+            //   this.handleSave(formContext, resource, option)
+            // }
           />
         </>
       </Card>
