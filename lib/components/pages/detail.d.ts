@@ -4,11 +4,13 @@ import { ModalProps } from 'antd/lib/modal';
 import { ResourceID } from 'webpanel-data';
 import { Thunk } from 'ts-thunk';
 import { Entity } from '../../model/Entity';
+import { DescriptionsProps } from 'antd/lib/descriptions';
 export interface IEntityDetailConfig {
     fields?: Thunk<string[]>;
     pollInterval?: number;
     wrapperType?: 'card' | 'plain' | 'modal';
     modal?: ModalProps;
+    desriptions?: DescriptionsProps;
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
     entity: Entity;

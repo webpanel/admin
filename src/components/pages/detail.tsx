@@ -11,12 +11,14 @@ import { Entity } from '../../model/Entity';
 // import { Link  } from 'react-router-dom';
 import { TFunction } from 'i18next';
 import { Translation } from 'react-i18next';
+import { DescriptionsProps } from 'antd/lib/descriptions';
 
 export interface IEntityDetailConfig {
   fields?: Thunk<string[]>;
   pollInterval?: number;
   wrapperType?: 'card' | 'plain' | 'modal';
   modal?: ModalProps;
+  desriptions?: DescriptionsProps
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity;
@@ -45,6 +47,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
         bordered={false}
         size="small"
         column={{ md: 2, xs: 1 }}
+        {...this.props.desriptions}
       >
         {entityFields.map((field, i) => (
           <Descriptions.Item
