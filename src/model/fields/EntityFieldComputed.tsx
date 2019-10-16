@@ -6,7 +6,6 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
   columnName?: string;
-
   fetchField?: string;
 }
 export class EntityFieldComputed<T> extends EntityField<
@@ -30,15 +29,4 @@ export class EntityFieldComputed<T> extends EntityField<
   }): React.ReactNode {
     return 'cannot edit computed field';
   }
-
-  // public visible(
-  //   section: FieldSections,
-  //   action: FieldAction,
-  //   strict: boolean = false
-  // ): boolean {
-  //   if (section === 'edit') {
-  //     return false;
-  //   }
-  //   return super.visible(section, action, strict);
-  // }
 }

@@ -43,7 +43,7 @@ export interface IEntityFieldConfig<T> {
   render?: (record: T) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
   attributes?: InputProps;
-  sortable?: boolean;
+  sortable?: boolean | { fields: string[] };
   filter?: IEntityFieldConfigFilter | boolean;
 }
 
@@ -72,7 +72,26 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return this.name;
   }
   public get sortable(): boolean {
-    return this.config.sortable || false;
+    const sortable = this.config.sortable;
+    switch (typeof sortable) {
+      case 'undefined':
+        return false;
+      case 'boolean':
+        return sortable;
+      default:
+        return true;
+    }
+  }
+  public sortColumns(): string[] {
+    const sortable = this.config.sortable;
+    switch (typeof sortable) {
+      case 'undefined':
+        return [];
+      case 'boolean':
+        return [this.columnName()];
+      default:
+        return sortable.fields;
+    }
   }
   public get filter(): boolean {
     if (typeof this.config.filter === 'boolean') {
