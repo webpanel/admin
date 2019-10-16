@@ -24,7 +24,9 @@ export interface IEntityFieldConfig<T> {
     render?: (record: T) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
-    sortable?: boolean;
+    sortable?: boolean | {
+        fields: string[];
+    };
     filter?: IEntityFieldConfigFilter | boolean;
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -37,6 +39,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     columnName(): string;
     fetchField(): string | null;
     readonly sortable: boolean;
+    sortColumns(): string[];
     readonly filter: boolean;
     readonly range: boolean;
     readonly filterNormalize: (values: any[]) => {
