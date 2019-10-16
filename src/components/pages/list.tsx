@@ -96,7 +96,7 @@ export class EntityList extends React.Component<IEntityListProps> {
         const { field, render } = column;
         return {
           key: field.name,
-          dataIndex: field.name,
+          dataIndex: field.columnName(),
           title: t(`${field.entity.name}.${field.name}`, {
             defaultValue: field.shortTitle
           }),

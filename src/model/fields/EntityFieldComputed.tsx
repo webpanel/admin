@@ -6,6 +6,7 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 
 export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
   columnName?: string;
+
   fetchField?: string;
 }
 export class EntityFieldComputed<T> extends EntityField<
