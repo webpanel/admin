@@ -252,7 +252,7 @@ export class EntityFieldRelationship<T> extends EntityField<
                 return _targetEntity.render(value);
               }}
               value={value}
-              mode={this.mode}
+              mode="multiple"
               allowClear={false}
               showSearch={true}
               resourceCollection={resource}
