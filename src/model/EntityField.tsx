@@ -261,8 +261,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
             boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
           }}
         >
-          {this._filterDropdownInput(props)}
+          <div style={{ marginRight: 2 }}>
+            {this._filterDropdownInput(props)}
+          </div>
           <Button
+            style={{ marginRight: 2 }}
             disabled={!props.selectedKeys}
             onClick={() => props.confirm()}
             type="primary"
