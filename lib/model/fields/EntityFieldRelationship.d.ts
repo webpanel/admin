@@ -32,3 +32,4 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         [key: string]: any;
     }) => any[];
 }
+export declare const getRelationshipFilterDropdownInput: (targetEntity: Entity<any>, props: IEntityFieldFilterProps<string>) => React.ReactNode;
