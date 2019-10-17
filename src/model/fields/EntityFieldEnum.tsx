@@ -48,9 +48,7 @@ export class EntityFieldEnum<T> extends EntityField<
     const selectOptions = resolveThunk(this.config.options).map(
       (value: IOption) => (
         <Select.Option
-          key={`enum_field_${this.entity.name}_${this.valuePropName}_${
-            value.value
-          }`}
+          key={`enum_field_${this.entity.name}_${this.valuePropName}_${value.value}`}
           value={value.value}
         >
           {value.label}
@@ -87,6 +85,7 @@ export class EntityFieldEnum<T> extends EntityField<
         style={{
           minWidth: '200px'
         }}
+        mode="multiple"
         value={value}
         onChange={(value: any) => props.setSelectedKeys([value])}
         showSearch={true}
