@@ -2,12 +2,16 @@ import * as React from 'react';
 import * as inflection from 'inflection';
 
 import { Button, Tooltip } from 'antd';
+import {
+  FormField,
+  ResourceTableFilterDenormalizer,
+  ResourceTableFilterNormalizer
+} from 'webpanel-antd';
 import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
 import { Entity } from './Entity';
 import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { FormField } from 'webpanel-antd';
 import { InputProps } from 'antd/lib/input';
 import { Translation } from 'react-i18next';
 
@@ -22,8 +26,17 @@ export interface IEntityFieldFilterProps<T> {
   clearFilters: () => {};
 }
 
+export interface IEntityFieldInputElementProps<T = any> {
+  value?: T;
+  onChange?: (value: T, stringValue: string) => void;
+  autoFocus?: boolean;
+}
+
 export interface IEntityFieldConfigFilter {
   range?: boolean;
+  dropdownInput?: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
+  normalizer?: ResourceTableFilterNormalizer;
+  denormalizer?: ResourceTableFilterDenormalizer;
 }
 const isIEntityFieldConfigFilter = (
   value: IEntityFieldConfigFilter | boolean | undefined
@@ -107,7 +120,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return false;
   }
 
-  public get filterNormalize(): (values: any[]) => { [key: string]: any } {
+  public get filterNormalize(): ResourceTableFilterNormalizer {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
@@ -118,8 +131,15 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return res;
     };
   }
+  public filterNormalizeFn(): ResourceTableFilterNormalizer {
+    const filter = this.config.filter;
+    if (filter && typeof filter === 'object' && filter.normalizer) {
+      return filter.normalizer;
+    }
+    return this.filterNormalize;
+  }
 
-  public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
+  public get filterDenormalize(): ResourceTableFilterDenormalizer {
     return (values: { [key: string]: any }) => {
       let res: any[] = [];
       if (values[this.columnName() + '_like']) {
@@ -130,6 +150,13 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       }
       return res;
     };
+  }
+  public filterDenormalizeFn(): ResourceTableFilterDenormalizer {
+    const filter = this.config.filter;
+    if (filter && typeof filter === 'object' && filter.denormalizer) {
+      return filter.denormalizer;
+    }
+    return this.filterDenormalize;
   }
 
   public get enabled(): boolean {
@@ -164,11 +191,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     };
   }
 
-  public inputElement(props?: {
-    value?: any;
-    onChange?: (value: any, stringValue: string) => void;
-    autoFocus?: boolean;
-  }): React.ReactNode {
+  public inputElement(props?: IEntityFieldInputElementProps): React.ReactNode {
     return 'input element is empty';
   }
 
@@ -216,6 +239,15 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   ): React.ReactNode => {
     return 'empty filter input';
   };
+  private _filterDropdownInput = (
+    props: IEntityFieldFilterProps<any>
+  ): React.ReactNode => {
+    const filter = this.config.filter;
+    if (filter && typeof filter === 'object' && filter.dropdownInput) {
+      return filter.dropdownInput(props);
+    }
+    return this.filterDropdownInput(props);
+  };
 
   public filterDropdown = (resource: any) => {
     return (props: IEntityFieldFilterProps<any>) => {
@@ -229,7 +261,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
             boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
           }}
         >
-          {this.filterDropdownInput(props)}
+          {this._filterDropdownInput(props)}
           <Button
             disabled={!props.selectedKeys}
             onClick={() => props.confirm()}

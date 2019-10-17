@@ -6,11 +6,7 @@ import {
   IEntityFieldFilterProps
 } from '../EntityField';
 import { FormField, ResourceSelect } from 'webpanel-antd';
-import {
-  ResourceCollection,
-  ResourceCollectionLayer,
-  ResourceID
-} from 'webpanel-data';
+import { ResourceCollection, ResourceID } from 'webpanel-data';
 import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
 
 // import { CreateEntityButton } from '../../components/buttons/EntityAddButton';
@@ -93,81 +89,68 @@ export class EntityFieldRelationship<T> extends EntityField<
           }
         : null;
 
-    return (
-      <ResourceCollectionLayer
-        key={key}
-        name={_targetEntity.name}
-        fields={[
-          'id',
-          ..._targetEntity.searchableFields.map(
-            (x: EntityField<any, any>) => x.name
-          )
-        ]}
-        initialSorting={_targetEntity.initialSorting}
-        initialFilters={_targetEntity.initialFilters}
-        dataSource={_targetEntity.dataSource}
-        render={(collection: ResourceCollection) => (
-          <Translation>
-            {t => (
-              <FormField
-                label={t(`${this.entity.name}.${this.name}`, {
-                  defaultValue: this.title
-                })}
-                extra={this.config.description}
-                name={this.columnName()}
-                formContext={formContext}
-                style={{
-                  width: '100%'
+    return _targetEntity.getResourceCollectionLayer(
+      (collection: ResourceCollection) => (
+        <Translation key={key}>
+          {t => (
+            <FormField
+              label={t(`${this.entity.name}.${this.name}`, {
+                defaultValue: this.title
+              })}
+              extra={this.config.description}
+              name={this.columnName()}
+              formContext={formContext}
+              style={{
+                width: '100%'
+              }}
+              rules={resolveOptionalThunk(this.config.rules)}
+              {...formItemLayout}
+            >
+              <ResourceSelect
+                key={`relationship_field_${this.entity.name}_${this.valuePropName}`}
+                valueKey="id"
+                labelKey={(value: any): string => {
+                  return _targetEntity.render(value);
                 }}
-                rules={resolveOptionalThunk(this.config.rules)}
-                {...formItemLayout}
-              >
-                <ResourceSelect
-                  key={`relationship_field_${this.entity.name}_${this.valuePropName}`}
-                  valueKey="id"
-                  labelKey={(value: any): string => {
-                    return _targetEntity.render(value);
-                  }}
-                  mode={this.mode}
-                  resourceCollection={collection}
-                  showSearch={true}
-                  style={{
-                    width: '100%',
-                    minWidth: '200px',
-                    marginRight: '-38px',
-                    paddingRight: '38px'
-                  }}
-                />
-                {_targetEntity.creatable &&
-                  _targetEntity.getCreateButton({
-                    key: `relationship_field_${this.entity.name}_${this.valuePropName}_add`,
-                    button: {
-                      style: {
-                        margin:
-                          config.formLayout === 'horizontal'
-                            ? '4px 0 0 4px'
-                            : '0 0 0 4px'
-                      }
-                    },
-                    flow: {
-                      type: 'modal',
-                      modal: {
-                        title: `Add ${_targetEntity.title}`,
-                        width: '70%'
-                      }
-                    },
-                    onCreate: async (id: ResourceID) => {
-                      await collection.get();
-                      let updateValues = {};
-                      updateValues[this.columnName()] = id;
-                      formContext.form.setFieldsValue(updateValues);
+                mode={this.mode}
+                resourceCollection={collection}
+                showSearch={true}
+                style={{
+                  width: '100%',
+                  minWidth: '200px',
+                  marginRight: '-38px',
+                  paddingRight: '38px'
+                }}
+              />
+              {_targetEntity.creatable &&
+                _targetEntity.getCreateButton({
+                  key: `relationship_field_${this.entity.name}_${this.valuePropName}_add`,
+                  button: {
+                    style: {
+                      margin:
+                        config.formLayout === 'horizontal'
+                          ? '4px 0 0 4px'
+                          : '0 0 0 4px'
                     }
-                  })}
-              </FormField>
-            )}
-          </Translation>
-        )}
-      />
+                  },
+                  flow: {
+                    type: 'modal',
+                    modal: {
+                      title: `Add ${_targetEntity.title}`,
+                      width: '70%'
+                    }
+                  },
+                  onCreate: async (id: ResourceID) => {
+                    await collection.get();
+                    let updateValues = {};
+                    updateValues[this.columnName()] = id;
+                    formContext.form.setFieldsValue(updateValues);
+                  }
+                })}
+            </FormField>
+          )}
+        </Translation>
+      )
     );
   }
 
@@ -193,37 +176,25 @@ export class EntityFieldRelationship<T> extends EntityField<
         }
       : undefined;
 
-    return (
-      <ResourceCollectionLayer
-        name={_targetEntity.name}
-        fields={[
-          'id',
-          ..._targetEntity.searchableFields.map(
-            (x: EntityField<any, any>) => x.name
-          )
-        ]}
-        initialSorting={_targetEntity.initialSorting}
-        initialFilters={_targetEntity.initialFilters}
-        dataSource={_targetEntity.dataSource}
-        render={(collection: ResourceCollection) => {
-          return (
-            <ResourceSelect
-              {...props}
-              valueKey="id"
-              allowClear={true}
-              showSearch={true}
-              style={{ width: '100%', minWidth: '200px' }}
-              labelKey={(value: any): string => {
-                return _targetEntity.render(value);
-              }}
-              mode={this.mode}
-              resourceCollection={collection}
-              // labelInValue={true}
-              onChange={onChangeProp}
-            />
-          );
-        }}
-      />
+    return _targetEntity.getResourceCollectionLayer(
+      (collection: ResourceCollection) => {
+        return (
+          <ResourceSelect
+            {...props}
+            valueKey="id"
+            allowClear={true}
+            showSearch={true}
+            style={{ width: '100%', minWidth: '200px' }}
+            labelKey={(value: any): string => {
+              return _targetEntity.render(value);
+            }}
+            mode={this.mode}
+            resourceCollection={collection}
+            // labelInValue={true}
+            onChange={onChangeProp}
+          />
+        );
+      }
     );
   }
 
@@ -231,46 +202,34 @@ export class EntityFieldRelationship<T> extends EntityField<
     const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
     const value = props.selectedKeys;
-    return (
-      <ResourceCollectionLayer
-        name={_targetEntity.name}
-        fields={[
-          'id',
-          ...(_targetEntity.searchableFields
-            .map((x: EntityField<any, any>) => x.fetchField())
-            .filter(x => x) as string[])
-        ]}
-        dataSource={_targetEntity.dataSource}
-        initialFilters={_targetEntity.initialFilters}
-        initialSorting={_targetEntity.initialSorting}
-        autoload={!!value}
-        render={(resource: ResourceCollection) => {
-          return (
-            <ResourceSelect
-              valueKey="id"
-              labelKey={(value: any): string => {
-                return _targetEntity.render(value);
-              }}
-              value={value}
-              mode="multiple"
-              allowClear={false}
-              showSearch={true}
-              resourceCollection={resource}
-              style={{ minWidth: '200px' }}
-              onChange={(
-                value: string | string[],
-                option: React.ReactElement<any> | React.ReactElement<any>[]
-              ) => {
-                if (Array.isArray(value)) {
-                  props.setSelectedKeys(value);
-                } else {
-                  props.setSelectedKeys([value.toString()]);
-                }
-              }}
-            />
-          );
-        }}
-      />
+    return _targetEntity.getResourceCollectionLayer(
+      (resource: ResourceCollection) => {
+        return (
+          <ResourceSelect
+            valueKey="id"
+            labelKey={(value: any): string => {
+              return _targetEntity.render(value);
+            }}
+            value={value}
+            mode="multiple"
+            allowClear={false}
+            showSearch={true}
+            resourceCollection={resource}
+            style={{ minWidth: '200px' }}
+            onChange={(
+              value: string | string[],
+              option: React.ReactElement<any> | React.ReactElement<any>[]
+            ) => {
+              if (Array.isArray(value)) {
+                props.setSelectedKeys(value);
+              } else {
+                props.setSelectedKeys([value.toString()]);
+              }
+            }}
+          />
+        );
+      },
+      { autoload: true }
     );
   };
 

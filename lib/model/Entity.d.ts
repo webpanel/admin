@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CreateEntityProps } from '../components/buttons/EntityAddButton';
-import { DataSource, ResourceID, SortInfo } from 'webpanel-data';
+import { DataSource, ResourceCollection, ResourceID, SortInfo } from 'webpanel-data';
 import { DetailEntityProps } from '../components/buttons/EntityDetailButton';
 import { IEntityEditLayoutProps } from '../components/layouts/entity.edit';
 import { EntityField, IEntityFieldConfig } from './EntityField';
@@ -18,6 +18,7 @@ import { Thunk } from 'ts-thunk';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
+import { ResourceCollectionLayerProps } from 'webpanel-data/lib/components/ResourceCollectionLayer';
 interface IEntitySearchableConfig {
     fields: Thunk<string[]>;
 }
@@ -93,6 +94,7 @@ export declare class Entity<T = any> {
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getEditButton: (resourceID: React.ReactText) => React.ReactNode;
+    getResourceCollectionLayer: (render: (collection: ResourceCollection<any[] | null, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps> | undefined) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;

@@ -106,8 +106,8 @@ export class EntityList extends React.Component<IEntityListProps> {
           filterDropdown: field.filter
             ? field.filterDropdown(resource)
             : undefined,
-          filterNormalize: field.filterNormalize,
-          filterDenormalize: field.filterDenormalize,
+          filterNormalize: field.filterNormalizeFn(),
+          filterDenormalize: field.filterDenormalizeFn(),
 
           render: (value: any, record: any): React.ReactNode => {
             const values = rowValues[record.id] || record;
