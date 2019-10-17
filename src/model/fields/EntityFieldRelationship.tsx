@@ -201,36 +201,7 @@ export class EntityFieldRelationship<T> extends EntityField<
   public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
     const { targetEntity } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
-    const value = props.selectedKeys;
-    return _targetEntity.getResourceCollectionLayer(
-      (resource: ResourceCollection) => {
-        return (
-          <ResourceSelect
-            valueKey="id"
-            labelKey={(value: any): string => {
-              return _targetEntity.render(value);
-            }}
-            value={value}
-            mode="multiple"
-            allowClear={false}
-            showSearch={true}
-            resourceCollection={resource}
-            style={{ minWidth: '200px' }}
-            onChange={(
-              value: string | string[],
-              option: React.ReactElement<any> | React.ReactElement<any>[]
-            ) => {
-              if (Array.isArray(value)) {
-                props.setSelectedKeys(value);
-              } else {
-                props.setSelectedKeys([value.toString()]);
-              }
-            }}
-          />
-        );
-      },
-      { autoload: true }
-    );
+    return getRelationshipFilterDropdownInput(_targetEntity, props);
   };
 
   public get filterNormalize(): (values: string[]) => { [key: string]: any } {
@@ -265,3 +236,40 @@ export class EntityFieldRelationship<T> extends EntityField<
     };
   }
 }
+
+export const getRelationshipFilterDropdownInput = (
+  targetEntity: Entity<any>,
+  props: IEntityFieldFilterProps<string>
+) => {
+  const _targetEntity = resolveThunk(targetEntity);
+  const value = props.selectedKeys;
+  return _targetEntity.getResourceCollectionLayer(
+    (resource: ResourceCollection) => {
+      return (
+        <ResourceSelect
+          valueKey="id"
+          labelKey={(value: any): string => {
+            return _targetEntity.render(value);
+          }}
+          value={value}
+          mode="multiple"
+          allowClear={false}
+          showSearch={true}
+          resourceCollection={resource}
+          style={{ minWidth: '200px' }}
+          onChange={(
+            value: string | string[],
+            option: React.ReactElement<any> | React.ReactElement<any>[]
+          ) => {
+            if (Array.isArray(value)) {
+              props.setSelectedKeys(value);
+            } else {
+              props.setSelectedKeys([value.toString()]);
+            }
+          }}
+        />
+      );
+    },
+    { autoload: true }
+  );
+};

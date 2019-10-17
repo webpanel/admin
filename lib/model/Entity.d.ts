@@ -73,7 +73,7 @@ export declare class Entity<T = any> {
     readonly editLayout: ((props: IEntityEditLayoutProps, resourceID: ResourceID) => React.ReactNode) | undefined;
     readonly createLayout: ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
-    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: 'detail' | 'edit', config: LayoutBuilderConfig): React.ReactNode | null;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
