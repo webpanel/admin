@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ResourceTableFilterDenormalizer, ResourceTableFilterNormalizer } from 'webpanel-antd';
 import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
 import { Thunk } from 'ts-thunk';
 import { Entity } from './Entity';
@@ -11,8 +12,16 @@ export interface IEntityFieldFilterProps<T> {
     confirm: () => {};
     clearFilters: () => {};
 }
+export interface IEntityFieldInputElementProps<T = any> {
+    value?: T;
+    onChange?: (value: T, stringValue: string) => void;
+    autoFocus?: boolean;
+}
 export interface IEntityFieldConfigFilter {
     range?: boolean;
+    dropdownInput?: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
+    normalizer?: ResourceTableFilterNormalizer;
+    denormalizer?: ResourceTableFilterDenormalizer;
 }
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
@@ -42,25 +51,20 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     sortColumns(): string[];
     readonly filter: boolean;
     readonly range: boolean;
-    readonly filterNormalize: (values: any[]) => {
-        [key: string]: any;
-    };
-    readonly filterDenormalize: (values: {
-        [key: string]: any;
-    }) => any[];
+    readonly filterNormalize: ResourceTableFilterNormalizer;
+    filterNormalizeFn(): ResourceTableFilterNormalizer;
+    readonly filterDenormalize: ResourceTableFilterDenormalizer;
+    filterDenormalizeFn(): ResourceTableFilterDenormalizer;
     readonly enabled: boolean;
     readonly readable: boolean;
     readonly writeable: boolean;
     readonly render: (record: T) => React.ReactNode;
-    inputElement(props?: {
-        value?: any;
-        onChange?: (value: any, stringValue: string) => void;
-        autoFocus?: boolean;
-    }): React.ReactNode;
+    inputElement(props?: IEntityFieldInputElementProps): React.ReactNode;
     readonly valuePropName: string;
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
+    private _filterDropdownInput;
     filterDropdown: (resource: any) => (props: IEntityFieldFilterProps<any>) => JSX.Element;
 }

@@ -5,7 +5,13 @@ import {
   CreateEntityButton,
   CreateEntityProps
 } from '../components/buttons/EntityAddButton';
-import { DataSource, ResourceID, SortInfo } from 'webpanel-data';
+import {
+  DataSource,
+  ResourceCollection,
+  ResourceCollectionLayer,
+  ResourceID,
+  SortInfo
+} from 'webpanel-data';
 import {
   DetailEntityButton,
   DetailEntityProps
@@ -66,6 +72,7 @@ import { EntityFieldText } from './fields/EntityFieldText';
 import { LayoutBuilder } from '../layout-builder';
 import { LayoutBuilderConfig } from '../layout-builder/builder';
 import { Redirect } from 'react-router';
+import { ResourceCollectionLayerProps } from 'webpanel-data/lib/components/ResourceCollectionLayer';
 import { SaveOption } from '../components/form/buttons';
 import { Translation } from 'react-i18next';
 import { componentPermission } from './permissions';
@@ -562,6 +569,26 @@ export class Entity<T = any> {
       <Link to={this.getEditLink(resourceID)}>
         <Button size="small" htmlType="button" icon="edit" />
       </Link>
+    );
+  };
+
+  public getResourceCollectionLayer = (
+    render: (collection: ResourceCollection) => React.ReactNode,
+    props?: Partial<ResourceCollectionLayerProps>
+  ): React.ReactNode => {
+    return (
+      <ResourceCollectionLayer
+        name={this.name}
+        fields={[
+          'id',
+          ...this.searchableFields.map((x: EntityField<any, any>) => x.name)
+        ]}
+        initialSorting={this.initialSorting}
+        initialFilters={this.initialFilters}
+        dataSource={this.dataSource}
+        {...props}
+        render={render}
+      />
     );
   };
 
