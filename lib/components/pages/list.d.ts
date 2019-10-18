@@ -16,7 +16,13 @@ export interface IEntityListTableProps extends TableProps<any> {
     actionButtonsFixed?: boolean;
     pagination?: PaginationConfig | false;
 }
-export declare type IEntityListColumnRender = (value: any, values: any, field: EntityField<any, any>) => React.ReactNode;
+export declare type IEntityListColumnRender = (value: any, values: any, index: number, field: EntityField<any, any>) => React.ReactNode | {
+    childre: React.ReactNode;
+    props: {
+        rowSpan: number;
+        colSpan: number;
+    };
+};
 export declare type IEntityListColumn = string | {
     field: string;
     hidden?: boolean;

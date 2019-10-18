@@ -36,8 +36,14 @@ export interface IEntityListTableProps extends TableProps<any> {
 export type IEntityListColumnRender = (
   value: any,
   values: any,
+  index: number,
   field: EntityField<any, any>
-) => React.ReactNode;
+) =>
+  | React.ReactNode
+  | {
+      childre: React.ReactNode;
+      props: { rowSpan: number; colSpan: number };
+    };
 
 export type IEntityListColumn =
   | string
@@ -109,10 +115,11 @@ export class EntityList extends React.Component<IEntityListProps> {
           filterNormalize: field.filterNormalizeFn(),
           filterDenormalize: field.filterDenormalizeFn(),
 
-          render: (value: any, record: any): React.ReactNode => {
+          render: (value: any, record: any, index: number): React.ReactNode => {
             const values = rowValues[record.id] || record;
+            console.log('????', record);
             if (render) {
-              return render(value, values, field);
+              return render(value, values, index, field);
             }
             return (
               <ListCell
