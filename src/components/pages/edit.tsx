@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Card, Modal, message } from 'antd';
+import { Card, Modal, Spin, message } from 'antd';
 import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
 import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
@@ -74,18 +74,20 @@ export class EntityEdit extends React.Component<
     resource: Resource
   ): React.ReactNode {
     return (
-      <Card loading={resource.loading && !resource.polling}>
-        <>
-          {content}
-          <ResourceFormPageButtons
-            hasChanges={formContext.form.isFieldsTouched()}
-            handleReset={() => formContext.formComponent.resetFields()}
-            // handleSave={(option: SaveOption) =>
-            //   this.handleSave(formContext, resource, option)
-            // }
-          />
-        </>
-      </Card>
+      <>
+        <Card>
+          <Spin spinning={resource.loading && !resource.polling}>
+            {content}
+            <ResourceFormPageButtons
+              hasChanges={formContext.form.isFieldsTouched()}
+              handleReset={() => formContext.formComponent.resetFields()}
+              // handleSave={(option: SaveOption) =>
+              //   this.handleSave(formContext, resource, option)
+              // }
+            />
+          </Spin>
+        </Card>
+      </>
     );
   }
   private formModalContent(
@@ -98,10 +100,10 @@ export class EntityEdit extends React.Component<
       <Modal
         onOk={() => this.handleSave(formContext, resource)}
         onCancel={onCancel}
-        confirmLoading={resource.loading}
+        confirmLoading={resource.loading && !resource.polling}
         {...modal}
       >
-        {content}
+        <Spin spinning={resource.loading && !resource.polling}>{content}</Spin>
       </Modal>
     );
   }
