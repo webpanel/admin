@@ -117,7 +117,6 @@ export class EntityList extends React.Component<IEntityListProps> {
 
           render: (value: any, record: any, index: number): React.ReactNode => {
             const values = rowValues[record.id] || record;
-            console.log('????', record);
             if (render) {
               return render(value, values, index, field);
             }
