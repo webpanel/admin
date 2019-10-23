@@ -85,6 +85,7 @@ interface IEntitySearchableConfig {
 
 export interface IEntityConfig<T> {
   name: Thunk<string>;
+  pathPrefix?: Thunk<string>;
   icon?: Thunk<string>;
   dataSource: Thunk<DataSource>;
   title?: Thunk<string>;
@@ -331,7 +332,7 @@ export class Entity<T = any> {
   public structureItem = (): React.ReactNode => {
     return (
       <Layout.StructureItem
-        key={this.getListLink()}
+        key={`/${this.structureName}`}
         name={
           <Translation>
             {t =>
@@ -670,15 +671,19 @@ export class Entity<T = any> {
 
   // links
   public getListLink(): string {
-    return `/${this.structureName}`;
+    const prefix = resolveOptionalThunk(this.config.pathPrefix);
+    return `${prefix || ''}/${this.structureName}`;
   }
   public getCreateLink(): string {
-    return `/${this.structureName}/new`;
+    const prefix = resolveOptionalThunk(this.config.pathPrefix);
+    return `${prefix || ''}/${this.structureName}/new`;
   }
   public getDetailLink(id: ResourceID): string {
-    return `/${this.structureName}/${id}`;
+    const prefix = resolveOptionalThunk(this.config.pathPrefix);
+    return `${prefix || ''}/${this.structureName}/${id}`;
   }
   public getEditLink(id: ResourceID): string {
-    return `/${this.structureName}/${id}/edit`;
+    const prefix = resolveOptionalThunk(this.config.pathPrefix);
+    return `${prefix || ''}/${this.structureName}/${id}/edit`;
   }
 }
