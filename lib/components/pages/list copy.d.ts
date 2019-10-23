@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
-import { EntitylistActionButton } from './list.buttons';
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk } from 'ts-thunk';
+import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { CreateEntityProps } from '../buttons/EntityAddButton';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import i18next from 'i18next';
+interface EntityListActionButtonProps extends ActionButtonProps {
+    entity: Entity<any>;
+}
+declare type EntitylistActionButton = 'detail' | 'edit' | 'delete' | React.ReactNode | ((props: EntityListActionButtonProps) => React.ReactNode);
 export interface IEntityListTableProps extends TableProps<any> {
     condensed?: boolean;
     actionButtons?: EntitylistActionButton[];
@@ -57,7 +61,7 @@ export declare class EntityList extends React.Component<IEntityListProps> {
     }[], resource: ResourceCollection, t: i18next.TFunction): ResourceTableColumn[];
     private getListFields;
     private cardContent;
-    private tableActionButtons;
     private tableContent;
     render(): React.ReactNode;
 }
+export {};

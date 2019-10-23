@@ -1,33 +1,39 @@
 import * as React from 'react';
 
 import {
-  ActionButtonProps,
-  ResourceTablePropsActionButton
-} from 'webpanel-antd/lib/table/ResourceTableActionButtons';
-import { Button, Card, Icon } from 'antd';
-import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
   SortInfo
 } from 'webpanel-data';
-import { Link, ResourceSearchInput, ResourceTable } from 'webpanel-antd';
+import {
+  EntitylistActionButton,
+  detailListButton,
+  editListButton
+} from './list.buttons';
 import { PaginationConfig, TableProps } from 'antd/lib/table';
+import {
+  ResourceSearchInput,
+  ResourceTable,
+  ResourceTableActionButtonProps
+} from 'webpanel-antd';
 import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
+import { Card } from 'antd';
 import { CreateEntityProps } from '../buttons/EntityAddButton';
 import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
+import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
 import { Translation } from 'react-i18next';
 import i18next from 'i18next';
 
 export interface IEntityListTableProps extends TableProps<any> {
   // deprecated, use size instead
   condensed?: boolean;
-  actionButtons?: ResourceTablePropsActionButton[];
+  actionButtons?: EntitylistActionButton[];
   actionButtonsTitle?: React.ReactNode;
   actionButtonsFixed?: boolean;
   pagination?: PaginationConfig | false;
@@ -239,16 +245,47 @@ export class EntityList extends React.Component<IEntityListProps> {
     );
   }
 
+  private tableActionButtons(
+    buttons?: EntitylistActionButton[]
+  ): ResourceTablePropsActionButton[] {
+    const { entity, table } = this.props;
+    if (table && table.condensed) {
+      table.size = 'small';
+    }
+    const size = table && table.size === 'small' ? 'small' : 'default';
+    if (typeof buttons === 'undefined') {
+      buttons = [
+        entity.showDetailPage && 'detail',
+        entity.updateable && 'edit',
+        entity.deletable && 'delete'
+      ].filter(x => x);
+    }
+    return buttons.map(
+      (item: EntitylistActionButton): ResourceTablePropsActionButton => {
+        if (typeof item === 'function') {
+          return (props: ResourceTableActionButtonProps) =>
+            item({ ...props, entity });
+        }
+        switch (item) {
+          case 'edit':
+            return (props: ResourceTableActionButtonProps) =>
+              editListButton({ ...props, entity }, size);
+          case 'detail':
+            return (props: ResourceTableActionButtonProps) =>
+              detailListButton({ ...props, entity }, size);
+          default:
+            return item;
+        }
+      }
+    );
+  }
+
   private tableContent(
     resource: ResourceCollection,
     t: i18next.TFunction
   ): React.ReactNode {
     const { entity, table } = this.props;
 
-    if (table && table.condensed) {
-      table.size = 'small';
-    }
-    const size = table && table.size === 'small' ? 'small' : 'default';
     const defaultPagination: PaginationConfig = {
       defaultPageSize: 30,
       pageSizeOptions: ['10', '20', '30', '50', '100'],
@@ -263,37 +300,11 @@ export class EntityList extends React.Component<IEntityListProps> {
         scroll={{ x: true }}
         resourceCollection={resource}
         pagination={{ ...defaultPagination, ...(table && table.pagination) }}
-        actionButtons={[
-          entity.showDetailPage
-            ? (props: ActionButtonProps) => (
-                <Link
-                  key="detail-button-action"
-                  to={entity.getDetailLink(props.resourceID)}
-                >
-                  <Button size={size}>
-                    <Icon type={entity.showDetailPage ? 'search' : 'edit'} />
-                  </Button>
-                </Link>
-              )
-            : null,
-          entity.updateable
-            ? (props: ActionButtonProps) => (
-                <Link
-                  key="edit-button-action"
-                  to={entity.getEditLink(props.resourceID)}
-                >
-                  <Button size={size}>
-                    <Icon type="edit" />
-                  </Button>
-                </Link>
-              )
-            : null,
-          entity.deletable && 'delete'
-        ].filter(x => x)}
         customDetailURL={(resourceID: string) => {
           return entity.getDetailLink(resourceID);
         }}
         {...table}
+        actionButtons={this.tableActionButtons(table && table.actionButtons)}
         columns={this.getColumns(
           this.getListFields().filter(x => !x.hidden),
           resource,
