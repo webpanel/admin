@@ -38,7 +38,7 @@ export interface IEntityConfig<T> {
         edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
         create?: (props: IEntityEditLayoutProps) => React.ReactNode;
     }>;
-    list?: Thunk<IEntityListConfig>;
+    list?: Thunk<IEntityListConfig<T>>;
     edit?: Thunk<IEntityEditConfig>;
     detail?: Thunk<IEntityDetailConfig>;
     searchable?: Thunk<boolean | IEntitySearchableConfig>;
@@ -82,7 +82,7 @@ export declare class Entity<T = any> {
     private handleFormOnSave;
     private getEditPageLayout;
     private getCreatePageLayout;
-    getListView: (config?: IEntityListConfig | undefined) => React.ReactNode;
+    getListView: (config?: IEntityListConfig<T> | undefined) => React.ReactNode;
     getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
@@ -95,7 +95,7 @@ export declare class Entity<T = any> {
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getEditButton: (resourceID: React.ReactText) => React.ReactNode;
-    getResourceCollectionLayer: (render: (collection: ResourceCollection<any[] | null, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps> | undefined) => React.ReactNode;
+    getResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;

@@ -99,7 +99,7 @@ export interface IEntityConfig<T> {
     edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
     create?: (props: IEntityEditLayoutProps) => React.ReactNode;
   }>;
-  list?: Thunk<IEntityListConfig>;
+  list?: Thunk<IEntityListConfig<T>>;
   edit?: Thunk<IEntityEditConfig>;
   detail?: Thunk<IEntityDetailConfig>;
 
@@ -482,7 +482,7 @@ export class Entity<T = any> {
   };
 
   // views
-  public getListView = (config?: IEntityListConfig): React.ReactNode => {
+  public getListView = (config?: IEntityListConfig<T>): React.ReactNode => {
     // const listConfig = resolveOptionalThunk(this.config.list);
     return (
       <EntityList
@@ -574,7 +574,7 @@ export class Entity<T = any> {
   };
 
   public getResourceCollectionLayer = (
-    render: (collection: ResourceCollection) => React.ReactNode,
+    render: (collection: ResourceCollection<T>) => React.ReactNode,
     props?: Partial<ResourceCollectionLayerProps>
   ): React.ReactNode => {
     return (

@@ -8,7 +8,7 @@ import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import i18next from 'i18next';
-export interface IEntityListTableProps extends TableProps<any>, ResourceCollectionOptions {
+export interface IEntityListTableProps extends TableProps<any>, ResourceCollectionOptions<any> {
     condensed?: boolean;
     actionButtons?: EntitylistActionButton[];
     actionButtonsTitle?: React.ReactNode;
@@ -27,7 +27,7 @@ export declare type IEntityListColumn = string | {
     hidden?: boolean;
     render?: IEntityListColumnRender;
 };
-export interface IEntityListConfig extends ResourceCollectionOptions {
+export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
     card?: {
         extra?: React.ReactNode;
@@ -38,18 +38,17 @@ export interface IEntityListConfig extends ResourceCollectionOptions {
     title?: string;
     fields?: Thunk<IEntityListColumn[]>;
     editableFields?: Thunk<string[]>;
-    pollInterval?: number;
     wrapperType?: 'card' | 'plain';
 }
-export interface IEntityListProps extends IEntityListConfig {
-    entity: Entity;
+export interface IEntityListProps<T> extends IEntityListConfig<T> {
+    entity: Entity<T>;
     dataSource: DataSource;
 }
-export declare class EntityList extends React.Component<IEntityListProps> {
+export declare class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     getColumns(listFields: {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
-    }[], resource: ResourceCollection, t: i18next.TFunction): ResourceTableColumn[];
+    }[], resource: ResourceCollection<T>, t: i18next.TFunction): ResourceTableColumn[];
     private getListFields;
     private cardContent;
     private tableActionButtons;
