@@ -4,7 +4,7 @@ import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
-  SortInfo
+  ResourceCollectionOptions
 } from 'webpanel-data';
 import {
   EntitylistActionButton,
@@ -21,7 +21,6 @@ import { Thunk, resolveOptionalThunk } from 'ts-thunk';
 
 import { Card } from 'antd';
 import { CreateEntityProps } from '../buttons/EntityAddButton';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { ListCell } from './list-cell';
@@ -30,7 +29,9 @@ import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/Resource
 import { Translation } from 'react-i18next';
 import i18next from 'i18next';
 
-export interface IEntityListTableProps extends TableProps<any> {
+export interface IEntityListTableProps
+  extends TableProps<any>,
+    ResourceCollectionOptions {
   // deprecated, use size instead
   condensed?: boolean;
   actionButtons?: EntitylistActionButton[];
@@ -63,7 +64,7 @@ export type IEntityListColumn =
       render?: IEntityListColumnRender;
     };
 
-export interface IEntityListConfig {
+export interface IEntityListConfig extends ResourceCollectionOptions {
   table?: IEntityListTableProps;
   card?: { extra?: React.ReactNode };
   searchable?: boolean;
@@ -73,10 +74,6 @@ export interface IEntityListConfig {
   title?: string;
   fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
-  initialSorting?: SortInfo[];
-  initialFilters?: DataSourceArgumentMap;
-  initialLimit?: number;
-  autopersistConfigKey?: string;
   pollInterval?: number;
   // default: card
   wrapperType?: 'card' | 'plain';
@@ -320,6 +317,7 @@ export class EntityList extends React.Component<IEntityListProps> {
       initialFilters,
       initialSorting,
       initialLimit,
+      initialOffset,
       autopersistConfigKey,
       pollInterval,
       wrapperType
@@ -341,6 +339,7 @@ export class EntityList extends React.Component<IEntityListProps> {
             initialSorting={initialSorting || entity.initialSorting}
             initialFilters={initialFilters || entity.initialFilters}
             initialLimit={initialLimit}
+            initialOffset={initialOffset}
             pollInterval={pollInterval}
             render={(resource: ResourceCollection) =>
               wrapperType === 'plain'

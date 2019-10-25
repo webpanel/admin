@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { DataSource, ResourceCollection, SortInfo } from 'webpanel-data';
+import { DataSource, ResourceCollection, ResourceCollectionOptions } from 'webpanel-data';
 import { EntitylistActionButton } from './list.buttons';
 import { PaginationConfig, TableProps } from 'antd/lib/table';
 import { Thunk } from 'ts-thunk';
 import { CreateEntityProps } from '../buttons/EntityAddButton';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
 import { Entity } from '../../model/Entity';
 import { EntityField } from '../../model/EntityField';
 import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
 import i18next from 'i18next';
-export interface IEntityListTableProps extends TableProps<any> {
+export interface IEntityListTableProps extends TableProps<any>, ResourceCollectionOptions {
     condensed?: boolean;
     actionButtons?: EntitylistActionButton[];
     actionButtonsTitle?: React.ReactNode;
@@ -28,7 +27,7 @@ export declare type IEntityListColumn = string | {
     hidden?: boolean;
     render?: IEntityListColumnRender;
 };
-export interface IEntityListConfig {
+export interface IEntityListConfig extends ResourceCollectionOptions {
     table?: IEntityListTableProps;
     card?: {
         extra?: React.ReactNode;
@@ -39,10 +38,6 @@ export interface IEntityListConfig {
     title?: string;
     fields?: Thunk<IEntityListColumn[]>;
     editableFields?: Thunk<string[]>;
-    initialSorting?: SortInfo[];
-    initialFilters?: DataSourceArgumentMap;
-    initialLimit?: number;
-    autopersistConfigKey?: string;
     pollInterval?: number;
     wrapperType?: 'card' | 'plain';
 }

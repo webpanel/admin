@@ -38,6 +38,6 @@
     "typescript": "^3.5.3",
     "webpanel-antd": "git+https://github.com/webpanel/antd.git#develop",
     "webpanel-auth": "^0.0.24",
-    "webpanel-data": "0.0.55"
+    "webpanel-data": "0.0.57"
   }
 }
