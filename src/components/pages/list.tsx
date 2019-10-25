@@ -31,7 +31,7 @@ import i18next from 'i18next';
 
 export interface IEntityListTableProps
   extends TableProps<any>,
-    ResourceCollectionOptions {
+    ResourceCollectionOptions<any> {
   // deprecated, use size instead
   condensed?: boolean;
   actionButtons?: EntitylistActionButton[];
@@ -64,7 +64,7 @@ export type IEntityListColumn =
       render?: IEntityListColumnRender;
     };
 
-export interface IEntityListConfig extends ResourceCollectionOptions {
+export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
   table?: IEntityListTableProps;
   card?: { extra?: React.ReactNode };
   searchable?: boolean;
@@ -74,23 +74,22 @@ export interface IEntityListConfig extends ResourceCollectionOptions {
   title?: string;
   fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
-  pollInterval?: number;
   // default: card
   wrapperType?: 'card' | 'plain';
 }
 
-export interface IEntityListProps extends IEntityListConfig {
-  entity: Entity;
+export interface IEntityListProps<T> extends IEntityListConfig<T> {
+  entity: Entity<T>;
   dataSource: DataSource;
 }
 
-export class EntityList extends React.Component<IEntityListProps> {
+export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
   getColumns(
     listFields: {
       field: EntityField<any, any>;
       render?: IEntityListColumnRender;
     }[],
-    resource: ResourceCollection,
+    resource: ResourceCollection<T>,
     t: i18next.TFunction
   ): ResourceTableColumn[] {
     const { entity, editableFields } = this.props;
@@ -174,7 +173,7 @@ export class EntityList extends React.Component<IEntityListProps> {
   }
 
   private cardContent(
-    resource: ResourceCollection,
+    resource: ResourceCollection<T>,
     t: i18next.TFunction
   ): React.ReactNode {
     const {
@@ -244,7 +243,7 @@ export class EntityList extends React.Component<IEntityListProps> {
 
   private tableActionButtons(
     buttons?: EntitylistActionButton[]
-  ): ResourceTablePropsActionButton[] {
+  ): ResourceTablePropsActionButton<T>[] {
     const { entity, table } = this.props;
     if (table && table.condensed) {
       table.size = 'small';
@@ -258,17 +257,17 @@ export class EntityList extends React.Component<IEntityListProps> {
       ].filter(x => x);
     }
     return buttons.map(
-      (item: EntitylistActionButton): ResourceTablePropsActionButton => {
+      (item: EntitylistActionButton): ResourceTablePropsActionButton<T> => {
         if (typeof item === 'function') {
-          return (props: ResourceTableActionButtonProps) =>
+          return (props: ResourceTableActionButtonProps<T>) =>
             item({ ...props, entity });
         }
         switch (item) {
           case 'edit':
-            return (props: ResourceTableActionButtonProps) =>
+            return (props: ResourceTableActionButtonProps<T>) =>
               editListButton({ ...props, entity }, size);
           case 'detail':
-            return (props: ResourceTableActionButtonProps) =>
+            return (props: ResourceTableActionButtonProps<T>) =>
               detailListButton({ ...props, entity }, size);
           default:
             return item;
@@ -278,7 +277,7 @@ export class EntityList extends React.Component<IEntityListProps> {
   }
 
   private tableContent(
-    resource: ResourceCollection,
+    resource: ResourceCollection<T>,
     t: i18next.TFunction
   ): React.ReactNode {
     const { entity, table } = this.props;
@@ -316,32 +315,28 @@ export class EntityList extends React.Component<IEntityListProps> {
       entity,
       initialFilters,
       initialSorting,
-      initialLimit,
-      initialOffset,
-      autopersistConfigKey,
-      pollInterval,
-      wrapperType
+      wrapperType,
+      ...restProps
     } = this.props;
 
+    const fields = [
+      'id',
+      ...(this.getListFields()
+        .map(x => x.field.fetchField())
+        .filter(x => x) as string[])
+    ];
     return (
       <Translation>
         {t => (
           <ResourceCollectionLayer
             name={entity.name}
             dataSource={this.props.dataSource}
-            autopersistConfigKey={autopersistConfigKey}
-            fields={[
-              'id',
-              ...(this.getListFields()
-                .map(x => x.field.fetchField())
-                .filter(x => x) as string[])
-            ]}
+            {...restProps}
+            fields={fields}
             initialSorting={initialSorting || entity.initialSorting}
             initialFilters={initialFilters || entity.initialFilters}
-            initialLimit={initialLimit}
-            initialOffset={initialOffset}
-            pollInterval={pollInterval}
-            render={(resource: ResourceCollection) =>
+            // pollInterval={pollInterval}
+            render={(resource: ResourceCollection<any>) =>
               wrapperType === 'plain'
                 ? this.tableContent(resource, t)
                 : this.cardContent(resource, t)

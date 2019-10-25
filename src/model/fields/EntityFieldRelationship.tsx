@@ -90,7 +90,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         : null;
 
     return _targetEntity.getResourceCollectionLayer(
-      (collection: ResourceCollection) => (
+      (collection: ResourceCollection<any>) => (
         <Translation key={key}>
           {t => (
             <FormField
@@ -177,7 +177,7 @@ export class EntityFieldRelationship<T> extends EntityField<
       : undefined;
 
     return _targetEntity.getResourceCollectionLayer(
-      (collection: ResourceCollection) => {
+      (collection: ResourceCollection<any>) => {
         return (
           <ResourceSelect
             {...props}
@@ -244,7 +244,7 @@ export const getRelationshipFilterDropdownInput = (
   const _targetEntity = resolveThunk(targetEntity);
   const value = props.selectedKeys;
   return _targetEntity.getResourceCollectionLayer(
-    (resource: ResourceCollection) => {
+    (resource: ResourceCollection<any>) => {
       return (
         <ResourceSelect
           valueKey="id"

@@ -7,18 +7,18 @@ import { Link } from 'webpanel-antd';
 
 export type EntityListSize = 'small' | 'default';
 
-export interface EntityListActionButtonProps extends ActionButtonProps {
-  entity: Entity<any>;
+export interface EntityListActionButtonProps<T> extends ActionButtonProps<T> {
+  entity: Entity<T>;
 }
-export type EntitylistActionButton =
+export type EntitylistActionButton<T = any> =
   | 'detail'
   | 'edit'
   | 'delete'
   | React.ReactNode
-  | ((props: EntityListActionButtonProps) => React.ReactNode);
+  | ((props: EntityListActionButtonProps<T>) => React.ReactNode);
 
 export const detailListButton = (
-  props: EntityListActionButtonProps,
+  props: EntityListActionButtonProps<any>,
   size: EntityListSize
 ) => (
   <Link
@@ -30,7 +30,7 @@ export const detailListButton = (
 );
 
 export const editListButton = (
-  props: EntityListActionButtonProps,
+  props: EntityListActionButtonProps<any>,
   size: EntityListSize
 ) => (
   <Link

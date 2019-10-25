@@ -18,7 +18,6 @@ import { Entity } from './model/Entity';
 import { LoginForm } from 'webpanel-antd';
 
 export { Entity } from './model/Entity';
-export { DataGrid } from './components/data-grid';
 export { Layout } from 'webpanel-antd';
 export * from './layout-builder';
 export { AdminLayout, ILayoutProps } from './components/layout';

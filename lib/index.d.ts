@@ -5,7 +5,6 @@ import { AuthProps } from 'webpanel-auth/lib/Auth';
 import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
 import { Entity } from './model/Entity';
 export { Entity } from './model/Entity';
-export { DataGrid } from './components/data-grid';
 export { Layout } from 'webpanel-antd';
 export * from './layout-builder';
 export { AdminLayout, ILayoutProps } from './components/layout';
