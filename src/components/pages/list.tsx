@@ -1,3 +1,5 @@
+import '../../../styles/entity-list.css';
+
 import * as React from 'react';
 
 import {
@@ -250,30 +252,39 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     }
     const size = table && table.size === 'small' ? 'small' : 'default';
     if (typeof buttons === 'undefined') {
-      buttons = [
-        entity.showDetailPage && 'detail',
-        entity.updateable && 'edit',
-        entity.deletable && 'delete'
-      ].filter(x => x);
+      buttons = ['detail', 'edit', 'delete']
     }
-    return buttons.map(
-      (item: EntitylistActionButton): ResourceTablePropsActionButton<T> => {
-        if (typeof item === 'function') {
-          return (props: ResourceTableActionButtonProps<T>) =>
-            item({ ...props, entity });
-        }
-        switch (item) {
-          case 'edit':
+    return buttons
+      .map(
+        (item: EntitylistActionButton): ResourceTablePropsActionButton<T> => {
+          if (typeof item === 'function') {
             return (props: ResourceTableActionButtonProps<T>) =>
-              editListButton({ ...props, entity }, size);
-          case 'detail':
-            return (props: ResourceTableActionButtonProps<T>) =>
-              detailListButton({ ...props, entity }, size);
-          default:
-            return item;
+              item({ ...props, entity });
+          }
+          switch (item) {
+            case 'edit':
+              if (!entity.updateable) {
+                return null;
+              }
+              return (props: ResourceTableActionButtonProps<T>) =>
+                editListButton({ ...props, entity }, size);
+            case 'detail':
+              if (!entity.showDetailPage) {
+                return null;
+              }
+              return (props: ResourceTableActionButtonProps<T>) =>
+                detailListButton({ ...props, entity }, size);
+            case 'delete':
+              if (!entity.deletable) {
+                return null;
+              }
+              return 'delete';
+            default:
+              return item;
+          }
         }
-      }
-    );
+      )
+      .filter(x => x);
   }
 
   private tableContent(
