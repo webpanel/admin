@@ -1,3 +1,4 @@
+import '../../../styles/entity-list.css';
 import * as React from 'react';
 import { DataSource, ResourceCollection, ResourceCollectionOptions } from 'webpanel-data';
 import { EntitylistActionButton } from './list.buttons';
