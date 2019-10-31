@@ -87,7 +87,7 @@ export class EntityFieldEnum<T> extends EntityField<
         }}
         mode="multiple"
         value={value}
-        onChange={(value: any) => props.setSelectedKeys([value])}
+        onChange={(value: any) => props.setSelectedKeys(value)}
         showSearch={true}
         allowClear={true}
       >
