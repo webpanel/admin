@@ -573,7 +573,7 @@ export class Entity<T = any> {
     );
   };
 
-  public getResourceCollectionLayer = (
+  public getSearchResourceCollectionLayer = (
     render: (collection: ResourceCollection<T>) => React.ReactNode,
     props?: Partial<ResourceCollectionLayerProps>
   ): React.ReactNode => {
@@ -582,7 +582,9 @@ export class Entity<T = any> {
         name={this.name}
         fields={[
           'id',
-          ...this.searchableFields.map((x: EntityField<any, any>) => x.name)
+          ...this.searchableFields.map(
+            (x: EntityField<any, any>) => x.fetchField() || x.name
+          )
         ]}
         initialSorting={this.initialSorting}
         initialFilters={this.initialFilters}
