@@ -48,7 +48,7 @@ export class EntityFieldRelationship<T> extends EntityField<
     const searchFields = resolveThunk(this.config.targetEntity)
       .searchableFields;
     name += `{ id ${searchFields
-      .map((x: EntityField<any, any>) => x.name)
+      .map((x: EntityField<any, any>) => x.fetchField())
       .join(' ')}} ${this.columnName()} `;
     return name;
   }
@@ -89,7 +89,7 @@ export class EntityFieldRelationship<T> extends EntityField<
           }
         : null;
 
-    return _targetEntity.getResourceCollectionLayer(
+    return _targetEntity.getSearchResourceCollectionLayer(
       (collection: ResourceCollection<any>) => (
         <Translation key={key}>
           {t => (
@@ -176,7 +176,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         }
       : undefined;
 
-    return _targetEntity.getResourceCollectionLayer(
+    return _targetEntity.getSearchResourceCollectionLayer(
       (collection: ResourceCollection<any>) => {
         return (
           <ResourceSelect
@@ -243,7 +243,7 @@ export const getRelationshipFilterDropdownInput = (
 ) => {
   const _targetEntity = resolveThunk(targetEntity);
   const value = props.selectedKeys;
-  return _targetEntity.getResourceCollectionLayer(
+  return _targetEntity.getSearchResourceCollectionLayer(
     (resource: ResourceCollection<any>) => {
       return (
         <ResourceSelect
