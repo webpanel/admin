@@ -5,16 +5,16 @@ import { EntityField, IEntityFieldConfig } from '../EntityField';
 // import { FieldAction } from '../permissions';
 
 export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
-  columnName?: string;
+  // columnName?: string;
   fetchField?: string;
 }
 export class EntityFieldComputed<T> extends EntityField<
   T,
   IEntityFieldComputedConfig<T>
 > {
-  public columnName(): string {
-    return this.config.columnName || super.columnName();
-  }
+  // public columnName(): string {
+  //   return this.config.columnName || super.columnName();
+  // }
   public fetchField(): string | null {
     return this.config.fetchField || super.fetchField();
   }

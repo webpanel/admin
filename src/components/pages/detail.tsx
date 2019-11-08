@@ -97,7 +97,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                         defaultValue: entity.title
                       })}
                       loading={resource.loading && !resource.polling}
-                      extra={entity.getEditButton(resourceID)}
+                      extra={entity.updateable && entity.getEditButton(resourceID)}
                     >
                       {content}
                     </Card>
