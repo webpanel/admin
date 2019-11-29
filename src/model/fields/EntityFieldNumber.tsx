@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { EntityField, IEntityFieldFilterProps } from '../EntityField';
+import { EntityField, IEntityFieldFilterProps } from "../EntityField";
 
-import { InputNumber } from 'antd';
+import { InputNumber } from "antd";
 
 export class EntityFieldNumber<T, C> extends EntityField<T, C> {
   public inputElement(props?: {
@@ -17,6 +17,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
 
     return (
       <InputNumber
+        style={{ minWidth: "195px" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
         {...props}
         onChange={onChangeProp}
@@ -28,6 +29,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
     const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
     return (
       <InputNumber
+        style={{ minWidth: "195px" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
         placeholder="Number"
         value={value}
@@ -38,14 +40,14 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
     );
   };
 
-  public get filterNormalize(): ((values: any[]) => { [key: string]: any }) {
+  public get filterNormalize(): (values: any[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
         res[this.columnName()] = parseFloat(values[0]);
       } else if (values.length === 2) {
-        res[this.columnName() + '_gte'] = parseFloat(values[0]);
-        res[this.columnName() + '_lte'] = parseFloat(values[1]);
+        res[this.columnName() + "_gte"] = parseFloat(values[0]);
+        res[this.columnName() + "_lte"] = parseFloat(values[1]);
       }
       return res;
     };
@@ -56,12 +58,12 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
       if (values[this.columnName()]) {
         res = [values[this.columnName()].toString()];
       } else if (
-        values[this.columnName() + '_gte'] &&
-        values[this.columnName() + '_lte']
+        values[this.columnName() + "_gte"] &&
+        values[this.columnName() + "_lte"]
       ) {
         res = [
-          values[this.columnName() + '_gte'].toString(),
-          values[this.columnName() + '_lte'].toString()
+          values[this.columnName() + "_gte"].toString(),
+          values[this.columnName() + "_lte"].toString()
         ];
       }
       return res;

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { EntityField, IEntityFieldFilterProps } from '../EntityField';
+import * as React from "react";
+import { EntityField, IEntityFieldFilterProps } from "../EntityField";
 export declare class EntityFieldNumber<T, C> extends EntityField<T, C> {
     inputElement(props?: {
         value?: any;
@@ -7,9 +7,9 @@ export declare class EntityFieldNumber<T, C> extends EntityField<T, C> {
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<number>) => JSX.Element;
-    readonly filterNormalize: ((values: any[]) => {
+    readonly filterNormalize: (values: any[]) => {
         [key: string]: any;
-    });
+    };
     readonly filterDenormalize: (values: {
         [key: string]: any;
     }) => any[];
