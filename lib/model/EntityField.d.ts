@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { ResourceTableFilterDenormalizer, ResourceTableFilterNormalizer } from 'webpanel-antd';
-import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
-import { Thunk } from 'ts-thunk';
-import { Entity } from './Entity';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { InputProps } from 'antd/lib/input';
-export declare type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
+import * as React from "react";
+import { ResourceTableFilterDenormalizer, ResourceTableFilterNormalizer } from "webpanel-antd";
+import { FormLayout, ValidationRule } from "antd/lib/form/Form";
+import { InputProps } from "antd/lib/input";
+import { Thunk } from "ts-thunk";
+import { Entity } from "./Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
     setSelectedKeys: (keys: T[]) => {};
@@ -65,6 +65,6 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
         formLayout?: FormLayout;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
-    private _filterDropdownInput;
+    protected _filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
     filterDropdown: (resource: any) => (props: IEntityFieldFilterProps<any>) => JSX.Element;
 }
