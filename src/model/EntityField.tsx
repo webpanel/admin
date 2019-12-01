@@ -1,23 +1,23 @@
-import * as React from 'react';
-import * as inflection from 'inflection';
+import * as React from "react";
+import * as inflection from "inflection";
 
-import { Button, Tooltip } from 'antd';
+import { Button, Tooltip } from "antd";
 import {
   FormField,
   ResourceTableFilterDenormalizer,
   ResourceTableFilterNormalizer
-} from 'webpanel-antd';
-import { FormLayout, ValidationRule } from 'antd/lib/form/Form';
-import { Thunk, resolveOptionalThunk } from 'ts-thunk';
+} from "webpanel-antd";
+import { FormLayout, ValidationRule } from "antd/lib/form/Form";
+import Input, { InputProps } from "antd/lib/input";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Entity } from './Entity';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { InputProps } from 'antd/lib/input';
-import { Translation } from 'react-i18next';
+import { Entity } from "./Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { Translation } from "react-i18next";
 
 // import { ResourceCollection } from 'webpanel-data';
 
-export type FieldSections = 'list' | 'detail' | 'edit' | 'search' | 'custom';
+export type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 
 export interface IEntityFieldFilterProps<T> {
   selectedKeys: T[];
@@ -41,7 +41,7 @@ export interface IEntityFieldConfigFilter {
 const isIEntityFieldConfigFilter = (
   value: IEntityFieldConfigFilter | boolean | undefined
 ): value is IEntityFieldConfigFilter => {
-  return typeof value === 'object';
+  return typeof value === "object";
 };
 
 export interface IEntityFieldConfig<T> {
@@ -70,7 +70,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get title(): string {
     return (
       resolveOptionalThunk(this.config.title) ||
-      inflection.transform(this.name, ['underscore', 'titleize'])
+      inflection.transform(this.name, ["underscore", "titleize"])
     );
   }
 
@@ -87,9 +87,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get sortable(): boolean {
     const sortable = this.config.sortable;
     switch (typeof sortable) {
-      case 'undefined':
+      case "undefined":
         return false;
-      case 'boolean':
+      case "boolean":
         return sortable;
       default:
         return true;
@@ -98,19 +98,19 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public sortColumns(): string[] {
     const sortable = this.config.sortable;
     switch (typeof sortable) {
-      case 'undefined':
+      case "undefined":
         return [];
-      case 'boolean':
+      case "boolean":
         return [this.columnName()];
       default:
         return sortable.fields;
     }
   }
   public get filter(): boolean {
-    if (typeof this.config.filter === 'boolean') {
+    if (typeof this.config.filter === "boolean") {
       return this.config.filter;
     }
-    return typeof this.config.filter !== 'undefined' || false;
+    return typeof this.config.filter !== "undefined" || false;
   }
   public get range(): boolean {
     const filter = this.config.filter;
@@ -124,16 +124,16 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName() + '_like'] = values[0] + '*';
+        res[this.columnName() + "_like"] = values[0] + "*";
       } else if (values.length > 1) {
-        res[this.columnName() + '_in'] = values;
+        res[this.columnName() + "_in"] = values;
       }
       return res;
     };
   }
   public filterNormalizeFn(): ResourceTableFilterNormalizer {
     const filter = this.config.filter;
-    if (filter && typeof filter === 'object' && filter.normalizer) {
+    if (filter && typeof filter === "object" && filter.normalizer) {
       return filter.normalizer;
     }
     return this.filterNormalize;
@@ -142,18 +142,18 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get filterDenormalize(): ResourceTableFilterDenormalizer {
     return (values: { [key: string]: any }) => {
       let res: any[] = [];
-      if (values[this.columnName() + '_like']) {
-        const val = values[this.columnName() + '_like'];
+      if (values[this.columnName() + "_like"]) {
+        const val = values[this.columnName() + "_like"];
         res = [val.substring(0, val.length - 1)];
-      } else if (values[this.columnName() + '_in']) {
-        res = values[this.columnName() + '_in'];
+      } else if (values[this.columnName() + "_in"]) {
+        res = values[this.columnName() + "_in"];
       }
       return res;
     };
   }
   public filterDenormalizeFn(): ResourceTableFilterDenormalizer {
     const filter = this.config.filter;
-    if (filter && typeof filter === 'object' && filter.denormalizer) {
+    if (filter && typeof filter === "object" && filter.denormalizer) {
       return filter.denormalizer;
     }
     return this.filterDenormalize;
@@ -161,19 +161,19 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
 
   public get enabled(): boolean {
     const val = resolveOptionalThunk(this.config.enabled);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
   public get readable(): boolean {
     if (!this.enabled) return false;
     const val = resolveOptionalThunk(this.config.readable);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
   public get writeable(): boolean {
     if (!this.enabled) return false;
     const val = resolveOptionalThunk(this.config.writable);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
 
@@ -182,21 +182,21 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return this.config.render;
     }
     return (values: any) => {
-      const value = values[this.name] || '';
+      const value = values[this.name] || "";
       if (!value || !value.substring || value.length < 50) {
         return value;
       }
-      const shortValue = value.substring(0, 50) + '...';
+      const shortValue = value.substring(0, 50) + "...";
       return <Tooltip title={value}>{shortValue}</Tooltip>;
     };
   }
 
   public inputElement(props?: IEntityFieldInputElementProps): React.ReactNode {
-    return 'input element is empty';
+    return "input element is empty";
   }
 
   public get valuePropName(): string {
-    return 'value';
+    return "value";
   }
 
   public fieldElement(
@@ -205,7 +205,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     config: { formLayout?: FormLayout }
   ): React.ReactNode {
     const formItemLayout =
-      config.formLayout === 'horizontal'
+      config.formLayout === "horizontal"
         ? {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 }
@@ -237,13 +237,23 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public filterDropdownInput = (
     props: IEntityFieldFilterProps<any>
   ): React.ReactNode => {
-    return 'empty filter input';
+    const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
+    return (
+      <Input
+        key={`field_${this.entity.name}_${this.valuePropName}`}
+        value={value}
+        onChange={e =>
+          props.setSelectedKeys(e.target.value ? [e.target.value] : [])
+        }
+      />
+    );
   };
-  private _filterDropdownInput = (
+
+  protected _filterDropdownInput = (
     props: IEntityFieldFilterProps<any>
   ): React.ReactNode => {
     const filter = this.config.filter;
-    if (filter && typeof filter === 'object' && filter.dropdownInput) {
+    if (filter && typeof filter === "object" && filter.dropdownInput) {
       return filter.dropdownInput(props);
     }
     return this.filterDropdownInput(props);
@@ -254,11 +264,11 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       return (
         <div
           style={{
-            display: 'flex',
-            padding: '8px',
-            backgroundColor: 'white',
-            borderRadius: '6px',
-            boxShadow: '0 1px 6px rgba(0, 0, 0, .2)'
+            display: "flex",
+            padding: "8px",
+            backgroundColor: "white",
+            borderRadius: "6px",
+            boxShadow: "0 1px 6px rgba(0, 0, 0, .2)"
           }}
         >
           <div style={{ marginRight: 2 }}>
