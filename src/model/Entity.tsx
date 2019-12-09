@@ -1,81 +1,81 @@
-import * as React from 'react';
-import * as inflection from 'inflection';
+import * as React from "react";
+import * as inflection from "inflection";
 
 import {
   CreateEntityButton,
   CreateEntityProps
-} from '../components/buttons/EntityAddButton';
+} from "../components/buttons/EntityAddButton";
 import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
   ResourceID,
   SortInfo
-} from 'webpanel-data';
+} from "webpanel-data";
 import {
   DetailEntityButton,
   DetailEntityProps
-} from '../components/buttons/EntityDetailButton';
+} from "../components/buttons/EntityDetailButton";
 import {
   EntityEditLayout,
   IEntityEditLayoutProps
-} from '../components/layouts/entity.edit';
-import { EntityField, IEntityFieldConfig } from './EntityField';
+} from "../components/layouts/entity.edit";
+import { EntityField, IEntityFieldConfig } from "./EntityField";
 import {
   EntityFieldBoolean,
   IEntityFieldBooleanConfig
-} from './fields/EntityFieldBoolean';
+} from "./fields/EntityFieldBoolean";
 import {
   EntityFieldComputed,
   IEntityFieldComputedConfig
-} from './fields/EntityFieldComputed';
+} from "./fields/EntityFieldComputed";
 import {
   EntityFieldCustom,
   IEntityFieldCustomConfig
-} from './fields/EntityFieldCustom';
+} from "./fields/EntityFieldCustom";
 import {
   EntityFieldDate,
   IEntityFieldDateConfig
-} from './fields/EntityFieldDate';
+} from "./fields/EntityFieldDate";
 import {
   EntityFieldEnum,
   IEntityFieldEnumConfig
-} from './fields/EntityFieldEnum';
+} from "./fields/EntityFieldEnum";
 import {
   EntityFieldFile,
   IEntityFieldFileConfig
-} from './fields/EntityFieldFile';
+} from "./fields/EntityFieldFile";
 import {
   EntityFieldRelationship,
   IEntityFieldRelationshipConfig
-} from './fields/EntityFieldRelationship';
-import { EntityList, IEntityListConfig } from '../components/pages/list';
+} from "./fields/EntityFieldRelationship";
+import { EntityList, IEntityListConfig } from "../components/pages/list";
 import {
   EntityOnSaveHandler,
   IEntityEditConfig
-} from '../components/pages/edit';
+} from "../components/pages/edit";
 import {
   IEntityDetailConfig,
   IEntityDetailProps
-} from '../components/pages/detail';
-import { Layout, Link, RouteComponentProps } from 'webpanel-antd';
-import { Thunk, resolveOptionalThunk, resolveThunk } from 'ts-thunk';
+} from "../components/pages/detail";
+import { Layout, Link, RouteComponentProps } from "webpanel-antd";
+import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
 
-import { Button } from 'antd';
-import { DataSourceArgumentMap } from 'webpanel-data/lib/DataSource';
-import { EntityDetailLayout } from '../components/layouts/entity.detail';
-import { EntityFieldColor } from './fields/EntityFieldColor';
-import { EntityFieldNumber } from './fields/EntityFieldNumber';
-import { EntityFieldPasssword } from './fields/EntityFieldPassword';
-import { EntityFieldString } from './fields/EntityFieldString';
-import { EntityFieldText } from './fields/EntityFieldText';
-import { LayoutBuilder } from '../layout-builder';
-import { LayoutBuilderConfig } from '../layout-builder/builder';
-import { Redirect } from 'react-router';
-import { ResourceCollectionLayerProps } from 'webpanel-data/lib/components/ResourceCollectionLayer';
-import { SaveOption } from '../components/form/buttons';
-import { Translation } from 'react-i18next';
-import { componentPermission } from './permissions';
+import { Button } from "antd";
+import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
+import { EntityDetailLayout } from "../components/layouts/entity.detail";
+import { EntityFieldColor } from "./fields/EntityFieldColor";
+import { EntityFieldNumber } from "./fields/EntityFieldNumber";
+import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
+import { EntityFieldString } from "./fields/EntityFieldString";
+import { EntityFieldText } from "./fields/EntityFieldText";
+import { LayoutBuilder } from "../layout-builder";
+import { LayoutBuilderConfig } from "../layout-builder/builder";
+import { Redirect } from "react-router";
+import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
+import { SaveOption } from "../components/form/buttons";
+import { Translation } from "react-i18next";
+import { componentPermission } from "./permissions";
 
 // import { Button } from 'antd';
 
@@ -123,9 +123,9 @@ export class Entity<T = any> {
 
   public get structureName(): string {
     return `${inflection.transform(resolveThunk(this.config.name), [
-      'tableize',
-      'dasherize',
-      'pluralize'
+      "tableize",
+      "dasherize",
+      "pluralize"
     ])}`;
   }
 
@@ -138,22 +138,22 @@ export class Entity<T = any> {
 
   public get enabled(): boolean {
     const val = resolveOptionalThunk(this.config.enabled);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
   public get creatable(): boolean {
     const val = resolveOptionalThunk(this.config.creatable);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
   public get updateable(): boolean {
     const val = resolveOptionalThunk(this.config.updateable);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
   public get deletable(): boolean {
     const val = resolveOptionalThunk(this.config.deletable);
-    if (typeof val !== 'undefined') return val;
+    if (typeof val !== "undefined") return val;
     return true;
   }
 
@@ -174,10 +174,10 @@ export class Entity<T = any> {
       return this.config.render;
     }
     return (value: any) => {
-      if (value === null || typeof value !== 'object') {
-        return '–';
+      if (value === null || typeof value !== "object") {
+        return "–";
       }
-      return this.searchableFields.map(x => value[x.name]).join(', ');
+      return this.searchableFields.map(x => value[x.name]).join(", ");
     };
   }
 
@@ -190,7 +190,7 @@ export class Entity<T = any> {
     return (list && list.initialFilters) || this.config.initialFilters;
   }
   public get searchable(): boolean {
-    return typeof this.config.searchable !== 'undefined';
+    return typeof this.config.searchable !== "undefined";
   }
 
   public getField(name: string): EntityField<T, any> | null {
@@ -211,7 +211,7 @@ export class Entity<T = any> {
       const listFields = resolveOptionalThunk(listConfig.fields);
       if (listFields) {
         const _listFields = listFields.map(f =>
-          typeof f === 'string' ? f : f.field
+          typeof f === "string" ? f : f.field
         );
         return this.fields.filter(
           f => f.enabled && _listFields.indexOf(f.name) !== -1
@@ -247,7 +247,7 @@ export class Entity<T = any> {
   public get searchableFields(): EntityField<T, any>[] {
     const search = resolveOptionalThunk(this.config.searchable);
     let fields: EntityField<T, any>[] = [];
-    if (search && typeof search !== 'boolean') {
+    if (search && typeof search !== "boolean") {
       const searchFields = resolveOptionalThunk(search.fields);
       if (searchFields) {
         fields = this.fields.filter(
@@ -290,14 +290,14 @@ export class Entity<T = any> {
     [key: string]: (builder: LayoutBuilder) => React.ReactNode;
   } = {};
   public setLayout = (
-    type: 'detail' | 'edit',
+    type: "detail" | "edit",
     fn: (builder: LayoutBuilder) => React.ReactNode
   ) => {
     this.layouts[type] = fn;
   };
 
   public getLayout(
-    type: 'detail' | 'edit',
+    type: "detail" | "edit",
     config: LayoutBuilderConfig
   ): React.ReactNode | null {
     const builder = new LayoutBuilder(config);
@@ -323,7 +323,7 @@ export class Entity<T = any> {
               }
             </Translation>
           }
-          icon={resolveOptionalThunk(this.config.icon) || 'folder'}
+          icon={resolveOptionalThunk(this.config.icon) || "folder"}
         />
       )
     );
@@ -356,7 +356,7 @@ export class Entity<T = any> {
           key="/new"
           name={
             <Translation>
-              {t => t('common.new', { defaultValue: 'New' })}
+              {t => t("common.new", { defaultValue: "New" })}
             </Translation>
           }
           header={
@@ -370,7 +370,7 @@ export class Entity<T = any> {
           key="/:id"
           name={
             <Translation>
-              {t => t('common.detail', { defaultValue: 'Detail' })}
+              {t => t("common.detail", { defaultValue: "Detail" })}
             </Translation>
           }
           header={(route: RouteComponentProps<any>) => ({
@@ -387,7 +387,7 @@ export class Entity<T = any> {
           key="/:id/edit"
           name={
             <Translation>
-              {t => t('common.edit', { defaultValue: 'Edit' })}
+              {t => t("common.edit", { defaultValue: "Edit" })}
             </Translation>
           }
           header={
@@ -432,10 +432,10 @@ export class Entity<T = any> {
     option: SaveOption
   ) => {
     switch (option) {
-      case 'add':
+      case "add":
         route.history.push(this.getCreateLink());
         break;
-      case 'edit':
+      case "edit":
         route.history.push(this.getEditLink(id));
         break;
       default:
@@ -468,9 +468,9 @@ export class Entity<T = any> {
     config?: IEntityEditConfig
   ) => {
     const onSave = this.handleFormOnSave(route);
-    // if (this.editLayout) {
-    //   return this.editLayout({ entity: this, onSave });
-    // }
+    if (this.createLayout) {
+      return this.createLayout({ entity: this, onSave });
+    }
     return (
       <EntityEditLayout
         entity={this}
@@ -523,9 +523,9 @@ export class Entity<T = any> {
       onSave: undefined,
       onCancel: undefined
     };
-    // if (this.editLayout) {
-    //   return this.editLayout({ entity: this, onSave, onCancel });
-    // }
+    if (this.createLayout) {
+      return this.createLayout({ entity: this, onSave, onCancel });
+    }
     return (
       <EntityEditLayout
         entity={this}
@@ -581,7 +581,7 @@ export class Entity<T = any> {
       <ResourceCollectionLayer
         name={this.name}
         fields={[
-          'id',
+          "id",
           ...this.searchableFields.map(
             (x: EntityField<any, any>) => x.fetchField() || x.name
           )
@@ -674,18 +674,18 @@ export class Entity<T = any> {
   // links
   public getListLink(): string {
     const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ''}/${this.structureName}`;
+    return `${prefix || ""}/${this.structureName}`;
   }
   public getCreateLink(): string {
     const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ''}/${this.structureName}/new`;
+    return `${prefix || ""}/${this.structureName}/new`;
   }
   public getDetailLink(id: ResourceID): string {
     const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ''}/${this.structureName}/${id}`;
+    return `${prefix || ""}/${this.structureName}/${id}`;
   }
   public getEditLink(id: ResourceID): string {
     const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ''}/${this.structureName}/${id}/edit`;
+    return `${prefix || ""}/${this.structureName}/${id}/edit`;
   }
 }
