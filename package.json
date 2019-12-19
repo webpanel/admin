@@ -35,9 +35,8 @@
     "antd": "^3.20.7",
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
-    "typescript": "^3.5.3",
     "webpanel-antd": "git+https://github.com/webpanel/antd.git#develop",
-    "webpanel-auth": "^0.0.24",
+    "webpanel-auth": "0.0.32",
     "webpanel-data": "0.0.60"
   }
 }

@@ -1,14 +1,14 @@
-import '../../../styles/form-detail.css';
-import * as React from 'react';
-import { ModalProps } from 'antd/lib/modal';
-import { ResourceID } from 'webpanel-data';
-import { Thunk } from 'ts-thunk';
-import { Entity } from '../../model/Entity';
-import { DescriptionsProps } from 'antd/lib/descriptions';
+import "../../../styles/form-detail.css";
+import * as React from "react";
+import { ModalProps } from "antd/lib/modal";
+import { ResourceID } from "webpanel-data";
+import { Thunk } from "ts-thunk";
+import { DescriptionsProps } from "antd/lib/descriptions";
+import { Entity } from "../../model/Entity";
 export interface IEntityDetailConfig {
     fields?: Thunk<string[]>;
     pollInterval?: number;
-    wrapperType?: 'card' | 'plain' | 'modal';
+    wrapperType?: "card" | "plain" | "modal";
     modal?: ModalProps;
     desriptions?: DescriptionsProps;
 }

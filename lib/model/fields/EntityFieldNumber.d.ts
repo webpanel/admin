@@ -7,10 +7,10 @@ export declare class EntityFieldNumber<T, C> extends EntityField<T, C> {
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<number>) => JSX.Element;
-    readonly filterNormalize: (values: any[]) => {
+    get filterNormalize(): (values: any[]) => {
         [key: string]: any;
     };
-    readonly filterDenormalize: (values: {
+    get filterDenormalize(): (values: {
         [key: string]: any;
     }) => any[];
 }

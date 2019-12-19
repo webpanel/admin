@@ -6,10 +6,10 @@ export declare class EntityFieldText<T, C> extends EntityField<T, C> {
         onChange?: (value: any, valueElement: React.ReactNode) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
-    readonly filterNormalize: (values: any[]) => {
+    get filterNormalize(): (values: any[]) => {
         [key: string]: any;
     };
-    readonly filterDenormalize: (values: {
+    get filterDenormalize(): (values: {
         [key: string]: any;
     }) => any[];
 }

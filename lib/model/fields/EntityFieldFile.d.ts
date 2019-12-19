@@ -6,7 +6,7 @@ export interface IEntityFieldFileConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldFile<T> extends EntityField<T, IEntityFieldFileConfig<T>> {
     fetchField(): string | null;
     columnName(): string;
-    readonly render: (record: T) => React.ReactNode;
+    get render(): (record: T) => React.ReactNode;
     inputElement(props?: {
         value?: string;
         onChange?: (value: any, valueElement: React.ReactNode) => void;
