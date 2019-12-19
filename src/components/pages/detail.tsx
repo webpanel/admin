@@ -1,24 +1,24 @@
-import '../../../styles/form-detail.css';
+import "../../../styles/form-detail.css";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { Card, Descriptions } from 'antd';
-import Modal, { ModalProps } from 'antd/lib/modal';
-import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
-import { Thunk, resolveOptionalThunk } from 'ts-thunk';
+import { Card, Descriptions } from "antd";
+import Modal, { ModalProps } from "antd/lib/modal";
+import { Resource, ResourceID, ResourceLayer } from "webpanel-data";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Entity } from '../../model/Entity';
+import { DescriptionsProps } from "antd/lib/descriptions";
+import { Entity } from "../../model/Entity";
 // import { Link  } from 'react-router-dom';
-import { TFunction } from 'i18next';
-import { Translation } from 'react-i18next';
-import { DescriptionsProps } from 'antd/lib/descriptions';
+import { TFunction } from "i18next";
+import { Translation } from "react-i18next";
 
 export interface IEntityDetailConfig {
   fields?: Thunk<string[]>;
   pollInterval?: number;
-  wrapperType?: 'card' | 'plain' | 'modal';
+  wrapperType?: "card" | "plain" | "modal";
   modal?: ModalProps;
-  desriptions?: DescriptionsProps
+  desriptions?: DescriptionsProps;
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
   entity: Entity;
@@ -38,13 +38,13 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
 
     let entityFields = entity.detailFields;
     const _fields = resolveOptionalThunk(fields);
-    if (typeof _fields !== 'undefined') {
+    if (typeof _fields !== "undefined") {
       entityFields = _fields.map(name => entity.getFieldOrFail(name));
     }
 
     const contentFn = (resource: Resource, t: TFunction) => (
       <Descriptions
-        bordered={false}
+        bordered={true}
         size="small"
         column={{ md: 2, xs: 1 }}
         {...this.props.desriptions}
@@ -56,7 +56,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               defaultValue: field.title
             })}
           >
-            {(resource.data && field.render(resource.data)) || '–'}
+            {(resource.data && field.render(resource.data)) || "–"}
           </Descriptions.Item>
         ))}
       </Descriptions>
@@ -70,14 +70,14 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             id={resourceID}
             dataSource={entity.dataSource}
             fields={[
-              'id',
+              "id",
               ...(entityFields
                 .map(x => x.fetchField())
                 .filter(x => x) as string[])
             ]}
             pollInterval={pollInterval}
             render={(resource: Resource) => {
-              const layout = entity.getLayout('detail', {
+              const layout = entity.getLayout("detail", {
                 entity,
                 resource,
                 id: resourceID,
@@ -86,9 +86,9 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
               if (layout) return layout;
               const content = contentFn(resource, t);
               switch (wrapperType) {
-                case 'plain':
+                case "plain":
                   return content;
-                case 'modal':
+                case "modal":
                   return <Modal {...modal}>{content}</Modal>;
                 default:
                   return (
@@ -97,7 +97,9 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                         defaultValue: entity.title
                       })}
                       loading={resource.loading && !resource.polling}
-                      extra={entity.updateable && entity.getEditButton(resourceID)}
+                      extra={
+                        entity.updateable && entity.getEditButton(resourceID)
+                      }
                     >
                       {content}
                     </Card>

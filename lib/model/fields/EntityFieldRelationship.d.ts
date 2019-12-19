@@ -11,11 +11,11 @@ export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T>
     type: IEntityFieldRelationshipType;
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
-    readonly type: IEntityFieldRelationshipType;
+    get type(): IEntityFieldRelationshipType;
     columnName(): string;
-    readonly mode: IEntityFieldRelationshipSelectMode;
+    get mode(): IEntityFieldRelationshipSelectMode;
     fetchField(): string | null;
-    readonly render: (record: T) => React.ReactNode;
+    get render(): (record: T) => React.ReactNode;
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
@@ -25,10 +25,10 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => React.ReactNode;
-    readonly filterNormalize: (values: string[]) => {
+    get filterNormalize(): (values: string[]) => {
         [key: string]: any;
     };
-    readonly filterDenormalize: (values: {
+    get filterDenormalize(): (values: {
         [key: string]: any;
     }) => any[];
 }

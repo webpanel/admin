@@ -3,19 +3,19 @@ import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from '../Ent
 export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {
 }
 export declare class EntityFieldBoolean<T> extends EntityField<T, IEntityFieldBooleanConfig<T>> {
-    readonly valuePropName: string;
+    get valuePropName(): string;
     private renderValue;
-    readonly render: (record: T) => React.ReactNode;
+    get render(): (record: T) => React.ReactNode;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, valueElement: React.ReactNode) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
-    readonly filterNormalize: (values: boolean[]) => {
+    get filterNormalize(): (values: boolean[]) => {
         [key: string]: any;
     };
-    readonly filterDenormalize: (values: {
+    get filterDenormalize(): (values: {
         [key: string]: any;
     }) => any[];
 }

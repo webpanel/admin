@@ -9,17 +9,17 @@ export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
     options: Thunk<IOption[]>;
 }
 export declare class EntityFieldEnum<T> extends EntityField<T, IEntityFieldEnumConfig<T>> {
-    readonly render: (record: T) => React.ReactNode;
+    get render(): (record: T) => React.ReactNode;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, valueElement: React.ReactNode) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
-    readonly filterNormalize: (values: string[]) => {
+    get filterNormalize(): (values: string[]) => {
         [key: string]: any;
     };
-    readonly filterDenormalize: (values: {
+    get filterDenormalize(): (values: {
         [key: string]: any;
     }) => any[];
 }
