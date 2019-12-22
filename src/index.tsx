@@ -1,32 +1,31 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { AdminLayout, ILayoutProps } from './components/layout';
+import { AdminLayout, ILayoutProps } from "./components/layout";
 import {
   Auth,
   AuthContentProps,
   AuthFormProps,
   DummyAuth
-} from 'webpanel-auth';
+} from "webpanel-auth";
+import { Button, Result, Spin } from "antd";
 import {
   IAutopermissionConfig,
   configurePermissions
-} from './model/permissions';
+} from "./model/permissions";
 
-import { AuthProps } from 'webpanel-auth/lib/Auth';
-import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
-import { Entity } from './model/Entity';
-import { LoginForm } from 'webpanel-antd';
+import { DummyAuthProps } from "webpanel-auth/lib/DummyAuth";
+import { Entity } from "./model/Entity";
+import { LoginForm } from "webpanel-antd";
+import { OAuth2AuthProps } from "webpanel-auth/lib/Auth";
 
-export { Entity } from './model/Entity';
-export { Layout } from 'webpanel-antd';
-export * from './layout-builder';
-export { AdminLayout, ILayoutProps } from './components/layout';
-export {
-  getRelationshipFilterDropdownInput
-} from './model/fields/EntityFieldRelationship';
+export { Entity } from "./model/Entity";
+export { Layout } from "webpanel-antd";
+export * from "./layout-builder";
+export { AdminLayout, ILayoutProps } from "./components/layout";
+export { getRelationshipFilterDropdownInput } from "./model/fields/EntityFieldRelationship";
 
 export interface IAdminProps extends ILayoutProps {
-  auth?: AuthProps | DummyAuthProps;
+  auth?: OAuth2AuthProps | DummyAuthProps;
   autopermissions?: IAutopermissionConfig | boolean;
   logoURL?: string;
   logoCollapsedURL?: string;
@@ -70,10 +69,27 @@ export class Admin extends React.Component<IAdminProps> {
       <LoginForm authorizationInfo={props} />
     );
 
-    return auth.type === 'dummy' ? (
+    return auth.type === "dummy" ? (
       <DummyAuth {...auth} content={content} form={form} />
     ) : (
-      <Auth {...auth} content={content} form={form} />
+      <Auth
+        {...auth}
+        content={content}
+        form={form}
+        processing={() => <Spin />}
+        failed={({ error, logout }) => (
+          <Result
+            status="403"
+            title="403"
+            subTitle={`${error.message}`}
+            extra={
+              <Button type="primary" onClick={logout}>
+                Logout
+              </Button>
+            }
+          />
+        )}
+      />
     );
   }
 }
