@@ -5,6 +5,7 @@ import {
   Auth,
   AuthContentProps,
   AuthFormProps,
+  AuthProps,
   DummyAuth
 } from "webpanel-auth";
 import { Button, Result, Spin } from "antd";
@@ -13,10 +14,8 @@ import {
   configurePermissions
 } from "./model/permissions";
 
-import { DummyAuthProps } from "webpanel-auth/lib/DummyAuth";
 import { Entity } from "./model/Entity";
 import { LoginForm } from "webpanel-antd";
-import { OAuth2AuthProps } from "webpanel-auth/lib/Auth";
 
 export { Entity } from "./model/Entity";
 export { Layout } from "webpanel-antd";
@@ -25,7 +24,7 @@ export { AdminLayout, ILayoutProps } from "./components/layout";
 export { getRelationshipFilterDropdownInput } from "./model/fields/EntityFieldRelationship";
 
 export interface IAdminProps extends ILayoutProps {
-  auth?: OAuth2AuthProps | DummyAuthProps;
+  auth?: AuthProps;
   autopermissions?: IAutopermissionConfig | boolean;
   logoURL?: string;
   logoCollapsedURL?: string;
@@ -69,19 +68,20 @@ export class Admin extends React.Component<IAdminProps> {
       <LoginForm authorizationInfo={props} />
     );
 
-    return auth.type === "dummy" ? (
-      <DummyAuth {...auth} content={content} form={form} />
+    const _auth = auth as AuthProps;
+    return _auth.type === "dummy" ? (
+      <DummyAuth {..._auth} children={content} form={form} />
     ) : (
       <Auth
-        {...auth}
-        content={content}
+        {..._auth}
+        children={content}
         form={form}
         processing={() => <Spin />}
         failed={({ error, logout }) => (
           <Result
             status="403"
-            title="403"
-            subTitle={`${error.message}`}
+            title={error.message}
+            subTitle={`${error.description}`}
             extra={
               <Button type="primary" onClick={logout}>
                 Logout
