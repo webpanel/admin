@@ -36,7 +36,7 @@
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
     "webpanel-antd": "git+https://github.com/webpanel/antd.git#develop",
-    "webpanel-auth": "^0.1.5",
+    "webpanel-auth": "^0.1.7",
     "webpanel-data": "0.0.60"
   }
 }

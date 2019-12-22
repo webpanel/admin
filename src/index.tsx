@@ -76,7 +76,7 @@ export class Admin extends React.Component<IAdminProps> {
         {..._auth}
         children={content}
         form={form}
-        processing={() => <Spin />}
+        processing={() => <Spin style={{ width: "100%", marginTop: 80 }} />}
         failed={({ error, logout }) => (
           <Result
             status="403"
