@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { ILayoutProps } from './components/layout';
-import { IAutopermissionConfig } from './model/permissions';
-import { AuthProps } from 'webpanel-auth/lib/Auth';
-import { DummyAuthProps } from 'webpanel-auth/lib/DummyAuth';
-import { Entity } from './model/Entity';
-export { Entity } from './model/Entity';
-export { Layout } from 'webpanel-antd';
-export * from './layout-builder';
-export { AdminLayout, ILayoutProps } from './components/layout';
-export { getRelationshipFilterDropdownInput } from './model/fields/EntityFieldRelationship';
+import * as React from "react";
+import { ILayoutProps } from "./components/layout";
+import { IAutopermissionConfig } from "./model/permissions";
+import { DummyAuthProps } from "webpanel-auth/lib/DummyAuth";
+import { Entity } from "./model/Entity";
+import { OAuth2AuthProps } from "webpanel-auth/lib/Auth";
+export { Entity } from "./model/Entity";
+export { Layout } from "webpanel-antd";
+export * from "./layout-builder";
+export { AdminLayout, ILayoutProps } from "./components/layout";
+export { getRelationshipFilterDropdownInput } from "./model/fields/EntityFieldRelationship";
 export interface IAdminProps extends ILayoutProps {
-    auth?: AuthProps | DummyAuthProps;
+    auth?: OAuth2AuthProps | DummyAuthProps;
     autopermissions?: IAutopermissionConfig | boolean;
     logoURL?: string;
     logoCollapsedURL?: string;
