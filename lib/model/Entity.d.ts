@@ -42,7 +42,7 @@ export interface IEntityConfig<T> {
     edit?: Thunk<IEntityEditConfig>;
     detail?: Thunk<IEntityDetailConfig>;
     searchable?: Thunk<boolean | IEntitySearchableConfig>;
-    render?: (value: T | null) => string;
+    render?: (value: T | null) => React.ReactNode;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
 }
@@ -60,7 +60,7 @@ export declare class Entity<T = any> {
     get showDetailPage(): boolean;
     get name(): string;
     get dataSource(): DataSource;
-    get render(): (value: T | null) => string;
+    get render(): (value: T | null) => React.ReactNode;
     get initialSorting(): SortInfo[] | undefined;
     get initialFilters(): DataSourceArgumentMap | undefined;
     get searchable(): boolean;

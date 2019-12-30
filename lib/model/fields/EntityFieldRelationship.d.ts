@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from '../EntityField';
-import { Thunk } from 'ts-thunk';
-import { Entity } from '../Entity';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { FormLayout } from 'antd/lib/form/Form';
-export declare type IEntityFieldRelationshipType = 'toOne' | 'toMany';
-export declare type IEntityFieldRelationshipSelectMode = 'default' | 'multiple';
+import * as React from "react";
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
+import { Thunk } from "ts-thunk";
+import { Entity } from "../Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormLayout } from "antd/lib/form/Form";
+export declare type IEntityFieldRelationshipType = "toOne" | "toMany";
+export declare type IEntityFieldRelationshipSelectMode = "default" | "multiple";
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
     targetEntity: Thunk<Entity>;
     type: IEntityFieldRelationshipType;
