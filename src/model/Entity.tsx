@@ -106,7 +106,7 @@ export interface IEntityConfig<T> {
   searchable?: Thunk<boolean | IEntitySearchableConfig>;
   // render loaded entity to string (in search fields etc.)
   // only fields with {visible:['search']} are loaded for rendering
-  render?: (value: T | null) => string;
+  render?: (value: T | null) => React.ReactNode;
 
   // deprecated, user table config directly
   initialSorting?: SortInfo[];
@@ -169,7 +169,7 @@ export class Entity<T = any> {
     return resolveThunk(this.config.dataSource);
   }
 
-  public get render(): (value: T | null) => string {
+  public get render(): (value: T | null) => React.ReactNode {
     if (this.config.render) {
       return this.config.render;
     }
