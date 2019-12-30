@@ -5,8 +5,13 @@ import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../../model/Entity";
+export interface IEntityDetailFieldOptions {
+    field: string | null;
+    span?: number;
+}
+export declare type IEntityDetailConfigField = IEntityDetailFieldOptions | string | null;
 export interface IEntityDetailConfig {
-    fields?: Thunk<string[]>;
+    fields?: Thunk<IEntityDetailConfigField[]>;
     pollInterval?: number;
     wrapperType?: "card" | "plain" | "modal";
     modal?: ModalProps;
