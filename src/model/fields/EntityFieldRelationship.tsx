@@ -207,10 +207,18 @@ export class EntityFieldRelationship<T> extends EntityField<
   public get filterNormalize(): (values: string[]) => { [key: string]: any } {
     return (values: string[]) => {
       let res = {};
-      if (values.length == 1) {
-        res[this.name] = { id: values[0] };
-      } else if (values.length > 1) {
-        res[this.name] = { id_in: values };
+      if (this.type === "toMany") {
+        if (values.length == 1) {
+          res[this.name] = { id: values[0] };
+        } else if (values.length > 1) {
+          res[this.name] = { id_in: values };
+        }
+      } else {
+        if (values.length == 1) {
+          res[this.name + "Id"] = values[0];
+        } else if (values.length > 1) {
+          res[this.name + "Id_in"] = values;
+        }
       }
       return res;
     };
@@ -220,6 +228,8 @@ export class EntityFieldRelationship<T> extends EntityField<
       let res: any[] = [];
       const value =
         values[this.columnName()] ||
+        values[this.columnName() + "Id"] ||
+        values[this.columnName() + "Id_in"] ||
         values[
           this.columnName()
             .replace("Ids", "")
@@ -230,6 +240,10 @@ export class EntityFieldRelationship<T> extends EntityField<
           res = [value.id];
         } else if (value.id_in) {
           res = value.id_in;
+        } else if (Array.isArray(value)) {
+          res = value;
+        } else {
+          res = [value];
         }
       }
       return res;
