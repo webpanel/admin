@@ -54,6 +54,7 @@ import {
   EntityOnSaveHandler,
   IEntityEditConfig
 } from "../components/pages/edit";
+import { EntitySelect, EntitySelectConfig } from "../components/entity-picker";
 import {
   IEntityDetailConfig,
   IEntityDetailProps
@@ -598,6 +599,10 @@ export class Entity<T = any> {
       />
     );
   };
+
+  public getSelect(config?: EntitySelectConfig): React.ReactNode {
+    return <EntitySelect entity={this} {...config} />;
+  }
 
   // fields
   // deprecated, use stringField
