@@ -299,13 +299,17 @@ export class Entity<T = any> {
   public getLayout(
     type: "detail" | "edit",
     config: LayoutBuilderConfig
-  ): React.ReactNode | null {
+  ): React.ReactNode {
     const builder = new LayoutBuilder(config);
     const fn = this.layouts[type];
     if (fn) {
       return fn(builder);
     }
-    return null;
+    const detail = resolveOptionalThunk(this.config.detail);
+    return builder.getDefaultDetailContent({
+      descriptions: detail && detail.desriptions,
+      fields: detail && detail.fields
+    });
   }
 
   public menuItem = (): React.ReactNode => {
