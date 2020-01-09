@@ -1,15 +1,17 @@
-import * as React from 'react';
-import { LayoutBuilderCardProps } from './components/card';
-import { LayoutBuilderColProps } from './components/col';
-import { LayoutBuilderEditFieldProps } from './components/edit-field';
-import { LayoutBuilderRowProps } from './components/row';
-import { LayoutBuilderStringFieldProps } from './components/string-field';
-import { LayoutBuilderTabsProps } from './components/tabs';
-import { LayoutBuilderValueProps } from './components/value';
-import { Resource, ResourceID } from 'webpanel-data';
-import { Thunk } from 'ts-thunk';
-import { Entity } from '../model/Entity';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
+import * as React from "react";
+import { IEntityDetailConfigField } from "../components/pages/detail";
+import { LayoutBuilderCardProps } from "./components/card";
+import { LayoutBuilderColProps } from "./components/col";
+import { LayoutBuilderEditFieldProps } from "./components/edit-field";
+import { LayoutBuilderRowProps } from "./components/row";
+import { LayoutBuilderStringFieldProps } from "./components/string-field";
+import { LayoutBuilderTabsProps } from "./components/tabs";
+import { LayoutBuilderValueProps } from "./components/value";
+import { Resource, ResourceID } from "webpanel-data";
+import { Thunk } from "ts-thunk";
+import { DescriptionsProps } from "antd/lib/descriptions";
+import { Entity } from "../model/Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
 export interface LayoutBuilderConfig {
     entity: Entity;
     id?: ResourceID;
@@ -22,6 +24,17 @@ export declare class LayoutBuilder {
     constructor(config: LayoutBuilderConfig);
     isLoading(): boolean;
     isInitLoading(): boolean;
+    get data(): any;
+    get resourceID(): ResourceID | undefined;
+    get entity(): Entity;
+    getDefaultDetailContent(config?: {
+        descriptions?: DescriptionsProps;
+        fields?: Thunk<IEntityDetailConfigField[]>;
+    }): React.ReactNode;
+    getDescriptions(config?: {
+        descriptions?: DescriptionsProps;
+        fields?: Thunk<IEntityDetailConfigField[]>;
+    }): React.ReactNode;
     card(props: Thunk<LayoutBuilderCardProps, LayoutBuilderConfig>): React.ReactNode;
     row(props: Thunk<LayoutBuilderRowProps, LayoutBuilderConfig>): React.ReactNode;
     col(props: Thunk<LayoutBuilderColProps, LayoutBuilderConfig>): React.ReactNode;
