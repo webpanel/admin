@@ -90,7 +90,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                           defaultValue: entity.title
                         }) +
                         ": " +
-                        (resource.data && entity.render(resource.data))
+                        ((resource.data && entity.render(resource.data)) || "-")
                       }
                       loading={resource.loading && !resource.polling}
                       extra={
