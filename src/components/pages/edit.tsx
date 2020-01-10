@@ -84,7 +84,7 @@ export class EntityEdit extends React.Component<
                 defaultValue: entity.title
               }) +
               ": " +
-              (resource.data && entity.render(resource.data))
+              ((resource.data && entity.render(resource.data)) || "-")
             }
           >
             <Spin spinning={resource.loading && !resource.polling}>
