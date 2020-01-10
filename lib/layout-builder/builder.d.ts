@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IEntityDetailConfigField } from "../components/pages/detail";
+import { IEntityDetailConfigField, IEntityDetailFieldOptions } from "../components/pages/detail";
 import { LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderColProps } from "./components/col";
 import { LayoutBuilderEditFieldProps } from "./components/edit-field";
@@ -27,12 +27,16 @@ export declare class LayoutBuilder {
     get data(): any;
     get resourceID(): ResourceID | undefined;
     get entity(): Entity;
+    getFieldsFromThunk(fields?: Thunk<IEntityDetailConfigField[]>): IEntityDetailFieldOptions[];
     getDefaultDetailContent(config?: {
         descriptions?: DescriptionsProps;
         fields?: Thunk<IEntityDetailConfigField[]>;
     }): React.ReactNode;
     getDescriptions(config?: {
         descriptions?: DescriptionsProps;
+        fields?: Thunk<IEntityDetailConfigField[]>;
+    }): React.ReactNode;
+    getDefaultEditContent(config?: {
         fields?: Thunk<IEntityDetailConfigField[]>;
     }): React.ReactNode;
     card(props: Thunk<LayoutBuilderCardProps, LayoutBuilderConfig>): React.ReactNode;
