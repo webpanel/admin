@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { Resource, ResourceID } from 'webpanel-data';
-import { SaveOption } from '../form/buttons';
-import { Thunk } from 'ts-thunk';
-import { Entity } from '../../model/Entity';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { FormLayout } from 'antd/lib/form/Form';
-import { ModalProps } from 'antd/lib/modal';
+import * as React from "react";
+import { Resource, ResourceID } from "webpanel-data";
+import { SaveOption } from "../form/buttons";
+import { Thunk } from "ts-thunk";
+import { Entity } from "../../model/Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormLayout } from "antd/lib/form/Form";
+import { ModalProps } from "antd/lib/modal";
 export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
@@ -16,7 +16,7 @@ export interface IEntityEditConfig {
     initialValues?: {
         [key: string]: any;
     };
-    wrapperType?: 'card' | 'modal';
+    wrapperType?: "card" | "modal";
     modal?: ModalProps;
 }
 export interface IEntityEditProps extends IEntityEditConfig {
@@ -37,7 +37,7 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{
         [key: string]: any;
-    }>>, option?: "add" | "edit" | undefined) => Promise<void>;
+    }>>, option?: "edit" | "add" | undefined) => Promise<void>;
     handleFormSuccess: (resource: Resource<{
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{

@@ -1,15 +1,16 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Card, Modal, Spin, message } from 'antd';
-import { Resource, ResourceID, ResourceLayer } from 'webpanel-data';
-import { ResourceFormPageButtons, SaveOption } from '../form/buttons';
-import { Thunk, resolveOptionalThunk } from 'ts-thunk';
+import { Card, Modal, Spin, message } from "antd";
+import { Resource, ResourceID, ResourceLayer } from "webpanel-data";
+import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Entity } from '../../model/Entity';
-import { FormContext } from 'webpanel-antd/lib/form/form/Form';
-import { FormLayout } from 'antd/lib/form/Form';
-import { ModalProps } from 'antd/lib/modal';
-import { ResourceForm } from 'webpanel-antd';
+import { Entity } from "../../model/Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormLayout } from "antd/lib/form/Form";
+import { ModalProps } from "antd/lib/modal";
+import { ResourceForm } from "webpanel-antd";
+import { Translation } from "react-i18next";
 
 export type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 
@@ -21,7 +22,7 @@ export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
   fields?: Thunk<string[]>;
   initialValues?: { [key: string]: any };
-  wrapperType?: 'card' | 'modal';
+  wrapperType?: "card" | "modal";
   modal?: ModalProps;
 }
 
@@ -60,7 +61,7 @@ export class EntityEdit extends React.Component<
   };
 
   handleFormSuccess = async (resource: Resource) => {
-    message.success('Form saved!');
+    message.success("Form saved!");
     const { onSave } = this.props;
 
     if (onSave) {
@@ -73,21 +74,32 @@ export class EntityEdit extends React.Component<
     formContext: FormContext,
     resource: Resource
   ): React.ReactNode {
+    const { entity } = this.props;
     return (
-      <>
-        <Card>
-          <Spin spinning={resource.loading && !resource.polling}>
-            {content}
-            <ResourceFormPageButtons
-              hasChanges={formContext.form.isFieldsTouched()}
-              handleReset={() => formContext.formComponent.resetFields()}
-              // handleSave={(option: SaveOption) =>
-              //   this.handleSave(formContext, resource, option)
-              // }
-            />
-          </Spin>
-        </Card>
-      </>
+      <Translation>
+        {t => (
+          <Card
+            title={
+              t(`${entity.name}._title`, {
+                defaultValue: entity.title
+              }) +
+              ": " +
+              (resource.data && entity.render(resource.data))
+            }
+          >
+            <Spin spinning={resource.loading && !resource.polling}>
+              {content}
+              <ResourceFormPageButtons
+                hasChanges={formContext.form.isFieldsTouched()}
+                handleReset={() => formContext.formComponent.resetFields()}
+                // handleSave={(option: SaveOption) =>
+                //   this.handleSave(formContext, resource, option)
+                // }
+              />
+            </Spin>
+          </Card>
+        )}
+      </Translation>
     );
   }
   private formModalContent(
@@ -122,7 +134,7 @@ export class EntityEdit extends React.Component<
       f => f && f.fetchField() && f.writeable
     );
     const _fields = resolveOptionalThunk(fields);
-    if (typeof _fields !== 'undefined') {
+    if (typeof _fields !== "undefined") {
       entityFields = _fields.map(name => entity.getFieldOrFail(name));
     }
     return (
@@ -147,7 +159,7 @@ export class EntityEdit extends React.Component<
             }
             {...form}
             render={(formContext: FormContext) => {
-              const layout = entity.getLayout('edit', {
+              const layout = entity.getLayout("edit", {
                 entity,
                 resource,
                 formContext,
@@ -163,7 +175,7 @@ export class EntityEdit extends React.Component<
                 );
 
               switch (wrapperType) {
-                case 'modal':
+                case "modal":
                   return this.formModalContent(content, formContext, resource);
                 default:
                   return this.formCardContent(content, formContext, resource);
