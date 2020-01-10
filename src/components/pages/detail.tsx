@@ -89,7 +89,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                         t(`${entity.name}._title`, {
                           defaultValue: entity.title
                         }) +
-                        " " +
+                        ": " +
                         (resource.data && entity.render(resource.data))
                       }
                       loading={resource.loading && !resource.polling}
