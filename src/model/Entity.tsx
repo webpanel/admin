@@ -307,10 +307,16 @@ export class Entity<T = any> {
       return fn(builder);
     }
     const detail = resolveOptionalThunk(this.config.detail);
-    return builder.getDefaultDetailContent({
-      descriptions: detail && detail.desriptions,
-      fields: detail && detail.fields
-    });
+    if (type == "detail") {
+      return builder.getDefaultDetailContent({
+        descriptions: detail && detail.desriptions,
+        fields: detail && detail.fields
+      });
+    } else {
+      return builder.getDefaultEditContent({
+        fields: detail && detail.fields
+      });
+    }
   }
 
   public menuItem = (): React.ReactNode => {

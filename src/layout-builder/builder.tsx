@@ -60,6 +60,25 @@ export class LayoutBuilder {
     return this.config.entity;
   }
 
+  getFieldsFromThunk(
+    fields?: Thunk<IEntityDetailConfigField[]>
+  ): IEntityDetailFieldOptions[] {
+    let fs: IEntityDetailFieldOptions[] = [];
+    const _fields = resolveOptionalThunk(fields);
+    if (typeof _fields !== "undefined") {
+      fs = _fields.map(f => {
+        let _f: IEntityDetailFieldOptions = { field: null };
+        if (typeof f === "string" || f === null) {
+          return { field: f };
+        } else {
+          _f = f;
+        }
+        return _f;
+      });
+    }
+    return fs;
+  }
+
   public getDefaultDetailContent(config?: {
     descriptions?: DescriptionsProps;
     fields?: Thunk<IEntityDetailConfigField[]>;
@@ -78,17 +97,8 @@ export class LayoutBuilder {
       field
     }));
 
-    const _fields = resolveOptionalThunk(config && config.fields);
-    if (typeof _fields !== "undefined") {
-      const fs: IEntityDetailFieldOptions[] = _fields.map(f => {
-        let _f: IEntityDetailFieldOptions = { field: null };
-        if (typeof f === "string" || f === null) {
-          return { field: f };
-        } else {
-          _f = f;
-        }
-        return _f;
-      });
+    if (config && config.fields) {
+      const fs = this.getFieldsFromThunk(config.fields);
       descriptionItems = fs.map(f => {
         return {
           field: (f.field && this.entity.getFieldOrFail(f.field)) || null,
@@ -124,6 +134,17 @@ export class LayoutBuilder {
         )}
       </Translation>
     );
+  }
+  public getDefaultEditContent(config?: {
+    fields?: Thunk<IEntityDetailConfigField[]>;
+  }): React.ReactNode {
+    let fields: EntityField<any, any>[] = this.entity.detailFields;
+    if (config && config.fields) {
+      fields = this.getFieldsFromThunk(config.fields)
+        .map(f => (f.field && this.entity.getFieldOrFail(f.field)) || null)
+        .filter(x => x) as EntityField<any, any>[];
+    }
+    return fields.map(f => this.editField({ name: f.name }));
   }
 
   card(
