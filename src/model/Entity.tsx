@@ -306,15 +306,16 @@ export class Entity<T = any> {
     if (fn) {
       return fn(builder);
     }
-    const detail = resolveOptionalThunk(this.config.detail);
     if (type == "detail") {
+      const detail = resolveOptionalThunk(this.config.detail);
       return builder.getDefaultDetailContent({
         descriptions: detail && detail.desriptions,
         fields: detail && detail.fields
       });
     } else {
+      const edit = resolveOptionalThunk(this.config.edit);
       return builder.getDefaultEditContent({
-        fields: detail && detail.fields
+        fields: edit && edit.fields
       });
     }
   }

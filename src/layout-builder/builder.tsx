@@ -138,7 +138,7 @@ export class LayoutBuilder {
   public getDefaultEditContent(config?: {
     fields?: Thunk<IEntityDetailConfigField[]>;
   }): React.ReactNode {
-    let fields: EntityField<any, any>[] = this.entity.detailFields;
+    let fields: EntityField<any, any>[] = this.entity.editFields;
     if (config && config.fields) {
       fields = this.getFieldsFromThunk(config.fields)
         .map(f => (f.field && this.entity.getFieldOrFail(f.field)) || null)
