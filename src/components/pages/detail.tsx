@@ -4,13 +4,13 @@ import * as React from "react";
 
 import Modal, { ModalProps } from "antd/lib/modal";
 import { Resource, ResourceID, ResourceLayer } from "webpanel-data";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Card } from "antd";
 import { CardProps } from "antd/lib/card";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
-import { Thunk } from "ts-thunk";
 // import { Link  } from 'react-router-dom';
 import { Translation } from "react-i18next";
 
@@ -45,16 +45,23 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       pollInterval,
       wrapperType,
       modal,
-      card
+      card,
+      fields
     } = this.props;
 
     let entityFields: EntityField<any, any>[] = entity.detailFields;
-    let descriptionItems: {
-      field: EntityField<any, any> | null;
-      span?: number;
-    }[] = entityFields.map(field => ({
-      field
-    }));
+    const _fields = resolveOptionalThunk(fields);
+    if (typeof _fields !== "undefined") {
+      entityFields = _fields
+        .map(f => {
+          const fieldName = typeof f === "string" ? f : f?.field;
+          if (!fieldName) {
+            return null;
+          }
+          return entity.getFieldOrFail(fieldName);
+        })
+        .filter(x => x) as EntityField<any, any>[];
+    }
 
     return (
       <Translation>
@@ -65,8 +72,8 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             dataSource={entity.dataSource}
             fields={[
               "id",
-              ...(descriptionItems
-                .map(x => x.field && x.field.fetchField())
+              ...(entityFields
+                .map(x => x && x.fetchField())
                 .filter(x => x) as string[])
             ]}
             pollInterval={pollInterval}

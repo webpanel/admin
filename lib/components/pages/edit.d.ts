@@ -7,12 +7,16 @@ import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { FormLayout } from "antd/lib/form/Form";
 import { ModalProps } from "antd/lib/modal";
 export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
+export interface IEntityEditFieldOptions {
+    field: string | null;
+}
+export declare type IEntityEditConfigField = IEntityEditFieldOptions | string | null;
 export interface IEntityEditFormProps {
     layout?: FormLayout;
 }
 export interface IEntityEditConfig {
     form?: IEntityEditFormProps;
-    fields?: Thunk<string[]>;
+    fields?: Thunk<IEntityEditConfigField[]>;
     initialValues?: {
         [key: string]: any;
     };

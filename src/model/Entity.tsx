@@ -236,10 +236,13 @@ export class Entity<T = any> {
   public get detailFields(): EntityField<T, any>[] {
     const detailConfig = resolveOptionalThunk(this.config.detail);
     if (detailConfig) {
-      const listFields = resolveOptionalThunk(detailConfig.fields);
-      if (listFields) {
+      const _detailFields = resolveOptionalThunk(detailConfig.fields);
+      if (_detailFields) {
+        const detailFields = _detailFields.map(f =>
+          typeof f === "string" ? f : f?.field
+        );
         return this.fields.filter(
-          f => f.readable && listFields.indexOf(f.name) !== -1
+          f => f.readable && detailFields.indexOf(f.name) !== -1
         );
       }
     }
