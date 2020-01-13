@@ -2,10 +2,10 @@ import "../../../styles/form-detail.css";
 import * as React from "react";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
+import { Thunk } from "ts-thunk";
 import { CardProps } from "antd/lib/card";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../../model/Entity";
-import { Thunk } from "ts-thunk";
 export interface IEntityDetailFieldOptions {
     field: string | null;
     span?: number;

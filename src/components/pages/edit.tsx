@@ -6,6 +6,7 @@ import { ResourceFormPageButtons, SaveOption } from "../form/buttons";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "../../model/Entity";
+import { EntityField } from "../../model/EntityField";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { FormLayout } from "antd/lib/form/Form";
 import { ModalProps } from "antd/lib/modal";
@@ -14,13 +15,19 @@ import { Translation } from "react-i18next";
 
 export type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 
+export interface IEntityEditFieldOptions {
+  field: string | null;
+}
+
+export type IEntityEditConfigField = IEntityEditFieldOptions | string | null;
+
 export interface IEntityEditFormProps {
   layout?: FormLayout;
 }
 
 export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
-  fields?: Thunk<string[]>;
+  fields?: Thunk<IEntityEditConfigField[]>;
   initialValues?: { [key: string]: any };
   wrapperType?: "card" | "modal";
   modal?: ModalProps;
@@ -135,8 +142,17 @@ export class EntityEdit extends React.Component<
     );
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== "undefined") {
-      entityFields = _fields.map(name => entity.getFieldOrFail(name));
+      entityFields = _fields
+        .map(f => {
+          const fieldName = typeof f === "string" ? f : f?.field;
+          if (!fieldName) {
+            return null;
+          }
+          return entity.getFieldOrFail(fieldName);
+        })
+        .filter(x => x) as EntityField<any, any>[];
     }
+
     return (
       <ResourceLayer
         key={this.state.version}
@@ -159,20 +175,13 @@ export class EntityEdit extends React.Component<
             }
             {...form}
             render={(formContext: FormContext) => {
-              const layout = entity.getLayout("edit", {
+              const content = entity.getLayout("edit", {
                 entity,
                 resource,
                 formContext,
                 id: resourceID,
                 data: resource.data || {}
               });
-              const content =
-                layout ||
-                entityFields.map((field, i) =>
-                  field.fieldElement(formContext, i, {
-                    formLayout: form && form.layout
-                  })
-                );
 
               switch (wrapperType) {
                 case "modal":
