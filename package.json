@@ -35,8 +35,9 @@
     "antd": "^3.20.7",
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
+    "typescript": "^3.7.4",
     "webpanel-antd": "0.0.34",
-    "webpanel-auth": "^0.1.7",
-    "webpanel-data": "0.0.60"
+    "webpanel-auth": "^0.1.9",
+    "webpanel-data": "0.0.61"
   }
 }

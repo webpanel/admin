@@ -1,8 +1,7 @@
 import * as React from "react";
 
 import {
-  IEntityDetailConfigField,
-  IEntityDetailFieldOptions
+  IEntityDetailConfigField,IEntityDetailFieldOptions
 } from "../components/pages/detail";
 import { LayoutBuilderCard, LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
@@ -30,6 +29,7 @@ import { EntityField } from "../model/EntityField";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { LayoutBuilderEditButton } from "./components/edit-button";
 import { Translation } from "react-i18next";
+import { IEntityEditConfigField, IEntityEditFieldOptions } from "../components/pages/edit";
 
 export interface LayoutBuilderConfig {
   entity: Entity;
@@ -39,6 +39,8 @@ export interface LayoutBuilderConfig {
   resource: Resource;
 }
 
+type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityEditConfigField
+type IEntityBuilderFieldOptions = IEntityEditFieldOptions | IEntityDetailFieldOptions
 export class LayoutBuilder {
   constructor(public readonly config: LayoutBuilderConfig) {}
 
@@ -61,9 +63,9 @@ export class LayoutBuilder {
   }
 
   getFieldsFromThunk(
-    fields?: Thunk<IEntityDetailConfigField[]>
-  ): IEntityDetailFieldOptions[] {
-    let fs: IEntityDetailFieldOptions[] = [];
+    fields?: Thunk<IEntityBuilderConfigField[]>
+  ): IEntityBuilderFieldOptions[] {
+    let fs: IEntityBuilderFieldOptions[] = [];
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== "undefined") {
       fs = _fields.map(f => {
@@ -81,13 +83,13 @@ export class LayoutBuilder {
 
   public getDefaultDetailContent(config?: {
     descriptions?: DescriptionsProps;
-    fields?: Thunk<IEntityDetailConfigField[]>;
+    fields?: Thunk<IEntityBuilderConfigField[]>;
   }): React.ReactNode {
     return this.getDescriptions(config);
   }
   public getDescriptions(config?: {
     descriptions?: DescriptionsProps;
-    fields?: Thunk<IEntityDetailConfigField[]>;
+    fields?: Thunk<IEntityBuilderConfigField[]>;
   }): React.ReactNode {
     let entityFields: EntityField<any, any>[] = this.entity.detailFields;
     let descriptionItems: {
@@ -102,7 +104,7 @@ export class LayoutBuilder {
       descriptionItems = fs.map(f => {
         return {
           field: (f.field && this.entity.getFieldOrFail(f.field)) || null,
-          span: f.span
+          span: f["span"] || 1
         };
       });
     }
@@ -136,7 +138,7 @@ export class LayoutBuilder {
     );
   }
   public getDefaultEditContent(config?: {
-    fields?: Thunk<IEntityDetailConfigField[]>;
+    fields?: Thunk<IEntityBuilderConfigField[]>;
   }): React.ReactNode {
     let fields: EntityField<any, any>[] = this.entity.editFields;
     if (config && config.fields) {
