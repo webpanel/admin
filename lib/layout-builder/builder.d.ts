@@ -12,6 +12,7 @@ import { Thunk } from "ts-thunk";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../model/Entity";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { IEntityEditConfigField, IEntityEditFieldOptions } from "../components/pages/edit";
 export interface LayoutBuilderConfig {
     entity: Entity;
     id?: ResourceID;
@@ -19,6 +20,8 @@ export interface LayoutBuilderConfig {
     formContext?: FormContext;
     resource: Resource;
 }
+declare type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityEditConfigField;
+declare type IEntityBuilderFieldOptions = IEntityEditFieldOptions | IEntityDetailFieldOptions;
 export declare class LayoutBuilder {
     readonly config: LayoutBuilderConfig;
     constructor(config: LayoutBuilderConfig);
@@ -27,17 +30,17 @@ export declare class LayoutBuilder {
     get data(): any;
     get resourceID(): ResourceID | undefined;
     get entity(): Entity;
-    getFieldsFromThunk(fields?: Thunk<IEntityDetailConfigField[]>): IEntityDetailFieldOptions[];
+    getFieldsFromThunk(fields?: Thunk<IEntityBuilderConfigField[]>): IEntityBuilderFieldOptions[];
     getDefaultDetailContent(config?: {
         descriptions?: DescriptionsProps;
-        fields?: Thunk<IEntityDetailConfigField[]>;
+        fields?: Thunk<IEntityBuilderConfigField[]>;
     }): React.ReactNode;
     getDescriptions(config?: {
         descriptions?: DescriptionsProps;
-        fields?: Thunk<IEntityDetailConfigField[]>;
+        fields?: Thunk<IEntityBuilderConfigField[]>;
     }): React.ReactNode;
     getDefaultEditContent(config?: {
-        fields?: Thunk<IEntityDetailConfigField[]>;
+        fields?: Thunk<IEntityBuilderConfigField[]>;
     }): React.ReactNode;
     card(props: Thunk<LayoutBuilderCardProps, LayoutBuilderConfig>): React.ReactNode;
     row(props: Thunk<LayoutBuilderRowProps, LayoutBuilderConfig>): React.ReactNode;
@@ -48,3 +51,4 @@ export declare class LayoutBuilder {
     editField(props: Thunk<LayoutBuilderEditFieldProps, LayoutBuilderConfig>): React.ReactNode;
     editButton(): React.ReactNode;
 }
+export {};
