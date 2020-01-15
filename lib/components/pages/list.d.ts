@@ -1,14 +1,15 @@
-import '../../../styles/entity-list.css';
-import * as React from 'react';
-import { DataSource, ResourceCollection, ResourceCollectionOptions } from 'webpanel-data';
-import { EntitylistActionButton } from './list.buttons';
-import { PaginationConfig, TableProps } from 'antd/lib/table';
-import { Thunk } from 'ts-thunk';
-import { CreateEntityProps } from '../buttons/EntityAddButton';
-import { Entity } from '../../model/Entity';
-import { EntityField } from '../../model/EntityField';
-import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
-import i18next from 'i18next';
+import "../../../styles/entity-list.css";
+import * as React from "react";
+import { DataSource, ResourceCollection, ResourceCollectionOptions } from "webpanel-data";
+import { EntitylistActionButton } from "./list.buttons";
+import { PaginationConfig, TableProps } from "antd/lib/table";
+import { Thunk } from "ts-thunk";
+import { CardProps } from "antd/lib/card";
+import { CreateEntityProps } from "../buttons/EntityAddButton";
+import { Entity } from "../../model/Entity";
+import { EntityField } from "../../model/EntityField";
+import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
+import i18next from "i18next";
 export interface IEntityListTableProps extends TableProps<any>, ResourceCollectionOptions<any> {
     condensed?: boolean;
     actionButtons?: EntitylistActionButton[];
@@ -30,16 +31,14 @@ export declare type IEntityListColumn = string | {
 };
 export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
-    card?: {
-        extra?: React.ReactNode;
-    };
+    card?: CardProps;
     searchable?: boolean;
     showAddButton?: boolean;
     addButton?: boolean | CreateEntityProps;
     title?: string;
     fields?: Thunk<IEntityListColumn[]>;
     editableFields?: Thunk<string[]>;
-    wrapperType?: 'card' | 'plain';
+    wrapperType?: "card" | "plain";
 }
 export interface IEntityListProps<T> extends IEntityListConfig<T> {
     entity: Entity<T>;

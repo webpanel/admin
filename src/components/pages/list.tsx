@@ -1,35 +1,36 @@
-import '../../../styles/entity-list.css';
+import "../../../styles/entity-list.css";
 
-import * as React from 'react';
+import * as React from "react";
 
 import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
   ResourceCollectionOptions
-} from 'webpanel-data';
+} from "webpanel-data";
 import {
   EntitylistActionButton,
   detailListButton,
   editListButton
-} from './list.buttons';
-import { PaginationConfig, TableProps } from 'antd/lib/table';
+} from "./list.buttons";
+import { PaginationConfig, TableProps } from "antd/lib/table";
 import {
   ResourceSearchInput,
   ResourceTable,
   ResourceTableActionButtonProps
-} from 'webpanel-antd';
-import { Thunk, resolveOptionalThunk } from 'ts-thunk';
+} from "webpanel-antd";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Card } from 'antd';
-import { CreateEntityProps } from '../buttons/EntityAddButton';
-import { Entity } from '../../model/Entity';
-import { EntityField } from '../../model/EntityField';
-import { ListCell } from './list-cell';
-import { ResourceTableColumn } from 'webpanel-antd/lib/table/ResourceTable';
-import { ResourceTablePropsActionButton } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
-import { Translation } from 'react-i18next';
-import i18next from 'i18next';
+import { Card } from "antd";
+import { CardProps } from "antd/lib/card";
+import { CreateEntityProps } from "../buttons/EntityAddButton";
+import { Entity } from "../../model/Entity";
+import { EntityField } from "../../model/EntityField";
+import { ListCell } from "./list-cell";
+import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
+import { ResourceTablePropsActionButton } from "webpanel-antd/lib/table/ResourceTableActionButtons";
+import { Translation } from "react-i18next";
+import i18next from "i18next";
 
 export interface IEntityListTableProps
   extends TableProps<any>,
@@ -68,7 +69,7 @@ export type IEntityListColumn =
 
 export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
   table?: IEntityListTableProps;
-  card?: { extra?: React.ReactNode };
+  card?: CardProps;
   searchable?: boolean;
   // deprecated, please use addButton property
   showAddButton?: boolean;
@@ -77,7 +78,7 @@ export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
   fields?: Thunk<IEntityListColumn[]>;
   editableFields?: Thunk<string[]>;
   // default: card
-  wrapperType?: 'card' | 'plain';
+  wrapperType?: "card" | "plain";
 }
 
 export interface IEntityListProps<T> extends IEntityListConfig<T> {
@@ -155,9 +156,9 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     }[] = [];
     if (_fields) {
       for (let f of _fields) {
-        const fieldName = typeof f === 'string' ? f : f.field;
-        const render = (typeof f !== 'string' && f.render) || undefined;
-        const hidden = (typeof f !== 'string' && f.hidden) || false;
+        const fieldName = typeof f === "string" ? f : f.field;
+        const render = (typeof f !== "string" && f.render) || undefined;
+        const hidden = (typeof f !== "string" && f.hidden) || false;
         const field = entity.getField(fieldName);
         if (!field) {
           throw new Error(
@@ -188,26 +189,27 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     } = this.props;
 
     const _searchable =
-      typeof searchable !== 'undefined' ? searchable : entity.searchable;
+      typeof searchable !== "undefined" ? searchable : entity.searchable;
 
     let _addButton = addButton;
-    if (typeof showAddButton !== 'undefined') {
+    if (typeof showAddButton !== "undefined") {
       _addButton = showAddButton;
     }
 
-    if (typeof _addButton === 'undefined' || _addButton === true) {
+    if (typeof _addButton === "undefined" || _addButton === true) {
       _addButton = {
-        flow: 'redirect'
+        flow: "redirect"
       };
     }
 
     return (
       <Card
-        bodyStyle={{ padding: '0' }}
+        bodyStyle={{ padding: "0" }}
         title={
           title ||
           t(`${entity.name}._title`, { count: 100, defaultValue: entity.title })
         }
+        {...card}
         extra={[
           _searchable && (
             <ResourceSearchInput
@@ -215,7 +217,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
               resourceCollection={resource}
               size="small"
               style={{
-                width: '100%',
+                width: "100%",
                 minWidth: 100,
                 maxWidth: 150,
                 marginRight: 8
@@ -225,9 +227,9 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
           _addButton &&
             entity.creatable &&
             entity.getCreateButton({
-              button: { size: 'small' },
+              button: { size: "small" },
               onCreate: () => resource.reload(),
-              ...(typeof _addButton === 'object' ? _addButton : {})
+              ...(typeof _addButton === "object" ? _addButton : {})
             }),
           // <EntityAddButton
           //   key="addButton"
@@ -248,37 +250,37 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
   ): ResourceTablePropsActionButton<T>[] {
     const { entity, table } = this.props;
     if (table && table.condensed) {
-      table.size = 'small';
+      table.size = "small";
     }
-    const size = table && table.size === 'small' ? 'small' : 'default';
-    if (typeof buttons === 'undefined') {
-      buttons = ['detail', 'edit', 'delete']
+    const size = table && table.size === "small" ? "small" : "default";
+    if (typeof buttons === "undefined") {
+      buttons = ["detail", "edit", "delete"];
     }
     return buttons
       .map(
         (item: EntitylistActionButton): ResourceTablePropsActionButton<T> => {
-          if (typeof item === 'function') {
+          if (typeof item === "function") {
             return (props: ResourceTableActionButtonProps<T>) =>
               item({ ...props, entity });
           }
           switch (item) {
-            case 'edit':
+            case "edit":
               if (!entity.updateable) {
                 return null;
               }
               return (props: ResourceTableActionButtonProps<T>) =>
                 editListButton({ ...props, entity }, size);
-            case 'detail':
+            case "detail":
               if (!entity.showDetailPage) {
                 return null;
               }
               return (props: ResourceTableActionButtonProps<T>) =>
                 detailListButton({ ...props, entity }, size);
-            case 'delete':
+            case "delete":
               if (!entity.deletable) {
                 return null;
               }
-              return 'delete';
+              return "delete";
             default:
               return item;
           }
@@ -295,7 +297,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
 
     const defaultPagination: PaginationConfig = {
       defaultPageSize: 30,
-      pageSizeOptions: ['10', '20', '30', '50', '100'],
+      pageSizeOptions: ["10", "20", "30", "50", "100"],
       showSizeChanger: true,
       showTotal: (total: number, range: [number, number]) =>
         `${range[0]}-${range[1]} / ${total}`
@@ -331,7 +333,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     } = this.props;
 
     const fields = [
-      'id',
+      "id",
       ...(this.getListFields()
         .map(x => x.field.fetchField())
         .filter(x => x) as string[])
@@ -348,7 +350,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
             initialFilters={initialFilters || entity.initialFilters}
             // pollInterval={pollInterval}
             render={(resource: ResourceCollection<any>) =>
-              wrapperType === 'plain'
+              wrapperType === "plain"
                 ? this.tableContent(resource, t)
                 : this.cardContent(resource, t)
             }
