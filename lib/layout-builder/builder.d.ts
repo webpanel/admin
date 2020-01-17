@@ -1,5 +1,6 @@
 import * as React from "react";
 import { IEntityDetailConfigField, IEntityDetailFieldOptions } from "../components/pages/detail";
+import { IEntityEditConfigField, IEntityEditFieldOptions } from "../components/pages/edit";
 import { LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderColProps } from "./components/col";
 import { LayoutBuilderEditFieldProps } from "./components/edit-field";
@@ -12,7 +13,6 @@ import { Thunk } from "ts-thunk";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../model/Entity";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
-import { IEntityEditConfigField, IEntityEditFieldOptions } from "../components/pages/edit";
 export interface LayoutBuilderConfig {
     entity: Entity;
     id?: ResourceID;

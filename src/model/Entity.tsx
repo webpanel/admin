@@ -209,14 +209,17 @@ export class Entity<T = any> {
   public get listFields(): EntityField<T, any>[] {
     const listConfig = resolveOptionalThunk(this.config.list);
     if (listConfig) {
-      const listFields = resolveOptionalThunk(listConfig.fields);
-      if (listFields) {
-        const _listFields = listFields.map(f =>
-          typeof f === "string" ? f : f.field
-        );
-        return this.fields.filter(
-          f => f.enabled && _listFields.indexOf(f.name) !== -1
-        );
+      const fields = resolveOptionalThunk(listConfig.fields);
+      if (fields) {
+        return fields
+          .map(f => {
+            const fieldName = typeof f === "string" ? f : f?.field;
+            if (!fieldName) {
+              return null;
+            }
+            return this.getFieldOrFail(fieldName);
+          })
+          .filter(x => x) as EntityField<T, any>[];
       }
     }
     return this.fields.filter(f => f.readable);
@@ -224,11 +227,17 @@ export class Entity<T = any> {
   public get editFields(): EntityField<T, any>[] {
     const editConfig = resolveOptionalThunk(this.config.edit);
     if (editConfig) {
-      const listFields = resolveOptionalThunk(editConfig.fields);
-      if (listFields) {
-        return this.fields.filter(
-          f => f.writeable && listFields.indexOf(f.name) !== -1
-        );
+      const fields = resolveOptionalThunk(editConfig.fields);
+      if (fields) {
+        return fields
+          .map(f => {
+            const fieldName = typeof f === "string" ? f : f?.field;
+            if (!fieldName) {
+              return null;
+            }
+            return this.getFieldOrFail(fieldName);
+          })
+          .filter(x => x) as EntityField<T, any>[];
       }
     }
     return this.fields.filter(f => f.writeable);
