@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { EntityField } from '../EntityField';
-export declare class EntityFieldText<T, C> extends EntityField<T, C> {
+import * as React from "react";
+import { EntityField, IEntityFieldConfig, IEntityFieldRenderOptions } from "../EntityField";
+export declare class EntityFieldText<T, C extends IEntityFieldConfig<T>> extends EntityField<T, C> {
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, valueElement: React.ReactNode) => void;
@@ -12,4 +12,5 @@ export declare class EntityFieldText<T, C> extends EntityField<T, C> {
     get filterDenormalize(): (values: {
         [key: string]: any;
     }) => any[];
+    get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
 }

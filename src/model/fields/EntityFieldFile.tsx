@@ -1,10 +1,14 @@
-import * as React from 'react';
-import * as numeral from 'numeral';
+import * as React from "react";
+import * as numeral from "numeral";
 
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldRenderOptions
+} from "../EntityField";
 
-import { AuthSession } from 'webpanel-auth';
-import { FileInput } from '../../components/form/fileinput';
+import { AuthSession } from "webpanel-auth";
+import { FileInput } from "../../components/form/fileinput";
 
 export interface IEntityFieldFileConfig<T> extends IEntityFieldConfig<T> {
   uploadURL?: string;
@@ -23,12 +27,15 @@ export class EntityFieldFile<T> extends EntityField<
     return `${this.name}Id`;
   }
 
-  public get render(): (record: T) => React.ReactNode {
+  public get render(): (
+    record: T,
+    options?: IEntityFieldRenderOptions
+  ) => React.ReactNode {
     const { render } = this.config;
     return values => {
       const value = values[this.name];
       if (!value) {
-        return '–';
+        return "–";
       }
       return (
         (render && render(value)) || (
@@ -38,7 +45,7 @@ export class EntityFieldFile<T> extends EntityField<
               AuthSession.current().accessToken
             }`}
           >
-            {value.name} ({numeral(value.size).format('0.0 b')})
+            {value.name} ({numeral(value.size).format("0.0 b")})
           </a>
         )
       );

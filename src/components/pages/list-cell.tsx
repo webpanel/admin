@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Button, Icon, Popconfirm } from 'antd';
+import { Button, Icon, Popconfirm } from "antd";
 
-import { EntityField } from '../../model/EntityField';
-import { ResourceCollection } from 'webpanel-data';
+import { EntityField } from "../../model/EntityField";
+import { ResourceCollection } from "webpanel-data";
 
 export interface IListCellProps {
   collection: ResourceCollection<any>;
@@ -45,7 +45,7 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
 
     let data = {};
     data[field.columnName()] = value;
-    item.fields = ['id'];
+    item.fields = ["id"];
     await item.update(data);
     this.setState({
       editing: false,
@@ -59,12 +59,12 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
     const { currentValue, value, saving } = this.state;
     return (
       <>
-        {currentValue || field.render(values)}
+        {currentValue || field.render(values, { size: "small" })}
         {editable ? (
           <Popconfirm
             title={field.inputElement({
               value:
-                typeof value !== 'undefined'
+                typeof value !== "undefined"
                   ? value
                   : values[field.columnName()],
               onChange: (value: any, valueElement: React.ReactNode) => {
@@ -82,7 +82,7 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
                 icon="edit"
                 size="small"
                 className="no-print"
-                style={{ marginLeft: '10px' }}
+                style={{ marginLeft: "10px" }}
                 onClick={() => this.setState({ editing: true })}
               />
             )}

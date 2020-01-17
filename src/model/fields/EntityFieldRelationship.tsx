@@ -3,7 +3,8 @@ import * as React from "react";
 import {
   EntityField,
   IEntityFieldConfig,
-  IEntityFieldFilterProps
+  IEntityFieldFilterProps,
+  IEntityFieldRenderOptions
 } from "../EntityField";
 import { FormField, ResourceSelect } from "webpanel-antd";
 import { ResourceCollection, ResourceID } from "webpanel-data";
@@ -53,7 +54,10 @@ export class EntityFieldRelationship<T> extends EntityField<
     return name;
   }
 
-  public get render(): (record: T) => React.ReactNode {
+  public get render(): (
+    record: T,
+    options?: IEntityFieldRenderOptions
+  ) => React.ReactNode {
     const { targetEntity, type, render } = this.config;
     const _render = render || resolveThunk(targetEntity).render;
     return values => {

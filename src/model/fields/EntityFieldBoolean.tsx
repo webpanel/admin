@@ -1,13 +1,14 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Checkbox, Select } from 'antd';
+import { Checkbox, Select } from "antd";
 import {
   EntityField,
   IEntityFieldConfig,
-  IEntityFieldFilterProps
-} from '../EntityField';
+  IEntityFieldFilterProps,
+  IEntityFieldRenderOptions
+} from "../EntityField";
 
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { CheckboxChangeEvent } from "antd/lib/checkbox";
 
 export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {}
 
@@ -16,17 +17,20 @@ export class EntityFieldBoolean<T> extends EntityField<
   IEntityFieldBooleanConfig<T>
 > {
   public get valuePropName(): string {
-    return 'checked';
+    return "checked";
   }
 
   private renderValue(value: boolean): React.ReactNode {
-    if (value === null || typeof value === 'undefined') {
-      return '–';
+    if (value === null || typeof value === "undefined") {
+      return "–";
     }
-    return value ? '✓' : '✗';
+    return value ? "✓" : "✗";
   }
 
-  public get render(): (record: T) => React.ReactNode {
+  public get render(): (
+    record: T,
+    options?: IEntityFieldRenderOptions
+  ) => React.ReactNode {
     return values => this.renderValue(values[this.name]);
   }
   public inputElement(props?: {
@@ -54,7 +58,7 @@ export class EntityFieldBoolean<T> extends EntityField<
     return (
       <Select
         style={{
-          minWidth: '200px'
+          minWidth: "200px"
         }}
         value={value}
         onChange={(value: any) => props.setSelectedKeys([value])}

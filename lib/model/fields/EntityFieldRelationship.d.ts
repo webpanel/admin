@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps, IEntityFieldRenderOptions } from "../EntityField";
 import { Thunk } from "ts-thunk";
 import { Entity } from "../Entity";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
@@ -15,7 +15,7 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     columnName(): string;
     get mode(): IEntityFieldRelationshipSelectMode;
     fetchField(): string | null;
-    get render(): (record: T) => React.ReactNode;
+    get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     fieldElement(formContext: FormContext, key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
