@@ -23,6 +23,9 @@ export interface IEntityFieldConfigFilter {
     normalizer?: ResourceTableFilterNormalizer;
     denormalizer?: ResourceTableFilterDenormalizer;
 }
+export interface IEntityFieldRenderOptions {
+    size?: "small" | "medium" | "large";
+}
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
     description?: React.ReactNode;
@@ -30,7 +33,7 @@ export interface IEntityFieldConfig<T> {
     enabled?: Thunk<boolean>;
     readable?: Thunk<boolean>;
     writable?: Thunk<boolean>;
-    render?: (record: T) => React.ReactNode;
+    render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     rules?: Thunk<ValidationRule[]>;
     attributes?: InputProps;
     sortable?: boolean | {
@@ -58,7 +61,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     get enabled(): boolean;
     get readable(): boolean;
     get writeable(): boolean;
-    get render(): (record: T) => React.ReactNode;
+    get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     inputElement(props?: IEntityFieldInputElementProps): React.ReactNode;
     get valuePropName(): string;
     fieldElement(formContext: FormContext, key: string | number, config: {

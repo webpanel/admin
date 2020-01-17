@@ -1,9 +1,16 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { EntityField } from '../EntityField';
-import { Input } from 'antd';
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldRenderOptions
+} from "../EntityField";
+import { Input, Tooltip } from "antd";
 
-export class EntityFieldText<T, C> extends EntityField<T, C> {
+export class EntityFieldText<
+  T,
+  C extends IEntityFieldConfig<T>
+> extends EntityField<T, C> {
   public inputElement(props?: {
     value?: any;
     onChange?: (value: any, valueElement: React.ReactNode) => void;
@@ -29,9 +36,9 @@ export class EntityFieldText<T, C> extends EntityField<T, C> {
     return (values: string[]) => {
       let res = {};
       if (values.length == 1) {
-        res[this.columnName() + '_contains'] = values[0];
+        res[this.columnName() + "_contains"] = values[0];
       } else if (values.length > 1) {
-        res[this.columnName() + '_in'] = values;
+        res[this.columnName() + "_in"] = values;
       }
       return res;
     };
@@ -40,12 +47,33 @@ export class EntityFieldText<T, C> extends EntityField<T, C> {
   public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
     return (values: { [key: string]: any }) => {
       let res: any[] = [];
-      if (values[this.columnName() + '_contains']) {
-        res = [values[this.columnName() + '_contains']];
-      } else if (values[this.columnName() + '_in']) {
-        res = values[this.columnName() + '_in'];
+      if (values[this.columnName() + "_contains"]) {
+        res = [values[this.columnName() + "_contains"]];
+      } else if (values[this.columnName() + "_in"]) {
+        res = values[this.columnName() + "_in"];
       }
       return res;
+    };
+  }
+
+  public get render(): (
+    record: T,
+    options?: IEntityFieldRenderOptions
+  ) => React.ReactNode {
+    if (this.config.render) {
+      return this.config.render;
+    }
+    return (values: T, options?: IEntityFieldRenderOptions) => {
+      let value = values[this.name] || "";
+      if (!value || !value.substring || value.length < 50) {
+        return value;
+      }
+      if (options?.size === "small") {
+        const shortValue = value.substring(0, 50) + "...";
+        return <Tooltip title={value}>{shortValue}</Tooltip>;
+      }
+
+      return <pre>{value}</pre>;
     };
   }
 }

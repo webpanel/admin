@@ -44,6 +44,10 @@ const isIEntityFieldConfigFilter = (
   return typeof value === "object";
 };
 
+export interface IEntityFieldRenderOptions {
+  size?: "small" | "medium" | "large";
+}
+
 export interface IEntityFieldConfig<T> {
   // header titles, bradcrumb names
   title?: Thunk<string>;
@@ -53,7 +57,7 @@ export interface IEntityFieldConfig<T> {
   enabled?: Thunk<boolean>;
   readable?: Thunk<boolean>;
   writable?: Thunk<boolean>;
-  render?: (record: T) => React.ReactNode;
+  render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
   rules?: Thunk<ValidationRule[]>;
   attributes?: InputProps;
   sortable?: boolean | { fields: string[] };
@@ -177,11 +181,14 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     return true;
   }
 
-  public get render(): (record: T) => React.ReactNode {
+  public get render(): (
+    record: T,
+    options?: IEntityFieldRenderOptions
+  ) => React.ReactNode {
     if (this.config.render) {
       return this.config.render;
     }
-    return (values: any) => {
+    return (values: T, options?: IEntityFieldRenderOptions) => {
       const value = values[this.name] || "";
       if (!value || !value.substring || value.length < 50) {
         return value;

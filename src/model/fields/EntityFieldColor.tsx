@@ -1,24 +1,28 @@
-import * as React from 'react';
-import { EntityField } from '../EntityField';
+import * as React from "react";
+
+import { EntityField, IEntityFieldRenderOptions } from "../EntityField";
 
 export class EntityFieldColor<T, C> extends EntityField<T, C> {
   private renderValue(value?: string): React.ReactNode {
     return value ? (
       <div
         style={{
-          width: '30px',
-          height: '20px',
+          width: "30px",
+          height: "20px",
           backgroundColor: value,
-          borderRadius: '3px'
+          borderRadius: "3px"
         }}
       />
     ) : (
-      '–'
+      "–"
     );
   }
 
-  public get render(): ((record: T) => React.ReactNode) {
-    return (values: any) => {
+  public get render(): (
+    record: T,
+    options?: IEntityFieldRenderOptions
+  ) => React.ReactNode {
+    return (values: T, options?: IEntityFieldRenderOptions) => {
       const color = values[this.name];
       return this.renderValue(color);
     };
