@@ -1,8 +1,13 @@
 import * as React from "react";
 
 import {
-  IEntityDetailConfigField,IEntityDetailFieldOptions
+  IEntityDetailConfigField,
+  IEntityDetailFieldOptions
 } from "../components/pages/detail";
+import {
+  IEntityEditConfigField,
+  IEntityEditFieldOptions
+} from "../components/pages/edit";
 import { LayoutBuilderCard, LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
 import {
@@ -29,7 +34,6 @@ import { EntityField } from "../model/EntityField";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { LayoutBuilderEditButton } from "./components/edit-button";
 import { Translation } from "react-i18next";
-import { IEntityEditConfigField, IEntityEditFieldOptions } from "../components/pages/edit";
 
 export interface LayoutBuilderConfig {
   entity: Entity;
@@ -39,8 +43,12 @@ export interface LayoutBuilderConfig {
   resource: Resource;
 }
 
-type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityEditConfigField
-type IEntityBuilderFieldOptions = IEntityEditFieldOptions | IEntityDetailFieldOptions
+type IEntityBuilderConfigField =
+  | IEntityDetailConfigField
+  | IEntityEditConfigField;
+type IEntityBuilderFieldOptions =
+  | IEntityEditFieldOptions
+  | IEntityDetailFieldOptions;
 export class LayoutBuilder {
   constructor(public readonly config: LayoutBuilderConfig) {}
 
