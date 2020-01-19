@@ -168,7 +168,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
         listFields.push({ field, hidden, render });
       }
     } else {
-      for (let f of entity.listFields) {
+      for (let f of entity.getListFields()) {
         listFields.push({ field: f, hidden: false });
       }
     }

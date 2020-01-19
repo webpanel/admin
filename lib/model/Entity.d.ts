@@ -23,6 +23,14 @@ import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/Resou
 interface IEntitySearchableConfig {
     fields: Thunk<string[]>;
 }
+interface IEntityDetailOptions<T> {
+    entity: Entity<T>;
+    resourceID: ResourceID;
+}
+interface IEntityEditOptions<T> {
+    entity: Entity<T>;
+    resourceID?: ResourceID;
+}
 export interface IEntityConfig<T> {
     name: Thunk<string>;
     pathPrefix?: Thunk<string>;
@@ -40,8 +48,8 @@ export interface IEntityConfig<T> {
         create?: (props: IEntityEditLayoutProps) => React.ReactNode;
     }>;
     list?: Thunk<IEntityListConfig<T>>;
-    edit?: Thunk<IEntityEditConfig>;
-    detail?: Thunk<IEntityDetailConfig>;
+    edit?: Thunk<IEntityEditConfig, IEntityEditOptions<T>>;
+    detail?: Thunk<IEntityDetailConfig, IEntityDetailOptions<T>>;
     searchable?: Thunk<boolean | IEntitySearchableConfig>;
     render?: (value: T | null) => React.ReactNode;
     initialSorting?: SortInfo[];
@@ -61,15 +69,18 @@ export declare class Entity<T = any> {
     get showDetailPage(): boolean;
     get name(): string;
     get dataSource(): DataSource;
+    getListConfig(): IEntityListConfig<T> | undefined;
+    getEditConfig(resourceID?: ResourceID): IEntityEditConfig | undefined;
+    getDetailConfig(resourceID: ResourceID): IEntityDetailConfig | undefined;
     get render(): (value: T | null) => React.ReactNode;
     get initialSorting(): SortInfo[] | undefined;
     get initialFilters(): DataSourceArgumentMap | undefined;
     get searchable(): boolean;
     getField(name: string): EntityField<T, any> | null;
     getFieldOrFail(name: string): EntityField<T, any>;
-    get listFields(): EntityField<T, any>[];
-    get editFields(): EntityField<T, any>[];
-    get detailFields(): EntityField<T, any>[];
+    getListFields(): EntityField<T, any>[];
+    getEditFields(resourceID?: ResourceID): EntityField<T, any>[];
+    getDetailFields(resourceID: ResourceID): EntityField<T, any>[];
     get searchableFields(): EntityField<T, any>[];
     get detailLayout(): ((props: IEntityDetailProps) => React.ReactNode) | undefined;
     get editLayout(): ((props: IEntityEditLayoutProps, resourceID: ResourceID) => React.ReactNode) | undefined;
@@ -84,18 +95,18 @@ export declare class Entity<T = any> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: import("csstype").AnimationIterationCountProperty, props: DetailEntityProps) => React.ReactNode;
+    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: ResourceID, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: ResourceID, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: import("csstype").AnimationIterationCountProperty) => React.ReactNode;
+    getEditButton: (resourceID: ResourceID) => React.ReactNode;
     getSearchResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;

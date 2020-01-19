@@ -84,6 +84,15 @@ interface IEntitySearchableConfig {
   fields: Thunk<string[]>;
 }
 
+interface IEntityDetailOptions<T> {
+  entity: Entity<T>;
+  resourceID: ResourceID;
+}
+interface IEntityEditOptions<T> {
+  entity: Entity<T>;
+  resourceID?: ResourceID;
+}
+
 export interface IEntityConfig<T> {
   name: Thunk<string>;
   pathPrefix?: Thunk<string>;
@@ -101,8 +110,8 @@ export interface IEntityConfig<T> {
     create?: (props: IEntityEditLayoutProps) => React.ReactNode;
   }>;
   list?: Thunk<IEntityListConfig<T>>;
-  edit?: Thunk<IEntityEditConfig>;
-  detail?: Thunk<IEntityDetailConfig>;
+  edit?: Thunk<IEntityEditConfig, IEntityEditOptions<T>>;
+  detail?: Thunk<IEntityDetailConfig, IEntityDetailOptions<T>>;
 
   searchable?: Thunk<boolean | IEntitySearchableConfig>;
   // render loaded entity to string (in search fields etc.)
@@ -170,6 +179,21 @@ export class Entity<T = any> {
     return resolveThunk(this.config.dataSource);
   }
 
+  public getListConfig(): IEntityListConfig<T> | undefined {
+    return resolveOptionalThunk(this.config.list);
+  }
+  public getEditConfig(resourceID?: ResourceID): IEntityEditConfig | undefined {
+    return resolveOptionalThunk(this.config.edit, { entity: this, resourceID });
+  }
+  public getDetailConfig(
+    resourceID: ResourceID
+  ): IEntityDetailConfig | undefined {
+    return resolveOptionalThunk(this.config.detail, {
+      entity: this,
+      resourceID
+    });
+  }
+
   public get render(): (value: T | null) => React.ReactNode {
     if (this.config.render) {
       return this.config.render;
@@ -206,8 +230,8 @@ export class Entity<T = any> {
     return filtered[0];
   }
 
-  public get listFields(): EntityField<T, any>[] {
-    const listConfig = resolveOptionalThunk(this.config.list);
+  public getListFields(): EntityField<T, any>[] {
+    const listConfig = this.getListConfig();
     if (listConfig) {
       const fields = resolveOptionalThunk(listConfig.fields);
       if (fields) {
@@ -224,8 +248,8 @@ export class Entity<T = any> {
     }
     return this.fields.filter(f => f.readable);
   }
-  public get editFields(): EntityField<T, any>[] {
-    const editConfig = resolveOptionalThunk(this.config.edit);
+  public getEditFields(resourceID?: ResourceID): EntityField<T, any>[] {
+    const editConfig = this.getEditConfig(resourceID);
     if (editConfig) {
       const fields = resolveOptionalThunk(editConfig.fields);
       if (fields) {
@@ -242,8 +266,8 @@ export class Entity<T = any> {
     }
     return this.fields.filter(f => f.writeable);
   }
-  public get detailFields(): EntityField<T, any>[] {
-    const detailConfig = resolveOptionalThunk(this.config.detail);
+  public getDetailFields(resourceID: ResourceID): EntityField<T, any>[] {
+    const detailConfig = this.getDetailConfig(resourceID);
     if (detailConfig) {
       const _detailFields = resolveOptionalThunk(detailConfig.fields);
       if (_detailFields) {
@@ -268,8 +292,9 @@ export class Entity<T = any> {
         );
       }
     }
-    if (fields.length === 0 && this.listFields.length > 0) {
-      return [this.listFields[0]];
+    const listFields = this.getListFields();
+    if (fields.length === 0 && listFields.length > 0) {
+      return [listFields[0]];
     }
     return fields;
   }
@@ -318,18 +343,19 @@ export class Entity<T = any> {
     if (fn) {
       return fn(builder);
     }
-    if (type == "detail") {
-      const detail = resolveOptionalThunk(this.config.detail);
+    if (type == "detail" && config.id) {
+      const detail = this.getDetailConfig(config.id);
       return builder.getDefaultDetailContent({
         descriptions: detail && detail.desriptions,
         fields: detail && detail.fields
       });
-    } else {
-      const edit = resolveOptionalThunk(this.config.edit);
+    } else if (type == "edit") {
+      const edit = this.getEditConfig(config.id);
       return builder.getDefaultEditContent({
         fields: edit && edit.fields
       });
     }
+    return null;
   }
 
   public menuItem = (): React.ReactNode => {
@@ -374,7 +400,7 @@ export class Entity<T = any> {
             // )
           }
         }
-        content={() => this.getListView(resolveOptionalThunk(this.config.list))}
+        content={() => this.getListView(this.getListConfig())}
       >
         <Layout.StructureItem
           key="/new"
@@ -435,14 +461,14 @@ export class Entity<T = any> {
         return this.detailLayout({
           entity: this,
           resourceID,
-          ...(config || this.config.detail)
+          ...{ ...this.getDetailConfig(resourceID), ...config }
         });
       }
       return (
         <EntityDetailLayout
           entity={this}
           resourceID={resourceID}
-          {...resolveOptionalThunk(this.config.detail)}
+          {...this.getDetailConfig(resourceID)}
           {...config}
         />
       );
@@ -481,7 +507,7 @@ export class Entity<T = any> {
         entity={this}
         onSave={onSave}
         resourceID={resourceID}
-        {...resolveOptionalThunk(this.config.edit)}
+        {...this.getEditConfig(resourceID)}
         {...config}
       />
     );
@@ -499,7 +525,7 @@ export class Entity<T = any> {
       <EntityEditLayout
         entity={this}
         onSave={onSave}
-        {...resolveOptionalThunk(this.config.edit)}
+        {...this.getEditConfig()}
         {...config}
       />
     );
@@ -507,14 +533,8 @@ export class Entity<T = any> {
 
   // views
   public getListView = (config?: IEntityListConfig<T>): React.ReactNode => {
-    // const listConfig = resolveOptionalThunk(this.config.list);
     return (
-      <EntityList
-        entity={this}
-        dataSource={this.dataSource}
-        // {...listConfig}
-        {...config}
-      />
+      <EntityList entity={this} dataSource={this.dataSource} {...config} />
     );
   };
 
@@ -526,7 +546,7 @@ export class Entity<T = any> {
       <EntityDetailLayout
         entity={this}
         resourceID={resourceID}
-        {...this.config.detail}
+        {...this.getDetailConfig(resourceID)}
         {...config}
       />
     );
@@ -555,7 +575,7 @@ export class Entity<T = any> {
         entity={this}
         onSave={onSave}
         onCancel={onCancel}
-        {...resolveOptionalThunk(this.config.edit)}
+        {...this.getEditConfig()}
         {...config}
       />
     );
@@ -583,7 +603,7 @@ export class Entity<T = any> {
         resourceID={resourceID}
         onSave={onSave}
         onCancel={onCancel}
-        {...resolveOptionalThunk(this.config.edit)}
+        {...this.getEditConfig(resourceID)}
         {...config}
       />
     );

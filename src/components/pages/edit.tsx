@@ -137,9 +137,9 @@ export class EntityEdit extends React.Component<
       wrapperType,
       fields
     } = this.props;
-    let entityFields = entity.editFields.filter(
-      f => f && f.fetchField() && f.writeable
-    );
+    let entityFields = entity
+      .getEditFields(resourceID)
+      .filter(f => f && f.fetchField() && f.writeable);
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== "undefined") {
       entityFields = _fields
