@@ -82,8 +82,8 @@ export class EntityFieldDate<T> extends EntityField<
         value={[value[0] && moment(value[0]), value[1] && moment(value[1])]}
         onChange={(dates: RangePickerValue) => {
           props.setSelectedKeys([
-            moment(dates[0]).startOf("day"),
-            moment(dates[1]).endOf("day")
+            moment(dates[0] || undefined).startOf("day"),
+            moment(dates[1] || undefined).endOf("day")
           ]);
         }}
       />
