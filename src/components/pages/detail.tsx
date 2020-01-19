@@ -49,7 +49,9 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       fields
     } = this.props;
 
-    let entityFields: EntityField<any, any>[] = entity.detailFields;
+    let entityFields: EntityField<any, any>[] = entity.getDetailFields(
+      resourceID
+    );
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== "undefined") {
       entityFields = _fields

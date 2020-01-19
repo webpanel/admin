@@ -99,7 +99,12 @@ export class LayoutBuilder {
     descriptions?: DescriptionsProps;
     fields?: Thunk<IEntityBuilderConfigField[]>;
   }): React.ReactNode {
-    let entityFields: EntityField<any, any>[] = this.entity.detailFields;
+    if (!this.resourceID) {
+      return "missing resourceID";
+    }
+    let entityFields: EntityField<any, any>[] = this.entity.getDetailFields(
+      this.resourceID
+    );
     let descriptionItems: {
       field: EntityField<any, any> | null;
       span?: number;
@@ -148,7 +153,9 @@ export class LayoutBuilder {
   public getDefaultEditContent(config?: {
     fields?: Thunk<IEntityBuilderConfigField[]>;
   }): React.ReactNode {
-    let fields: EntityField<any, any>[] = this.entity.editFields;
+    let fields: EntityField<any, any>[] = this.entity.getEditFields(
+      this.resourceID
+    );
     if (config && config.fields) {
       fields = this.getFieldsFromThunk(config.fields)
         .map(f => (f.field && this.entity.getFieldOrFail(f.field)) || null)
