@@ -336,7 +336,7 @@ export class Entity<T = any> {
 
   public getLayout(
     type: "detail" | "edit",
-    config: LayoutBuilderConfig
+    config: LayoutBuilderConfig & (IEntityDetailConfig | IEntityEditConfig)
   ): React.ReactNode {
     const builder = new LayoutBuilder(config);
     const fn = this.layouts[type];
@@ -347,12 +347,12 @@ export class Entity<T = any> {
       const detail = this.getDetailConfig(config.id);
       return builder.getDefaultDetailContent({
         descriptions: detail && detail.desriptions,
-        fields: detail && detail.fields
+        fields: config.fields || (detail && detail.fields)
       });
     } else if (type == "edit") {
       const edit = this.getEditConfig(config.id);
       return builder.getDefaultEditContent({
-        fields: edit && edit.fields
+        fields: config.fields || (edit && edit.fields)
       });
     }
     return null;
@@ -568,7 +568,7 @@ export class Entity<T = any> {
       onCancel: undefined
     };
     if (this.createLayout) {
-      return this.createLayout({ entity: this, onSave, onCancel });
+      return this.createLayout({ entity: this, onSave, onCancel, ...config });
     }
     return (
       <EntityEditLayout
@@ -595,7 +595,10 @@ export class Entity<T = any> {
       onCancel: undefined
     };
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave, onCancel }, resourceID);
+      return this.editLayout(
+        { entity: this, onSave, onCancel, ...config },
+        resourceID
+      );
     }
     return (
       <EntityEditLayout

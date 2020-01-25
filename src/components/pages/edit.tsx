@@ -180,7 +180,8 @@ export class EntityEdit extends React.Component<
                 resource,
                 formContext,
                 id: resourceID,
-                data: resource.data || {}
+                data: resource.data || {},
+                fields
               });
 
               switch (wrapperType) {
