@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { ButtonProps } from 'antd/lib/button';
-import { Entity } from '../../model/Entity';
-import { IEntityEditConfig } from '../pages/edit';
-import { ModalProps } from 'antd/lib/modal';
-import { ResourceID } from 'webpanel-data';
+import * as React from "react";
+import { ButtonProps } from "antd/lib/button";
+import { Entity } from "../../model/Entity";
+import { IEntityEditConfig } from "../pages/edit";
+import { ModalProps } from "antd/lib/modal";
+import { ResourceID } from "webpanel-data";
 export interface IEntityAddButtonModalFlow {
-    type: 'modal';
+    type: "modal";
     modal?: ModalProps;
 }
-declare type FlowType = 'redirect' | IEntityAddButtonModalFlow;
+declare type FlowType = "redirect" | IEntityAddButtonModalFlow;
 export interface CreateEntityProps extends IEntityEditConfig {
     onCreate?: (id: ResourceID) => void;
     flow?: FlowType;
