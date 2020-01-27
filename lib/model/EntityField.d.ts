@@ -50,6 +50,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     get shortTitle(): string;
     columnName(): string;
     fetchField(): string | null;
+    editFetchField(): string;
     get sortable(): boolean;
     sortColumns(): string[];
     get filter(): boolean;
