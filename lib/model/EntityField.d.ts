@@ -14,8 +14,9 @@ export interface IEntityFieldFilterProps<T> {
 }
 export interface IEntityFieldInputElementProps<T = any> {
     value?: T;
-    onChange?: (value: T, stringValue: string) => void;
+    onChange?: (value?: T, stringValue?: React.ReactNode) => void;
     autoFocus?: boolean;
+    formContext?: FormContext;
 }
 export interface IEntityFieldConfigFilter {
     range?: boolean;
