@@ -161,7 +161,7 @@ export class EntityEdit extends React.Component<
         fields={
           entityFields
             .filter(f => f && f.fetchField() && f.writeable)
-            .map(f => f.columnName())
+            .map(f => f.editFetchField())
             .filter(f => f) as string[]
         }
         dataSource={entity.dataSource}

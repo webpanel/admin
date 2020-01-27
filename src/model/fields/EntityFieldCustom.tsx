@@ -4,6 +4,7 @@ import { EntityField, IEntityFieldConfig } from "../EntityField";
 
 export interface IEntityFieldCustomConfig<T> extends IEntityFieldConfig<T> {
   fetchField?: string;
+  editFetchField?: string;
   inputElement: (props: {
     value: T | undefined;
     onChange: (value?: T) => void;
@@ -14,6 +15,10 @@ export class EntityFieldCustom<
   T,
   C extends IEntityFieldCustomConfig<T>
 > extends EntityField<T, C> {
+  public editFetchField(): string {
+    return this.config.editFetchField || super.editFetchField();
+  }
+
   public fetchField(): string | null {
     return this.config.fetchField || super.fetchField();
   }

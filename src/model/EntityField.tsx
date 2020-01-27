@@ -88,6 +88,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public fetchField(): string | null {
     return this.name;
   }
+  public editFetchField(): string {
+    return this.columnName();
+  }
   public get sortable(): boolean {
     const sortable = this.config.sortable;
     switch (typeof sortable) {
