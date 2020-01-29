@@ -28,7 +28,7 @@ export interface IEntityDetailConfig {
   fields?: Thunk<IEntityDetailConfigField[]>;
   pollInterval?: number;
   wrapperType?: "card" | "plain" | "modal";
-  modal?: ModalProps;
+  modal?: ModalProps; // this should inside wrapperType modal as {type:"modal", modal:{...}} similarly as with edit/detail button
   desriptions?: DescriptionsProps;
   card?: CardProps;
 }
