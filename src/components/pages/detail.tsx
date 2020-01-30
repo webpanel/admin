@@ -86,21 +86,29 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                 id: resourceID,
                 data: resource.data || {}
               });
+              const getTitle = (): string => {
+                return (
+                  t(`${entity.name}._title`, {
+                    defaultValue: entity.title
+                  }) +
+                  ": " +
+                  ((resource.data && entity.render(resource.data)) || "-")
+                );
+              };
+
               switch (wrapperType) {
                 case "plain":
                   return content;
                 case "modal":
-                  return <Modal {...modal}>{content}</Modal>;
+                  return (
+                    <Modal title={getTitle()} {...modal}>
+                      {content}
+                    </Modal>
+                  );
                 default:
                   return (
                     <Card
-                      title={
-                        t(`${entity.name}._title`, {
-                          defaultValue: entity.title
-                        }) +
-                        ": " +
-                        ((resource.data && entity.render(resource.data)) || "-")
-                      }
+                      title={getTitle()}
                       loading={resource.loading && !resource.polling}
                       extra={
                         entity.updateable && entity.getEditButton(resourceID)
