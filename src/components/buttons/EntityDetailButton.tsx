@@ -7,7 +7,6 @@ import { IEntityDetailConfig } from "../pages/detail";
 import { Link } from "webpanel-antd";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
-import { Translation } from "react-i18next";
 
 export interface IEntityDetailButtonModalFlow {
   type: "modal";
@@ -57,35 +56,28 @@ export class DetailEntityButton extends React.Component<
     if (_flow.type === "modal") {
       const modal = _flow.modal;
       return (
-        <Translation key={key}>
-          {t => (
-            <>
-              <div style={{ position: "absolute" }}>
-                {entity.getDetailView(entityId, {
-                  wrapperType: "modal",
-                  modal: {
-                    title: t(`${entity.name}._title`, {
-                      defaultValue: `${entity.title}`
-                    }),
-                    onCancel: this.hideModal,
-                    footer:
-                      !hideLinkToDetail &&
-                      entity.getDetailButton(entityId, {
-                        flow: "redirect",
-                        button: { icon: "select" }
-                      }),
-                    width: "80%",
-                    ...modal,
-                    visible: this.state.showModal,
-                    destroyOnClose: true
-                  },
-                  ...rest
-                })}
-              </div>
-              <Button icon="search" {...button} onClick={this.showModal} />
-            </>
-          )}
-        </Translation>
+        <>
+          <div style={{ position: "absolute" }}>
+            {entity.getDetailView(entityId, {
+              wrapperType: "modal",
+              modal: {
+                onCancel: this.hideModal,
+                footer:
+                  !hideLinkToDetail &&
+                  entity.getDetailButton(entityId, {
+                    flow: "redirect",
+                    button: { icon: "select" }
+                  }),
+                width: "80%",
+                ...modal,
+                visible: this.state.showModal,
+                destroyOnClose: true
+              },
+              ...rest
+            })}
+          </div>
+          <Button icon="search" {...button} onClick={this.showModal} />
+        </>
       );
     }
     return `unexpected flow`;
