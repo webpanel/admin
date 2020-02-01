@@ -95,18 +95,18 @@ export declare class Entity<T = any> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: import("csstype").AnimationIterationCountProperty, props: DetailEntityProps) => React.ReactNode;
+    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: import("csstype").AnimationIterationCountProperty) => React.ReactNode;
+    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     getSearchResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
