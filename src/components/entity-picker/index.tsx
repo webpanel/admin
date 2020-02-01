@@ -2,10 +2,13 @@ import * as React from "react";
 
 import { Entity } from "../../model/Entity";
 import { ResourceCollection } from "webpanel-data";
+import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
 import { ResourceSelect } from "webpanel-antd";
 import { SelectProps } from "antd/lib/select";
 
-export interface EntitySelectConfig extends SelectProps {
+export interface EntitySelectConfig
+  extends SelectProps,
+    Partial<ResourceCollectionLayerProps> {
   key?: string;
 }
 
@@ -29,7 +32,8 @@ export const EntitySelect = (props: EntitySelectProps) => {
             showSearch={true}
             {...rest}
           />
-        )
+        ),
+        rest
       )}
     </>
   );
