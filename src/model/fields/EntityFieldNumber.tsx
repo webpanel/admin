@@ -1,15 +1,45 @@
 import * as React from "react";
+import * as numeral from "numeral";
 
-import { EntityField, IEntityFieldFilterProps } from "../EntityField";
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldFilterProps
+} from "../EntityField";
 
+import { Entity } from "../Entity";
 import { InputNumber } from "antd";
 
-export class EntityFieldNumber<T, C> extends EntityField<T, C> {
+export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
+  format?: string;
+}
+export class EntityFieldNumber<T> extends EntityField<
+  T,
+  IEntityFieldNumberConfig<T>
+> {
+  constructor(
+    public readonly name: string,
+    protected readonly config: IEntityFieldNumberConfig<T>,
+    public readonly entity: Entity
+  ) {
+    super(name, config, entity);
+
+    if (
+      typeof config.format !== "undefined" &&
+      typeof config.render === "undefined"
+    ) {
+      this.config.render = values =>
+        numeral(values[name]).format(config.format);
+    }
+  }
+
   public inputElement(props?: {
     value?: any;
     onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
+    const { format } = this.config;
+
     const onChange = props && props.onChange;
     const onChangeProp = onChange
       ? (value: number | string | undefined) => onChange(value, value)
@@ -19,6 +49,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
       <InputNumber
         style={{ minWidth: "195px" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
+        formatter={value => numeral(value).format(format)}
         {...props}
         onChange={onChangeProp}
       />
@@ -26,6 +57,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<number>) => {
+    const { format } = this.config;
     const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
     return (
       <InputNumber
@@ -36,6 +68,7 @@ export class EntityFieldNumber<T, C> extends EntityField<T, C> {
         onChange={(value: number) =>
           props.setSelectedKeys(value ? [value] : [])
         }
+        formatter={value => numeral(value).format(format)}
       />
     );
   };
