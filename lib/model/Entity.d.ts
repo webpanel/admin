@@ -10,6 +10,7 @@ import { IEntityFieldCustomConfig } from "./fields/EntityFieldCustom";
 import { IEntityFieldDateConfig } from "./fields/EntityFieldDate";
 import { IEntityFieldEnumConfig } from "./fields/EntityFieldEnum";
 import { IEntityFieldFileConfig } from "./fields/EntityFieldFile";
+import { IEntityFieldNumberConfig } from "./fields/EntityFieldNumber";
 import { IEntityFieldRelationshipConfig } from "./fields/EntityFieldRelationship";
 import { IEntityListConfig } from "../components/pages/list";
 import { EntityOnSaveHandler, IEntityEditConfig } from "../components/pages/edit";
@@ -95,24 +96,24 @@ export declare class Entity<T = any> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
+    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: ResourceID, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: ResourceID, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
+    getEditButton: (resourceID: ResourceID) => React.ReactNode;
     getSearchResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     textField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
-    numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
+    numberField(name: string, config?: IEntityFieldNumberConfig<T>): Entity<T>;
     passwordField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
     dateField(name: string, config?: IEntityFieldDateConfig<T>): Entity<T>;
     booleanField(name: string, config?: IEntityFieldBooleanConfig<T>): Entity<T>;

@@ -1,6 +1,14 @@
 import * as React from "react";
-import { EntityField, IEntityFieldFilterProps } from "../EntityField";
-export declare class EntityFieldNumber<T, C> extends EntityField<T, C> {
+import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
+import { Entity } from "../Entity";
+export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
+    format?: string;
+}
+export declare class EntityFieldNumber<T> extends EntityField<T, IEntityFieldNumberConfig<T>> {
+    readonly name: string;
+    protected readonly config: IEntityFieldNumberConfig<T>;
+    readonly entity: Entity;
+    constructor(name: string, config: IEntityFieldNumberConfig<T>, entity: Entity);
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, valueElement: React.ReactNode) => void;

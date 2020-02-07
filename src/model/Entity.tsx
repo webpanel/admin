@@ -46,6 +46,10 @@ import {
   IEntityFieldFileConfig
 } from "./fields/EntityFieldFile";
 import {
+  EntityFieldNumber,
+  IEntityFieldNumberConfig
+} from "./fields/EntityFieldNumber";
+import {
   EntityFieldRelationship,
   IEntityFieldRelationshipConfig
 } from "./fields/EntityFieldRelationship";
@@ -66,7 +70,6 @@ import { Button } from "antd";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 import { EntityDetailLayout } from "../components/layouts/entity.detail";
 import { EntityFieldColor } from "./fields/EntityFieldColor";
-import { EntityFieldNumber } from "./fields/EntityFieldNumber";
 import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
 import { EntityFieldString } from "./fields/EntityFieldString";
 import { EntityFieldText } from "./fields/EntityFieldText";
@@ -660,7 +663,10 @@ export class Entity<T = any> {
     this.fields.push(new EntityFieldText(name, config || {}, this));
     return this;
   }
-  public numberField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+  public numberField(
+    name: string,
+    config?: IEntityFieldNumberConfig<T>
+  ): Entity<T> {
     this.fields.push(new EntityFieldNumber(name, config || {}, this));
     return this;
   }
