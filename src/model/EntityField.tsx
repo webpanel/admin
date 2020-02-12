@@ -14,6 +14,7 @@ import { Thunk, resolveOptionalThunk } from "ts-thunk";
 import { Entity } from "./Entity";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { Translation } from "react-i18next";
+import { IEntityListColumnAlign } from "../components/pages/list";
 
 // import { ResourceCollection } from 'webpanel-data';
 
@@ -63,6 +64,7 @@ export interface IEntityFieldConfig<T> {
   attributes?: InputProps;
   sortable?: boolean | { fields: string[] };
   filter?: IEntityFieldConfigFilter | boolean;
+  listColumnAlign?: IEntityListColumnAlign;
 }
 
 export class EntityField<T, C extends IEntityFieldConfig<T>> {
@@ -81,6 +83,10 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
 
   public get shortTitle(): string {
     return resolveOptionalThunk(this.config.shortTitle) || this.title;
+  }
+
+  public get listColumnAlign(): IEntityListColumnAlign {
+    return this.config.listColumnAlign || "left";
   }
 
   public columnName(): string {

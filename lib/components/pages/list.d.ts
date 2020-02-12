@@ -24,10 +24,12 @@ export declare type IEntityListColumnRender = (value: any, values: any, index: n
         colSpan: number;
     };
 };
+export declare type IEntityListColumnAlign = "left" | "right" | "center";
 export declare type IEntityListColumn = string | {
     field: string;
     hidden?: boolean;
     render?: IEntityListColumnRender;
+    align?: IEntityListColumnAlign;
 };
 export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
@@ -48,6 +50,7 @@ export declare class EntityList<T = any> extends React.Component<IEntityListProp
     getColumns(listFields: {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
+        align?: IEntityListColumnAlign;
     }[], resource: ResourceCollection<T>, t: i18next.TFunction): ResourceTableColumn[];
     private getListFields;
     private cardContent;

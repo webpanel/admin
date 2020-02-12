@@ -9,6 +9,7 @@ import {
 
 import { Entity } from "../Entity";
 import { InputNumber } from "antd";
+import { IEntityListColumnAlign } from "../../components/pages/list";
 
 export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
   format?: string;
@@ -31,6 +32,10 @@ export class EntityFieldNumber<T> extends EntityField<
       this.config.render = values =>
         numeral(values[name]).format(config.format);
     }
+  }
+
+  public get listColumnAlign(): IEntityListColumnAlign {
+    return this.config.listColumnAlign || "right";
   }
 
   public inputElement(props?: {
