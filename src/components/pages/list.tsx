@@ -55,6 +55,8 @@ export type IEntityListColumnRender = (
       props: { rowSpan: number; colSpan: number };
     };
 
+export type IEntityListColumnAlign = "left" | "right" | "center";
+
 export type IEntityListColumn =
   | string
   | {
@@ -65,6 +67,7 @@ export type IEntityListColumn =
       hidden?: boolean;
       // rendering function for table cell content
       render?: IEntityListColumnRender;
+      align?: IEntityListColumnAlign;
     };
 
 export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
@@ -91,6 +94,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     listFields: {
       field: EntityField<any, any>;
       render?: IEntityListColumnRender;
+      align?: IEntityListColumnAlign;
     }[],
     resource: ResourceCollection<T>,
     t: i18next.TFunction
@@ -104,8 +108,10 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
 
     return listFields.map(
       (column): ResourceTableColumn => {
-        const { field, render } = column;
+        const { field, render, align } = column;
+        const _align = align || field.listColumnAlign;
         return {
+          align: _align,
           key: field.name,
           dataIndex: field.name,
           title: t(`${field.entity.name}.${field.name}`, {
@@ -145,6 +151,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
     field: EntityField<any, any>;
     hidden: boolean;
     render?: IEntityListColumnRender;
+    align?: IEntityListColumnAlign;
   }[] {
     const { entity, fields } = this.props;
 
@@ -153,19 +160,21 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
       field: EntityField<any, any>;
       hidden: boolean;
       render?: IEntityListColumnRender;
+      align?: IEntityListColumnAlign;
     }[] = [];
     if (_fields) {
       for (let f of _fields) {
         const fieldName = typeof f === "string" ? f : f.field;
         const render = (typeof f !== "string" && f.render) || undefined;
         const hidden = (typeof f !== "string" && f.hidden) || false;
+        const align = (typeof f !== "string" && f.align) || undefined;
         const field = entity.getField(fieldName);
         if (!field) {
           throw new Error(
             `Field '${fieldName}' not found in entity '${entity.name}'`
           );
         }
-        listFields.push({ field, hidden, render });
+        listFields.push({ field, hidden, render, align });
       }
     } else {
       for (let f of entity.getListFields()) {

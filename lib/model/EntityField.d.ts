@@ -5,6 +5,7 @@ import { InputProps } from "antd/lib/input";
 import { Thunk } from "ts-thunk";
 import { Entity } from "./Entity";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { IEntityListColumnAlign } from "../components/pages/list";
 export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
@@ -41,6 +42,7 @@ export interface IEntityFieldConfig<T> {
         fields: string[];
     };
     filter?: IEntityFieldConfigFilter | boolean;
+    listColumnAlign?: IEntityListColumnAlign;
 }
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
@@ -49,6 +51,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     constructor(name: string, config: C, entity: Entity);
     get title(): string;
     get shortTitle(): string;
+    get listColumnAlign(): IEntityListColumnAlign;
     columnName(): string;
     fetchField(): string | null;
     editFetchField(): string;

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
 import { Entity } from "../Entity";
+import { IEntityListColumnAlign } from "../../components/pages/list";
 export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
     format?: string;
 }
@@ -9,6 +10,7 @@ export declare class EntityFieldNumber<T> extends EntityField<T, IEntityFieldNum
     protected readonly config: IEntityFieldNumberConfig<T>;
     readonly entity: Entity;
     constructor(name: string, config: IEntityFieldNumberConfig<T>, entity: Entity);
+    get listColumnAlign(): IEntityListColumnAlign;
     inputElement(props?: {
         value?: any;
         onChange?: (value: any, valueElement: React.ReactNode) => void;
