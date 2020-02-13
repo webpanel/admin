@@ -95,7 +95,7 @@ export declare class Entity<T extends {
     get editLayout(): ((props: IEntityEditLayoutProps, resourceID: ResourceID) => React.ReactNode) | undefined;
     get createLayout(): ((props: IEntityEditLayoutProps) => React.ReactNode) | undefined;
     private layouts;
-    setLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getLayout(type: "detail" | "edit", config: LayoutBuilderConfig & (IEntityDetailConfig | IEntityEditConfig)): React.ReactNode;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
@@ -104,18 +104,18 @@ export declare class Entity<T extends {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: import("csstype").AnimationIterationCountProperty, props: DetailEntityProps) => React.ReactNode;
+    getDetailView: (resourceID: string | number, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: string | number, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: string | number, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: import("csstype").AnimationIterationCountProperty) => React.ReactNode;
+    getEditButton: (resourceID: string | number) => React.ReactNode;
     getSearchResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
