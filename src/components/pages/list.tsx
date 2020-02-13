@@ -6,7 +6,8 @@ import {
   DataSource,
   ResourceCollection,
   ResourceCollectionLayer,
-  ResourceCollectionOptions
+  ResourceCollectionOptions,
+  ResourceID
 } from "webpanel-data";
 import {
   EntitylistActionButton,
@@ -84,12 +85,15 @@ export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
   wrapperType?: "card" | "plain";
 }
 
-export interface IEntityListProps<T> extends IEntityListConfig<T> {
+export interface IEntityListProps<T extends { id: ResourceID }>
+  extends IEntityListConfig<T> {
   entity: Entity<T>;
   dataSource: DataSource;
 }
 
-export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
+export class EntityList<
+  T extends { id: ResourceID } = any
+> extends React.Component<IEntityListProps<T>> {
   getColumns(
     listFields: {
       field: EntityField<any, any>;
@@ -103,8 +107,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
 
     const _editableFields =
       (entity.updateable && resolveOptionalThunk(editableFields)) || [];
-
-    const rowValues = {};
+    const entityListFields = listFields.map(x => x.field);
 
     return listFields.map(
       (column): ResourceTableColumn => {
@@ -127,7 +130,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
           filterDenormalize: field.filterDenormalizeFn(),
 
           render: (value: any, record: any, index: number): React.ReactNode => {
-            const values = rowValues[record.id] || record;
+            const values = record;
             if (render) {
               return render(value, values, index, field);
             }
@@ -139,6 +142,7 @@ export class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
                 editable={
                   _editableFields.indexOf(field.name) > -1 && field.writeable
                 }
+                fields={entityListFields}
               />
             );
           }

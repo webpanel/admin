@@ -87,16 +87,16 @@ interface IEntitySearchableConfig {
   fields: Thunk<string[]>;
 }
 
-interface IEntityDetailOptions<T> {
+interface IEntityDetailOptions<T extends { id: ResourceID }> {
   entity: Entity<T>;
   resourceID: ResourceID;
 }
-interface IEntityEditOptions<T> {
+interface IEntityEditOptions<T extends { id: ResourceID }> {
   entity: Entity<T>;
   resourceID?: ResourceID;
 }
 
-export interface IEntityConfig<T> {
+export interface IEntityConfig<T extends { id: ResourceID }> {
   name: Thunk<string>;
   pathPrefix?: Thunk<string>;
   icon?: Thunk<string>;
@@ -127,7 +127,7 @@ export interface IEntityConfig<T> {
   initialFilters?: DataSourceArgumentMap;
 }
 
-export class Entity<T = any> {
+export class Entity<T extends { id: ResourceID } = any> {
   public fields: EntityField<T, any>[] = [];
 
   autopermissions?: boolean;

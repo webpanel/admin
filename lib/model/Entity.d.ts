@@ -24,15 +24,21 @@ import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/Resou
 interface IEntitySearchableConfig {
     fields: Thunk<string[]>;
 }
-interface IEntityDetailOptions<T> {
+interface IEntityDetailOptions<T extends {
+    id: ResourceID;
+}> {
     entity: Entity<T>;
     resourceID: ResourceID;
 }
-interface IEntityEditOptions<T> {
+interface IEntityEditOptions<T extends {
+    id: ResourceID;
+}> {
     entity: Entity<T>;
     resourceID?: ResourceID;
 }
-export interface IEntityConfig<T> {
+export interface IEntityConfig<T extends {
+    id: ResourceID;
+}> {
     name: Thunk<string>;
     pathPrefix?: Thunk<string>;
     icon?: Thunk<string>;
@@ -56,7 +62,9 @@ export interface IEntityConfig<T> {
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
 }
-export declare class Entity<T = any> {
+export declare class Entity<T extends {
+    id: ResourceID;
+} = any> {
     private readonly config;
     fields: EntityField<T, any>[];
     autopermissions?: boolean;
@@ -96,18 +104,18 @@ export declare class Entity<T = any> {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
+    getDetailView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: import("csstype").AnimationIterationCountProperty, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: import("csstype").AnimationIterationCountProperty, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
+    getEditButton: (resourceID: import("csstype").AnimationIterationCountProperty) => React.ReactNode;
     getSearchResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
