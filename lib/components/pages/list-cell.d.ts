@@ -5,6 +5,7 @@ export interface IListCellProps {
     collection: ResourceCollection<any>;
     values: any;
     field: EntityField<any, any>;
+    fields: EntityField<any, any>[];
     editable: boolean;
 }
 export interface IListCellState {
@@ -15,13 +16,7 @@ export interface IListCellState {
     saving: boolean;
 }
 export declare class ListCell extends React.Component<IListCellProps, IListCellState> {
-    state: {
-        currentValue: undefined;
-        value: undefined;
-        valueElement: undefined;
-        editing: boolean;
-        saving: boolean;
-    };
+    state: IListCellState;
     onChange: (value: any, valueElement: React.ReactNode) => Promise<void>;
     cancel: () => void;
     save: () => Promise<void>;

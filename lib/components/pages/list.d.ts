@@ -1,6 +1,6 @@
 import "../../../styles/entity-list.css";
 import * as React from "react";
-import { DataSource, ResourceCollection, ResourceCollectionOptions } from "webpanel-data";
+import { DataSource, ResourceCollection, ResourceCollectionOptions, ResourceID } from "webpanel-data";
 import { EntitylistActionButton } from "./list.buttons";
 import { PaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk } from "ts-thunk";
@@ -42,11 +42,15 @@ export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
     editableFields?: Thunk<string[]>;
     wrapperType?: "card" | "plain";
 }
-export interface IEntityListProps<T> extends IEntityListConfig<T> {
+export interface IEntityListProps<T extends {
+    id: ResourceID;
+}> extends IEntityListConfig<T> {
     entity: Entity<T>;
     dataSource: DataSource;
 }
-export declare class EntityList<T = any> extends React.Component<IEntityListProps<T>> {
+export declare class EntityList<T extends {
+    id: ResourceID;
+} = any> extends React.Component<IEntityListProps<T>> {
     getColumns(listFields: {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;

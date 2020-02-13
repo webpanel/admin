@@ -1,19 +1,21 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { ActionButtonProps } from 'webpanel-antd/lib/table/ResourceTableActionButtons';
-import { Button } from 'antd';
-import { Entity } from '../../model/Entity';
-import { Link } from 'webpanel-antd';
+import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
+import { Button } from "antd";
+import { Entity } from "../../model/Entity";
+import { Link } from "webpanel-antd";
+import { ResourceID } from "webpanel-data";
 
-export type EntityListSize = 'small' | 'default';
+export type EntityListSize = "small" | "default";
 
-export interface EntityListActionButtonProps<T> extends ActionButtonProps<T> {
+export interface EntityListActionButtonProps<T extends { id: ResourceID }>
+  extends ActionButtonProps<T> {
   entity: Entity<T>;
 }
-export type EntitylistActionButton<T = any> =
-  | 'detail'
-  | 'edit'
-  | 'delete'
+export type EntitylistActionButton<T extends { id: ResourceID } = any> =
+  | "detail"
+  | "edit"
+  | "delete"
   | React.ReactNode
   | ((props: EntityListActionButtonProps<T>) => React.ReactNode);
 

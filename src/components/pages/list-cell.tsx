@@ -9,6 +9,7 @@ export interface IListCellProps {
   collection: ResourceCollection<any>;
   values: any;
   field: EntityField<any, any>;
+  fields: EntityField<any, any>[];
   editable: boolean;
 }
 
@@ -21,10 +22,7 @@ export interface IListCellState {
 }
 
 export class ListCell extends React.Component<IListCellProps, IListCellState> {
-  state = {
-    currentValue: undefined,
-    value: undefined,
-    valueElement: undefined,
+  state: IListCellState = {
     editing: false,
     saving: false
   };
@@ -39,18 +37,18 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
   save = async () => {
     const { collection, field, values } = this.props;
     const { value } = this.state;
-    const item = collection.getItem({ id: values.id });
 
-    this.setState({ value, saving: true });
+    this.setState({ saving: true });
 
-    let data = {};
+    const data = {};
     data[field.columnName()] = value;
-    item.fields = ["id"];
-    await item.update(data);
+
+    const item = await collection.patchItemValues(values.id, data);
+
     this.setState({
       editing: false,
       saving: false,
-      currentValue: this.state.valueElement
+      currentValue: field.render(item.data, { size: "small" })
     });
   };
 
