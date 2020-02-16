@@ -3,6 +3,7 @@ import { Resource, ResourceID } from "webpanel-data";
 import { SaveOption } from "../form/buttons";
 import { Thunk } from "ts-thunk";
 import { Entity } from "../../model/Entity";
+import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { FormLayout } from "antd/lib/form/Form";
 import { ModalProps } from "antd/lib/modal";
 export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
@@ -36,7 +37,7 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
         version: number;
     };
     private currentSaveOption?;
-    handleSave: (formContext: any, resource: Resource<{
+    handleSave: (formContext: FormContext, resource: Resource<{
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{
         [key: string]: any;
