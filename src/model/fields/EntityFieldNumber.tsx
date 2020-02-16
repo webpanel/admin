@@ -8,8 +8,15 @@ import {
 } from "../EntityField";
 
 import { Entity } from "../Entity";
-import { InputNumber } from "antd";
 import { IEntityListColumnAlign } from "../../components/pages/list";
+import { InputNumber } from "antd";
+
+const formatter = (value: string | number | undefined): string => {
+  return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+};
+const parser = (value: string): string => {
+  return value.replace(/\s?|(\s*)/g, "");
+};
 
 export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
   format?: string;
@@ -43,8 +50,6 @@ export class EntityFieldNumber<T> extends EntityField<
     onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    const { format } = this.config;
-
     const onChange = props && props.onChange;
     const onChangeProp = onChange
       ? (value: number | string | undefined) => onChange(value, value)
@@ -54,7 +59,8 @@ export class EntityFieldNumber<T> extends EntityField<
       <InputNumber
         style={{ minWidth: "195px" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
-        formatter={value => numeral(value).format(format)}
+        formatter={value => formatter(value)}
+        parser={value => parser(value || "")}
         {...props}
         onChange={onChangeProp}
       />
@@ -62,7 +68,6 @@ export class EntityFieldNumber<T> extends EntityField<
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<number>) => {
-    const { format } = this.config;
     const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
     return (
       <InputNumber
@@ -73,7 +78,8 @@ export class EntityFieldNumber<T> extends EntityField<
         onChange={(value: number) =>
           props.setSelectedKeys(value ? [value] : [])
         }
-        formatter={value => numeral(value).format(format)}
+        formatter={value => formatter(value)}
+        parser={value => parser(value || "")}
       />
     );
   };
