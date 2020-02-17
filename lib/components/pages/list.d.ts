@@ -25,7 +25,7 @@ export declare type IEntityListColumnRender = (value: any, values: any, index: n
     };
 };
 export declare type IEntityListColumnAlign = "left" | "right" | "center";
-export declare type IEntityListColumn<T> = string | {
+export declare type IEntityListColumn<T = any> = string | {
     field: string;
     hidden?: boolean;
     render?: IEntityListColumnRender;
