@@ -58,7 +58,7 @@ export type IEntityListColumnRender = (
 
 export type IEntityListColumnAlign = "left" | "right" | "center";
 
-export type IEntityListColumn<T> =
+export type IEntityListColumn<T = any> =
   | string
   | {
       // field name
