@@ -25,11 +25,12 @@ export declare type IEntityListColumnRender = (value: any, values: any, index: n
     };
 };
 export declare type IEntityListColumnAlign = "left" | "right" | "center";
-export declare type IEntityListColumn = string | {
+export declare type IEntityListColumn<T> = string | {
     field: string;
     hidden?: boolean;
     render?: IEntityListColumnRender;
     align?: IEntityListColumnAlign;
+    titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
 };
 export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
@@ -38,7 +39,7 @@ export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
     showAddButton?: boolean;
     addButton?: boolean | CreateEntityProps;
     title?: string;
-    fields?: Thunk<IEntityListColumn[]>;
+    fields?: Thunk<IEntityListColumn<T>[]>;
     editableFields?: Thunk<string[]>;
     wrapperType?: "card" | "plain";
 }
@@ -48,6 +49,10 @@ export interface IEntityListProps<T extends {
     entity: Entity<T>;
     dataSource: DataSource;
 }
+export interface EntityListTitleRenderProps<T> {
+    title: string;
+    data: T[] | undefined;
+}
 export declare class EntityList<T extends {
     id: ResourceID;
 } = any> extends React.Component<IEntityListProps<T>> {
@@ -55,6 +60,7 @@ export declare class EntityList<T extends {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
         align?: IEntityListColumnAlign;
+        titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     }[], resource: ResourceCollection<T>, t: i18next.TFunction): ResourceTableColumn[];
     private getListFields;
     private cardContent;
