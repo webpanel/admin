@@ -58,7 +58,7 @@ export type IEntityListColumnRender = (
 
 export type IEntityListColumnAlign = "left" | "right" | "center";
 
-export type IEntityListColumn =
+export type IEntityListColumn<T> =
   | string
   | {
       // field name
@@ -69,6 +69,7 @@ export type IEntityListColumn =
       // rendering function for table cell content
       render?: IEntityListColumnRender;
       align?: IEntityListColumnAlign;
+      titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     };
 
 export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
@@ -79,7 +80,7 @@ export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
   showAddButton?: boolean;
   addButton?: boolean | CreateEntityProps;
   title?: string;
-  fields?: Thunk<IEntityListColumn[]>;
+  fields?: Thunk<IEntityListColumn<T>[]>;
   editableFields?: Thunk<string[]>;
   // default: card
   wrapperType?: "card" | "plain";
@@ -91,6 +92,11 @@ export interface IEntityListProps<T extends { id: ResourceID }>
   dataSource: DataSource;
 }
 
+export interface EntityListTitleRenderProps<T> {
+  title: string;
+  data: T[] | undefined;
+}
+
 export class EntityList<
   T extends { id: ResourceID } = any
 > extends React.Component<IEntityListProps<T>> {
@@ -99,6 +105,7 @@ export class EntityList<
       field: EntityField<any, any>;
       render?: IEntityListColumnRender;
       align?: IEntityListColumnAlign;
+      titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     }[],
     resource: ResourceCollection<T>,
     t: i18next.TFunction
@@ -111,15 +118,19 @@ export class EntityList<
 
     return listFields.map(
       (column): ResourceTableColumn => {
-        const { field, render, align } = column;
+        const { field, render, align, titleRender } = column;
         const _align = align || field.listColumnAlign;
+        const fieldTitle = t(`${field.entity.name}.${field.name}`, {
+          defaultValue: field.shortTitle
+        });
+        const title = titleRender
+          ? titleRender({ title: fieldTitle, data: resource.data })
+          : fieldTitle;
         return {
           align: _align,
           key: field.name,
           dataIndex: field.name,
-          title: t(`${field.entity.name}.${field.name}`, {
-            defaultValue: field.shortTitle
-          }),
+          title: title,
           sorter: field.sortable,
           sortColumns: field.sortColumns(),
 
@@ -165,6 +176,7 @@ export class EntityList<
       hidden: boolean;
       render?: IEntityListColumnRender;
       align?: IEntityListColumnAlign;
+      titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     }[] = [];
     if (_fields) {
       for (let f of _fields) {
@@ -172,13 +184,15 @@ export class EntityList<
         const render = (typeof f !== "string" && f.render) || undefined;
         const hidden = (typeof f !== "string" && f.hidden) || false;
         const align = (typeof f !== "string" && f.align) || undefined;
+        const titleRender =
+          (typeof f !== "string" && f.titleRender) || undefined;
         const field = entity.getField(fieldName);
         if (!field) {
           throw new Error(
             `Field '${fieldName}' not found in entity '${entity.name}'`
           );
         }
-        listFields.push({ field, hidden, render, align });
+        listFields.push({ field, hidden, render, align, titleRender });
       }
     } else {
       for (let f of entity.getListFields()) {
