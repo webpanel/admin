@@ -240,7 +240,7 @@ export class LayoutBuilder {
     );
   }
 
-  // render(data: any): React.ReactNode {
-
-  // }
+  formValue(name: string): any {
+    return this.config.formContext?.form.getFieldValue(name);
+  }
 }

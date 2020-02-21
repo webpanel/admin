@@ -50,5 +50,6 @@ export declare class LayoutBuilder {
     stringField(props: Thunk<LayoutBuilderStringFieldProps, LayoutBuilderConfig>): React.ReactNode;
     editField(props: Thunk<LayoutBuilderEditFieldProps, LayoutBuilderConfig>): React.ReactNode;
     editButton(): React.ReactNode;
+    formValue(name: string): any;
 }
 export {};

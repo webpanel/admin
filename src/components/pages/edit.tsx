@@ -144,11 +144,12 @@ export class EntityEdit extends React.Component<
     if (typeof _fields !== "undefined") {
       entityFields = _fields
         .map(f => {
-          const fieldName = typeof f === "string" ? f : f?.field;
-          if (!fieldName) {
+          if (typeof f === "string") {
+            return entity.getFieldOrFail(f);
+          } else if (f === null || f.field === null) {
             return null;
           }
-          return entity.getFieldOrFail(fieldName);
+          return entity.getFieldOrFail(f.field);
         })
         .filter(x => x) as EntityField<any, any>[];
     }
