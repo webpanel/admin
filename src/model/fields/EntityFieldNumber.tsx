@@ -32,12 +32,9 @@ export class EntityFieldNumber<T> extends EntityField<
   ) {
     super(name, config, entity);
 
-    if (
-      typeof config.format !== "undefined" &&
-      typeof config.render === "undefined"
-    ) {
+    if (typeof config.render === "undefined") {
       this.config.render = values =>
-        numeral(values[name]).format(config.format);
+        numeral(values[name]).format(config.format || "0,0");
     }
   }
 
