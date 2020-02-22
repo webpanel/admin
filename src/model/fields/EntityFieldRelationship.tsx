@@ -176,7 +176,13 @@ export class EntityFieldRelationship<T> extends EntityField<
             ? option
             : [option];
           // const array: LabeledValue[] = Array.isArray(value) ? value : [value];
-          onChange(value, options.map(o => o.props.children).join(", "));
+          onChange(
+            value || null,
+            options
+              .map(o => o && o.props.children)
+              .filter(x => x)
+              .join(", ")
+          );
         }
       : undefined;
 
