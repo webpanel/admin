@@ -41,7 +41,7 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{
         [key: string]: any;
-    }>>, option?: "add" | "edit" | undefined) => Promise<void>;
+    }>>, option?: "edit" | "add" | undefined) => Promise<void>;
     handleFormSuccess: (resource: Resource<{
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{

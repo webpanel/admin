@@ -72,13 +72,17 @@ export type IEntityListColumn<T = any> =
       titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     };
 
-export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
+export interface IEntityListConfig<T extends { id: ResourceID }>
+  extends ResourceCollectionOptions<T> {
   table?: IEntityListTableProps;
   card?: CardProps;
   searchable?: boolean;
   // deprecated, please use addButton property
   showAddButton?: boolean;
-  addButton?: boolean | CreateEntityProps;
+  addButton?: Thunk<
+    boolean | CreateEntityProps | React.ReactNode,
+    { collection: ResourceCollection<T> }
+  >;
   title?: string;
   fields?: Thunk<IEntityListColumn<T>[]>;
   editableFields?: Thunk<string[]>;
@@ -218,7 +222,9 @@ export class EntityList<
     const _searchable =
       typeof searchable !== "undefined" ? searchable : entity.searchable;
 
-    let _addButton = addButton;
+    let _addButton = resolveOptionalThunk(addButton, {
+      collection: resource
+    });
     if (typeof showAddButton !== "undefined") {
       _addButton = showAddButton;
     }
@@ -253,11 +259,13 @@ export class EntityList<
           ),
           _addButton &&
             entity.creatable &&
-            entity.getCreateButton({
-              button: { size: "small" },
-              onCreate: () => resource.reload(),
-              ...(typeof _addButton === "object" ? _addButton : {})
-            }),
+            (React.isValidElement(_addButton)
+              ? _addButton
+              : entity.getCreateButton({
+                  button: { size: "small" },
+                  onCreate: () => resource.reload(),
+                  ...(typeof _addButton === "object" ? _addButton : {})
+                })),
           // <EntityAddButton
           //   key="addButton"
           //   entity={entity}
