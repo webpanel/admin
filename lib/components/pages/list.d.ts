@@ -32,12 +32,16 @@ export declare type IEntityListColumn<T = any> = string | {
     align?: IEntityListColumnAlign;
     titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
 };
-export interface IEntityListConfig<T> extends ResourceCollectionOptions<T> {
+export interface IEntityListConfig<T extends {
+    id: ResourceID;
+}> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
     card?: CardProps;
     searchable?: boolean;
     showAddButton?: boolean;
-    addButton?: boolean | CreateEntityProps;
+    addButton?: Thunk<boolean | CreateEntityProps | React.ReactNode, {
+        collection: ResourceCollection<T>;
+    }>;
     title?: string;
     fields?: Thunk<IEntityListColumn<T>[]>;
     editableFields?: Thunk<string[]>;

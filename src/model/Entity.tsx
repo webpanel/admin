@@ -535,7 +535,9 @@ export class Entity<T extends { id: ResourceID } = any> {
   };
 
   // views
-  public getListView = (config?: IEntityListConfig<T>): React.ReactNode => {
+  public getListView = (
+    config?: Thunk<IEntityListConfig<T>>
+  ): React.ReactNode => {
     return (
       <EntityList entity={this} dataSource={this.dataSource} {...config} />
     );
