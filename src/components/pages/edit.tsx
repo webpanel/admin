@@ -29,7 +29,7 @@ export interface IEntityEditConfig {
   form?: IEntityEditFormProps;
   fields?: Thunk<IEntityEditConfigField[]>;
   initialValues?: { [key: string]: any };
-  wrapperType?: "card" | "modal";
+  wrapperType?: "card" | "plain" | "modal";
   modal?: ModalProps;
 }
 
@@ -76,6 +76,25 @@ export class EntityEdit extends React.Component<
     }
   };
 
+  private formPlainContent(
+    content: React.ReactNode,
+    formContext: FormContext,
+    resource: Resource
+  ): React.ReactNode {
+    return (
+      <Spin spinning={resource.loading && !resource.polling}>
+        {content}
+        <ResourceFormPageButtons
+          hasChanges={formContext.form.isFieldsTouched()}
+          handleReset={() => formContext.formComponent.resetFields()}
+          // handleSave={(option: SaveOption) =>
+          //   this.handleSave(formContext, resource, option)
+          // }
+        />
+      </Spin>
+    );
+  }
+
   private formCardContent(
     content: React.ReactNode,
     formContext: FormContext,
@@ -94,16 +113,7 @@ export class EntityEdit extends React.Component<
               ((resource.data && entity.render(resource.data)) || "-")
             }
           >
-            <Spin spinning={resource.loading && !resource.polling}>
-              {content}
-              <ResourceFormPageButtons
-                hasChanges={formContext.form.isFieldsTouched()}
-                handleReset={() => formContext.formComponent.resetFields()}
-                // handleSave={(option: SaveOption) =>
-                //   this.handleSave(formContext, resource, option)
-                // }
-              />
-            </Spin>
+            {this.formPlainContent(content, formContext, resource)}
           </Card>
         )}
       </Translation>
@@ -188,6 +198,8 @@ export class EntityEdit extends React.Component<
               switch (wrapperType) {
                 case "modal":
                   return this.formModalContent(content, formContext, resource);
+                case "plain":
+                  return this.formPlainContent(content, formContext, resource);
                 default:
                   return this.formCardContent(content, formContext, resource);
               }
