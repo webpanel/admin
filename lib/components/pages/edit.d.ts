@@ -20,7 +20,7 @@ export interface IEntityEditConfig {
     initialValues?: {
         [key: string]: any;
     };
-    wrapperType?: "card" | "modal";
+    wrapperType?: "card" | "plain" | "modal";
     modal?: ModalProps;
 }
 export interface IEntityEditProps extends IEntityEditConfig {
@@ -41,12 +41,13 @@ export declare class EntityEdit extends React.Component<IEntityEditProps, {
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{
         [key: string]: any;
-    }>>, option?: "add" | "edit" | undefined) => Promise<void>;
+    }>>, option?: "edit" | "add" | undefined) => Promise<void>;
     handleFormSuccess: (resource: Resource<{
         [key: string]: any;
     }, import("webpanel-data").ResourceConfig<{
         [key: string]: any;
     }>>) => Promise<void>;
+    private formPlainContent;
     private formCardContent;
     private formModalContent;
     render(): React.ReactNode;
