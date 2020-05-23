@@ -59,7 +59,12 @@ export interface EntityListTitleRenderProps<T> {
 }
 export declare class EntityList<T extends {
     id: ResourceID;
-} = any> extends React.Component<IEntityListProps<T>> {
+} = any> extends React.Component<IEntityListProps<T>, {
+    version: number;
+}> {
+    state: {
+        version: number;
+    };
     getColumns(listFields: {
         field: EntityField<any, any>;
         render?: IEntityListColumnRender;
