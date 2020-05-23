@@ -7,18 +7,18 @@ import {
   ResourceCollection,
   ResourceCollectionLayer,
   ResourceCollectionOptions,
-  ResourceID
+  ResourceID,
 } from "webpanel-data";
 import {
   EntitylistActionButton,
   detailListButton,
-  editListButton
+  editListButton,
 } from "./list.buttons";
 import { PaginationConfig, TableProps } from "antd/lib/table";
 import {
   ResourceSearchInput,
   ResourceTable,
-  ResourceTableActionButtonProps
+  ResourceTableActionButtonProps,
 } from "webpanel-antd";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
@@ -103,7 +103,9 @@ export interface EntityListTitleRenderProps<T> {
 
 export class EntityList<
   T extends { id: ResourceID } = any
-> extends React.Component<IEntityListProps<T>> {
+> extends React.Component<IEntityListProps<T>, { version: number }> {
+  public state = { version: 0 };
+
   getColumns(
     listFields: {
       field: EntityField<any, any>;
@@ -118,14 +120,14 @@ export class EntityList<
 
     const _editableFields =
       (entity.updateable && resolveOptionalThunk(editableFields)) || [];
-    const entityListFields = listFields.map(x => x.field);
+    const entityListFields = listFields.map((x) => x.field);
 
     return listFields.map(
       (column): ResourceTableColumn => {
         const { field, render, align, titleRender } = column;
         const _align = align || field.listColumnAlign;
         const fieldTitle = t(`${field.entity.name}.${field.name}`, {
-          defaultValue: field.shortTitle
+          defaultValue: field.shortTitle,
         });
         const title = titleRender
           ? titleRender({ title: fieldTitle, data: resource.data })
@@ -160,7 +162,7 @@ export class EntityList<
                 fields={entityListFields}
               />
             );
-          }
+          },
         };
       }
     );
@@ -216,14 +218,14 @@ export class EntityList<
       title,
       searchable,
       showAddButton,
-      addButton
+      addButton,
     } = this.props;
 
     const _searchable =
       typeof searchable !== "undefined" ? searchable : entity.searchable;
 
     let _addButton = resolveOptionalThunk(addButton, {
-      collection: resource
+      collection: resource,
     });
     if (typeof showAddButton !== "undefined") {
       _addButton = showAddButton;
@@ -231,7 +233,7 @@ export class EntityList<
 
     if (typeof _addButton === "undefined" || _addButton === true) {
       _addButton = {
-        flow: "redirect"
+        flow: "redirect",
       };
     }
 
@@ -253,7 +255,7 @@ export class EntityList<
                 width: "100%",
                 minWidth: 100,
                 maxWidth: 150,
-                marginRight: 8
+                marginRight: 8,
               }}
             />
           ),
@@ -264,7 +266,7 @@ export class EntityList<
               : entity.getCreateButton({
                   button: { size: "small" },
                   onCreate: () => resource.reload(),
-                  ...(typeof _addButton === "object" ? _addButton : {})
+                  ...(typeof _addButton === "object" ? _addButton : {}),
                 })),
           // <EntityAddButton
           //   key="addButton"
@@ -272,8 +274,8 @@ export class EntityList<
           //   onCreate={() => resource.reload()}
           //   {..._addButton}
           // />
-          card && card.extra
-        ].filter(x => x)}
+          card && card.extra,
+        ].filter((x) => x)}
       >
         {this.tableContent(resource, t)}
       </Card>
@@ -321,7 +323,7 @@ export class EntityList<
           }
         }
       )
-      .filter(x => x);
+      .filter((x) => x);
   }
 
   private tableContent(
@@ -335,26 +337,34 @@ export class EntityList<
       pageSizeOptions: ["10", "20", "30", "50", "100"],
       showSizeChanger: true,
       showTotal: (total: number, range: [number, number]) =>
-        `${range[0]}-${range[1]} / ${total}`
+        `${range[0]}-${range[1]} / ${total}`,
     };
 
     return (
-      <ResourceTable
-        className="entitytable"
-        scroll={{ x: true }}
-        resourceCollection={resource}
-        pagination={{ ...defaultPagination, ...(table && table.pagination) }}
-        customDetailURL={(resourceID: string) => {
-          return entity.getDetailLink(resourceID);
-        }}
-        {...table}
-        actionButtons={this.tableActionButtons(table && table.actionButtons)}
-        columns={this.getColumns(
-          this.getListFields().filter(x => !x.hidden),
-          resource,
-          t
-        )}
-      />
+      <>
+        <ResourceTable
+          key={
+            "table_" +
+            resource.name +
+            "_" +
+            (resource.loading ? "loading" : "loaded")
+          }
+          className="entitytable"
+          scroll={{ x: true }}
+          resourceCollection={resource}
+          pagination={{ ...defaultPagination, ...(table && table.pagination) }}
+          customDetailURL={(resourceID: string) => {
+            return entity.getDetailLink(resourceID);
+          }}
+          {...table}
+          actionButtons={this.tableActionButtons(table && table.actionButtons)}
+          columns={this.getColumns(
+            this.getListFields().filter((x) => !x.hidden),
+            resource,
+            t
+          )}
+        />
+      </>
     );
   }
 
@@ -370,12 +380,22 @@ export class EntityList<
     const fields = [
       "id",
       ...(this.getListFields()
-        .map(x => x.field.fetchField())
-        .filter(x => x) as string[])
+        .map((x) => x.field.fetchField())
+        .filter((x) => x) as string[]),
     ];
+
+    // const resource = useResourceCollection({
+    //   name: entity.name,
+    //   dataSource: this.props.dataSource,
+    //   ...restProps,
+    //   fields,
+    //   initialSorting:initialSorting || entity.initialSorting,
+    //   initialFilters:initialFilters || entity.initialFilters
+    // });
+
     return (
       <Translation>
-        {t => (
+        {(t) => (
           <ResourceCollectionLayer
             name={entity.name}
             dataSource={this.props.dataSource}

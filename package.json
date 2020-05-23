@@ -38,6 +38,6 @@
     "typescript": "^3.7.4",
     "webpanel-antd": "0.0.35",
     "webpanel-auth": "^0.1.9",
-    "webpanel-data": "0.0.62"
+    "webpanel-data": "^0.1.0"
   }
 }
