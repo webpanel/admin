@@ -9,6 +9,7 @@ export declare type IEntityFieldRelationshipSelectMode = "default" | "multiple";
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
     targetEntity: Thunk<Entity>;
     type: IEntityFieldRelationshipType;
+    creatable?: Thunk<boolean>;
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
     get type(): IEntityFieldRelationshipType;
