@@ -4,7 +4,7 @@ import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps,
-  IEntityFieldRenderOptions
+  IEntityFieldRenderOptions,
 } from "../EntityField";
 import { FormField, ResourceSelect } from "webpanel-antd";
 import { ResourceCollection, ResourceID } from "webpanel-data";
@@ -25,6 +25,7 @@ export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
   targetEntity: Thunk<Entity>;
   type: IEntityFieldRelationshipType;
+  creatable?: Thunk<boolean>;
 }
 
 export class EntityFieldRelationship<T> extends EntityField<
@@ -60,13 +61,13 @@ export class EntityFieldRelationship<T> extends EntityField<
   ) => React.ReactNode {
     const { targetEntity, type, render } = this.config;
     const _render = render || resolveThunk(targetEntity).render;
-    return values => {
+    return (values) => {
       const value = values[this.name];
       if (type === "toMany" && Array.isArray(value)) {
         return value
-          .map(x => _render && _render(x))
-          .filter(x => x)
-          .map(x => <Tag key={String(x)}>{x}</Tag>);
+          .map((x) => _render && _render(x))
+          .filter((x) => x)
+          .map((x) => <Tag key={String(x)}>{x}</Tag>);
       }
 
       if (!value) {
@@ -82,30 +83,35 @@ export class EntityFieldRelationship<T> extends EntityField<
     key: string | number,
     config: { formLayout?: FormLayout }
   ): React.ReactNode {
-    const { targetEntity } = this.config;
+    const { targetEntity, creatable } = this.config;
     const _targetEntity = resolveThunk(targetEntity);
 
     const formItemLayout =
       config.formLayout === "horizontal"
         ? {
             labelCol: { span: 8 },
-            wrapperCol: { span: 16 }
+            wrapperCol: { span: 16 },
           }
         : null;
+
+    const _isCreatable = resolveOptionalThunk(creatable);
+    const isCreatable =
+      (_targetEntity.creatable && _isCreatable) ||
+      typeof _isCreatable === "undefined";
 
     return _targetEntity.getSearchResourceCollectionLayer(
       (collection: ResourceCollection<any>) => (
         <Translation key={key}>
-          {t => (
+          {(t) => (
             <FormField
               label={t(`${this.entity.name}.${this.name}`, {
-                defaultValue: this.title
+                defaultValue: this.title,
               })}
               extra={this.config.description}
               name={this.columnName()}
               formContext={formContext}
               style={{
-                width: "100%"
+                width: "100%",
               }}
               rules={resolveOptionalThunk(this.config.rules)}
               {...formItemLayout}
@@ -122,11 +128,11 @@ export class EntityFieldRelationship<T> extends EntityField<
                 style={{
                   width: "100%",
                   minWidth: "200px",
-                  marginRight: "-38px",
-                  paddingRight: "38px"
+                  marginRight: isCreatable ? "-38px" : undefined,
+                  paddingRight: isCreatable ? "38px" : undefined,
                 }}
               />
-              {_targetEntity.creatable &&
+              {isCreatable &&
                 _targetEntity.getCreateButton({
                   key: `relationship_field_${this.entity.name}_${this.valuePropName}_add`,
                   button: {
@@ -134,22 +140,22 @@ export class EntityFieldRelationship<T> extends EntityField<
                       margin:
                         config.formLayout === "horizontal"
                           ? "4px 0 0 4px"
-                          : "0 0 0 4px"
-                    }
+                          : "0 0 0 4px",
+                    },
                   },
                   flow: {
                     type: "modal",
                     modal: {
                       title: `Add ${_targetEntity.title}`,
-                      width: "70%"
-                    }
+                      width: "70%",
+                    },
                   },
                   onCreate: async (id: ResourceID) => {
                     await collection.get();
                     let updateValues = {};
                     updateValues[this.columnName()] = id;
                     formContext.form.setFieldsValue(updateValues);
-                  }
+                  },
                 })}
             </FormField>
           )}
@@ -179,8 +185,8 @@ export class EntityFieldRelationship<T> extends EntityField<
           onChange(
             value || null,
             options
-              .map(o => o && o.props.children)
-              .filter(x => x)
+              .map((o) => o && o.props.children)
+              .filter((x) => x)
               .join(", ")
           );
         }
@@ -240,11 +246,7 @@ export class EntityFieldRelationship<T> extends EntityField<
         values[this.columnName()] ||
         values[this.columnName() + "Id"] ||
         values[this.columnName() + "Id_in"] ||
-        values[
-          this.columnName()
-            .replace("Ids", "")
-            .replace("Id", "")
-        ];
+        values[this.columnName().replace("Ids", "").replace("Id", "")];
       if (value) {
         if (value.id) {
           res = [value.id];
