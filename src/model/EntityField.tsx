@@ -5,7 +5,7 @@ import { Button, Tooltip } from "antd";
 import {
   FormField,
   ResourceTableFilterDenormalizer,
-  ResourceTableFilterNormalizer
+  ResourceTableFilterNormalizer,
 } from "webpanel-antd";
 import { FormLayout, ValidationRule } from "antd/lib/form/Form";
 import Input, { InputProps } from "antd/lib/input";
@@ -13,8 +13,8 @@ import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "./Entity";
 import { FormContext } from "webpanel-antd/lib/form/form/Form";
-import { Translation } from "react-i18next";
 import { IEntityListColumnAlign } from "../components/pages/list";
+import { Translation } from "react-i18next";
 
 // import { ResourceCollection } from 'webpanel-data';
 
@@ -53,7 +53,7 @@ export interface IEntityFieldRenderOptions {
 export interface IEntityFieldConfig<T> {
   // header titles, bradcrumb names
   title?: Thunk<string>;
-  description?: React.ReactNode;
+  description?: Thunk<React.ReactNode>;
   // table columns title
   shortTitle?: Thunk<string>;
   enabled?: Thunk<boolean>;
@@ -225,19 +225,19 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       config.formLayout === "horizontal"
         ? {
             labelCol: { span: 8 },
-            wrapperCol: { span: 16 }
+            wrapperCol: { span: 16 },
           }
         : null;
 
     return (
       <Translation>
-        {t => (
+        {(t) => (
           <FormField
             key={key}
             label={t(`${this.entity.name}.${this.name}`, {
-              defaultValue: this.title
+              defaultValue: this.title,
             })}
-            extra={this.config.description}
+            extra={resolveOptionalThunk(this.config.description)}
             name={this.columnName()}
             formContext={formContext}
             valuePropName={this.valuePropName}
@@ -259,7 +259,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
       <Input
         key={`field_${this.entity.name}_${this.valuePropName}`}
         value={value}
-        onChange={e =>
+        onChange={(e) =>
           props.setSelectedKeys(e.target.value ? [e.target.value] : [])
         }
       />
@@ -285,7 +285,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
             padding: "8px",
             backgroundColor: "white",
             borderRadius: "6px",
-            boxShadow: "0 1px 6px rgba(0, 0, 0, .2)"
+            boxShadow: "0 1px 6px rgba(0, 0, 0, .2)",
           }}
         >
           <div style={{ marginRight: 2 }}>

@@ -30,7 +30,7 @@ export interface IEntityFieldRenderOptions {
 }
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;
-    description?: React.ReactNode;
+    description?: Thunk<React.ReactNode>;
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
     readable?: Thunk<boolean>;
