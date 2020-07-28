@@ -1,12 +1,12 @@
-import * as React from 'react';
-import * as numeral from 'numeral';
+import * as React from "react";
+import * as numeral from "numeral";
 
-import { Button, Icon, Upload } from 'antd';
+import { Button, Icon, Upload } from "antd";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { AuthSession } from 'webpanel-auth';
-import { Entity } from '../../model/Entity';
-import { ResourceLayer } from 'webpanel-data';
-import { UploadFile } from 'antd/lib/upload/interface';
+import { Entity } from "../../model/Entity";
+import { ResourceLayer } from "webpanel-data";
+import { UploadFile } from "antd/lib/upload/interface";
 
 interface IFile {
   id: string;
@@ -20,6 +20,7 @@ interface IFileInputProps {
   uploadURL?: string;
   value?: string;
   onChange?: (newValue: string | null) => void;
+  accessToken?: Thunk<string>;
 }
 interface IFileInputState {
   value: string | null;
@@ -31,7 +32,7 @@ export class FileInput extends React.Component<
 > {
   static getDerivedStateFromProps(props: IFileInputProps) {
     let state: IFileInputState = { value: null };
-    if ('value' in props) {
+    if ("value" in props) {
       state.value = props.value || null;
     }
     return state;
@@ -43,7 +44,7 @@ export class FileInput extends React.Component<
   }
 
   fileChangeHandler(file: UploadFile) {
-    if (file.status === 'done') {
+    if (file.status === "done") {
       this.udpateValue(file.response);
     }
   }
@@ -57,23 +58,20 @@ export class FileInput extends React.Component<
 
   renderFile(): React.ReactNode {
     const { value } = this.state;
-    const { entity } = this.props;
+    const { entity, accessToken } = this.props;
+    const token = resolveOptionalThunk(accessToken);
     if (!value) return null;
+
     return (
       <ResourceLayer
         name="File"
         id={value}
         dataSource={entity.dataSource}
-        fields={['url', 'name', 'size']}
+        fields={["url", "name", "size"]}
         render={({ data }) =>
           (data && (
-            <a
-              target="_blank"
-              href={`${data.url}?access_token=${
-                AuthSession.current().accessToken
-              }`}
-            >
-              {data.name} ({numeral(data.size).format('0.0 b')})
+            <a target="_blank" href={`${data.url}?access_token=${token}`}>
+              {data.name} ({numeral(data.size).format("0.0 b")})
             </a>
           )) ||
           null
@@ -100,11 +98,11 @@ export class FileInput extends React.Component<
 
   render(): React.ReactNode {
     const { value } = this.state;
-    const { uploadURL: fileUploadURL } = this.props;
+    const { uploadURL: fileUploadURL, accessToken } = this.props;
+    const token = resolveOptionalThunk(accessToken);
 
-    const accessToken = AuthSession.current().accessToken;
     const headers: { [key: string]: string } = {};
-    if (accessToken) {
+    if (token) {
       headers.authorization = `Bearer ${accessToken}`;
     }
 

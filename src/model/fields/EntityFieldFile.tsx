@@ -4,14 +4,15 @@ import * as numeral from "numeral";
 import {
   EntityField,
   IEntityFieldConfig,
-  IEntityFieldRenderOptions
+  IEntityFieldRenderOptions,
 } from "../EntityField";
+import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { AuthSession } from "webpanel-auth";
 import { FileInput } from "../../components/form/fileinput";
 
 export interface IEntityFieldFileConfig<T> extends IEntityFieldConfig<T> {
   uploadURL?: string;
+  accessToken?: Thunk<string>;
 }
 
 // This entity field is tied with usage of https://github.com/graphql-services/graphql-files
@@ -31,20 +32,20 @@ export class EntityFieldFile<T> extends EntityField<
     record: T,
     options?: IEntityFieldRenderOptions
   ) => React.ReactNode {
-    const { render } = this.config;
-    return values => {
+    const { render, accessToken } = this.config;
+    return (values) => {
       const value = values[this.name];
       if (!value) {
         return "–";
       }
+      let url = value.url;
+      const token = resolveOptionalThunk(accessToken);
+      if (token) {
+        url += `?access_token=${token}`;
+      }
       return (
         (render && render(value)) || (
-          <a
-            target="_blank"
-            href={`${value.url}?access_token=${
-              AuthSession.current().accessToken
-            }`}
-          >
+          <a target="_blank" href={url}>
             {value.name} ({numeral(value.size).format("0.0 b")})
           </a>
         )
