@@ -21,7 +21,6 @@
     "i18next": "*",
     "react-i18next": "*",
     "webpanel-antd": "*",
-    "webpanel-auth": "*",
     "webpanel-data": "*"
   },
   "repository": {
@@ -37,7 +36,6 @@
     "react-i18next": "^10.11.4",
     "typescript": "^3.7.4",
     "webpanel-antd": "0.0.35",
-    "webpanel-auth": "^0.1.9",
     "webpanel-data": "^0.1.0"
   }
 }

@@ -1,6 +1,7 @@
-import * as React from 'react';
-import { Entity } from '../../model/Entity';
-import { UploadFile } from 'antd/lib/upload/interface';
+import * as React from "react";
+import { Thunk } from "ts-thunk";
+import { Entity } from "../../model/Entity";
+import { UploadFile } from "antd/lib/upload/interface";
 interface IFile {
     id: string;
     name?: string;
@@ -13,6 +14,7 @@ interface IFileInputProps {
     uploadURL?: string;
     value?: string;
     onChange?: (newValue: string | null) => void;
+    accessToken?: Thunk<string>;
 }
 interface IFileInputState {
     value: string | null;
