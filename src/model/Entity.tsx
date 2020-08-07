@@ -75,9 +75,11 @@ import { EntityFieldString } from "./fields/EntityFieldString";
 import { EntityFieldText } from "./fields/EntityFieldText";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
+import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { Redirect } from "react-router";
 import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
 import { SaveOption } from "../components/form/buttons";
+import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
 import { Translation } from "react-i18next";
 
 // import { Button } from 'antd';
@@ -111,6 +113,8 @@ export interface IEntityConfig<T extends { id: ResourceID }> {
     edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
     create?: (props: IEntityEditLayoutProps) => React.ReactNode;
   }>;
+  menu?: Thunk<Partial<MenuItemProps & { key: string }>>;
+  structure?: Thunk<Partial<StructureItemProps & { key: string }>>;
   list?: Thunk<IEntityListConfig<T>>;
   edit?: Thunk<IEntityEditConfig, IEntityEditOptions<T>>;
   detail?: Thunk<IEntityDetailConfig, IEntityDetailOptions<T>>;
@@ -361,6 +365,7 @@ export class Entity<T extends { id: ResourceID } = any> {
   }
 
   public menuItem = (): React.ReactNode => {
+    const props = resolveOptionalThunk(this.config.menu);
     return (
       <Layout.MenuItem
         key={this.structureName}
@@ -375,11 +380,13 @@ export class Entity<T extends { id: ResourceID } = any> {
           </Translation>
         }
         icon={resolveOptionalThunk(this.config.icon) || "folder"}
+        {...props}
       />
     );
   };
 
   public structureItem = (): React.ReactNode => {
+    const props = resolveOptionalThunk(this.config.structure);
     return (
       <Layout.StructureItem
         key={`/${this.structureName}`}
@@ -401,6 +408,7 @@ export class Entity<T extends { id: ResourceID } = any> {
           }
         }
         content={() => this.getListView(this.getListConfig())}
+        {...props}
       >
         <Layout.StructureItem
           key="/new"
@@ -730,18 +738,16 @@ export class Entity<T extends { id: ResourceID } = any> {
   // links
   public getListLink(): string {
     const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ""}/${this.structureName}`;
+    const props = resolveOptionalThunk(this.config.structure);
+    return props?.key || `${prefix || ""}/${this.structureName}`;
   }
   public getCreateLink(): string {
-    const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ""}/${this.structureName}/new`;
+    return `${this.getListLink()}/new`;
   }
   public getDetailLink(id: ResourceID): string {
-    const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ""}/${this.structureName}/${id}`;
+    return `${this.getListLink()}/${id}`;
   }
   public getEditLink(id: ResourceID): string {
-    const prefix = resolveOptionalThunk(this.config.pathPrefix);
-    return `${prefix || ""}/${this.structureName}/${id}/edit`;
+    return `${this.getListLink()}/${id}/edit`;
   }
 }
