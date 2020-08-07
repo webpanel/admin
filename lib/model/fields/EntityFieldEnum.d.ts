@@ -3,7 +3,7 @@ import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps, IEntityFieldR
 import { Thunk } from "ts-thunk";
 export interface IOption {
     value: string;
-    label: string;
+    label: React.ReactNode;
 }
 export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
     options: Thunk<IOption[]>;
