@@ -1,5 +1,5 @@
-import * as React from 'react';
-export declare type SaveOption = 'edit' | 'add';
+import * as React from "react";
+export declare type SaveOption = "edit" | "add";
 export interface ResourceFormButtonsProps {
     hasChanges: boolean;
     handleReset: () => void;

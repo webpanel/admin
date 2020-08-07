@@ -1,14 +1,11 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Button, Form, Icon, Popconfirm } from 'antd';
+import { Button, Form, Popconfirm } from "antd";
 
-// import { ClickParam } from 'antd/lib/menu';
-
-export type SaveOption = 'edit' | 'add';
+export type SaveOption = "edit" | "add";
 
 export interface ResourceFormButtonsProps {
   hasChanges: boolean;
-  // handleSave: (option: SaveOption) => void;
   handleReset: () => void;
 }
 
@@ -17,26 +14,16 @@ export class ResourceFormPageButtons extends React.Component<
 > {
   render(): React.ReactNode {
     const { handleReset, hasChanges } = this.props;
-
-    // const menu = (
-    //   <Menu onClick={(e: ClickParam) => handleSave(e.key as SaveOption)}>
-    //     <Menu.Item key="edit">Save and continue editing</Menu.Item>
-    //     <Menu.Item key="add">Save and add another</Menu.Item>
-    //   </Menu>
-    // );
-
     return (
       <Form.Item
         wrapperCol={{
           xs: { span: 24, offset: 0 },
-          sm: { span: 16, offset: 8 }
+          sm: { span: 16, offset: 8 },
         }}
       >
-        {/* <Dropdown disabled={!hasChanges} overlay={menu}> */}
         <Button type="primary" htmlType="submit">
-          Save <Icon type="down" />
+          Save
         </Button>
-        {/* </Dropdown> */}
         <Popconfirm
           title="Reset?"
           cancelText="No"
