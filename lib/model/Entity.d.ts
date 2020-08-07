@@ -20,7 +20,9 @@ import { Thunk } from "ts-thunk";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
+import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
+import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
 interface IEntitySearchableConfig {
     fields: Thunk<string[]>;
 }
@@ -54,6 +56,12 @@ export interface IEntityConfig<T extends {
         edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
         create?: (props: IEntityEditLayoutProps) => React.ReactNode;
     }>;
+    menu?: Thunk<Partial<MenuItemProps & {
+        key: string;
+    }>>;
+    structure?: Thunk<Partial<StructureItemProps & {
+        key: string;
+    }>>;
     list?: Thunk<IEntityListConfig<T>>;
     edit?: Thunk<IEntityEditConfig, IEntityEditOptions<T>>;
     detail?: Thunk<IEntityDetailConfig, IEntityDetailOptions<T>>;
@@ -104,18 +112,18 @@ export declare class Entity<T extends {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | import("ts-thunk").ThunkFunction<IEntityListConfig<T>, undefined> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
+    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: ResourceID, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
     getCreateButton: (props: CreateEntityProps) => React.ReactNode;
-    getEditView: (resourceID: React.ReactText, config?: IEntityEditConfig | undefined, handlers?: {
+    getEditView: (resourceID: ResourceID, config?: IEntityEditConfig | undefined, handlers?: {
         onSave?: EntityOnSaveHandler | undefined;
         onCancel?: (() => void) | undefined;
     } | undefined) => React.ReactNode;
-    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
+    getEditButton: (resourceID: ResourceID) => React.ReactNode;
     getSearchResourceCollectionLayer: (render: (collection: ResourceCollection<T, import("webpanel-data/lib/ResourceCollection").ResourceCollectionConfig<T>>) => React.ReactNode, props?: Partial<ResourceCollectionLayerProps<any>> | undefined) => React.ReactNode;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T>;
