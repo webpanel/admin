@@ -4,7 +4,7 @@ import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps,
-  IEntityFieldRenderOptions
+  IEntityFieldRenderOptions,
 } from "../EntityField";
 import { Thunk, resolveThunk } from "ts-thunk";
 
@@ -14,7 +14,7 @@ import { Select } from "antd";
 
 export interface IOption {
   value: string;
-  label: string;
+  label: React.ReactNode;
 }
 
 export interface IEntityFieldEnumConfig<T> extends IEntityFieldConfig<T> {
@@ -33,7 +33,7 @@ export class EntityFieldEnum<T> extends EntityField<
       return this.config.render;
     }
     const options = resolveThunk(this.config.options);
-    return values => {
+    return (values) => {
       const keyValue = values[this.name];
       for (let option of options) {
         if (option.value === keyValue) {
@@ -64,7 +64,7 @@ export class EntityFieldEnum<T> extends EntityField<
       <Select
         style={{
           width: "100%",
-          minWidth: "200px"
+          minWidth: "200px",
         }}
         key={`enum_field_${this.entity.name}_${this.valuePropName}`}
         showSearch={true}
@@ -87,7 +87,7 @@ export class EntityFieldEnum<T> extends EntityField<
     return (
       <Select
         style={{
-          minWidth: "200px"
+          minWidth: "200px",
         }}
         mode="multiple"
         value={value}
