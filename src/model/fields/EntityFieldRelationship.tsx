@@ -96,8 +96,8 @@ export class EntityFieldRelationship<T> extends EntityField<
 
     const _isCreatable = resolveOptionalThunk(creatable);
     const isCreatable =
-      (_targetEntity.creatable && _isCreatable) ||
-      typeof _isCreatable === "undefined";
+      _targetEntity.creatable &&
+      (_isCreatable || typeof _isCreatable === "undefined");
 
     return _targetEntity.getSearchResourceCollectionLayer(
       (collection: ResourceCollection<any>) => (
