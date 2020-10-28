@@ -489,6 +489,10 @@ export class Entity<T extends { id: ResourceID } = any> {
     id: ResourceID,
     option: SaveOption
   ) => {
+    if (route.history.length > 1) {
+      route.history.goBack();
+      return;
+    }
     switch (option) {
       case "add":
         route.history.push(this.getCreateLink());
@@ -657,80 +661,60 @@ export class Entity<T extends { id: ResourceID } = any> {
   }
 
   // fields
-  // deprecated, use stringField
-  public inputField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+  public stringField(name: string, config?: IEntityFieldConfig<T>): this {
     this.fields.push(new EntityFieldString(name, config || {}, this));
     return this;
   }
-  public stringField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
-    this.fields.push(new EntityFieldString(name, config || {}, this));
-    return this;
-  }
-  public textField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+  public textField(name: string, config?: IEntityFieldConfig<T>): this {
     this.fields.push(new EntityFieldText(name, config || {}, this));
     return this;
   }
-  public numberField(
-    name: string,
-    config?: IEntityFieldNumberConfig<T>
-  ): Entity<T> {
+  public numberField(name: string, config?: IEntityFieldNumberConfig<T>): this {
     this.fields.push(new EntityFieldNumber(name, config || {}, this));
     return this;
   }
-  public passwordField(
-    name: string,
-    config?: IEntityFieldConfig<T>
-  ): Entity<T> {
+  public passwordField(name: string, config?: IEntityFieldConfig<T>): this {
     this.fields.push(new EntityFieldPasssword(name, config || {}, this));
     return this;
   }
-  public dateField(
-    name: string,
-    config?: IEntityFieldDateConfig<T>
-  ): Entity<T> {
+  public dateField(name: string, config?: IEntityFieldDateConfig<T>): this {
     this.fields.push(new EntityFieldDate(name, config || {}, this));
     return this;
   }
   public booleanField(
     name: string,
     config?: IEntityFieldBooleanConfig<T>
-  ): Entity<T> {
+  ): this {
     this.fields.push(new EntityFieldBoolean(name, config || {}, this));
     return this;
   }
   public relationshipField(
     name: string,
     config: IEntityFieldRelationshipConfig<T>
-  ): Entity<T> {
+  ): this {
     this.fields.push(new EntityFieldRelationship(name, config, this));
     return this;
   }
-  public fileField(
-    name: string,
-    config?: IEntityFieldFileConfig<T>
-  ): Entity<T> {
+  public fileField(name: string, config?: IEntityFieldFileConfig<T>): this {
     this.fields.push(new EntityFieldFile(name, config || {}, this));
     return this;
   }
-  public colorField(name: string, config?: IEntityFieldConfig<T>): Entity<T> {
+  public colorField(name: string, config?: IEntityFieldConfig<T>): this {
     this.fields.push(new EntityFieldColor(name, config || {}, this));
     return this;
   }
-  public enumField(name: string, config: IEntityFieldEnumConfig<T>): Entity<T> {
+  public enumField(name: string, config: IEntityFieldEnumConfig<T>): this {
     this.fields.push(new EntityFieldEnum(name, config, this));
     return this;
   }
   public computedField(
     name: string,
     config?: IEntityFieldComputedConfig<T>
-  ): Entity<T> {
+  ): this {
     this.fields.push(new EntityFieldComputed(name, config || {}, this));
     return this;
   }
-  public customField(
-    name: string,
-    config: IEntityFieldCustomConfig<T>
-  ): Entity<T> {
+  public customField(name: string, config: IEntityFieldCustomConfig<T>): this {
     this.fields.push(new EntityFieldCustom(name, config, this));
     return this;
   }
