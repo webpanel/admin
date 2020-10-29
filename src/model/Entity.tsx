@@ -17,9 +17,15 @@ import {
   DetailEntityProps,
 } from "../components/buttons/EntityDetailButton";
 import {
-  EntityEditLayout,
-  IEntityEditLayoutProps,
-} from "../components/layouts/entity.edit";
+  EntityDetail,
+  IEntityDetailConfig,
+  IEntityDetailProps,
+} from "../components/pages/detail";
+import {
+  EntityEdit,
+  IEntityEditConfig,
+  IEntityEditProps,
+} from "../components/pages/edit";
 import { EntityField, IEntityFieldConfig } from "./EntityField";
 import {
   EntityFieldBoolean,
@@ -54,25 +60,17 @@ import {
   IEntityFieldRelationshipConfig,
 } from "./fields/EntityFieldRelationship";
 import { EntityList, IEntityListConfig } from "../components/pages/list";
-import {
-  EntityOnSaveHandler,
-  IEntityEditConfig,
-} from "../components/pages/edit";
 import { EntitySelect, EntitySelectConfig } from "../components/entity-picker";
-import {
-  IEntityDetailConfig,
-  IEntityDetailProps,
-} from "../components/pages/detail";
 import { Layout, Link, RouteComponentProps } from "webpanel-antd";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
 
 import { Button } from "antd";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
-import { EntityDetailLayout } from "../components/layouts/entity.detail";
 import { EntityFieldColor } from "./fields/EntityFieldColor";
 import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
 import { EntityFieldString } from "./fields/EntityFieldString";
 import { EntityFieldText } from "./fields/EntityFieldText";
+import { EntityOnSaveHandler } from "../components/form/entity-form";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
@@ -110,8 +108,8 @@ export interface IEntityConfig<T extends { id: ResourceID }> {
   showDetailPage?: Thunk<boolean>;
   layouts?: Thunk<{
     detail?: (props: IEntityDetailProps) => React.ReactNode;
-    edit?: (props: IEntityEditLayoutProps) => React.ReactNode;
-    create?: (props: IEntityEditLayoutProps) => React.ReactNode;
+    edit?: (props: IEntityEditProps) => React.ReactNode;
+    create?: (props: IEntityEditProps) => React.ReactNode;
   }>;
   menu?: Thunk<Partial<MenuItemProps & { key: string }>>;
   structure?: Thunk<Partial<StructureItemProps & { key: string }>>;
@@ -314,17 +312,14 @@ export class Entity<T extends { id: ResourceID } = any> {
   }
 
   public get editLayout():
-    | ((
-        props: IEntityEditLayoutProps,
-        resourceID: ResourceID
-      ) => React.ReactNode)
+    | ((props: IEntityEditProps, resourceID: ResourceID) => React.ReactNode)
     | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
     return layouts && layouts.edit;
   }
 
   public get createLayout():
-    | ((props: IEntityEditLayoutProps) => React.ReactNode)
+    | ((props: IEntityEditProps) => React.ReactNode)
     | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
     return layouts && layouts.create;
@@ -473,7 +468,7 @@ export class Entity<T extends { id: ResourceID } = any> {
         });
       }
       return (
-        <EntityDetailLayout
+        <EntityDetail
           entity={this}
           resourceID={resourceID}
           {...this.getDetailConfig(resourceID)}
@@ -515,7 +510,7 @@ export class Entity<T extends { id: ResourceID } = any> {
       return this.editLayout({ entity: this, onSave, ...config }, resourceID);
     }
     return (
-      <EntityEditLayout
+      <EntityEdit
         entity={this}
         onSave={onSave}
         resourceID={resourceID}
@@ -534,7 +529,7 @@ export class Entity<T extends { id: ResourceID } = any> {
       return this.createLayout({ entity: this, onSave });
     }
     return (
-      <EntityEditLayout
+      <EntityEdit
         entity={this}
         onSave={onSave}
         {...this.getEditConfig()}
@@ -557,7 +552,7 @@ export class Entity<T extends { id: ResourceID } = any> {
     config?: IEntityDetailConfig
   ): React.ReactNode => {
     return (
-      <EntityDetailLayout
+      <EntityDetail
         entity={this}
         resourceID={resourceID}
         {...this.getDetailConfig(resourceID)}
@@ -585,7 +580,7 @@ export class Entity<T extends { id: ResourceID } = any> {
       return this.createLayout({ entity: this, onSave, onCancel, ...config });
     }
     return (
-      <EntityEditLayout
+      <EntityEdit
         entity={this}
         onSave={onSave}
         onCancel={onCancel}
@@ -615,7 +610,7 @@ export class Entity<T extends { id: ResourceID } = any> {
       );
     }
     return (
-      <EntityEditLayout
+      <EntityEdit
         entity={this}
         resourceID={resourceID}
         onSave={onSave}

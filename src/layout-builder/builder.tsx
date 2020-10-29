@@ -2,27 +2,27 @@ import * as React from "react";
 
 import {
   IEntityDetailConfigField,
-  IEntityDetailFieldOptions
+  IEntityDetailFieldOptions,
 } from "../components/pages/detail";
 import {
-  IEntityEditConfigField,
-  IEntityEditFieldOptions
-} from "../components/pages/edit";
+  IEntityFormConfigField,
+  IEntityFormFieldOptions,
+} from "../components/form/entity-form";
 import { LayoutBuilderCard, LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
 import {
   LayoutBuilderEditField,
-  LayoutBuilderEditFieldProps
+  LayoutBuilderEditFieldProps,
 } from "./components/edit-field";
 import { LayoutBuilderRow, LayoutBuilderRowProps } from "./components/row";
 import {
   LayoutBuilderStringField,
-  LayoutBuilderStringFieldProps
+  LayoutBuilderStringFieldProps,
 } from "./components/string-field";
 import { LayoutBuilderTabs, LayoutBuilderTabsProps } from "./components/tabs";
 import {
   LayoutBuilderValue,
-  LayoutBuilderValueProps
+  LayoutBuilderValueProps,
 } from "./components/value";
 import { Resource, ResourceID } from "webpanel-data";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
@@ -45,9 +45,9 @@ export interface LayoutBuilderConfig {
 
 type IEntityBuilderConfigField =
   | IEntityDetailConfigField
-  | IEntityEditConfigField;
+  | IEntityFormConfigField;
 type IEntityBuilderFieldOptions =
-  | IEntityEditFieldOptions
+  | IEntityFormFieldOptions
   | IEntityDetailFieldOptions;
 export class LayoutBuilder {
   constructor(public readonly config: LayoutBuilderConfig) {}
@@ -76,7 +76,7 @@ export class LayoutBuilder {
     let fs: IEntityBuilderFieldOptions[] = [];
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== "undefined") {
-      fs = _fields.map(f => {
+      fs = _fields.map((f) => {
         let _f: IEntityDetailFieldOptions = { field: null };
         if (typeof f === "string" || f === null) {
           return { field: f };
@@ -108,23 +108,23 @@ export class LayoutBuilder {
     let descriptionItems: {
       field: EntityField<any, any> | null;
       span?: number;
-    }[] = entityFields.map(field => ({
-      field
+    }[] = entityFields.map((field) => ({
+      field,
     }));
 
     if (config && config.fields) {
       const fs = this.getFieldsFromThunk(config.fields);
-      descriptionItems = fs.map(f => {
+      descriptionItems = fs.map((f) => {
         return {
           field: (f.field && this.entity.getFieldOrFail(f.field)) || null,
-          span: f["span"] || 1
+          span: f["span"] || 1,
         };
       });
     }
 
     return (
       <Translation>
-        {t => (
+        {(t) => (
           <Descriptions
             bordered={true}
             size="small"
@@ -138,7 +138,7 @@ export class LayoutBuilder {
                 label={
                   item.field &&
                   t(`${this.entity.name}.${item.field.name}`, {
-                    defaultValue: item.field.title
+                    defaultValue: item.field.title,
                   })
                 }
               >
@@ -158,10 +158,10 @@ export class LayoutBuilder {
     );
     if (config && config.fields) {
       fields = this.getFieldsFromThunk(config.fields)
-        .map(f => (f.field && this.entity.getFieldOrFail(f.field)) || null)
-        .filter(x => x) as EntityField<any, any>[];
+        .map((f) => (f.field && this.entity.getFieldOrFail(f.field)) || null)
+        .filter((x) => x) as EntityField<any, any>[];
     }
-    return fields.map(f => this.editField({ name: f.name }));
+    return fields.map((f) => this.editField({ name: f.name }));
   }
 
   card(

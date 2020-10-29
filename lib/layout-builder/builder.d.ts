@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IEntityDetailConfigField, IEntityDetailFieldOptions } from "../components/pages/detail";
-import { IEntityEditConfigField, IEntityEditFieldOptions } from "../components/pages/edit";
+import { IEntityFormConfigField, IEntityFormFieldOptions } from "../components/form/entity-form";
 import { LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderColProps } from "./components/col";
 import { LayoutBuilderEditFieldProps } from "./components/edit-field";
@@ -20,8 +20,8 @@ export interface LayoutBuilderConfig {
     formContext?: FormContext;
     resource: Resource;
 }
-declare type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityEditConfigField;
-declare type IEntityBuilderFieldOptions = IEntityEditFieldOptions | IEntityDetailFieldOptions;
+declare type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityFormConfigField;
+declare type IEntityBuilderFieldOptions = IEntityFormFieldOptions | IEntityDetailFieldOptions;
 export declare class LayoutBuilder {
     readonly config: LayoutBuilderConfig;
     constructor(config: LayoutBuilderConfig);

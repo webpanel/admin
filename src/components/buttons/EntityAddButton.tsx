@@ -3,7 +3,7 @@ import * as React from "react";
 import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
 import { Entity } from "../../model/Entity";
-import { IEntityEditConfig } from "../pages/edit";
+import { IEntityFormConfig } from "../form/entity-form";
 import { Link } from "webpanel-antd";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
@@ -14,7 +14,7 @@ export interface IEntityAddButtonModalFlow {
   modal?: ModalProps;
 }
 type FlowType = "redirect" | IEntityAddButtonModalFlow;
-export interface CreateEntityProps extends IEntityEditConfig {
+export interface CreateEntityProps extends IEntityFormConfig {
   onCreate?: (id: ResourceID) => void;
   flow?: FlowType;
   key?: string;
@@ -37,7 +37,7 @@ export class CreateEntityButton extends React.Component<
       fields,
       flow,
       onCreate,
-      button
+      button,
     } = this.props;
 
     let _flow = flow || "redirect";
@@ -54,7 +54,7 @@ export class CreateEntityButton extends React.Component<
       const modal = _flow.modal;
       return (
         <Translation>
-          {t => (
+          {(t) => (
             <>
               <div style={{ position: "absolute" }}>
                 {entity.getCreateView(
@@ -64,21 +64,21 @@ export class CreateEntityButton extends React.Component<
                     wrapperType: "modal",
                     modal: {
                       title: t(`${entity.name}.title.create`, {
-                        defaultValue: `Create ${entity.title}`
+                        defaultValue: `Create ${entity.title}`,
                       }),
                       ...modal,
                       visible: this.state.showModal,
-                      destroyOnClose: true
-                    }
+                      destroyOnClose: true,
+                    },
                   },
                   {
                     onCancel: this.hideModal,
-                    onSave: id => {
+                    onSave: (id) => {
                       this.hideModal();
                       if (onCreate) {
                         onCreate(id);
                       }
-                    }
+                    },
                   }
                 )}
               </div>
