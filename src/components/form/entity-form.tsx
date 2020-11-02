@@ -1,15 +1,13 @@
 import * as React from "react";
 
+import { FormInstance, ResourceForm } from "webpanel-antd";
 import { Resource, ResourceID, useResource } from "webpanel-data";
 import { Spin, message } from "antd";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { FormLayout } from "antd/lib/form/Form";
-import { ModalProps } from "antd/lib/modal";
-import { ResourceForm } from "webpanel-antd";
 import { SaveOption } from "./buttons";
 
 // import { Translation } from "react-i18next";
@@ -30,30 +28,47 @@ export interface IEntityFormConfig {
   form?: IEntityInternalFormProps;
   fields?: Thunk<IEntityFormConfigField[]>;
   initialValues?: { [key: string]: any };
-  modal?: ModalProps;
 }
 
 export interface IEntityFormProps extends IEntityFormConfig {
   entity: Entity;
-  resourceID?: ResourceID;
-  // route?: RouteComponentProps<any>;
+  formRef?: (form: FormInstance) => void;
   onSave?: EntityOnSaveHandler;
-  // onCreate?: (id: string) => void;
-  onCancel?: () => void;
-  useFormContext?: (form: FormContext) => void;
+  onValuesChanged?: (values: any) => void;
 }
 
-export const EntityForm = (props: IEntityFormProps) => {
+export interface IEntityFormEditProps extends IEntityFormProps {
+  resourceID: ResourceID;
+}
+export interface IEntityFormCreateProps extends IEntityFormProps {}
+
+const isEditProps = (props: any): props is IEntityFormEditProps => {
+  return typeof props.resourceID !== "undefined";
+};
+
+export const EntityForm = (
+  props: IEntityFormCreateProps | IEntityFormEditProps
+) => {
+  const { formRef, onSave, onValuesChanged } = props;
+  const [formInstance, setFormInstance] = React.useState<FormInstance>();
+
+  if (formRef && formInstance) {
+    formRef(formInstance);
+  }
+
   const handleFormSuccess = async (resource: Resource) => {
     message.success("Form saved!");
-    const { onSave } = props;
-
     if (onSave) {
       onSave(resource.id || 0, "add");
     }
   };
 
-  const { entity, resourceID, form, initialValues, fields } = props;
+  var resourceID: ResourceID | undefined = undefined;
+  if (isEditProps(props)) {
+    resourceID = props.resourceID;
+  }
+
+  const { entity, form, initialValues, fields } = props;
   let entityFields = entity
     .getEditFields(resourceID)
     .filter((f) => f && f.fetchField() && f.writeable);
@@ -82,31 +97,25 @@ export const EntityForm = (props: IEntityFormProps) => {
     dataSource: entity.dataSource,
   });
 
+  const content = entity.getLayout("edit", {
+    entity,
+    resource,
+    formInstance,
+    id: resourceID,
+    data: resource.data || {},
+    fields,
+  });
+
   return (
     <ResourceForm
       formResource={resource}
-      onSuccess={(context: FormContext) => handleFormSuccess(resource)}
+      onSuccess={() => handleFormSuccess(resource)}
+      formRef={(form) => setFormInstance(form)}
+      onValuesChange={onValuesChanged}
+      layout={"vertical"}
       {...form}
-      render={(formContext: FormContext) => {
-        const content = entity.getLayout("edit", {
-          entity,
-          resource,
-          formContext,
-          id: resourceID,
-          data: resource.data || {},
-          fields,
-        });
-
-        return (
-          <Spin spinning={resource.loading && !resource.polling}>
-            {content}
-            {/* <ResourceFormPageButtons
-                  hasChanges={formContext.form.isFieldsTouched()}
-                  handleReset={() => formContext.formComponent.resetFields()}
-                /> */}
-          </Spin>
-        );
-      }}
-    />
+    >
+      <Spin spinning={resource.loading && !resource.polling}>{content}</Spin>
+    </ResourceForm>
   );
 };

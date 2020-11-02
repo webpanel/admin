@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { Entity } from '../../model/Entity';
+import * as React from "react";
+import { Entity } from "../../model/Entity";
 export interface LayoutBuilderStringFieldProps {
     name: string;
-    layout?: 'horizontal' | 'vertical';
+    layout?: "horizontal" | "vertical";
 }
 export interface LayoutBuilderStringFieldInternalProps {
     entity: Entity;

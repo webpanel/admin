@@ -7,6 +7,7 @@ import { IEntityDetailConfig } from "../pages/detail";
 import { Link } from "webpanel-antd";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
+import { SearchOutlined } from "@ant-design/icons";
 
 export interface IEntityDetailButtonModalFlow {
   type: "modal";
@@ -48,7 +49,7 @@ export class DetailEntityButton extends React.Component<
     if (_flow === "redirect") {
       return (
         <Link to={entity.getDetailLink(entityId)} key={key}>
-          <Button htmlType="button" icon="search" {...button} />
+          <Button htmlType="button" icon={<SearchOutlined />} {...button} />
         </Link>
       );
     }
@@ -66,17 +67,21 @@ export class DetailEntityButton extends React.Component<
                   !hideLinkToDetail &&
                   entity.getDetailButton(entityId, {
                     flow: "redirect",
-                    button: { icon: "select" }
+                    button: { icon: "select" },
                   }),
                 width: "80%",
                 ...modal,
                 visible: this.state.showModal,
-                destroyOnClose: true
+                destroyOnClose: true,
               },
-              ...rest
+              ...rest,
             })}
           </div>
-          <Button icon="search" {...button} onClick={this.showModal} />
+          <Button
+            icon={<SearchOutlined />}
+            {...button}
+            onClick={this.showModal}
+          />
         </>
       );
     }

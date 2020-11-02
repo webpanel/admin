@@ -12,12 +12,12 @@ import { Resource, ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../model/Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormInstance } from "webpanel-antd";
 export interface LayoutBuilderConfig {
     entity: Entity;
     id?: ResourceID;
     data: any;
-    formContext?: FormContext;
+    formInstance?: FormInstance;
     resource: Resource;
 }
 declare type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityFormConfigField;

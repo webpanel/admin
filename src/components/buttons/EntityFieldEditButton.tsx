@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { Button, Popconfirm } from "antd";
 
+import { EditOutlined } from "@ant-design/icons";
 import { EntityField } from "../../model/EntityField";
 
 interface IEntityFieldEditButtonProps {
@@ -26,7 +27,12 @@ export const EntityFieldEditButton = (props: IEntityFieldEditButtonProps) => {
       onConfirm={async () => await onChange(newValue)}
       onCancel={() => setNewValue(null)}
     >
-      <Button shape="circle" icon="edit" size="small" className="no-print" />
+      <Button
+        shape="circle"
+        icon={<EditOutlined />}
+        size="small"
+        className="no-print"
+      />
     </Popconfirm>
   );
 };

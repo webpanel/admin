@@ -1,10 +1,10 @@
 /// <reference types="react" />
-import { IEntityFormConfig, IEntityFormProps } from "../form/entity-form";
-import { ModalProps } from "antd/lib/modal";
+import { IEntityFormConfig, IEntityFormCreateProps, IEntityFormEditProps } from "../form/entity-form";
 export interface IEntityEditConfig extends IEntityFormConfig {
-    wrapperType?: "card" | "plain" | "modal";
-    modal?: ModalProps;
+    wrapperType?: "card" | "plain";
 }
-export interface IEntityEditProps extends IEntityEditConfig, IEntityFormProps {
+export interface IEntityEditProps extends IEntityEditConfig, IEntityFormEditProps {
 }
-export declare const EntityEdit: (props: IEntityEditProps) => JSX.Element;
+export interface IEntityCreateProps extends IEntityEditConfig, IEntityFormCreateProps {
+}
+export declare const EntityEdit: (props: (IEntityEditProps & IEntityEditConfig) | (IEntityCreateProps & IEntityEditConfig)) => JSX.Element;

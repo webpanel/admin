@@ -1,11 +1,11 @@
 import * as React from "react";
-import { ResourceTableFilterDenormalizer, ResourceTableFilterNormalizer } from "webpanel-antd";
-import { FormLayout, ValidationRule } from "antd/lib/form/Form";
 import { InputProps } from "antd/lib/input";
+import { ResourceTableFilterDenormalizer, ResourceTableFilterNormalizer } from "webpanel-antd";
 import { Thunk } from "ts-thunk";
 import { Entity } from "./Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormLayout } from "antd/lib/form/Form";
 import { IEntityListColumnAlign } from "../components/pages/list";
+import { Rule } from "rc-field-form/es/interface";
 export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
@@ -17,7 +17,6 @@ export interface IEntityFieldInputElementProps<T = any> {
     value?: T;
     onChange?: (value?: T, stringValue?: React.ReactNode) => void;
     autoFocus?: boolean;
-    formContext?: FormContext;
 }
 export interface IEntityFieldConfigFilter {
     range?: boolean;
@@ -36,7 +35,7 @@ export interface IEntityFieldConfig<T> {
     readable?: Thunk<boolean>;
     writable?: Thunk<boolean>;
     render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
-    rules?: Thunk<ValidationRule[]>;
+    rules?: Thunk<Rule[]>;
     attributes?: InputProps;
     sortable?: boolean | {
         fields: string[];
@@ -69,7 +68,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     inputElement(props?: IEntityFieldInputElementProps): React.ReactNode;
     get valuePropName(): string;
-    fieldElement(formContext: FormContext, key: string | number, config: {
+    fieldElement(key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;

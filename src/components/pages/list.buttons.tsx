@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { EditOutlined, SearchOutlined } from "@ant-design/icons";
+
 import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import { Button } from "antd";
 import { Entity } from "../../model/Entity";
@@ -27,7 +29,10 @@ export const detailListButton = (
     key="detail-button-action"
     to={props.entity.getDetailLink(props.resourceID)}
   >
-    <Button size={size} icon="search" />
+    <Button
+      size={size == "small" ? "small" : undefined}
+      icon={<SearchOutlined />}
+    />
   </Link>
 );
 
@@ -39,6 +44,9 @@ export const editListButton = (
     key="edit-button-action"
     to={props.entity.getEditLink(props.resourceID)}
   >
-    <Button size={size} icon="edit" />
+    <Button
+      size={size == "small" ? "small" : undefined}
+      icon={<EditOutlined />}
+    />
   </Link>
 );

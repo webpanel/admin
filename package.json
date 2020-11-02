@@ -9,15 +9,22 @@
     "test": "react-scripts-ts test --env=jsdom"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.2.2",
     "@types/inflection": "^1.5.28",
     "@types/numeral": "^0.0.25",
+    "@types/react-router": "^5.1.8",
+    "@types/react-router-dom": "^5.1.6",
     "inflection": "^1.12.0",
     "numeral": "^2.0.6",
+    "rc-field-form": "^1.13.0",
+    "rc-picker": "^2.3.3",
+    "rc-select": "^11.4.2",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "ts-thunk": "^0.1.1"
   },
   "peerDependencies": {
-    "ant-design-pro": "*",
-    "antd": "*",
+    "antd": "^4.7.3",
     "i18next": "*",
     "react-i18next": "*",
     "webpanel-antd": "*",
@@ -28,14 +35,13 @@
     "url": "https://github.com/webpanel/admin.git"
   },
   "devDependencies": {
-    "@types/react": "^16.8.24",
-    "@types/react-dom": "^16.8.5",
-    "ant-design-pro": "^1.4.4",
-    "antd": "^3.26.2",
+    "@types/react": "^16.9.55",
+    "@types/react-dom": "^16.9.9",
+    "antd": "^4.7.3",
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
     "typescript": "^3.7.4",
-    "webpanel-antd": "0.0.35",
+    "webpanel-antd": "^0.2.0",
     "webpanel-data": "^0.1.0"
   }
 }

@@ -16,6 +16,7 @@ import {
   DetailEntityButton,
   DetailEntityProps,
 } from "../components/buttons/EntityDetailButton";
+import { EditOutlined, FolderOutlined } from "@ant-design/icons";
 import {
   EntityDetail,
   IEntityDetailConfig,
@@ -23,6 +24,7 @@ import {
 } from "../components/pages/detail";
 import {
   EntityEdit,
+  IEntityCreateProps,
   IEntityEditConfig,
   IEntityEditProps,
 } from "../components/pages/edit";
@@ -70,7 +72,6 @@ import { EntityFieldColor } from "./fields/EntityFieldColor";
 import { EntityFieldPasssword } from "./fields/EntityFieldPassword";
 import { EntityFieldString } from "./fields/EntityFieldString";
 import { EntityFieldText } from "./fields/EntityFieldText";
-import { EntityOnSaveHandler } from "../components/form/entity-form";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
@@ -98,7 +99,7 @@ interface IEntityEditOptions<T extends { id: ResourceID }> {
 export interface IEntityConfig<T extends { id: ResourceID }> {
   name: Thunk<string>;
   pathPrefix?: Thunk<string>;
-  icon?: Thunk<string>;
+  icon?: Thunk<React.ReactNode>;
   dataSource: Thunk<DataSource>;
   title?: Thunk<string>;
   enabled?: Thunk<boolean>;
@@ -312,14 +313,14 @@ export class Entity<T extends { id: ResourceID } = any> {
   }
 
   public get editLayout():
-    | ((props: IEntityEditProps, resourceID: ResourceID) => React.ReactNode)
+    | ((props: IEntityEditProps) => React.ReactNode)
     | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
     return layouts && layouts.edit;
   }
 
   public get createLayout():
-    | ((props: IEntityEditProps) => React.ReactNode)
+    | ((props: IEntityCreateProps) => React.ReactNode)
     | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
     return layouts && layouts.create;
@@ -374,7 +375,7 @@ export class Entity<T extends { id: ResourceID } = any> {
             }
           </Translation>
         }
-        icon={resolveOptionalThunk(this.config.icon) || "folder"}
+        icon={resolveOptionalThunk(this.config.icon) || <FolderOutlined />}
         {...props}
       />
     );
@@ -392,16 +393,16 @@ export class Entity<T extends { id: ResourceID } = any> {
             }
           </Translation>
         }
-        header={
-          {
-            // title: undefined //this.title,
-            // action: (
-            //   <Link to="new">
-            //     <Button htmlType="button">+</Button>
-            //   </Link>
-            // )
-          }
-        }
+        // header={
+        //   {
+        //     // title: undefined //this.title,
+        //     // action: (
+        //     //   <Link to="new">
+        //     //     <Button htmlType="button">+</Button>
+        //     //   </Link>
+        //     // )
+        //   }
+        // }
         content={() => this.getListView(this.getListConfig())}
         {...props}
       >
@@ -412,11 +413,11 @@ export class Entity<T extends { id: ResourceID } = any> {
               {(t) => t("common.new", { defaultValue: "New" })}
             </Translation>
           }
-          header={
-            {
-              // title: 'New'
-            }
-          }
+          // header={
+          //   {
+          //     // title: 'New'
+          //   }
+          // }
           content={this.getCreatePageLayout}
         />
         <Layout.StructureItem
@@ -426,14 +427,14 @@ export class Entity<T extends { id: ResourceID } = any> {
               {(t) => t("common.detail", { defaultValue: "Detail" })}
             </Translation>
           }
-          header={(route: RouteComponentProps<any>) => ({
-            // title: `Detail`,
-            // action: (
-            //   <Link to={`${route.match.params.id}/edit`}>
-            //     <Button htmlType="button">Edit</Button>
-            //   </Link>
-            // )
-          })}
+          // header={(route: RouteComponentProps<any>) => ({
+          //   // title: `Detail`,
+          //   // action: (
+          //   //   <Link to={`${route.match.params.id}/edit`}>
+          //   //     <Button htmlType="button">Edit</Button>
+          //   //   </Link>
+          //   // )
+          // })}
           content={this.getDetailPageLayout}
         />
         <Layout.StructureItem
@@ -443,11 +444,11 @@ export class Entity<T extends { id: ResourceID } = any> {
               {(t) => t("common.edit", { defaultValue: "Edit" })}
             </Translation>
           }
-          header={
-            {
-              // title: 'Edit'
-            }
-          }
+          // header={
+          //   {
+          //     // title: 'Edit'
+          //   }
+          // }
           content={this.getEditPageLayout}
         />
       </Layout.StructureItem>
@@ -502,12 +503,12 @@ export class Entity<T extends { id: ResourceID } = any> {
   };
   private getEditPageLayout = (
     route: RouteComponentProps<any>,
-    config?: IEntityEditConfig
+    props?: Omit<IEntityEditProps, "resourceID">
   ) => {
     const onSave = this.handleFormOnSave(route);
     const resourceID = route.match.params.id;
     if (this.editLayout) {
-      return this.editLayout({ entity: this, onSave, ...config }, resourceID);
+      return this.editLayout({ entity: this, onSave, resourceID, ...props });
     }
     return (
       <EntityEdit
@@ -515,7 +516,7 @@ export class Entity<T extends { id: ResourceID } = any> {
         onSave={onSave}
         resourceID={resourceID}
         {...this.getEditConfig(resourceID)}
-        {...config}
+        {...props}
       />
     );
   };
@@ -542,9 +543,7 @@ export class Entity<T extends { id: ResourceID } = any> {
   public getListView = (
     config?: Thunk<IEntityListConfig<T>>
   ): React.ReactNode => {
-    return (
-      <EntityList entity={this} dataSource={this.dataSource} {...config} />
-    );
+    return <EntityList entity={this} {...config} />;
   };
 
   public getDetailView = (
@@ -569,54 +568,34 @@ export class Entity<T extends { id: ResourceID } = any> {
   };
 
   public getCreateView = (
-    config?: IEntityEditConfig,
-    handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
+    props?: Omit<IEntityCreateProps, "entity">
   ): React.ReactNode => {
-    const { onSave, onCancel } = handlers || {
-      onSave: undefined,
-      onCancel: undefined,
-    };
     if (this.createLayout) {
-      return this.createLayout({ entity: this, onSave, onCancel, ...config });
+      return this.createLayout({ entity: this, ...props });
     }
-    return (
-      <EntityEdit
-        entity={this}
-        onSave={onSave}
-        onCancel={onCancel}
-        {...this.getEditConfig()}
-        {...config}
-      />
-    );
+    return <EntityEdit entity={this} {...this.getEditConfig()} {...props} />;
   };
 
-  public getCreateButton = (props: CreateEntityProps): React.ReactNode => {
+  public getCreateButton = (
+    props: Omit<CreateEntityProps, "entity">
+  ): React.ReactNode => {
     return <CreateEntityButton entity={this} {...props} />;
   };
 
   public getEditView = (
-    resourceID: ResourceID,
-    config?: IEntityEditConfig,
-    handlers?: { onSave?: EntityOnSaveHandler; onCancel?: () => void }
+    props: Omit<IEntityEditProps, "entity">
   ): React.ReactNode => {
-    const { onSave, onCancel } = handlers || {
-      onSave: undefined,
-      onCancel: undefined,
-    };
+    // const { onSave } = handlers || {
+    //   onSave: undefined,
+    // };
     if (this.editLayout) {
-      return this.editLayout(
-        { entity: this, onSave, onCancel, ...config },
-        resourceID
-      );
+      return this.editLayout({ entity: this, ...props });
     }
     return (
       <EntityEdit
         entity={this}
-        resourceID={resourceID}
-        onSave={onSave}
-        onCancel={onCancel}
-        {...this.getEditConfig(resourceID)}
-        {...config}
+        {...this.getEditConfig(props.resourceID)}
+        {...props}
       />
     );
   };
@@ -624,7 +603,7 @@ export class Entity<T extends { id: ResourceID } = any> {
   public getEditButton = (resourceID: ResourceID): React.ReactNode => {
     return (
       <Link to={this.getEditLink(resourceID)}>
-        <Button size="small" htmlType="button" icon="edit" />
+        <Button size="small" htmlType="button" icon={<EditOutlined />} />
       </Link>
     );
   };

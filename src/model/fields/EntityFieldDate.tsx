@@ -5,12 +5,12 @@ import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps,
-  IEntityFieldRenderOptions
+  IEntityFieldRenderOptions,
 } from "../EntityField";
 
 import { DatePicker as AntdDatePicker } from "antd";
 import { DatePicker } from "../../components/date-picker";
-import { RangePickerValue } from "antd/lib/date-picker/interface";
+import { RangeValue } from "rc-picker/lib/interface";
 
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
   showTime?: boolean;
@@ -45,7 +45,7 @@ export class EntityFieldDate<T> extends EntityField<
     record: T,
     options?: IEntityFieldRenderOptions
   ) => React.ReactNode {
-    return values => {
+    return (values) => {
       return this.renderValue(values[this.name]);
     };
   }
@@ -80,11 +80,13 @@ export class EntityFieldDate<T> extends EntityField<
         format={this.config.format}
         allowClear={false}
         value={[value[0] && moment(value[0]), value[1] && moment(value[1])]}
-        onChange={(dates: RangePickerValue) => {
-          props.setSelectedKeys([
-            moment(dates[0] || undefined).startOf("day"),
-            moment(dates[1] || undefined).endOf("day")
-          ]);
+        onChange={(dates: RangeValue<any>) => {
+          if (dates != null) {
+            props.setSelectedKeys([
+              moment(dates[0] || undefined).startOf("day"),
+              moment(dates[1] || undefined).endOf("day"),
+            ]);
+          }
         }}
       />
     ) : (
@@ -94,7 +96,7 @@ export class EntityFieldDate<T> extends EntityField<
         onChange={(date: moment.Moment) => {
           props.setSelectedKeys([
             moment(date).startOf("day"),
-            moment(date).endOf("day")
+            moment(date).endOf("day"),
           ]);
         }}
       />
@@ -126,7 +128,7 @@ export class EntityFieldDate<T> extends EntityField<
       ) {
         res = [
           moment(values[this.columnName() + "_gte"]),
-          moment(values[this.columnName() + "_lte"])
+          moment(values[this.columnName() + "_lte"]),
         ];
       }
       return res;

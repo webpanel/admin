@@ -1,6 +1,7 @@
 import * as React from "react";
 
-import { Button, Icon, Popconfirm } from "antd";
+import { Button, Popconfirm } from "antd";
+import { EditOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import { EntityField } from "../../model/EntityField";
 import { ResourceCollection } from "webpanel-data";
@@ -24,7 +25,7 @@ export interface IListCellState {
 export class ListCell extends React.Component<IListCellProps, IListCellState> {
   state: IListCellState = {
     editing: false,
-    saving: false
+    saving: false,
   };
 
   onChange = async (value: any, valueElement: React.ReactNode) => {
@@ -48,7 +49,7 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
     this.setState({
       editing: false,
       saving: false,
-      currentValue: field.render(item.data, { size: "small" })
+      currentValue: field.render(item.data, { size: "small" }),
     });
   };
 
@@ -67,17 +68,17 @@ export class ListCell extends React.Component<IListCellProps, IListCellState> {
                   : values[field.columnName()],
               onChange: (value: any, valueElement: React.ReactNode) => {
                 this.onChange(value, valueElement);
-              }
+              },
             })}
             onConfirm={() => this.save()}
             onCancel={() => this.cancel()}
           >
             {saving ? (
-              <Icon type="loading" />
+              <LoadingOutlined />
             ) : (
               <Button
                 shape="circle"
-                icon="edit"
+                icon={<EditOutlined />}
                 size="small"
                 className="no-print"
                 style={{ marginLeft: "10px" }}

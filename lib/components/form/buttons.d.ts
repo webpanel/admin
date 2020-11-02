@@ -1,9 +1,7 @@
-import * as React from "react";
+/// <reference types="react" />
 export declare type SaveOption = "edit" | "add";
 export interface ResourceFormButtonsProps {
-    hasChanges: boolean;
-    handleReset: () => void;
+    reset: () => void;
+    submit: () => Promise<void>;
 }
-export declare class ResourceFormPageButtons extends React.Component<ResourceFormButtonsProps> {
-    render(): React.ReactNode;
-}
+export declare const ResourceFormPageButtons: (props: ResourceFormButtonsProps) => JSX.Element;

@@ -3,7 +3,7 @@ import * as React from "react";
 import {
   EntityField,
   IEntityFieldConfig,
-  IEntityFieldRenderOptions
+  IEntityFieldRenderOptions,
 } from "../EntityField";
 import { Input, Tooltip } from "antd";
 
@@ -26,7 +26,7 @@ export class EntityFieldText<
       <Input.TextArea
         key={`text_field_${this.entity.name}_${this.valuePropName}`}
         {...props}
-        autosize={{ minRows: 2, maxRows: 8 }}
+        autoSize={{ minRows: 2, maxRows: 8 }}
         onChange={onChangeProp}
       />
     );

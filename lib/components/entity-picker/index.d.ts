@@ -2,7 +2,7 @@
 import { Entity } from "../../model/Entity";
 import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
 import { SelectProps } from "antd/lib/select";
-export interface EntitySelectConfig extends SelectProps, Partial<ResourceCollectionLayerProps> {
+export interface EntitySelectConfig extends SelectProps<any>, Partial<ResourceCollectionLayerProps> {
     key?: string;
 }
 export interface EntitySelectProps extends EntitySelectConfig {

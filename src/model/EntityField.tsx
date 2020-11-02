@@ -2,18 +2,19 @@ import * as React from "react";
 import * as inflection from "inflection";
 
 import { Button, Tooltip } from "antd";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import Input, { InputProps } from "antd/lib/input";
 import {
-  FormField,
   ResourceTableFilterDenormalizer,
   ResourceTableFilterNormalizer,
 } from "webpanel-antd";
-import { FormLayout, ValidationRule } from "antd/lib/form/Form";
-import Input, { InputProps } from "antd/lib/input";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "./Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import FormItem from "antd/lib/form/FormItem";
+import { FormLayout } from "antd/lib/form/Form";
 import { IEntityListColumnAlign } from "../components/pages/list";
+import { Rule } from "rc-field-form/es/interface";
 import { Translation } from "react-i18next";
 
 // import { ResourceCollection } from 'webpanel-data';
@@ -31,7 +32,6 @@ export interface IEntityFieldInputElementProps<T = any> {
   value?: T;
   onChange?: (value?: T, stringValue?: React.ReactNode) => void;
   autoFocus?: boolean;
-  formContext?: FormContext;
 }
 
 export interface IEntityFieldConfigFilter {
@@ -60,7 +60,7 @@ export interface IEntityFieldConfig<T> {
   readable?: Thunk<boolean>;
   writable?: Thunk<boolean>;
   render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
-  rules?: Thunk<ValidationRule[]>;
+  rules?: Thunk<Rule[]>;
   attributes?: InputProps;
   sortable?: boolean | { fields: string[] };
   filter?: IEntityFieldConfigFilter | boolean;
@@ -217,7 +217,6 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public fieldElement(
-    formContext: FormContext,
     key: string | number,
     config: { formLayout?: FormLayout }
   ): React.ReactNode {
@@ -230,22 +229,21 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
         : null;
 
     return (
-      <Translation>
+      <Translation key={key}>
         {(t) => (
-          <FormField
+          <FormItem
             key={key}
             label={t(`${this.entity.name}.${this.name}`, {
               defaultValue: this.title,
             })}
             extra={resolveOptionalThunk(this.config.description)}
             name={this.columnName()}
-            formContext={formContext}
             valuePropName={this.valuePropName}
             rules={resolveOptionalThunk(this.config.rules)}
             {...formItemLayout}
           >
-            {this.inputElement({ formContext })}
-          </FormField>
+            {this.inputElement()}
+          </FormItem>
         )}
       </Translation>
     );
@@ -296,12 +294,12 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
             disabled={!props.selectedKeys}
             onClick={() => props.confirm()}
             type="primary"
-            icon="search"
+            icon={<SearchOutlined />}
           />
           <Button
             disabled={!props.selectedKeys}
             onClick={() => props.clearFilters()}
-            icon="delete"
+            icon={<DeleteOutlined />}
           />
         </div>
       );

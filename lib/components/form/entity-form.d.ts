@@ -1,10 +1,9 @@
 /// <reference types="react" />
+import { FormInstance } from "webpanel-antd";
 import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
 import { Entity } from "../../model/Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { FormLayout } from "antd/lib/form/Form";
-import { ModalProps } from "antd/lib/modal";
 import { SaveOption } from "./buttons";
 export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 export interface IEntityFormFieldOptions {
@@ -20,14 +19,17 @@ export interface IEntityFormConfig {
     initialValues?: {
         [key: string]: any;
     };
-    modal?: ModalProps;
 }
 export interface IEntityFormProps extends IEntityFormConfig {
     entity: Entity;
-    resourceID?: ResourceID;
+    formRef?: (form: FormInstance) => void;
     onSave?: EntityOnSaveHandler;
-    onCancel?: () => void;
-    useFormContext?: (form: FormContext) => void;
+    onValuesChanged?: (values: any) => void;
 }
-export declare const EntityForm: (props: IEntityFormProps) => JSX.Element;
+export interface IEntityFormEditProps extends IEntityFormProps {
+    resourceID: ResourceID;
+}
+export interface IEntityFormCreateProps extends IEntityFormProps {
+}
+export declare const EntityForm: (props: IEntityFormEditProps | IEntityFormCreateProps) => JSX.Element;
 export {};

@@ -3,23 +3,22 @@ import "../../../styles/entity-list.css";
 import * as React from "react";
 
 import {
-  DataSource,
+  EntitylistActionButton,
+  detailListButton,
+  editListButton,
+} from "./list.buttons";
+import {
   ResourceCollection,
   ResourceCollectionLayer,
   ResourceCollectionOptions,
   ResourceID,
 } from "webpanel-data";
 import {
-  EntitylistActionButton,
-  detailListButton,
-  editListButton,
-} from "./list.buttons";
-import { PaginationConfig, TableProps } from "antd/lib/table";
-import {
   ResourceSearchInput,
   ResourceTable,
   ResourceTableActionButtonProps,
 } from "webpanel-antd";
+import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Card } from "antd";
@@ -41,7 +40,7 @@ export interface IEntityListTableProps
   actionButtons?: EntitylistActionButton[];
   actionButtonsTitle?: React.ReactNode;
   actionButtonsFixed?: boolean;
-  pagination?: PaginationConfig | false;
+  pagination?: TablePaginationConfig | false;
 }
 
 export type IEntityListColumnRender = (
@@ -93,7 +92,6 @@ export interface IEntityListConfig<T extends { id: ResourceID }>
 export interface IEntityListProps<T extends { id: ResourceID }>
   extends IEntityListConfig<T> {
   entity: Entity<T>;
-  dataSource: DataSource;
 }
 
 export interface EntityListTitleRenderProps<T> {
@@ -265,7 +263,7 @@ export class EntityList<
               ? _addButton
               : entity.getCreateButton({
                   button: { size: "small" },
-                  onCreate: () => resource.reload(),
+                  onSave: () => resource.reload(),
                   ...(typeof _addButton === "object" ? _addButton : {}),
                 })),
           // <EntityAddButton
@@ -332,7 +330,7 @@ export class EntityList<
   ): React.ReactNode {
     const { entity, table } = this.props;
 
-    const defaultPagination: PaginationConfig = {
+    const defaultPagination: TablePaginationConfig = {
       defaultPageSize: 30,
       pageSizeOptions: ["10", "20", "30", "50", "100"],
       showSizeChanger: true,
@@ -398,7 +396,7 @@ export class EntityList<
         {(t) => (
           <ResourceCollectionLayer
             name={entity.name}
-            dataSource={this.props.dataSource}
+            dataSource={entity.dataSource}
             {...restProps}
             fields={fields}
             initialSorting={initialSorting || entity.initialSorting}

@@ -1,40 +1,42 @@
 import * as React from "react";
 
-import { Button, Form, Popconfirm } from "antd";
+import { Button, Form } from "antd";
 
 export type SaveOption = "edit" | "add";
 
 export interface ResourceFormButtonsProps {
-  hasChanges: boolean;
-  handleReset: () => void;
+  reset: () => void;
+  submit: () => Promise<void>;
 }
 
-export class ResourceFormPageButtons extends React.Component<
-  ResourceFormButtonsProps
-> {
-  render(): React.ReactNode {
-    const { handleReset, hasChanges } = this.props;
-    return (
-      <Form.Item
-        wrapperCol={{
-          xs: { span: 24, offset: 0 },
-          sm: { span: 16, offset: 8 },
+export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
+  const { reset: handleReset, submit: handleSave } = props;
+  const [saving, setSaving] = React.useState(false);
+  return (
+    <Form.Item
+      key="form-buttons"
+      wrapperCol={{
+        xs: { span: 24, offset: 0 },
+        sm: { span: 16, offset: 8 },
+      }}
+    >
+      <Button
+        type="primary"
+        loading={saving}
+        onClick={async () => {
+          setSaving(true);
+          try {
+            await handleSave();
+          } finally {
+            setSaving(false);
+          }
         }}
       >
-        <Button type="primary" htmlType="submit">
-          Save
-        </Button>
-        <Popconfirm
-          title="Reset?"
-          cancelText="No"
-          okText="Yes"
-          onConfirm={handleReset}
-        >
-          <Button disabled={!hasChanges} style={{ marginLeft: 8 }}>
-            Reset
-          </Button>
-        </Popconfirm>
-      </Form.Item>
-    );
-  }
-}
+        Save
+      </Button>
+      <Button style={{ marginLeft: 8 }} onClick={handleReset}>
+        Reset
+      </Button>
+    </Form.Item>
+  );
+};

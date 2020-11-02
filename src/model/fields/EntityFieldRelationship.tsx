@@ -1,25 +1,25 @@
 import * as React from "react";
 
+import { Col, Row, Tag } from "antd";
 import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps,
   IEntityFieldRenderOptions,
 } from "../EntityField";
-import { FormField, ResourceSelect } from "webpanel-antd";
 import { ResourceCollection, ResourceID } from "webpanel-data";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
 
 // import { CreateEntityButton } from '../../components/buttons/EntityAddButton';
 import { Entity } from "../Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import FormItem from "antd/lib/form/FormItem";
 import { FormLayout } from "antd/lib/form/Form";
-import { Tag } from "antd";
+import { ResourceSelect } from "webpanel-antd";
 // import { IEntityEditConfig } from '../../components/pages/edit';
 import { Translation } from "react-i18next";
 
 export type IEntityFieldRelationshipType = "toOne" | "toMany";
-export type IEntityFieldRelationshipSelectMode = "default" | "multiple";
+export type IEntityFieldRelationshipSelectMode = undefined | "multiple";
 
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
@@ -27,6 +27,87 @@ export interface IEntityFieldRelationshipConfig<T>
   type: IEntityFieldRelationshipType;
   creatable?: Thunk<boolean>;
 }
+
+type SelectValueType = string | string[];
+interface RelationshipSelectWithAddButtonProps {
+  field: EntityFieldRelationship<any>;
+  targetEntity: Entity<any>;
+  isCreatable: boolean;
+  onChange?: (value: SelectValueType) => void;
+  value?: SelectValueType;
+}
+const RelationshipSelectWithAddButton = (
+  props: RelationshipSelectWithAddButtonProps
+) => {
+  const { field, targetEntity, isCreatable, onChange, value } = props;
+
+  return (
+    <>
+      {targetEntity.getSearchResourceCollectionLayer(
+        (collection: ResourceCollection<any>) => (
+          <Row>
+            <Col flex="auto">
+              <ResourceSelect
+                // key={`relationship_field_${entity.name}_${this.valuePropName}`}
+                value={value}
+                valueKey="id"
+                labelKey={(value: any): React.ReactNode => {
+                  return targetEntity.render(value);
+                }}
+                mode={field.mode}
+                resourceCollection={collection}
+                showSearch={true}
+                style={{
+                  width: "100%",
+                  minWidth: "200px",
+                  // marginRight: isCreatable ? "-38px" : undefined,
+                  // paddingRight: isCreatable ? "38px" : undefined,
+                }}
+                onChange={(value) => onChange && onChange(value)}
+              />
+            </Col>
+            {isCreatable && (
+              <Col flex="32px">
+                {targetEntity.getCreateButton({
+                  key: `relationship_field_${field.entity.name}_${field.valuePropName}_add`,
+                  button: {
+                    // style: {
+                    //   margin:
+                    //     config.formLayout === "horizontal"
+                    //       ? "4px 0 0 4px"
+                    //       : "0 0 0 4px",
+                    // },
+                  },
+                  flow: {
+                    type: "modal",
+                    modal: {
+                      title: `Add ${targetEntity.title}`,
+                      width: "70%",
+                    },
+                  },
+                  onSave: async (id: ResourceID) => {
+                    await collection.get();
+                    let updateValues = {};
+                    updateValues[field.columnName()] = id;
+                    if (onChange) {
+                      if (field.mode === "multiple") {
+                        const ids = value as string[];
+                        ids.push(id.toString());
+                        onChange(ids);
+                      } else {
+                        onChange(id.toString());
+                      }
+                    }
+                  },
+                })}
+              </Col>
+            )}
+          </Row>
+        )
+      )}
+    </>
+  );
+};
 
 export class EntityFieldRelationship<T> extends EntityField<
   T,
@@ -41,7 +122,7 @@ export class EntityFieldRelationship<T> extends EntityField<
   }
 
   public get mode(): IEntityFieldRelationshipSelectMode {
-    return this.type === "toOne" ? "default" : "multiple";
+    return this.type === "toOne" ? undefined : "multiple";
   }
 
   public fetchField(): string | null {
@@ -79,7 +160,6 @@ export class EntityFieldRelationship<T> extends EntityField<
   }
 
   public fieldElement(
-    formContext: FormContext,
     key: string | number,
     config: { formLayout?: FormLayout }
   ): React.ReactNode {
@@ -99,23 +179,30 @@ export class EntityFieldRelationship<T> extends EntityField<
       _targetEntity.creatable &&
       (_isCreatable || typeof _isCreatable === "undefined");
 
-    return _targetEntity.getSearchResourceCollectionLayer(
-      (collection: ResourceCollection<any>) => (
-        <Translation key={key}>
-          {(t) => (
-            <FormField
-              label={t(`${this.entity.name}.${this.name}`, {
-                defaultValue: this.title,
-              })}
-              extra={this.config.description}
-              name={this.columnName()}
-              formContext={formContext}
-              style={{
-                width: "100%",
-              }}
-              rules={resolveOptionalThunk(this.config.rules)}
-              {...formItemLayout}
-            >
+    return (
+      <Translation key={key}>
+        {(t) => (
+          <FormItem
+            label={t(`${this.entity.name}.${this.name}`, {
+              defaultValue: this.title,
+            })}
+            extra={this.config.description}
+            name={this.columnName()}
+            style={{
+              width: "100%",
+            }}
+            rules={resolveOptionalThunk(this.config.rules)}
+            {...formItemLayout}
+          >
+            <RelationshipSelectWithAddButton
+              field={this}
+              targetEntity={_targetEntity}
+              isCreatable={isCreatable}
+            />
+            {/* <RelationshipSelectWithAddButton>
+                !!!!!!!!!!
+              </RelationshipSelectWithAddButton>
+
               <ResourceSelect
                 key={`relationship_field_${this.entity.name}_${this.valuePropName}`}
                 valueKey="id"
@@ -154,19 +241,18 @@ export class EntityFieldRelationship<T> extends EntityField<
                     await collection.get();
                     let updateValues = {};
                     updateValues[this.columnName()] = id;
-                    formContext.form.setFieldsValue(updateValues);
+                    // formInstance?.setFieldsValue(updateValues);
                   },
-                })}
-            </FormField>
-          )}
-        </Translation>
-      )
+                })} */}
+          </FormItem>
+        )}
+      </Translation>
     );
   }
 
   public inputElement(props?: {
     value?: any;
-    onChange?: (value: any, valueElement: React.ReactNode) => void;
+    onChange?: (value: any) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
     const { targetEntity } = this.config;
@@ -174,21 +260,9 @@ export class EntityFieldRelationship<T> extends EntityField<
 
     const onChange = props && props.onChange;
     const onChangeProp = onChange
-      ? (
-          value: any,
-          option: React.ReactElement<any> | React.ReactElement<any>[]
-        ) => {
-          const options: React.ReactElement<any>[] = Array.isArray(option)
-            ? option
-            : [option];
+      ? (value: any) => {
           // const array: LabeledValue[] = Array.isArray(value) ? value : [value];
-          onChange(
-            value || null,
-            options
-              .map((o) => o && o.props.children)
-              .filter((x) => x)
-              .join(", ")
-          );
+          onChange(value || null);
         }
       : undefined;
 
@@ -208,6 +282,12 @@ export class EntityFieldRelationship<T> extends EntityField<
             resourceCollection={collection}
             // labelInValue={true}
             onChange={onChangeProp}
+            // onChange={(value) => {
+            // const options = Array.isArray(option) ? option : option;
+            // if(onChangeProp){
+            // onChangeProp(value,options)
+            // }
+            // }}
           />
         );
       }
@@ -283,10 +363,7 @@ export const getRelationshipFilterDropdownInput = (
           showSearch={true}
           resourceCollection={resource}
           style={{ minWidth: "200px" }}
-          onChange={(
-            value: string | string[],
-            option: React.ReactElement<any> | React.ReactElement<any>[]
-          ) => {
+          onChange={(value: string | string[]) => {
             if (Array.isArray(value)) {
               props.setSelectedKeys(value);
             } else {

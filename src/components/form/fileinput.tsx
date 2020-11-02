@@ -1,7 +1,8 @@
 import * as React from "react";
 import * as numeral from "numeral";
 
-import { Button, Icon, Upload } from "antd";
+import { Button, Upload } from "antd";
+import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "../../model/Entity";
@@ -110,7 +111,7 @@ export class FileInput extends React.Component<
       <>
         {this.renderFile()}
         <Button
-          icon="cross"
+          icon={<CloseOutlined />}
           onClick={() => this.udpateValue(null)}
           size="small"
         />
@@ -122,7 +123,7 @@ export class FileInput extends React.Component<
         headers={headers}
       >
         <Button>
-          <Icon type="upload" /> Upload
+          <UploadOutlined /> Upload
         </Button>
       </Upload>
     );

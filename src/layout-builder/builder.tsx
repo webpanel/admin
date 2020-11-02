@@ -31,7 +31,7 @@ import { Descriptions } from "antd";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../model/Entity";
 import { EntityField } from "../model/EntityField";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormInstance } from "webpanel-antd";
 import { LayoutBuilderEditButton } from "./components/edit-button";
 import { Translation } from "react-i18next";
 
@@ -39,7 +39,7 @@ export interface LayoutBuilderConfig {
   entity: Entity;
   id?: ResourceID;
   data: any;
-  formContext?: FormContext;
+  formInstance?: FormInstance;
   resource: Resource;
 }
 
@@ -216,17 +216,11 @@ export class LayoutBuilder {
   editField(
     props: Thunk<LayoutBuilderEditFieldProps, LayoutBuilderConfig>
   ): React.ReactNode {
-    const formContext = this.config.formContext;
-
-    if (!formContext) {
-      throw new Error("cannot create editField without formContext");
-    }
-
     return (
       <LayoutBuilderEditField
+        key={`LayoutBuilderEditField_${this.config.entity.name}_${props.name}`}
         {...resolveThunk(props, this.config)}
         entity={this.config.entity}
-        formContext={formContext}
       />
     );
   }
@@ -241,6 +235,6 @@ export class LayoutBuilder {
   }
 
   formValue(name: string): any {
-    return this.config.formContext?.form.getFieldValue(name);
+    return this.config.formInstance?.getFieldValue(name);
   }
 }

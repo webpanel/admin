@@ -2,10 +2,9 @@ import * as React from "react";
 import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps, IEntityFieldRenderOptions } from "../EntityField";
 import { Thunk } from "ts-thunk";
 import { Entity } from "../Entity";
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { FormLayout } from "antd/lib/form/Form";
 export declare type IEntityFieldRelationshipType = "toOne" | "toMany";
-export declare type IEntityFieldRelationshipSelectMode = "default" | "multiple";
+export declare type IEntityFieldRelationshipSelectMode = undefined | "multiple";
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
     targetEntity: Thunk<Entity>;
     type: IEntityFieldRelationshipType;
@@ -17,12 +16,12 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
     get mode(): IEntityFieldRelationshipSelectMode;
     fetchField(): string | null;
     get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
-    fieldElement(formContext: FormContext, key: string | number, config: {
+    fieldElement(key: string | number, config: {
         formLayout?: FormLayout;
     }): React.ReactNode;
     inputElement(props?: {
         value?: any;
-        onChange?: (value: any, valueElement: React.ReactNode) => void;
+        onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<string>) => React.ReactNode;

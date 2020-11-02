@@ -1,9 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Button } from 'antd';
-import { Entity } from '../../model/Entity';
-import { Link } from 'webpanel-antd';
-import { RowProps } from 'antd/lib/row';
+import { Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { Entity } from "../../model/Entity";
+import { Link } from "webpanel-antd";
+import { RowProps } from "antd/lib/row";
 
 export interface LayoutEditButtonInternalProps extends RowProps {
   entity: Entity;
@@ -17,7 +18,7 @@ export class LayoutBuilderEditButton extends React.Component<
     const { entity, data } = this.props;
     return (
       <Link to={entity.getEditLink(data.id)}>
-        <Button size="small" htmlType="button" icon="edit" />
+        <Button size="small" htmlType="button" icon={<EditOutlined />} />
       </Link>
     );
   }

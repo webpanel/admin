@@ -1,12 +1,12 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Entity } from '../../model/Entity';
-import { Form } from 'antd';
-import { Translation } from 'react-i18next';
+import { Entity } from "../../model/Entity";
+import { Form } from "antd";
+import { Translation } from "react-i18next";
 
 export interface LayoutBuilderStringFieldProps {
   name: string;
-  layout?: 'horizontal' | 'vertical';
+  layout?: "horizontal" | "vertical";
 }
 
 export interface LayoutBuilderStringFieldInternalProps {
@@ -21,23 +21,23 @@ export class LayoutBuilderStringField extends React.Component<
     horizontal: {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
-      }
+        sm: { span: 16 },
+      },
     },
     vertical: {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
-      }
-    }
+        sm: { span: 16 },
+      },
+    },
   };
 
   render(): React.ReactNode {
@@ -54,14 +54,12 @@ export class LayoutBuilderStringField extends React.Component<
 
     return (
       <Translation>
-        {t => (
+        {(t) => (
           <Form.Item
             {...props}
-            //   key={key}
             label={t(field.name, { defaultValue: field.title })}
             colon={field.title ? true : false}
-            //   className={`${item.value === null ? '' : 'rounded'} job-info__item`}
-            {...this.layouts[layout || 'horizontal']}
+            {...this.layouts[layout || "horizontal"]}
           >
             {field.render(data)}
           </Form.Item>

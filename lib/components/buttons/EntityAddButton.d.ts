@@ -1,16 +1,14 @@
-import * as React from "react";
+/// <reference types="react" />
 import { ButtonProps } from "antd/lib/button";
 import { Entity } from "../../model/Entity";
-import { IEntityFormConfig } from "../form/entity-form";
+import { IEntityFormProps } from "../form/entity-form";
 import { ModalProps } from "antd/lib/modal";
-import { ResourceID } from "webpanel-data";
 export interface IEntityAddButtonModalFlow {
     type: "modal";
     modal?: ModalProps;
 }
 declare type FlowType = "redirect" | IEntityAddButtonModalFlow;
-export interface CreateEntityProps extends IEntityFormConfig {
-    onCreate?: (id: ResourceID) => void;
+export interface CreateEntityProps extends IEntityFormProps {
     flow?: FlowType;
     key?: string;
     button?: ButtonProps;
@@ -18,13 +16,5 @@ export interface CreateEntityProps extends IEntityFormConfig {
 export interface CreateEntityButtonProps extends CreateEntityProps {
     entity: Entity;
 }
-export declare class CreateEntityButton extends React.Component<CreateEntityButtonProps, {
-    showModal: boolean;
-}> {
-    state: {
-        showModal: boolean;
-    };
-    render(): JSX.Element | "unexpected flow";
-    private hideModal;
-}
+export declare const CreateEntityButton: (props: CreateEntityButtonProps) => JSX.Element;
 export {};

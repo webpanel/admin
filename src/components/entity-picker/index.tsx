@@ -7,7 +7,7 @@ import { ResourceSelect } from "webpanel-antd";
 import { SelectProps } from "antd/lib/select";
 
 export interface EntitySelectConfig
-  extends SelectProps,
+  extends SelectProps<any>,
     Partial<ResourceCollectionLayerProps> {
   key?: string;
 }

@@ -1,8 +1,8 @@
 import "../../../styles/entity-list.css";
 import * as React from "react";
-import { DataSource, ResourceCollection, ResourceCollectionOptions, ResourceID } from "webpanel-data";
 import { EntitylistActionButton } from "./list.buttons";
-import { PaginationConfig, TableProps } from "antd/lib/table";
+import { ResourceCollection, ResourceCollectionOptions, ResourceID } from "webpanel-data";
+import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk } from "ts-thunk";
 import { CardProps } from "antd/lib/card";
 import { CreateEntityProps } from "../buttons/EntityAddButton";
@@ -15,7 +15,7 @@ export interface IEntityListTableProps extends TableProps<any>, ResourceCollecti
     actionButtons?: EntitylistActionButton[];
     actionButtonsTitle?: React.ReactNode;
     actionButtonsFixed?: boolean;
-    pagination?: PaginationConfig | false;
+    pagination?: TablePaginationConfig | false;
 }
 export declare type IEntityListColumnRender = (value: any, values: any, index: number, field: EntityField<any, any>) => React.ReactNode | {
     childre: React.ReactNode;
@@ -51,7 +51,6 @@ export interface IEntityListProps<T extends {
     id: ResourceID;
 }> extends IEntityListConfig<T> {
     entity: Entity<T>;
-    dataSource: DataSource;
 }
 export interface EntityListTitleRenderProps<T> {
     title: string;

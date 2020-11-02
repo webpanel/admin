@@ -3,10 +3,10 @@ import * as React from "react";
 import {
   EntityField,
   IEntityFieldConfig,
-  IEntityFieldInputElementProps
+  IEntityFieldInputElementProps,
 } from "../EntityField";
 
-import { FormContext } from "webpanel-antd/lib/form/form/Form";
+import { FormInstance } from "webpanel-antd";
 
 export interface IEntityFieldCustomConfig<T> extends IEntityFieldConfig<T> {
   fetchField?: string;
@@ -14,7 +14,7 @@ export interface IEntityFieldCustomConfig<T> extends IEntityFieldConfig<T> {
   inputElement: (props: {
     value: T | undefined;
     onChange: (value?: T) => void;
-    formContext?: FormContext;
+    formInstance?: FormInstance;
   }) => React.ReactNode;
 }
 
@@ -38,7 +38,6 @@ export class EntityFieldCustom<
     return this.config.inputElement({
       value: props && props.value,
       onChange: onChangeProp,
-      formContext: props?.formContext
     });
   }
 }
