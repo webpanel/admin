@@ -59,7 +59,7 @@ export const EntityForm = (
   const handleFormSuccess = async (resource: Resource) => {
     message.success("Form saved!");
     if (onSave) {
-      onSave(resource.id || 0, "add");
+      onSave(resource.id || 0);
     }
   };
 

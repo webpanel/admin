@@ -17,7 +17,12 @@ export class LayoutBuilderEditButton extends React.Component<
   render(): React.ReactNode {
     const { entity, data } = this.props;
     return (
-      <Link to={entity.getEditLink(data.id)}>
+      <Link
+        to={{
+          pathname: entity.getEditLink(data.id),
+          state: { goBackEnabled: true },
+        }}
+      >
         <Button size="small" htmlType="button" icon={<EditOutlined />} />
       </Link>
     );

@@ -42,7 +42,10 @@ export const editListButton = (
 ) => (
   <Link
     key="edit-button-action"
-    to={props.entity.getEditLink(props.resourceID)}
+    to={{
+      pathname: props.entity.getEditLink(props.resourceID),
+      state: { goBackEnabled: true },
+    }}
   >
     <Button
       size={size == "small" ? "small" : undefined}

@@ -485,7 +485,11 @@ export class Entity<T extends { id: ResourceID } = any> {
     id: ResourceID,
     option: SaveOption
   ) => {
-    if (route.history.length > 1) {
+    console.log("???", route.location.state, route.history, option);
+    if (
+      route.history.length > 1 &&
+      (route.location.state as any)?.goBackEnabled
+    ) {
       route.history.goBack();
       return;
     }
@@ -494,7 +498,7 @@ export class Entity<T extends { id: ResourceID } = any> {
         route.history.push(this.getCreateLink());
         break;
       case "edit":
-        route.history.push(this.getEditLink(id));
+        route.history.push(this.getEditLink(id), { goBackEnabled: true });
         break;
       default:
         route.history.push(this.getListLink());
@@ -602,7 +606,12 @@ export class Entity<T extends { id: ResourceID } = any> {
 
   public getEditButton = (resourceID: ResourceID): React.ReactNode => {
     return (
-      <Link to={this.getEditLink(resourceID)}>
+      <Link
+        to={{
+          pathname: this.getEditLink(resourceID),
+          state: { goBackEnabled: true },
+        }}
+      >
         <Button size="small" htmlType="button" icon={<EditOutlined />} />
       </Link>
     );
