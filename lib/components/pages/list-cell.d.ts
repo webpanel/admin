@@ -15,10 +15,4 @@ export interface IListCellState {
     editing: boolean;
     saving: boolean;
 }
-export declare class ListCell extends React.Component<IListCellProps, IListCellState> {
-    state: IListCellState;
-    onChange: (value: any, valueElement: React.ReactNode) => Promise<void>;
-    cancel: () => void;
-    save: () => Promise<void>;
-    render(): React.ReactNode;
-}
+export declare const ListCell: (props: IListCellProps) => JSX.Element;
