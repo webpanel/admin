@@ -77,11 +77,13 @@ export class EntityFieldEnum<T> extends EntityField<
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
-    const selectOptions = resolveThunk(
-      this.config.options
-    ).map((value: IOption) => (
-      <Select.Option value={value.value}>{value.label}</Select.Option>
-    ));
+    const selectOptions = resolveThunk(this.config.options).map(
+      (value: IOption) => (
+        <Select.Option value={value.value} key={value.value}>
+          {value.label}
+        </Select.Option>
+      )
+    );
 
     const value = props.selectedKeys;
     return (
