@@ -5,7 +5,7 @@ import {
   EntityField,
   IEntityFieldConfig,
   IEntityFieldFilterProps,
-  IEntityFieldRenderOptions
+  IEntityFieldRenderOptions,
 } from "../EntityField";
 
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
@@ -31,7 +31,7 @@ export class EntityFieldBoolean<T> extends EntityField<
     record: T,
     options?: IEntityFieldRenderOptions
   ) => React.ReactNode {
-    return values => this.renderValue(values[this.name]);
+    return (values) => this.renderValue(values[this.name]);
   }
   public inputElement(props?: {
     value?: any;
@@ -58,7 +58,7 @@ export class EntityFieldBoolean<T> extends EntityField<
     return (
       <Select
         style={{
-          minWidth: "200px"
+          minWidth: "200px",
         }}
         value={value}
         onChange={(value: any) => props.setSelectedKeys([value])}
@@ -72,8 +72,9 @@ export class EntityFieldBoolean<T> extends EntityField<
   };
 
   public get filterNormalize(): (values: boolean[]) => { [key: string]: any } {
-    return (values: boolean[]) => {
+    return (values: boolean[] | null) => {
       let res = {};
+      values = values || [];
       if (values.length >= 1) {
         res[this.columnName()] = !!values[0];
       }

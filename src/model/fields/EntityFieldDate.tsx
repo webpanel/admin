@@ -106,8 +106,9 @@ export class EntityFieldDate<T> extends EntityField<
   public get filterNormalize(): (
     values: moment.Moment[]
   ) => { [key: string]: any } {
-    return (values: moment.Moment[]) => {
+    return (values: moment.Moment[] | null) => {
       let res = {};
+      values = values || [];
       if (values.length == 1) {
         res[this.columnName()] = moment(values[0]).toISOString();
       } else if (values.length === 2) {

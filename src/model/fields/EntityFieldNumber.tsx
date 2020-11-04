@@ -4,7 +4,7 @@ import * as numeral from "numeral";
 import {
   EntityField,
   IEntityFieldConfig,
-  IEntityFieldFilterProps
+  IEntityFieldFilterProps,
 } from "../EntityField";
 
 import { Entity } from "../Entity";
@@ -33,7 +33,7 @@ export class EntityFieldNumber<T> extends EntityField<
     super(name, config, entity);
 
     if (typeof config.render === "undefined") {
-      this.config.render = values =>
+      this.config.render = (values) =>
         numeral(values[name]).format(config.format || "0,0");
     }
   }
@@ -56,8 +56,8 @@ export class EntityFieldNumber<T> extends EntityField<
       <InputNumber
         style={{ minWidth: "195px" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
-        formatter={value => formatter(value)}
-        parser={value => parser(value || "")}
+        formatter={(value) => formatter(value)}
+        parser={(value) => parser(value || "")}
         {...props}
         onChange={onChangeProp}
       />
@@ -75,15 +75,16 @@ export class EntityFieldNumber<T> extends EntityField<
         onChange={(value: number) =>
           props.setSelectedKeys(value ? [value] : [])
         }
-        formatter={value => formatter(value)}
-        parser={value => parser(value || "")}
+        formatter={(value) => formatter(value)}
+        parser={(value) => parser(value || "")}
       />
     );
   };
 
   public get filterNormalize(): (values: any[]) => { [key: string]: any } {
-    return (values: string[]) => {
+    return (values: string[] | null) => {
       let res = {};
+      values = values || [];
       if (values.length == 1) {
         res[this.columnName()] = parseFloat(values[0]);
       } else if (values.length === 2) {
@@ -104,7 +105,7 @@ export class EntityFieldNumber<T> extends EntityField<
       ) {
         res = [
           values[this.columnName() + "_gte"].toString(),
-          values[this.columnName() + "_lte"].toString()
+          values[this.columnName() + "_lte"].toString(),
         ];
       }
       return res;

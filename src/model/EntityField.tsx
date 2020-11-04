@@ -135,8 +135,9 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   }
 
   public get filterNormalize(): ResourceTableFilterNormalizer {
-    return (values: string[]) => {
+    return (values: string[] | null) => {
       let res = {};
+      values = values || [];
       if (values.length == 1) {
         res[this.columnName() + "_like"] = values[0] + "*";
       } else if (values.length > 1) {

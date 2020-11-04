@@ -301,8 +301,9 @@ export class EntityFieldRelationship<T> extends EntityField<
   };
 
   public get filterNormalize(): (values: string[]) => { [key: string]: any } {
-    return (values: string[]) => {
+    return (values: string[] | null) => {
       let res = {};
+      values = values || [];
       if (this.type === "toMany") {
         if (values.length == 1) {
           res[this.name] = { id: values[0] };

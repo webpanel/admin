@@ -100,9 +100,12 @@ export class EntityFieldEnum<T> extends EntityField<
     );
   };
 
-  public get filterNormalize(): (values: string[]) => { [key: string]: any } {
-    return (values: string[]) => {
+  public get filterNormalize(): (
+    values: string[] | null
+  ) => { [key: string]: any } {
+    return (values: string[] | null) => {
       let res = {};
+      values = values || [];
       if (values.length == 1) {
         res[this.columnName()] = values[0];
       } else if (values.length > 1) {

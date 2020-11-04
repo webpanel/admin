@@ -33,8 +33,9 @@ export class EntityFieldText<
   }
 
   public get filterNormalize(): (values: any[]) => { [key: string]: any } {
-    return (values: string[]) => {
+    return (values: string[] | null) => {
       let res = {};
+      values = values || [];
       if (values.length == 1) {
         res[this.columnName() + "_contains"] = values[0];
       } else if (values.length > 1) {
