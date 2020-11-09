@@ -27,7 +27,7 @@
     "antd": "^4.7.3",
     "i18next": "*",
     "react-i18next": "*",
-    "webpanel-antd": "*",
+    "webpanel-antd": "^0.2.1",
     "webpanel-data": "*"
   },
   "repository": {
@@ -41,7 +41,7 @@
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
     "typescript": "^3.7.4",
-    "webpanel-antd": "^0.2.0",
+    "webpanel-antd": "^0.2.1",
     "webpanel-data": "^0.1.0"
   }
 }

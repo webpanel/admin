@@ -76,6 +76,7 @@ import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { Redirect } from "react-router";
+import { ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
 import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
 import { SaveOption } from "../components/form/buttons";
 import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
@@ -637,6 +638,22 @@ export class Entity<T extends { id: ResourceID } = any> {
         render={render}
       />
     );
+  };
+  public getSearchResourceCollectionConfig = (): ResourceCollectionConfig<
+    T
+  > => {
+    return {
+      name: this.name,
+      fields: [
+        "id",
+        ...this.searchableFields.map(
+          (x: EntityField<any, any>) => x.fetchField() || x.name
+        ),
+      ],
+      initialSorting: this.initialSorting,
+      initialFilters: this.initialFilters,
+      dataSource: this.dataSource,
+    };
   };
 
   public getSelect(config?: EntitySelectConfig): React.ReactNode {

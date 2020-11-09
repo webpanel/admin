@@ -1,14 +1,10 @@
 import * as React from "react";
 
 import { Entity } from "../../model/Entity";
-import { ResourceCollection } from "webpanel-data";
-import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
 import { ResourceSelect } from "webpanel-antd";
 import { SelectProps } from "antd/lib/select";
 
-export interface EntitySelectConfig
-  extends SelectProps<any>,
-    Partial<ResourceCollectionLayerProps> {
+export interface EntitySelectConfig extends SelectProps<any> {
   key?: string;
 }
 
@@ -17,24 +13,17 @@ export interface EntitySelectProps extends EntitySelectConfig {
 }
 
 export const EntitySelect = (props: EntitySelectProps) => {
-  const { entity, key, ...rest } = props;
+  const { entity, key } = props;
+  const resourceConfig = entity.getSearchResourceCollectionConfig();
   return (
-    <>
-      {entity.getSearchResourceCollectionLayer(
-        (collection: ResourceCollection<any>) => (
-          <ResourceSelect
-            key={`entity_select_${entity.name}_${key}`}
-            valueKey="id"
-            labelKey={(value: any): React.ReactNode => {
-              return entity.render(value);
-            }}
-            resourceCollection={collection}
-            showSearch={true}
-            {...rest}
-          />
-        ),
-        rest
-      )}
-    </>
+    <ResourceSelect
+      resource={resourceConfig}
+      key={`entity_select_${entity.name}_${key}`}
+      valueKey="id"
+      labelKey={(value: any): React.ReactNode => {
+        return entity.render(value);
+      }}
+      showSearch={true}
+    />
   );
 };

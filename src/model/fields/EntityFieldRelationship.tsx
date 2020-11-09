@@ -7,13 +7,13 @@ import {
   IEntityFieldFilterProps,
   IEntityFieldRenderOptions,
 } from "../EntityField";
-import { ResourceCollection, ResourceID } from "webpanel-data";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
 
 // import { CreateEntityButton } from '../../components/buttons/EntityAddButton';
 import { Entity } from "../Entity";
 import FormItem from "antd/lib/form/FormItem";
 import { FormLayout } from "antd/lib/form/Form";
+import { ResourceID } from "webpanel-data";
 import { ResourceSelect } from "webpanel-antd";
 // import { IEntityEditConfig } from '../../components/pages/edit';
 import { Translation } from "react-i18next";
@@ -40,72 +40,55 @@ const RelationshipSelectWithAddButton = (
   props: RelationshipSelectWithAddButtonProps
 ) => {
   const { field, targetEntity, isCreatable, onChange, value } = props;
-
+  const resourceConfig = targetEntity.getSearchResourceCollectionConfig();
   return (
-    <>
-      {targetEntity.getSearchResourceCollectionLayer(
-        (collection: ResourceCollection<any>) => (
-          <Row>
-            <Col flex="auto">
-              <ResourceSelect
-                // key={`relationship_field_${entity.name}_${this.valuePropName}`}
-                value={value}
-                valueKey="id"
-                labelKey={(value: any): React.ReactNode => {
-                  return targetEntity.render(value);
-                }}
-                mode={field.mode}
-                resourceCollection={collection}
-                showSearch={true}
-                style={{
-                  width: "100%",
-                  minWidth: "200px",
-                  // marginRight: isCreatable ? "-38px" : undefined,
-                  // paddingRight: isCreatable ? "38px" : undefined,
-                }}
-                onChange={(value) => onChange && onChange(value)}
-              />
-            </Col>
-            {isCreatable && (
-              <Col flex="32px">
-                {targetEntity.getCreateButton({
-                  key: `relationship_field_${field.entity.name}_${field.valuePropName}_add`,
-                  button: {
-                    // style: {
-                    //   margin:
-                    //     config.formLayout === "horizontal"
-                    //       ? "4px 0 0 4px"
-                    //       : "0 0 0 4px",
-                    // },
-                  },
-                  flow: {
-                    type: "modal",
-                    modal: {
-                      title: `Add ${targetEntity.title}`,
-                      width: "70%",
-                    },
-                  },
-                  onSave: async (id: ResourceID) => {
-                    await collection.get();
-                    let updateValues = {};
-                    updateValues[field.columnName()] = id;
-                    if (onChange) {
-                      if (field.mode === "multiple") {
-                        const ids = value as string[];
-                        ids.push(id.toString());
-                        onChange(ids);
-                      } else {
-                        onChange(id.toString());
-                      }
-                    }
-                  },
-                })}
-              </Col>
-            )}
-          </Row>
-        )
+    <Row>
+      <Col flex="auto">
+        <ResourceSelect
+          // key={`relationship_field_${entity.name}_${this.valuePropName}`}
+          value={value}
+          valueKey="id"
+          labelKey={(value: any): React.ReactNode => {
+            return targetEntity.render(value);
+          }}
+          mode={field.mode}
+          resource={resourceConfig}
+          showSearch={true}
+          style={{
+            width: "100%",
+            minWidth: "200px",
+          }}
+          onChange={(value) => onChange && onChange(value)}
+        />
+      </Col>
+      {isCreatable && (
+        <Col flex="32px">
+          {targetEntity.getCreateButton({
+            key: `relationship_field_${field.entity.name}_${field.valuePropName}_add`,
+            flow: {
+              type: "modal",
+              modal: {
+                title: `Add ${targetEntity.title}`,
+                width: "70%",
+              },
+            },
+            onSave: async (id: ResourceID) => {
+              let updateValues = {};
+              updateValues[field.columnName()] = id;
+              if (onChange) {
+                if (field.mode === "multiple") {
+                  const ids = value as string[];
+                  ids.push(id.toString());
+                  onChange(ids);
+                } else {
+                  onChange(id.toString());
+                }
+              }
+            },
+          })}
+        </Col>
       )}
-    </>
+    </Row>
   );
 };
 
@@ -266,31 +249,28 @@ export class EntityFieldRelationship<T> extends EntityField<
         }
       : undefined;
 
-    return _targetEntity.getSearchResourceCollectionLayer(
-      (collection: ResourceCollection<any>) => {
-        return (
-          <ResourceSelect
-            {...props}
-            valueKey="id"
-            allowClear={true}
-            showSearch={true}
-            style={{ width: "100%", minWidth: "200px" }}
-            labelKey={(value: any): React.ReactNode => {
-              return _targetEntity.render(value);
-            }}
-            mode={this.mode}
-            resourceCollection={collection}
-            // labelInValue={true}
-            onChange={onChangeProp}
-            // onChange={(value) => {
-            // const options = Array.isArray(option) ? option : option;
-            // if(onChangeProp){
-            // onChangeProp(value,options)
-            // }
-            // }}
-          />
-        );
-      }
+    const resourceConfig = _targetEntity.getSearchResourceCollectionConfig();
+    return (
+      <ResourceSelect
+        {...props}
+        valueKey="id"
+        allowClear={true}
+        showSearch={true}
+        style={{ width: "100%", minWidth: "200px" }}
+        labelKey={(value: any): React.ReactNode => {
+          return _targetEntity.render(value);
+        }}
+        mode={this.mode}
+        resource={resourceConfig}
+        // labelInValue={true}
+        onChange={onChangeProp}
+        // onChange={(value) => {
+        // const options = Array.isArray(option) ? option : option;
+        // if(onChangeProp){
+        // onChangeProp(value,options)
+        // }
+        // }}
+      />
     );
   }
 
@@ -350,30 +330,27 @@ export const getRelationshipFilterDropdownInput = (
 ) => {
   const _targetEntity = resolveThunk(targetEntity);
   const value = props.selectedKeys;
-  return _targetEntity.getSearchResourceCollectionLayer(
-    (resource: ResourceCollection<any>) => {
-      return (
-        <ResourceSelect
-          valueKey="id"
-          labelKey={(value: any): React.ReactNode => {
-            return _targetEntity.render(value);
-          }}
-          value={value}
-          mode="multiple"
-          allowClear={false}
-          showSearch={true}
-          resourceCollection={resource}
-          style={{ minWidth: "200px" }}
-          onChange={(value: string | string[]) => {
-            if (Array.isArray(value)) {
-              props.setSelectedKeys(value);
-            } else {
-              props.setSelectedKeys([value.toString()]);
-            }
-          }}
-        />
-      );
-    },
-    { autoload: true }
+
+  const resourceConfig = _targetEntity.getSearchResourceCollectionConfig();
+  return (
+    <ResourceSelect
+      valueKey="id"
+      labelKey={(value: any): React.ReactNode => {
+        return _targetEntity.render(value);
+      }}
+      value={value}
+      mode="multiple"
+      allowClear={false}
+      showSearch={true}
+      resource={resourceConfig}
+      style={{ minWidth: "200px" }}
+      onChange={(value: string | string[]) => {
+        if (Array.isArray(value)) {
+          props.setSelectedKeys(value);
+        } else {
+          props.setSelectedKeys([value.toString()]);
+        }
+      }}
+    />
   );
 };

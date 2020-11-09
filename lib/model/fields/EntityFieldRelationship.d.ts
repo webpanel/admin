@@ -24,7 +24,7 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
-    filterDropdownInput: (props: IEntityFieldFilterProps<string>) => React.ReactNode;
+    filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
     get filterNormalize(): (values: string[]) => {
         [key: string]: any;
     };
@@ -32,4 +32,4 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         [key: string]: any;
     }) => any[];
 }
-export declare const getRelationshipFilterDropdownInput: (targetEntity: Entity<any>, props: IEntityFieldFilterProps<string>) => React.ReactNode;
+export declare const getRelationshipFilterDropdownInput: (targetEntity: Entity<any>, props: IEntityFieldFilterProps<string>) => JSX.Element;
