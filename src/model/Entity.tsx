@@ -5,13 +5,7 @@ import {
   CreateEntityButton,
   CreateEntityProps,
 } from "../components/buttons/EntityAddButton";
-import {
-  DataSource,
-  ResourceCollection,
-  ResourceCollectionLayer,
-  ResourceID,
-  SortInfo,
-} from "webpanel-data";
+import { DataSource, ResourceID, SortInfo } from "webpanel-data";
 import {
   DetailEntityButton,
   DetailEntityProps,
@@ -77,7 +71,6 @@ import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { Redirect } from "react-router";
 import { ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
-import { ResourceCollectionLayerProps } from "webpanel-data/lib/components/ResourceCollectionLayer";
 import { SaveOption } from "../components/form/buttons";
 import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
 import { Translation } from "react-i18next";
@@ -618,27 +611,6 @@ export class Entity<T extends { id: ResourceID } = any> {
     );
   };
 
-  public getSearchResourceCollectionLayer = (
-    render: (collection: ResourceCollection<T>) => React.ReactNode,
-    props?: Partial<ResourceCollectionLayerProps>
-  ): React.ReactNode => {
-    return (
-      <ResourceCollectionLayer
-        name={this.name}
-        fields={[
-          "id",
-          ...this.searchableFields.map(
-            (x: EntityField<any, any>) => x.fetchField() || x.name
-          ),
-        ]}
-        initialSorting={this.initialSorting}
-        initialFilters={this.initialFilters}
-        dataSource={this.dataSource}
-        {...props}
-        render={render}
-      />
-    );
-  };
   public getSearchResourceCollectionConfig = (): ResourceCollectionConfig<
     T
   > => {

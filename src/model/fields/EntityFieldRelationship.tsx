@@ -254,8 +254,6 @@ export class EntityFieldRelationship<T> extends EntityField<
       <ResourceSelect
         {...props}
         valueKey="id"
-        allowClear={true}
-        showSearch={true}
         style={{ width: "100%", minWidth: "200px" }}
         labelKey={(value: any): React.ReactNode => {
           return _targetEntity.render(value);
