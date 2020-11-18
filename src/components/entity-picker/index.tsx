@@ -15,7 +15,7 @@ export interface EntitySelectProps extends EntitySelectConfig {
 }
 
 export const EntitySelect = (props: EntitySelectProps) => {
-  const { entity, key, resource } = props;
+  const { entity, key, resource, ...rest } = props;
   const resourceConfig = entity.getSearchResourceCollectionConfig();
   return (
     <ResourceSelect
@@ -26,6 +26,7 @@ export const EntitySelect = (props: EntitySelectProps) => {
         return entity.render(value);
       }}
       showSearch={true}
+      {...rest}
     />
   );
 };
