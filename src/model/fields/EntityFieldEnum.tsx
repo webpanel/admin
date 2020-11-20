@@ -64,7 +64,7 @@ export class EntityFieldEnum<T> extends EntityField<
       <Select
         style={{
           width: "100%",
-          minWidth: "200px",
+          minWidth: "100px",
         }}
         key={`enum_field_${this.entity.name}_${this.valuePropName}`}
         showSearch={true}

@@ -48,13 +48,17 @@ export const ListCell = (props: IListCellProps) => {
       {currentValue || field.render(values, { size: "small" })}
       {editable ? (
         <Popover
-          content={field.inputElement({
-            value: values[field.columnName()],
-            onChange: async (value: any, valueElement: React.ReactNode) => {
-              setEditing(false);
-              await save(value);
-            },
-          })}
+          content={
+            <div style={{ width: 200 }}>
+              {field.inputElement({
+                value: values[field.columnName()],
+                onChange: async (value: any, valueElement: React.ReactNode) => {
+                  setEditing(false);
+                  await save(value);
+                },
+              })}
+            </div>
+          }
           trigger="click"
           onVisibleChange={(visible) => {
             setEditing(visible);

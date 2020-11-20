@@ -56,7 +56,7 @@ const RelationshipSelectWithAddButton = (
           showSearch={true}
           style={{
             width: "100%",
-            minWidth: "200px",
+            minWidth: "100px",
           }}
           onChange={(value) => onChange && onChange(value)}
         />
@@ -182,51 +182,6 @@ export class EntityFieldRelationship<T> extends EntityField<
               targetEntity={_targetEntity}
               isCreatable={isCreatable}
             />
-            {/* <RelationshipSelectWithAddButton>
-                !!!!!!!!!!
-              </RelationshipSelectWithAddButton>
-
-              <ResourceSelect
-                key={`relationship_field_${this.entity.name}_${this.valuePropName}`}
-                valueKey="id"
-                labelKey={(value: any): React.ReactNode => {
-                  return _targetEntity.render(value);
-                }}
-                mode={this.mode}
-                resourceCollection={collection}
-                showSearch={true}
-                style={{
-                  width: "100%",
-                  minWidth: "200px",
-                  marginRight: isCreatable ? "-38px" : undefined,
-                  paddingRight: isCreatable ? "38px" : undefined,
-                }}
-              />
-              {isCreatable &&
-                _targetEntity.getCreateButton({
-                  key: `relationship_field_${this.entity.name}_${this.valuePropName}_add`,
-                  button: {
-                    style: {
-                      margin:
-                        config.formLayout === "horizontal"
-                          ? "4px 0 0 4px"
-                          : "0 0 0 4px",
-                    },
-                  },
-                  flow: {
-                    type: "modal",
-                    modal: {
-                      title: `Add ${_targetEntity.title}`,
-                      width: "70%",
-                    },
-                  },
-                  onCreate: async (id: ResourceID) => {
-                    await collection.get();
-                    let updateValues = {};
-                    updateValues[this.columnName()] = id;
-                    // formInstance?.setFieldsValue(updateValues);
-                  },
-                })} */}
           </FormItem>
         )}
       </Translation>
@@ -252,22 +207,17 @@ export class EntityFieldRelationship<T> extends EntityField<
     const resourceConfig = _targetEntity.getSearchResourceCollectionConfig();
     return (
       <ResourceSelect
+        showSearch={true}
+        allowClear={true}
+        style={{ width: "100%", minWidth: "100px" }}
         {...props}
         valueKey="id"
-        style={{ width: "100%", minWidth: "200px" }}
         labelKey={(value: any): React.ReactNode => {
           return _targetEntity.render(value);
         }}
         mode={this.mode}
         resource={resourceConfig}
-        // labelInValue={true}
         onChange={onChangeProp}
-        // onChange={(value) => {
-        // const options = Array.isArray(option) ? option : option;
-        // if(onChangeProp){
-        // onChangeProp(value,options)
-        // }
-        // }}
       />
     );
   }

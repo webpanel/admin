@@ -14,18 +14,21 @@ interface IEntityFieldEditButtonProps {
 
 export const EntityFieldEditButton = (props: IEntityFieldEditButtonProps) => {
   const { field, value: currentValue, onChange } = props;
-  // const [newValue, setNewValue] = React.useState(null);
   const [editing, setEditing] = React.useState(false);
 
   return (
     <Popover
-      content={field.inputElement({
-        value: currentValue,
-        onChange: (value: any) => {
-          setEditing(false);
-          onChange(value);
-        },
-      })}
+      content={
+        <div style={{ width: 200 }}>
+          {field.inputElement({
+            value: currentValue,
+            onChange: (value: any) => {
+              setEditing(false);
+              onChange(value);
+            },
+          })}
+        </div>
+      }
       trigger="click"
       onVisibleChange={(visible) => {
         setEditing(visible);
