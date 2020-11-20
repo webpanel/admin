@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Popconfirm } from "antd";
+import { Button, Popover } from "antd";
 
 import { EditOutlined } from "@ant-design/icons";
 import { EntityField } from "../../model/EntityField";
@@ -14,18 +14,23 @@ interface IEntityFieldEditButtonProps {
 
 export const EntityFieldEditButton = (props: IEntityFieldEditButtonProps) => {
   const { field, value: currentValue, onChange } = props;
-  const [newValue, setNewValue] = React.useState(null);
+  // const [newValue, setNewValue] = React.useState(null);
+  const [editing, setEditing] = React.useState(false);
 
   return (
-    <Popconfirm
-      title={field.inputElement({
-        value: newValue || currentValue,
+    <Popover
+      content={field.inputElement({
+        value: currentValue,
         onChange: (value: any) => {
-          setNewValue(value);
+          setEditing(false);
+          onChange(value);
         },
       })}
-      onConfirm={async () => await onChange(newValue)}
-      onCancel={() => setNewValue(null)}
+      trigger="click"
+      onVisibleChange={(visible) => {
+        setEditing(visible);
+      }}
+      visible={editing}
     >
       <Button
         shape="circle"
@@ -33,6 +38,6 @@ export const EntityFieldEditButton = (props: IEntityFieldEditButtonProps) => {
         size="small"
         className="no-print"
       />
-    </Popconfirm>
+    </Popover>
   );
 };
