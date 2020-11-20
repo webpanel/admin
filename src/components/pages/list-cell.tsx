@@ -55,6 +55,7 @@ export const ListCell = (props: IListCellProps) => {
               await save(value);
             },
           })}
+          trigger="click"
           onVisibleChange={(visible) => {
             setEditing(visible);
           }}
