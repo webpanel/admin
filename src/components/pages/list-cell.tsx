@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Popconfirm } from "antd";
+import { Button, Popover } from "antd";
 import { EditOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import { EntityField } from "../../model/EntityField";
@@ -24,14 +24,11 @@ export interface IListCellState {
 
 export const ListCell = (props: IListCellProps) => {
   const [currentValue, setCurrentvalue] = React.useState<any>();
-  const [value, setValue] = React.useState<any>();
+  // const [value, setValue] = React.useState<any>();
   const [saving, setSaving] = React.useState(false);
+  const [editing, setEditing] = React.useState(false);
 
-  const onChange = async (value: any, valueElement: React.ReactNode) => {
-    setValue(value);
-  };
-
-  const save = async () => {
+  const save = async (value: any) => {
     const { collection, field, values } = props;
 
     setSaving(true);
@@ -50,15 +47,18 @@ export const ListCell = (props: IListCellProps) => {
     <>
       {currentValue || field.render(values, { size: "small" })}
       {editable ? (
-        <Popconfirm
-          title={field.inputElement({
-            value:
-              typeof value !== "undefined" ? value : values[field.columnName()],
-            onChange: (value: any, valueElement: React.ReactNode) => {
-              onChange(value, valueElement);
+        <Popover
+          content={field.inputElement({
+            value: values[field.columnName()],
+            onChange: async (value: any, valueElement: React.ReactNode) => {
+              setEditing(false);
+              await save(value);
             },
           })}
-          onConfirm={() => save()}
+          onVisibleChange={(visible) => {
+            setEditing(visible);
+          }}
+          visible={editing}
         >
           {saving ? (
             <LoadingOutlined />
@@ -69,9 +69,10 @@ export const ListCell = (props: IListCellProps) => {
               size="small"
               className="no-print"
               style={{ marginLeft: "10px" }}
+              onClick={() => setEditing(true)}
             />
           )}
-        </Popconfirm>
+        </Popover>
       ) : null}
     </>
   );
