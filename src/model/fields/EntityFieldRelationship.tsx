@@ -292,7 +292,7 @@ export const getRelationshipFilterDropdownInput = (
       allowClear={false}
       showSearch={true}
       resource={resourceConfig}
-      style={{ minWidth: "200px" }}
+      style={{ width: 350 }}
       onChange={(value: string | string[]) => {
         if (Array.isArray(value)) {
           props.setSelectedKeys(value);
