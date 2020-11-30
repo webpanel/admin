@@ -253,6 +253,7 @@ export class EntityFieldRelationship<T> extends EntityField<
       let res: any[] = [];
       const value =
         values[this.columnName()] ||
+        values[this.columnName() + "_in"] ||
         values[this.columnName() + "Id"] ||
         values[this.columnName() + "Id_in"] ||
         values[this.columnName().replace("Ids", "").replace("Id", "")];
