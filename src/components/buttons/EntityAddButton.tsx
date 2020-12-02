@@ -75,7 +75,6 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
             wrapperType: "plain",
             formRef: setFormInstance,
             onSave: (id) => {
-              console.log("?????save!!", id);
               hideModal();
               if (onSave) {
                 onSave(id);

@@ -479,7 +479,6 @@ export class Entity<T extends { id: ResourceID } = any> {
     id: ResourceID,
     option: SaveOption
   ) => {
-    console.log("???", route.location.state, route.history, option);
     if (
       route.history.length > 1 &&
       (route.location.state as any)?.goBackEnabled
@@ -611,9 +610,7 @@ export class Entity<T extends { id: ResourceID } = any> {
     );
   };
 
-  public getSearchResourceCollectionConfig = (): ResourceCollectionConfig<
-    T
-  > => {
+  public getSearchResourceCollectionConfig = (): ResourceCollectionConfig<T> => {
     return {
       name: this.name,
       fields: [
