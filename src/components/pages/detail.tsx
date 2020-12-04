@@ -80,7 +80,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             ]}
             pollInterval={pollInterval}
             render={(resource: Resource) => {
-              const content = entity.getLayout("detail", {
+              const content = entity.getCardLayout("detail", {
                 entity,
                 resource,
                 id: resourceID,

@@ -97,7 +97,7 @@ export const EntityForm = (
     dataSource: entity.dataSource,
   });
 
-  const content = entity.getLayout("edit", {
+  const content = entity.getCardLayout("edit", {
     entity,
     resource,
     formInstance,

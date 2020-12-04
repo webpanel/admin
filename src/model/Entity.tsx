@@ -90,6 +90,8 @@ interface IEntityEditOptions<T extends { id: ResourceID }> {
   resourceID?: ResourceID;
 }
 
+type ILayoutGetter<T> = (props: T) => React.ReactNode;
+
 export interface IEntityConfig<T extends { id: ResourceID }> {
   name: Thunk<string>;
   pathPrefix?: Thunk<string>;
@@ -102,9 +104,9 @@ export interface IEntityConfig<T extends { id: ResourceID }> {
   deletable?: Thunk<boolean>;
   showDetailPage?: Thunk<boolean>;
   layouts?: Thunk<{
-    detail?: (props: IEntityDetailProps) => React.ReactNode;
-    edit?: (props: IEntityEditProps) => React.ReactNode;
-    create?: (props: IEntityEditProps) => React.ReactNode;
+    detail?: ILayoutGetter<IEntityDetailProps>;
+    edit?: ILayoutGetter<IEntityEditProps>;
+    create?: ILayoutGetter<IEntityCreateProps>;
   }>;
   menu?: Thunk<Partial<MenuItemProps & { key: string }>>;
   structure?: Thunk<Partial<StructureItemProps & { key: string }>>;
@@ -298,44 +300,53 @@ export class Entity<T extends { id: ResourceID } = any> {
     return fields;
   }
 
-  public get detailLayout():
-    | ((props: IEntityDetailProps) => React.ReactNode)
-    | undefined {
+  public get detailLayout(): ILayoutGetter<IEntityDetailProps> | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
-    if (!layouts) return undefined;
-    return layouts.detail;
+    return layouts?.detail;
   }
 
-  public get editLayout():
-    | ((props: IEntityEditProps) => React.ReactNode)
-    | undefined {
+  public get editLayout(): ILayoutGetter<IEntityEditProps> | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
-    return layouts && layouts.edit;
+    return layouts?.edit;
   }
 
-  public get createLayout():
-    | ((props: IEntityCreateProps) => React.ReactNode)
-    | undefined {
+  public get createLayout(): ILayoutGetter<IEntityCreateProps> | undefined {
     const layouts = resolveOptionalThunk(this.config.layouts);
-    return layouts && layouts.create;
+    return layouts?.create;
   }
 
-  private layouts: {
+  public setDetailLayout(fn: ILayoutGetter<IEntityDetailProps>) {
+    const layouts = resolveOptionalThunk(this.config.layouts) || {};
+    this.config.layouts = layouts;
+    layouts.detail = fn;
+  }
+  public setEditLayout(fn: ILayoutGetter<IEntityEditProps>) {
+    const layouts = resolveOptionalThunk(this.config.layouts) || {};
+    layouts.edit = fn;
+    this.config.layouts = layouts;
+  }
+  public setCreateLayout(fn: ILayoutGetter<IEntityCreateProps>) {
+    const layouts = resolveOptionalThunk(this.config.layouts) || {};
+    layouts.create = fn;
+    this.config.layouts = layouts;
+  }
+
+  private cardLayouts: {
     [key: string]: (builder: LayoutBuilder) => React.ReactNode;
   } = {};
-  public setLayout = (
+  public setCardLayout = (
     type: "detail" | "edit",
     fn: (builder: LayoutBuilder) => React.ReactNode
   ) => {
-    this.layouts[type] = fn;
+    this.cardLayouts[type] = fn;
   };
 
-  public getLayout(
+  public getCardLayout(
     type: "detail" | "edit",
     config: LayoutBuilderConfig & (IEntityDetailConfig | IEntityEditConfig)
   ): React.ReactNode {
     const builder = new LayoutBuilder(config);
-    const fn = this.layouts[type];
+    const fn = this.cardLayouts[type];
     if (fn) {
       return fn(builder);
     }
