@@ -262,6 +262,7 @@ export class EntityList<
             (React.isValidElement(_addButton)
               ? _addButton
               : entity.getCreateButton({
+                  key: "create",
                   button: { size: "small" },
                   onSave: () => resource.reload(),
                   ...(typeof _addButton === "object" ? _addButton : {}),
