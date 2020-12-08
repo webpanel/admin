@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { Button, Popover } from "antd";
-import { EditOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Button, Col, Popover, Row } from "antd";
+import { EditOutlined, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 
 import { EntityField } from "../../model/EntityField";
 import { ResourceCollection } from "webpanel-data";
@@ -24,7 +24,7 @@ export interface IListCellState {
 
 export const ListCell = (props: IListCellProps) => {
   const [currentValue, setCurrentvalue] = React.useState<any>();
-  // const [value, setValue] = React.useState<any>();
+  const [value, setValue] = React.useState<any | undefined>(undefined);
   const [saving, setSaving] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
 
@@ -49,19 +49,39 @@ export const ListCell = (props: IListCellProps) => {
       {editable ? (
         <Popover
           content={
-            <div style={{ width: 200 }}>
-              {field.inputElement({
-                value: values[field.columnName()],
-                onChange: async (value: any, valueElement: React.ReactNode) => {
-                  setEditing(false);
-                  await save(value);
-                },
-              })}
+            <div style={{ width: 250 }}>
+              <Row gutter={[8, 8]}>
+                <Col flex="auto">
+                  {field.inputElement({
+                    value: value || values[field.columnName()],
+                    onChange: async (
+                      value: any,
+                      valueElement: React.ReactNode
+                    ) => {
+                      setValue(value);
+                    },
+                  })}
+                </Col>
+                <Col flex="32px">
+                  <Button
+                    icon={<SaveOutlined />}
+                    type="primary"
+                    onClick={async () => {
+                      await save(value);
+                      setValue(undefined);
+                      setEditing(false);
+                    }}
+                  />
+                </Col>
+              </Row>
             </div>
           }
           trigger="click"
           onVisibleChange={(visible) => {
             setEditing(visible);
+            if (!visible) {
+              setValue(undefined);
+            }
           }}
           visible={editing}
         >

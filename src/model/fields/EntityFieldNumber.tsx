@@ -54,7 +54,7 @@ export class EntityFieldNumber<T> extends EntityField<
 
     return (
       <InputNumber
-        style={{ minWidth: "195px" }}
+        style={{ minWidth: "195px", width: "100%" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
         formatter={(value) => formatter(value)}
         parser={(value) => parser(value || "")}
