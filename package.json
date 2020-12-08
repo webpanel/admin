@@ -41,7 +41,7 @@
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
     "typescript": "^3.7.4",
-    "webpanel-antd": "^0.2.2",
+    "webpanel-antd": "^0.2.5",
     "webpanel-data": "^0.1.0"
   }
 }

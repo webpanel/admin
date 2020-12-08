@@ -100,8 +100,8 @@ export interface IEntityConfig<T extends { id: ResourceID }> {
   title?: Thunk<string>;
   enabled?: Thunk<boolean>;
   creatable?: Thunk<boolean>;
-  updateable?: Thunk<boolean>;
-  deletable?: Thunk<boolean>;
+  updateable?: Thunk<boolean, T>;
+  deletable?: Thunk<boolean, T>;
   showDetailPage?: Thunk<boolean>;
   layouts?: Thunk<{
     detail?: ILayoutGetter<IEntityDetailProps>;
@@ -157,13 +157,13 @@ export class Entity<T extends { id: ResourceID } = any> {
     if (typeof val !== "undefined") return val;
     return true;
   }
-  public get updateable(): boolean {
-    const val = resolveOptionalThunk(this.config.updateable);
+  public updateable(values: T): boolean {
+    const val = resolveOptionalThunk(this.config.updateable, values);
     if (typeof val !== "undefined") return val;
     return true;
   }
-  public get deletable(): boolean {
-    const val = resolveOptionalThunk(this.config.deletable);
+  public deletable(values: T): boolean {
+    const val = resolveOptionalThunk(this.config.deletable, values);
     if (typeof val !== "undefined") return val;
     return true;
   }

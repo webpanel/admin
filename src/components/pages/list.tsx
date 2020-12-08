@@ -37,7 +37,7 @@ export interface IEntityListTableProps
     ResourceCollectionOptions<any> {
   // deprecated, use size instead
   condensed?: boolean;
-  actionButtons?: EntitylistActionButton[];
+  actionButtons?: Thunk<EntitylistActionButton[], any>;
   actionButtonsTitle?: React.ReactNode;
   actionButtonsFixed?: boolean;
   pagination?: TablePaginationConfig | false;
@@ -116,8 +116,7 @@ export class EntityList<
   ): ResourceTableColumn[] {
     const { entity, editableFields } = this.props;
 
-    const _editableFields =
-      (entity.updateable && resolveOptionalThunk(editableFields)) || [];
+    const _editableFields = resolveOptionalThunk(editableFields) || [];
     const entityListFields = listFields.map((x) => x.field);
 
     return listFields.map(
@@ -155,7 +154,9 @@ export class EntityList<
                 values={values}
                 field={field}
                 editable={
-                  _editableFields.indexOf(field.name) > -1 && field.writeable
+                  entity.updateable(record) &&
+                  _editableFields.indexOf(field.name) > -1 &&
+                  field.writeable
                 }
                 fields={entityListFields}
               />
@@ -282,6 +283,7 @@ export class EntityList<
   }
 
   private tableActionButtons(
+    resourceValues: T,
     buttons?: EntitylistActionButton[]
   ): ResourceTablePropsActionButton<T>[] {
     const { entity, table } = this.props;
@@ -301,7 +303,7 @@ export class EntityList<
           }
           switch (item) {
             case "edit":
-              if (!entity.updateable) {
+              if (!entity.updateable(resourceValues)) {
                 return null;
               }
               return (props: ResourceTableActionButtonProps<T>) =>
@@ -313,7 +315,7 @@ export class EntityList<
               return (props: ResourceTableActionButtonProps<T>) =>
                 detailListButton({ ...props, entity }, size);
             case "delete":
-              if (!entity.deletable) {
+              if (!entity.deletable(resourceValues)) {
                 return null;
               }
               return "delete";
@@ -356,7 +358,12 @@ export class EntityList<
             return entity.getDetailLink(resourceID);
           }}
           {...table}
-          actionButtons={this.tableActionButtons(table && table.actionButtons)}
+          actionButtons={(values) =>
+            this.tableActionButtons(
+              values,
+              resolveOptionalThunk(table?.actionButtons, values)
+            )
+          }
           columns={this.getColumns(
             this.getListFields().filter((x) => !x.hidden),
             resource,

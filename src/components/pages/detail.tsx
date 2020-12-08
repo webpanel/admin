@@ -46,7 +46,7 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
       wrapperType,
       modal,
       card,
-      fields
+      fields,
     } = this.props;
 
     let entityFields: EntityField<any, any>[] = entity.getDetailFields(
@@ -55,19 +55,19 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
     const _fields = resolveOptionalThunk(fields);
     if (typeof _fields !== "undefined") {
       entityFields = _fields
-        .map(f => {
+        .map((f) => {
           const fieldName = typeof f === "string" ? f : f?.field;
           if (!fieldName) {
             return null;
           }
           return entity.getFieldOrFail(fieldName);
         })
-        .filter(x => x) as EntityField<any, any>[];
+        .filter((x) => x) as EntityField<any, any>[];
     }
 
     return (
       <Translation>
-        {t => (
+        {(t) => (
           <ResourceLayer
             name={entity.name}
             id={resourceID}
@@ -75,8 +75,8 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
             fields={[
               "id",
               ...(entityFields
-                .map(x => x && x.fetchField())
-                .filter(x => x) as string[])
+                .map((x) => x && x.fetchField())
+                .filter((x) => x) as string[]),
             ]}
             pollInterval={pollInterval}
             render={(resource: Resource) => {
@@ -84,12 +84,12 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                 entity,
                 resource,
                 id: resourceID,
-                data: resource.data || {}
+                data: resource.data || {},
               });
               const getTitle = (): string => {
                 return (
                   t(`${entity.name}._title`, {
-                    defaultValue: entity.title
+                    defaultValue: entity.title,
                   }) +
                   ": " +
                   ((resource.data && entity.render(resource.data)) || "-")
@@ -111,7 +111,8 @@ export class EntityDetail extends React.Component<IEntityDetailProps> {
                       title={getTitle()}
                       loading={resource.loading && !resource.polling}
                       extra={
-                        entity.updateable && entity.getEditButton(resourceID)
+                        entity.updateable(resource.data) &&
+                        entity.getEditButton(resourceID)
                       }
                       {...card}
                     >
