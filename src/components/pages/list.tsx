@@ -245,6 +245,7 @@ export class EntityList<
         }
         {...card}
         extra={[
+          card && card.extra,
           _searchable && (
             <ResourceSearchInput
               key="searchInput"
@@ -274,7 +275,6 @@ export class EntityList<
           //   onCreate={() => resource.reload()}
           //   {..._addButton}
           // />
-          card && card.extra,
         ].filter((x) => x)}
       >
         {this.tableContent(resource, t)}
