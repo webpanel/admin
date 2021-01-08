@@ -117,9 +117,9 @@ export declare class Entity<T extends {
     getListView: (config?: IEntityListConfig<T> | import("ts-thunk").ThunkFunction<IEntityListConfig<T>, undefined> | undefined) => React.ReactNode;
     getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
-    getCreateView: (props?: Pick<IEntityCreateProps, "fields" | "wrapperType" | "form" | "formRef" | "onSave" | "onValuesChanged" | "initialValues"> | undefined) => React.ReactNode;
-    getCreateButton: (props: Pick<CreateEntityProps, "fields" | "form" | "button" | "flow" | "key" | "formRef" | "onSave" | "onValuesChanged" | "initialValues">) => React.ReactNode;
-    getEditView: (props: Pick<IEntityEditProps, "fields" | "wrapperType" | "form" | "formRef" | "onSave" | "onValuesChanged" | "initialValues" | "resourceID">) => React.ReactNode;
+    getCreateView: (props?: Pick<IEntityCreateProps, "form" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged"> | undefined) => React.ReactNode;
+    getCreateButton: (props: Pick<CreateEntityProps, "button" | "form" | "key" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "flow">) => React.ReactNode;
+    getEditView: (props: Pick<IEntityEditProps, "form" | "resourceID" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged">) => React.ReactNode;
     getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     getSearchResourceCollectionConfig: () => ResourceCollectionConfig<T>;
     getSelect(config?: EntitySelectConfig): React.ReactNode;

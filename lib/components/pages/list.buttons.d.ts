@@ -11,5 +11,5 @@ export interface EntityListActionButtonProps<T extends {
 export declare type EntitylistActionButton<T extends {
     id: ResourceID;
 } = any> = "detail" | "edit" | "delete" | React.ReactNode | ((props: EntityListActionButtonProps<T>) => React.ReactNode);
-export declare const detailListButton: (props: EntityListActionButtonProps<any>, size: "default" | "small") => JSX.Element;
-export declare const editListButton: (props: EntityListActionButtonProps<any>, size: "default" | "small") => JSX.Element;
+export declare const detailListButton: (props: EntityListActionButtonProps<any>, size: import("antd/lib/card").CardSize) => JSX.Element;
+export declare const editListButton: (props: EntityListActionButtonProps<any>, size: import("antd/lib/card").CardSize) => JSX.Element;

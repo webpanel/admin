@@ -11,8 +11,9 @@ import { Thunk, resolveOptionalThunk } from "ts-thunk";
 import { FileInput } from "../../components/form/fileinput";
 
 export interface IEntityFieldFileConfig<T> extends IEntityFieldConfig<T> {
+  hostURL?: string;
   uploadURL?: string;
-  accessToken?: Thunk<string>;
+  accessToken?: Thunk<Promise<string>>;
 }
 
 // This entity field is tied with usage of https://github.com/graphql-services/graphql-files
@@ -21,7 +22,7 @@ export class EntityFieldFile<T> extends EntityField<
   IEntityFieldFileConfig<T>
 > {
   public fetchField(): string | null {
-    return `${this.name} { id name url size }`;
+    return `${this.name} { id name size }`;
   }
 
   public columnName(): string {
@@ -58,6 +59,8 @@ export class EntityFieldFile<T> extends EntityField<
     onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
+    const { accessToken } = this.config;
+
     const onChange = props && props.onChange;
     const onChangeProp = onChange
       ? (value: string) => onChange(value, value)
@@ -66,8 +69,10 @@ export class EntityFieldFile<T> extends EntityField<
     return (
       <FileInput
         entity={this.entity}
+        hostURL={this.config.hostURL}
         uploadURL={this.config.uploadURL}
         key={`text_field_${this.entity.name}_${this.valuePropName}`}
+        accessToken={accessToken}
         {...props}
         onChange={onChangeProp}
       />
