@@ -9,6 +9,7 @@ export interface IEntityFieldFileConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldFile<T> extends EntityField<T, IEntityFieldFileConfig<T>> {
     fetchField(): string | null;
     columnName(): string;
+    private openItem;
     get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     inputElement(props?: {
         value?: string;

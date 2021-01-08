@@ -9,6 +9,7 @@ import {
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { FileInput } from "../../components/form/fileinput";
+import { message } from "antd";
 
 export interface IEntityFieldFileConfig<T> extends IEntityFieldConfig<T> {
   hostURL?: string;
@@ -29,24 +30,50 @@ export class EntityFieldFile<T> extends EntityField<
     return `${this.name}Id`;
   }
 
+  private async openItem(
+    hostURL: string,
+    id: string,
+    accessToken?: Promise<string>
+  ) {
+    const token = await accessToken;
+    try {
+      // setLoading(true);
+      const url = await fetch(`${hostURL}/${id}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((json) => json.url);
+      window.open(url, "_blank");
+    } catch (err) {
+      message.error(err.message);
+    } finally {
+      // setLoading(false);
+    }
+  }
+
   public get render(): (
     record: T,
     options?: IEntityFieldRenderOptions
   ) => React.ReactNode {
-    const { render, accessToken } = this.config;
+    const { render, accessToken, hostURL } = this.config;
     return (values) => {
       const value = values[this.name];
-      if (!value) {
+      if (!value || !hostURL) {
         return "–";
-      }
-      let url = value.url;
-      const token = resolveOptionalThunk(accessToken);
-      if (token) {
-        url += `?access_token=${token}`;
       }
       return (
         (render && render(value)) || (
-          <a target="_blank" href={url}>
+          <a
+            href="#"
+            onClick={() =>
+              this.openItem(
+                hostURL,
+                value.id,
+                resolveOptionalThunk(accessToken)
+              )
+            }
+          >
             {value.name} ({numeral(value.size).format("0.0 b")})
           </a>
         )
