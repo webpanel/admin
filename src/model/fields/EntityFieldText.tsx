@@ -74,7 +74,11 @@ export class EntityFieldText<
         return <Tooltip title={value}>{shortValue}</Tooltip>;
       }
 
-      return <pre>{value}</pre>;
+      return (
+        <pre style={{ whiteSpace: "break-spaces", wordBreak: "break-word" }}>
+          {value}
+        </pre>
+      );
     };
   }
 }
