@@ -1,6 +1,6 @@
 {
   "name": "webpanel-admin",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "typings": "lib/index.d.ts",
