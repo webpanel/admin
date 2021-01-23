@@ -8,6 +8,7 @@ import {
 } from "../form/entity-form";
 
 import { Card } from "antd";
+import { FormInstance } from "webpanel-antd";
 // import { FormContext } from "webpanel-antd/lib/form/form/Form";
 import { ResourceFormPageButtons } from "../form/buttons";
 import { useTranslation } from "react-i18next";
@@ -30,10 +31,14 @@ export const EntityEdit = (
   const [formData, setFormData] = React.useState<any>(undefined);
 
   const { entity, wrapperType, formRef, ...restProps } = props;
+  let formRefLocal = formRef;
+  if (typeof formRefLocal === "undefined") {
+    formRefLocal = React.useRef<FormInstance | null>(null);
+  }
 
   const submit = async () => {
     try {
-      await formRef?.current?.submit();
+      await formRefLocal?.current?.submit();
     } catch (err) {
       throw err;
     }
@@ -43,7 +48,7 @@ export const EntityEdit = (
     <EntityForm
       entity={entity}
       {...restProps}
-      formRef={formRef}
+      formRef={formRefLocal}
       onValuesChanged={(values) => setFormData(values)}
     />
   );
@@ -65,7 +70,7 @@ export const EntityEdit = (
           {entityForm}
           <ResourceFormPageButtons
             submit={submit}
-            reset={() => formRef?.current?.resetFields()}
+            reset={() => formRefLocal?.current?.resetFields()}
           />
         </Card>
       );
