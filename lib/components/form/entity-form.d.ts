@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import * as React from "react";
 import { FormInstance } from "webpanel-antd";
 import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
@@ -22,7 +22,7 @@ export interface IEntityFormConfig {
 }
 export interface IEntityFormProps extends IEntityFormConfig {
     entity: Entity;
-    formRef?: (form: FormInstance) => void;
+    formRef?: React.MutableRefObject<FormInstance | null>;
     onSave?: EntityOnSaveHandler;
     onValuesChanged?: (values: any) => void;
 }

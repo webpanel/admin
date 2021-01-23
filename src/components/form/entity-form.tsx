@@ -32,7 +32,7 @@ export interface IEntityFormConfig {
 
 export interface IEntityFormProps extends IEntityFormConfig {
   entity: Entity;
-  formRef?: (form: FormInstance) => void;
+  formRef?: React.MutableRefObject<FormInstance | null>;
   onSave?: EntityOnSaveHandler;
   onValuesChanged?: (values: any) => void;
 }
@@ -50,11 +50,6 @@ export const EntityForm = (
   props: IEntityFormCreateProps | IEntityFormEditProps
 ) => {
   const { formRef, onSave, onValuesChanged } = props;
-  const [formInstance, setFormInstance] = React.useState<FormInstance>();
-
-  if (formRef && formInstance) {
-    formRef(formInstance);
-  }
 
   const handleFormSuccess = async (resource: Resource) => {
     message.success("Form saved!");
@@ -100,7 +95,7 @@ export const EntityForm = (
   const content = entity.getCardLayout("edit", {
     entity,
     resource,
-    formInstance,
+    formInstance: formRef?.current || undefined,
     id: resourceID,
     data: resource.data || {},
     fields,
@@ -110,7 +105,7 @@ export const EntityForm = (
     <ResourceForm
       formResource={resource}
       onSuccess={() => handleFormSuccess(resource)}
-      formRef={(form) => setFormInstance(form)}
+      formRef={formRef}
       onValuesChange={onValuesChanged}
       layout={"vertical"}
       {...form}

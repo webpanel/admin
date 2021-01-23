@@ -1,11 +1,11 @@
 import * as React from "react";
 
+import { FormInstance, Link } from "webpanel-antd";
+
 import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
 import { Entity } from "../../model/Entity";
-import { FormInstance } from "rc-field-form";
 import { IEntityFormProps } from "../form/entity-form";
-import { Link } from "webpanel-antd";
 import Modal from "antd/lib/modal/Modal";
 import { ModalProps } from "antd/lib/modal";
 import { PlusOutlined } from "@ant-design/icons";
@@ -28,9 +28,10 @@ export interface CreateEntityButtonProps extends CreateEntityProps {
 export const CreateEntityButton = (props: CreateEntityButtonProps) => {
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [formInstance, setFormInstance] = React.useState<
-    FormInstance | undefined
-  >(undefined);
+  const formRef = React.useRef<FormInstance | null>(null);
+  // const [formInstance, setFormInstance] = React.useState<
+  //   FormInstance | undefined
+  // >(undefined);
 
   const { entity, initialValues, fields, flow, onSave, button } = props;
 
@@ -54,7 +55,8 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
         defaultValue: entity.title,
       }) +
       ": " +
-      ((formInstance && entity.render(formInstance.getFieldsValue())) || "-")
+      ((formRef.current && entity.render(formRef.current.getFieldsValue())) ||
+        "-")
     );
   };
 
@@ -64,7 +66,7 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
       <>
         <Modal
           visible={modalVisible}
-          onOk={() => formInstance?.submit()}
+          onOk={() => formRef?.current?.submit()}
           onCancel={() => setModalVisible(false)}
           title={getTitle()}
           destroyOnClose={true}
@@ -73,7 +75,7 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
             initialValues,
             fields,
             wrapperType: "plain",
-            formRef: setFormInstance,
+            formRef: formRef,
             onSave: (id) => {
               hideModal();
               if (onSave) {

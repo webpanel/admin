@@ -106,7 +106,7 @@ export declare class Entity<T extends {
     setEditLayout(fn: ILayoutGetter<IEntityEditProps>): void;
     setCreateLayout(fn: ILayoutGetter<IEntityCreateProps>): void;
     private cardLayouts;
-    setCardLayout: (type: "detail" | "edit", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
+    setCardLayout: (type: "edit" | "detail", fn: (builder: LayoutBuilder) => React.ReactNode) => void;
     getCardLayout(type: "detail" | "edit", config: LayoutBuilderConfig & (IEntityDetailConfig | IEntityEditConfig)): React.ReactNode;
     menuItem: () => React.ReactNode;
     structureItem: () => React.ReactNode;
@@ -115,12 +115,12 @@ export declare class Entity<T extends {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | import("ts-thunk").ThunkFunction<IEntityListConfig<T>, undefined> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
-    getCreateView: (props?: Pick<IEntityCreateProps, "form" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged"> | undefined) => React.ReactNode;
-    getCreateButton: (props: Pick<CreateEntityProps, "button" | "form" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "flow" | "key">) => React.ReactNode;
-    getEditView: (props: Pick<IEntityEditProps, "form" | "resourceID" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged">) => React.ReactNode;
-    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
+    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: ResourceID, props: DetailEntityProps) => React.ReactNode;
+    getCreateView: (props?: Pick<IEntityCreateProps, "formRef" | "onSave" | "onValuesChanged" | "form" | "initialValues" | "fields" | "wrapperType"> | undefined) => React.ReactNode;
+    getCreateButton: (props: Pick<CreateEntityProps, "formRef" | "onSave" | "onValuesChanged" | "form" | "initialValues" | "fields" | "button" | "flow" | "key">) => React.ReactNode;
+    getEditView: (props: Pick<IEntityEditProps, "formRef" | "onSave" | "onValuesChanged" | "form" | "initialValues" | "fields" | "wrapperType" | "resourceID">) => React.ReactNode;
+    getEditButton: (resourceID: ResourceID) => React.ReactNode;
     getSearchResourceCollectionConfig: () => ResourceCollectionConfig<T>;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     stringField(name: string, config?: IEntityFieldConfig<T>): this;
