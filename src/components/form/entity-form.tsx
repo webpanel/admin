@@ -1,12 +1,12 @@
 import * as React from "react";
 
-import { FormInstance, ResourceForm } from "webpanel-antd";
+import { Form, Spin, message } from "antd";
 import { Resource, ResourceID, useResource } from "webpanel-data";
-import { Spin, message } from "antd";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
+import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
 import { SaveOption } from "./buttons";
 
@@ -50,6 +50,12 @@ export const EntityForm = (
   props: IEntityFormCreateProps | IEntityFormEditProps
 ) => {
   const { formRef, onSave, onValuesChanged } = props;
+  const [form] = Form.useForm();
+  const [saving, setSaving] = React.useState(false);
+
+  if (formRef) {
+    formRef.current = form;
+  }
 
   const handleFormSuccess = async (resource: Resource) => {
     message.success("Form saved!");
@@ -63,7 +69,7 @@ export const EntityForm = (
     resourceID = props.resourceID;
   }
 
-  const { entity, form, initialValues, fields } = props;
+  const { entity, initialValues, fields } = props;
   let entityFields = entity
     .getEditFields(resourceID)
     .filter((f) => f && f.fetchField() && f.writeable);
@@ -101,16 +107,31 @@ export const EntityForm = (
     fields,
   });
 
+  if (resource.data) {
+    form.setFieldsValue(resource.data);
+  }
+
   return (
-    <ResourceForm
-      formResource={resource}
-      onSuccess={() => handleFormSuccess(resource)}
-      formRef={formRef}
+    <Form
+      form={form}
+      onFinish={async (values) => {
+        try {
+          setSaving(true);
+          resource.save(values);
+          handleFormSuccess(resource);
+        } catch (err) {
+          message.error(err.message);
+        } finally {
+          setSaving(false);
+        }
+      }}
       onValuesChange={onValuesChanged}
       layout={"vertical"}
       {...form}
     >
-      <Spin spinning={resource.loading && !resource.polling}>{content}</Spin>
-    </ResourceForm>
+      <Spin spinning={(resource.loading && !resource.polling) || saving}>
+        {content}
+      </Spin>
+    </Form>
   );
 };

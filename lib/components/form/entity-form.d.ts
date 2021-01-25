@@ -1,8 +1,8 @@
 import * as React from "react";
-import { FormInstance } from "webpanel-antd";
 import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
 import { Entity } from "../../model/Entity";
+import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
 import { SaveOption } from "./buttons";
 export declare type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
