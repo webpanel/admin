@@ -22,6 +22,7 @@ export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
     >
       <Button
         type="primary"
+        htmlType="submit"
         loading={saving}
         onClick={async () => {
           setSaving(true);
@@ -34,7 +35,7 @@ export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
       >
         Save
       </Button>
-      <Button style={{ marginLeft: 8 }} onClick={handleReset}>
+      <Button style={{ marginLeft: 8 }} onClick={handleReset} htmlType="reset">
         Reset
       </Button>
     </Form.Item>
