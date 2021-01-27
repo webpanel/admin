@@ -6,12 +6,11 @@ export type SaveOption = "edit" | "add";
 
 export interface ResourceFormButtonsProps {
   reset: () => void;
-  submit: () => Promise<void>;
 }
 
 export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
-  const { reset: handleReset, submit: handleSave } = props;
-  const [saving, setSaving] = React.useState(false);
+  const { reset: handleReset } = props;
+
   return (
     <Form.Item
       key="form-buttons"
@@ -20,22 +19,10 @@ export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
         sm: { span: 16, offset: 8 },
       }}
     >
-      <Button
-        type="primary"
-        htmlType="submit"
-        loading={saving}
-        onClick={async () => {
-          setSaving(true);
-          try {
-            await handleSave();
-          } finally {
-            setSaving(false);
-          }
-        }}
-      >
+      <Button type="primary" htmlType="submit">
         Save
       </Button>
-      <Button style={{ marginLeft: 8 }} onClick={handleReset} htmlType="reset">
+      <Button style={{ marginLeft: 8 }} onClick={handleReset}>
         Reset
       </Button>
     </Form.Item>

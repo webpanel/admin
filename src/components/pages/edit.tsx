@@ -36,14 +36,6 @@ export const EntityEdit = (
     formRefLocal = React.useRef<FormInstance | null>(null);
   }
 
-  const submit = async () => {
-    try {
-      await formRefLocal?.current?.submit();
-    } catch (err) {
-      throw err;
-    }
-  };
-
   const entityForm = (
     <EntityForm
       entity={entity}
@@ -69,7 +61,6 @@ export const EntityEdit = (
         >
           {entityForm}
           <ResourceFormPageButtons
-            submit={submit}
             reset={() => formRefLocal?.current?.resetFields()}
           />
         </Card>

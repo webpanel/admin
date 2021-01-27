@@ -10,8 +10,6 @@ import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
 import { SaveOption } from "./buttons";
 
-// import { Translation } from "react-i18next";
-
 export type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
 
 export interface IEntityFormFieldOptions {
