@@ -11,11 +11,19 @@ import { Entity } from "../Entity";
 import { IEntityListColumnAlign } from "../../components/pages/list";
 import { InputNumber } from "antd";
 
-const formatter = (value: string | number | undefined): string => {
-  return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+const formatter = (
+  value: string | number | undefined,
+  format?: string
+): string => {
+  return numeral(value).format(format || "0,0");
+  // return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };
 const parser = (value: string): string => {
-  return value.replace(/\s?|(\s*)/g, "");
+  if (!value) {
+    return "";
+  }
+  return numeral(value).format("0");
+  // return value.replace(/\s?|(\s*)/g, "");
 };
 
 export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
@@ -56,8 +64,11 @@ export class EntityFieldNumber<T> extends EntityField<
       <InputNumber
         style={{ minWidth: "195px", width: "100%" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
-        formatter={(value) => formatter(value)}
-        parser={(value) => parser(value || "")}
+        formatter={(value) => formatter(value, this.config.format)}
+        parser={(value) => {
+          console.log("???", value, parser(value || ""));
+          return parser(value || "");
+        }}
         {...props}
         onChange={onChangeProp}
       />
