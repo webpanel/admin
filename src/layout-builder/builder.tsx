@@ -10,10 +10,6 @@ import {
 } from "../components/form/entity-form";
 import { LayoutBuilderCard, LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderCol, LayoutBuilderColProps } from "./components/col";
-import {
-  LayoutBuilderEditField,
-  LayoutBuilderEditFieldProps,
-} from "./components/edit-field";
 import { LayoutBuilderRow, LayoutBuilderRowProps } from "./components/row";
 import {
   LayoutBuilderStringField,
@@ -33,6 +29,7 @@ import { Entity } from "../model/Entity";
 import { EntityField } from "../model/EntityField";
 import { FormInstance } from "webpanel-antd";
 import { LayoutBuilderEditButton } from "./components/edit-button";
+import { LayoutBuilderEditFieldProps } from "./components/edit-field";
 import { Translation } from "react-i18next";
 
 export interface LayoutBuilderConfig {
@@ -216,13 +213,30 @@ export class LayoutBuilder {
   editField(
     props: Thunk<LayoutBuilderEditFieldProps, LayoutBuilderConfig>
   ): React.ReactNode {
-    return (
-      <LayoutBuilderEditField
-        key={`LayoutBuilderEditField_${this.config.entity.name}_${props.name}`}
-        {...resolveThunk(props, this.config)}
-        entity={this.config.entity}
-      />
+    // const { name, entity, formLayout, values, formInstance } = this.props;
+    const _props = resolveThunk(props, this.config);
+    const field = this.config.entity.getField(_props.name);
+
+    if (field === null) {
+      return `unknown field ${_props.name}`;
+    }
+    if (!field.writeable) {
+      return null;
+    }
+    return field.fieldElement(
+      _props.name,
+      { formLayout: _props.formLayout, formInstance: this.config.formInstance },
+      this.config.data
     );
+    // return (
+    //   <LayoutBuilderEditField
+    //     key={`LayoutBuilderEditField_${this.config.entity.name}_${props.name}`}
+    //     values={this.config.data}
+    //     formInstance={this.config.formInstance}
+    //     {...resolveThunk(props, this.config)}
+    //     entity={this.config.entity}
+    //   />
+    // );
   }
 
   editButton(): React.ReactNode {
@@ -234,7 +248,7 @@ export class LayoutBuilder {
     );
   }
 
-  formValue(name: string): any {
-    return this.config.formInstance?.getFieldValue(name);
-  }
+  // formValue(name: string): any {
+  //   return this.config.formInstance?.getFieldValue(name);
+  // }
 }

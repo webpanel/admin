@@ -66,7 +66,6 @@ export class EntityFieldNumber<T> extends EntityField<
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
         formatter={(value) => formatter(value, this.config.format)}
         parser={(value) => {
-          console.log("???", value, parser(value || ""));
           return parser(value || "");
         }}
         {...props}

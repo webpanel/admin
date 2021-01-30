@@ -1,13 +1,13 @@
 import * as React from "react";
 import { EntityField, IEntityFieldConfig, IEntityFieldInputElementProps } from "../EntityField";
-import { FormInstance } from "webpanel-antd";
 export interface IEntityFieldCustomConfig<T> extends IEntityFieldConfig<T> {
     fetchField?: string;
     editFetchField?: string;
     inputElement: (props: {
         value: T | undefined;
         onChange: (value?: T) => void;
-        formInstance?: FormInstance;
+        valueGetter: (key: string) => any;
+        values?: any;
     }) => React.ReactNode;
 }
 export declare class EntityFieldCustom<T, C extends IEntityFieldCustomConfig<T>> extends EntityField<T, C> {

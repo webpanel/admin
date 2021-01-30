@@ -115,12 +115,12 @@ export declare class Entity<T extends {
     private getEditPageLayout;
     private getCreatePageLayout;
     getListView: (config?: IEntityListConfig<T> | import("ts-thunk").ThunkFunction<IEntityListConfig<T>, undefined> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig | undefined) => React.ReactNode;
-    getDetailButton: (id: ResourceID, props: DetailEntityProps) => React.ReactNode;
-    getCreateView: (props?: Pick<IEntityCreateProps, "formRef" | "onSave" | "onValuesChanged" | "showButtons" | "form" | "initialValues" | "fields" | "wrapperType"> | undefined) => React.ReactNode;
-    getCreateButton: (props: Pick<CreateEntityProps, "formRef" | "onSave" | "onValuesChanged" | "showButtons" | "form" | "initialValues" | "fields" | "button" | "flow" | "key">) => React.ReactNode;
-    getEditView: (props: Pick<IEntityEditProps, "formRef" | "onSave" | "onValuesChanged" | "showButtons" | "form" | "initialValues" | "fields" | "wrapperType" | "resourceID">) => React.ReactNode;
-    getEditButton: (resourceID: ResourceID) => React.ReactNode;
+    getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
+    getCreateView: (props?: Pick<IEntityCreateProps, "form" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons"> | undefined) => React.ReactNode;
+    getCreateButton: (props: Pick<CreateEntityProps, "button" | "form" | "key" | "flow" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons">) => React.ReactNode;
+    getEditView: (props: Pick<IEntityEditProps, "form" | "resourceID" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons">) => React.ReactNode;
+    getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     getSearchResourceCollectionConfig: () => ResourceCollectionConfig<T>;
     getSelect(config?: EntitySelectConfig): React.ReactNode;
     stringField(name: string, config?: IEntityFieldConfig<T>): this;

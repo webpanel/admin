@@ -50,12 +50,12 @@ export const isEntityEditFormProps = (
 export const EntityForm = (
   props: IEntityFormCreateProps | IEntityFormEditProps
 ) => {
-  const { formRef, onSave, onValuesChanged, showButtons } = props;
-  const [form] = Form.useForm();
+  const { formRef, onSave, onValuesChanged, showButtons, form } = props;
+  const [formInstance] = Form.useForm();
   const [saving, setSaving] = React.useState(false);
 
   if (formRef) {
-    formRef.current = form;
+    formRef.current = formInstance;
   }
 
   const handleFormSuccess = async (resource: Resource) => {
@@ -102,16 +102,16 @@ export const EntityForm = (
   const content = entity.getCardLayout("edit", {
     entity,
     resource,
-    formInstance: formRef?.current || undefined,
+    formInstance: formInstance,
     id: resourceID,
-    data: resource.data || {},
+    data: resource.data,
     fields,
   });
 
   return (
     <Form
       key={JSON.stringify(resource.data)}
-      form={form}
+      form={formInstance}
       onFinish={async (values) => {
         try {
           setSaving(true);
@@ -134,7 +134,7 @@ export const EntityForm = (
           <ResourceFormPageButtons
             saving={saving}
             // submit={() => formRefLocal?.current?.submit()}
-            reset={() => form.resetFields()}
+            reset={() => formInstance.resetFields()}
           />
         )}
       </Spin>

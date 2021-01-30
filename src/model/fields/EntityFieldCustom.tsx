@@ -6,15 +6,14 @@ import {
   IEntityFieldInputElementProps,
 } from "../EntityField";
 
-import { FormInstance } from "webpanel-antd";
-
 export interface IEntityFieldCustomConfig<T> extends IEntityFieldConfig<T> {
   fetchField?: string;
   editFetchField?: string;
   inputElement: (props: {
     value: T | undefined;
     onChange: (value?: T) => void;
-    formInstance?: FormInstance;
+    valueGetter: (key: string) => any;
+    values?: any;
   }) => React.ReactNode;
 }
 
@@ -35,9 +34,21 @@ export class EntityFieldCustom<
   ): React.ReactNode {
     const onChange = props && props.onChange;
     const onChangeProp = (value?: T) => onChange && onChange(value, value);
+    console.log(
+      "??new values",
+      props?.values,
+      props?.formInstance?.getFieldsValue()
+    );
     return this.config.inputElement({
       value: props && props.value,
       onChange: onChangeProp,
+      values: props?.values,
+      valueGetter: (key) => {
+        return (
+          props?.formInstance?.getFieldValue(key) ||
+          (props?.values && props?.values[key])
+        );
+      },
     });
   }
 }

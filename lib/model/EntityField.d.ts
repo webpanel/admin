@@ -1,9 +1,9 @@
 import * as React from "react";
+import { FormInstance, FormLayout } from "antd/lib/form/Form";
 import { InputProps } from "antd/lib/input";
 import { ResourceTableFilterDenormalizer, ResourceTableFilterNormalizer } from "webpanel-antd";
 import { Thunk } from "ts-thunk";
 import { Entity } from "./Entity";
-import { FormLayout } from "antd/lib/form/Form";
 import { IEntityListColumnAlign } from "../components/pages/list";
 import { Rule } from "rc-field-form/es/interface";
 export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
@@ -17,6 +17,8 @@ export interface IEntityFieldInputElementProps<T = any> {
     value?: T;
     onChange?: (value?: T, stringValue?: React.ReactNode) => void;
     autoFocus?: boolean;
+    values?: any;
+    formInstance?: FormInstance;
 }
 export interface IEntityFieldConfigFilter {
     range?: boolean;
@@ -36,6 +38,7 @@ export interface IEntityFieldConfig<T> {
     writable?: Thunk<boolean>;
     render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     rules?: Thunk<Rule[]>;
+    dependencies?: Thunk<string[]>;
     attributes?: InputProps;
     sortable?: boolean | {
         fields: string[];
@@ -70,7 +73,8 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     get valuePropName(): string;
     fieldElement(key: string | number, config: {
         formLayout?: FormLayout;
-    }): React.ReactNode;
+        formInstance?: FormInstance;
+    }, values?: any): React.ReactNode;
     filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
     protected _filterDropdownInput: (props: IEntityFieldFilterProps<any>) => React.ReactNode;
     filterDropdown: (resource: any) => (props: IEntityFieldFilterProps<any>) => JSX.Element;

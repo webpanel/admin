@@ -175,6 +175,7 @@ export class EntityFieldRelationship<T> extends EntityField<
               width: "100%",
             }}
             rules={resolveOptionalThunk(this.config.rules)}
+            dependencies={resolveOptionalThunk(this.config.dependencies)}
             {...formItemLayout}
           >
             <RelationshipSelectWithAddButton

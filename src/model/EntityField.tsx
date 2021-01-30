@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as inflection from "inflection";
 
-import { Button, Tooltip } from "antd";
+import { Button, Form, Tooltip } from "antd";
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import { FormInstance, FormLayout } from "antd/lib/form/Form";
 import Input, { InputProps } from "antd/lib/input";
 import {
   ResourceTableFilterDenormalizer,
@@ -11,8 +12,6 @@ import {
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "./Entity";
-import FormItem from "antd/lib/form/FormItem";
-import { FormLayout } from "antd/lib/form/Form";
 import { IEntityListColumnAlign } from "../components/pages/list";
 import { Rule } from "rc-field-form/es/interface";
 import { Translation } from "react-i18next";
@@ -32,6 +31,8 @@ export interface IEntityFieldInputElementProps<T = any> {
   value?: T;
   onChange?: (value?: T, stringValue?: React.ReactNode) => void;
   autoFocus?: boolean;
+  values?: any;
+  formInstance?: FormInstance;
 }
 
 export interface IEntityFieldConfigFilter {
@@ -61,6 +62,7 @@ export interface IEntityFieldConfig<T> {
   writable?: Thunk<boolean>;
   render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
   rules?: Thunk<Rule[]>;
+  dependencies?: Thunk<string[]>;
   attributes?: InputProps;
   sortable?: boolean | { fields: string[] };
   filter?: IEntityFieldConfigFilter | boolean;
@@ -219,7 +221,8 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
 
   public fieldElement(
     key: string | number,
-    config: { formLayout?: FormLayout }
+    config: { formLayout?: FormLayout; formInstance?: FormInstance },
+    values?: any
   ): React.ReactNode {
     const formItemLayout =
       config.formLayout === "horizontal"
@@ -229,24 +232,36 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
           }
         : null;
 
-    return (
-      <Translation key={key}>
-        {(t) => (
-          <FormItem
-            key={key}
-            label={t(`${this.entity.name}.${this.name}`, {
-              defaultValue: this.title,
-            })}
-            extra={resolveOptionalThunk(this.config.description)}
-            name={this.columnName()}
-            valuePropName={this.valuePropName}
-            rules={resolveOptionalThunk(this.config.rules)}
-            {...formItemLayout}
-          >
-            {this.inputElement()}
-          </FormItem>
-        )}
-      </Translation>
+    const deps = resolveOptionalThunk(this.config.dependencies);
+    const formItem = () => (
+      <Form.Item
+        name={this.columnName()}
+        valuePropName={this.valuePropName}
+        rules={resolveOptionalThunk(this.config.rules)}
+        label={
+          <Translation>
+            {(t) =>
+              t(`${this.entity.name}.${this.name}`, {
+                defaultValue: this.title,
+              })
+            }
+          </Translation>
+        }
+        extra={resolveOptionalThunk(this.config.description)}
+        {...formItemLayout}
+      >
+        {this.inputElement({
+          values,
+          formInstance: config.formInstance,
+        })}
+      </Form.Item>
+    );
+    return deps ? (
+      <Form.Item key={key} dependencies={deps} noStyle={true}>
+        {formItem}
+      </Form.Item>
+    ) : (
+      formItem()
     );
   }
 

@@ -3,7 +3,6 @@ import { IEntityDetailConfigField, IEntityDetailFieldOptions } from "../componen
 import { IEntityFormConfigField, IEntityFormFieldOptions } from "../components/form/entity-form";
 import { LayoutBuilderCardProps } from "./components/card";
 import { LayoutBuilderColProps } from "./components/col";
-import { LayoutBuilderEditFieldProps } from "./components/edit-field";
 import { LayoutBuilderRowProps } from "./components/row";
 import { LayoutBuilderStringFieldProps } from "./components/string-field";
 import { LayoutBuilderTabsProps } from "./components/tabs";
@@ -13,6 +12,7 @@ import { Thunk } from "ts-thunk";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../model/Entity";
 import { FormInstance } from "webpanel-antd";
+import { LayoutBuilderEditFieldProps } from "./components/edit-field";
 export interface LayoutBuilderConfig {
     entity: Entity;
     id?: ResourceID;
@@ -50,6 +50,5 @@ export declare class LayoutBuilder {
     stringField(props: Thunk<LayoutBuilderStringFieldProps, LayoutBuilderConfig>): React.ReactNode;
     editField(props: Thunk<LayoutBuilderEditFieldProps, LayoutBuilderConfig>): React.ReactNode;
     editButton(): React.ReactNode;
-    formValue(name: string): any;
 }
 export {};

@@ -60,6 +60,7 @@ export const ListCell = (props: IListCellProps) => {
                     ) => {
                       setValue(value);
                     },
+                    values,
                   })}
                 </Col>
                 <Col flex="32px">
