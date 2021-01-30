@@ -115,7 +115,7 @@ export const EntityForm = (
       onFinish={async (values) => {
         try {
           setSaving(true);
-          resource.save(values);
+          await resource.save(values);
           handleFormSuccess(resource);
         } catch (err) {
           message.error(err.message);
