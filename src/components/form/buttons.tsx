@@ -2,15 +2,14 @@ import * as React from "react";
 
 import { Button, Form } from "antd";
 
-export type SaveOption = "edit" | "add";
-
 export interface ResourceFormButtonsProps {
-  reset: () => void;
+  saving?: boolean;
+  submit?: () => void;
+  reset?: () => void;
 }
 
 export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
-  const { reset: handleReset } = props;
-
+  const { saving, reset, submit } = props;
   return (
     <Form.Item
       key="form-buttons"
@@ -19,10 +18,15 @@ export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
         sm: { span: 16, offset: 8 },
       }}
     >
-      <Button type="primary" htmlType="submit">
+      <Button
+        type="primary"
+        loading={saving}
+        onClick={submit}
+        htmlType={typeof submit === "undefined" ? "submit" : undefined}
+      >
         Save
       </Button>
-      <Button style={{ marginLeft: 8 }} onClick={handleReset}>
+      <Button style={{ marginLeft: 8 }} onClick={reset}>
         Reset
       </Button>
     </Form.Item>

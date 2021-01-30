@@ -71,7 +71,6 @@ import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { Redirect } from "react-router";
 import { ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
-import { SaveOption } from "../components/form/buttons";
 import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
 import { Translation } from "react-i18next";
 
@@ -487,8 +486,7 @@ export class Entity<T extends { id: ResourceID } = any> {
   };
 
   private handleFormOnSave = (route: RouteComponentProps<any>) => (
-    id: ResourceID,
-    option: SaveOption
+    id: ResourceID
   ) => {
     if (
       route.history.length > 1 &&
@@ -497,17 +495,7 @@ export class Entity<T extends { id: ResourceID } = any> {
       route.history.goBack();
       return;
     }
-    switch (option) {
-      case "add":
-        route.history.push(this.getCreateLink());
-        break;
-      case "edit":
-        route.history.push(this.getEditLink(id), { goBackEnabled: true });
-        break;
-      default:
-        route.history.push(this.getListLink());
-        break;
-    }
+    route.history.push(this.getDetailLink(id));
   };
   private getEditPageLayout = (
     route: RouteComponentProps<any>,

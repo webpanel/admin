@@ -8,9 +8,9 @@ import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
 import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
-import { SaveOption } from "./buttons";
+import { ResourceFormPageButtons } from "./buttons";
 
-export type EntityOnSaveHandler = (id: ResourceID, option?: SaveOption) => void;
+export type EntityOnSaveHandler = (id: ResourceID) => void;
 
 export interface IEntityFormFieldOptions {
   field: string | null;
@@ -33,6 +33,7 @@ export interface IEntityFormProps extends IEntityFormConfig {
   formRef?: React.MutableRefObject<FormInstance | null>;
   onSave?: EntityOnSaveHandler;
   onValuesChanged?: (values: any) => void;
+  showButtons?: boolean;
 }
 
 export interface IEntityFormEditProps extends IEntityFormProps {
@@ -40,14 +41,16 @@ export interface IEntityFormEditProps extends IEntityFormProps {
 }
 export interface IEntityFormCreateProps extends IEntityFormProps {}
 
-const isEditProps = (props: any): props is IEntityFormEditProps => {
+export const isEntityEditFormProps = (
+  props: any
+): props is IEntityFormEditProps => {
   return typeof props.resourceID !== "undefined";
 };
 
 export const EntityForm = (
   props: IEntityFormCreateProps | IEntityFormEditProps
 ) => {
-  const { formRef, onSave, onValuesChanged } = props;
+  const { formRef, onSave, onValuesChanged, showButtons } = props;
   const [form] = Form.useForm();
   const [saving, setSaving] = React.useState(false);
 
@@ -63,7 +66,7 @@ export const EntityForm = (
   };
 
   var resourceID: ResourceID | undefined = undefined;
-  if (isEditProps(props)) {
+  if (isEntityEditFormProps(props)) {
     resourceID = props.resourceID;
   }
 
@@ -105,12 +108,9 @@ export const EntityForm = (
     fields,
   });
 
-  if (resource.data) {
-    form.setFieldsValue(resource.data);
-  }
-
   return (
     <Form
+      key={JSON.stringify(resource.data)}
       form={form}
       onFinish={async (values) => {
         try {
@@ -125,10 +125,18 @@ export const EntityForm = (
       }}
       onValuesChange={onValuesChanged}
       layout={"vertical"}
+      initialValues={resource.data}
       {...form}
     >
       <Spin spinning={(resource.loading && !resource.polling) || saving}>
         {content}
+        {showButtons && (
+          <ResourceFormPageButtons
+            saving={saving}
+            // submit={() => formRefLocal?.current?.submit()}
+            reset={() => form.resetFields()}
+          />
+        )}
       </Spin>
     </Form>
   );
