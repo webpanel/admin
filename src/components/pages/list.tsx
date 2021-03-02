@@ -35,8 +35,6 @@ import i18next from "i18next";
 export interface IEntityListTableProps
   extends TableProps<any>,
     ResourceCollectionOptions<any> {
-  // deprecated, use size instead
-  condensed?: boolean;
   actionButtons?: Thunk<EntitylistActionButton[], any>;
   actionButtonsTitle?: React.ReactNode;
   actionButtonsFixed?: boolean;
@@ -287,9 +285,6 @@ export class EntityList<
     buttons?: EntitylistActionButton[]
   ): ResourceTablePropsActionButton<T>[] {
     const { entity, table } = this.props;
-    if (table && table.condensed) {
-      table.size = "small";
-    }
     const size = table && table.size === "small" ? "small" : "default";
     if (typeof buttons === "undefined") {
       buttons = ["detail", "edit", "delete"];

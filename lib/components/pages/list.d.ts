@@ -11,7 +11,6 @@ import { EntityField } from "../../model/EntityField";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 import i18next from "i18next";
 export interface IEntityListTableProps extends TableProps<any>, ResourceCollectionOptions<any> {
-    condensed?: boolean;
     actionButtons?: Thunk<EntitylistActionButton[], any>;
     actionButtonsTitle?: React.ReactNode;
     actionButtonsFixed?: boolean;
