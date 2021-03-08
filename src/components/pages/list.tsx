@@ -2,6 +2,7 @@ import "../../../styles/entity-list.css";
 
 import * as React from "react";
 
+import { Button, Card, Space } from "antd";
 import {
   EntitylistActionButton,
   detailListButton,
@@ -21,11 +22,11 @@ import {
 import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Card } from "antd";
 import { CardProps } from "antd/lib/card";
 import { CreateEntityProps } from "../buttons/EntityAddButton";
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
+import { FilterOutlined } from "@ant-design/icons";
 import { ListCell } from "./list-cell";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 import { ResourceTablePropsActionButton } from "webpanel-antd/lib/table/ResourceTableActionButtons";
@@ -234,6 +235,7 @@ export class EntityList<
       };
     }
 
+    const hasTableFilter = typeof resource.namedFilter("table") !== "undefined";
     return (
       <Card
         bodyStyle={{ padding: "0" }}
@@ -244,35 +246,43 @@ export class EntityList<
         {...card}
         extra={[
           card && card.extra,
-          _searchable && (
-            <ResourceSearchInput
-              key="searchInput"
-              resourceCollection={resource}
-              size="small"
-              style={{
-                width: "100%",
-                minWidth: 100,
-                maxWidth: 150,
-                marginRight: 8,
-              }}
-            />
-          ),
-          _addButton &&
-            entity.creatable &&
-            (React.isValidElement(_addButton)
-              ? _addButton
-              : entity.getCreateButton({
-                  key: "create",
-                  button: { size: "small" },
-                  onSave: () => resource.reload(),
-                  ...(typeof _addButton === "object" ? _addButton : {}),
-                })),
-          // <EntityAddButton
-          //   key="addButton"
-          //   entity={entity}
-          //   onCreate={() => resource.reload()}
-          //   {..._addButton}
-          // />
+          <Space>
+            {hasTableFilter && (
+              <Button
+                icon={<FilterOutlined />}
+                danger={true}
+                size="small"
+                onClick={async () => {
+                  await resource.updateNamedFilters("table", undefined);
+                  await resource.reload();
+                }}
+              />
+            )}
+            {_searchable && (
+              <ResourceSearchInput
+                key="searchInput"
+                resourceCollection={resource}
+                size="small"
+                style={{
+                  width: "100%",
+                  minWidth: 100,
+                  maxWidth: 150,
+                  marginRight: 8,
+                }}
+              />
+            )}
+
+            {_addButton &&
+              entity.creatable &&
+              (React.isValidElement(_addButton)
+                ? _addButton
+                : entity.getCreateButton({
+                    key: "create",
+                    button: { size: "small" },
+                    onSave: () => resource.reload(),
+                    ...(typeof _addButton === "object" ? _addButton : {}),
+                  }))}
+          </Space>,
         ].filter((x) => x)}
       >
         {this.tableContent(resource, t)}
