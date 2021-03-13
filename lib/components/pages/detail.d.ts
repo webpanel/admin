@@ -1,5 +1,5 @@
+/// <reference types="react" />
 import "../../../styles/form-detail.css";
-import * as React from "react";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
@@ -23,6 +23,4 @@ export interface IEntityDetailProps extends IEntityDetailConfig {
     entity: Entity;
     resourceID: ResourceID;
 }
-export declare class EntityDetail extends React.Component<IEntityDetailProps> {
-    render(): React.ReactNode;
-}
+export declare const EntityDetail: (props: IEntityDetailProps) => JSX.Element;

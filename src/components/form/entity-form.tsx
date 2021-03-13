@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Form, Spin, message } from "antd";
+import { Form, Result, Spin, message } from "antd";
 import { Resource, ResourceID, useResource } from "webpanel-data";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
@@ -98,6 +98,10 @@ export const EntityForm = (
       .filter((f) => f) as string[],
     dataSource: entity.dataSource,
   });
+
+  if (!resource.loading && resource.data === null) {
+    return <Result status="404" />;
+  }
 
   const content = entity.getCardLayout("edit", {
     entity,
