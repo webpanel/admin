@@ -1,3 +1,4 @@
+export { PageNotFound } from "./components/pages/not-found";
 export { Entity } from "./model/Entity";
 export { Layout } from "webpanel-antd";
 export * from "./layout-builder";

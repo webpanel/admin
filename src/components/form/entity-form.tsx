@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Form, Result, Spin, message } from "antd";
+import { Form, Spin, message } from "antd";
 import { Resource, ResourceID, useResource } from "webpanel-data";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
@@ -8,6 +8,7 @@ import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
 import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
+import { PageNotFound } from "../pages/not-found";
 import { ResourceFormPageButtons } from "./buttons";
 
 export type EntityOnSaveHandler = (id: ResourceID) => void;
@@ -100,7 +101,7 @@ export const EntityForm = (
   });
 
   if (!resource.loading && resource.data === null) {
-    return <Result status="404" />;
+    return <PageNotFound />;
   }
 
   const content = entity.getCardLayout("edit", {

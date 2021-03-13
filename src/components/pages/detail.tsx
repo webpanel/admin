@@ -2,15 +2,16 @@ import "../../../styles/form-detail.css";
 
 import * as React from "react";
 
-import { Card, Result } from "antd";
 import Modal, { ModalProps } from "antd/lib/modal";
 import { ResourceID, useResource } from "webpanel-data";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
+import { Card } from "antd";
 import { CardProps } from "antd/lib/card";
 import { DescriptionsProps } from "antd/lib/descriptions";
 import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
+import { PageNotFound } from "./not-found";
 // import { Link  } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 
@@ -67,7 +68,7 @@ export const EntityDetail = (props: IEntityDetailProps) => {
   });
 
   if (!resource.loading && resource.data === null) {
-    return <Result status="404" />;
+    return <PageNotFound />;
   }
 
   const _fields = resolveOptionalThunk(fields);
