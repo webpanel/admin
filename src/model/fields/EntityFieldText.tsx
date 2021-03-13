@@ -25,7 +25,7 @@ export class EntityFieldText<
     return (
       <Input.TextArea
         key={`text_field_${this.entity.name}_${this.valuePropName}`}
-        {...props}
+        autoFocus={props?.autoFocus}
         autoSize={{ minRows: 2, maxRows: 8 }}
         onChange={onChangeProp}
       />

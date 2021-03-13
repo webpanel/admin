@@ -5,10 +5,14 @@ import { Entity } from "../Entity";
 import { FormLayout } from "antd/lib/form/Form";
 export declare type IEntityFieldRelationshipType = "toOne" | "toMany";
 export declare type IEntityFieldRelationshipSelectMode = undefined | "multiple";
+export interface IEntityFieldRelationshipCreatableConfig {
+    addButton: boolean;
+    notFound: boolean;
+}
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
     targetEntity: Thunk<Entity>;
     type: IEntityFieldRelationshipType;
-    creatable?: Thunk<boolean>;
+    creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
     get type(): IEntityFieldRelationshipType;

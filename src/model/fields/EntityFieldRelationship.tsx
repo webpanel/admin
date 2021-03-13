@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Col, Row, Tag } from "antd";
+import { Button, Col, Row, Tag } from "antd";
 import {
   EntityField,
   IEntityFieldConfig,
@@ -8,31 +8,38 @@ import {
   IEntityFieldRenderOptions,
 } from "../EntityField";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
+// import { IEntityEditConfig } from '../../components/pages/edit';
+import { Translation, useTranslation } from "react-i18next";
 
+import { CreateEntityModal } from "../../components/buttons/CreateEntityModal";
 // import { CreateEntityButton } from '../../components/buttons/EntityAddButton';
 import { Entity } from "../Entity";
 import FormItem from "antd/lib/form/FormItem";
 import { FormLayout } from "antd/lib/form/Form";
+import { PlusOutlined } from "@ant-design/icons";
 import { ResourceID } from "webpanel-data";
 import { ResourceSelect } from "webpanel-antd";
-// import { IEntityEditConfig } from '../../components/pages/edit';
-import { Translation } from "react-i18next";
 
 export type IEntityFieldRelationshipType = "toOne" | "toMany";
 export type IEntityFieldRelationshipSelectMode = undefined | "multiple";
+
+export interface IEntityFieldRelationshipCreatableConfig {
+  addButton: boolean;
+  notFound: boolean;
+}
 
 export interface IEntityFieldRelationshipConfig<T>
   extends IEntityFieldConfig<T> {
   targetEntity: Thunk<Entity>;
   type: IEntityFieldRelationshipType;
-  creatable?: Thunk<boolean>;
+  creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
 }
 
 type SelectValueType = string | string[];
 interface RelationshipSelectWithAddButtonProps {
   field: EntityFieldRelationship<any>;
   targetEntity: Entity<any>;
-  isCreatable: boolean;
+  isCreatable: boolean | IEntityFieldRelationshipCreatableConfig;
   onChange?: (value: SelectValueType) => void;
   value?: SelectValueType;
 }
@@ -41,6 +48,47 @@ const RelationshipSelectWithAddButton = (
 ) => {
   const { field, targetEntity, isCreatable, onChange, value } = props;
   const resourceConfig = targetEntity.getSearchResourceCollectionConfig();
+  const [modalVisible, setModalVisible] = React.useState<boolean | undefined>(
+    undefined
+  );
+  const { t } = useTranslation("webpanel-admin");
+
+  const showAddButton =
+    typeof isCreatable === "boolean" ? isCreatable : isCreatable.addButton;
+  const showAddOnNotFound =
+    typeof isCreatable === "boolean" ? isCreatable : isCreatable.notFound;
+
+  const onSave = async (id: ResourceID) => {
+    let updateValues = {};
+    updateValues[field.columnName()] = id;
+    if (onChange) {
+      if (field.mode === "multiple") {
+        const ids = value as string[];
+        ids.push(id.toString());
+        onChange(ids);
+      } else {
+        onChange(id.toString());
+      }
+    }
+  };
+  const getAddButton = () => {
+    return (
+      <Col flex="32px">
+        {targetEntity.getCreateButton({
+          key: `relationship_field_${field.entity.name}_${field.valuePropName}_add`,
+          flow: {
+            type: "modal",
+            modal: {
+              title: `Add ${targetEntity.title}`,
+              width: "70%",
+            },
+          },
+          onSave: onSave,
+        })}
+      </Col>
+    );
+  };
+
   return (
     <Row>
       <Col flex="auto">
@@ -59,35 +107,32 @@ const RelationshipSelectWithAddButton = (
             minWidth: "100px",
           }}
           onChange={(value) => onChange && onChange(value)}
+          notFoundContent={
+            showAddOnNotFound && (
+              <Button
+                onClick={() => setModalVisible(true)}
+                icon={<PlusOutlined />}
+              >
+                {t("notFoundCreateNew")}
+              </Button>
+            )
+          }
         />
       </Col>
-      {isCreatable && (
-        <Col flex="32px">
-          {targetEntity.getCreateButton({
-            key: `relationship_field_${field.entity.name}_${field.valuePropName}_add`,
-            flow: {
-              type: "modal",
-              modal: {
-                title: `Add ${targetEntity.title}`,
-                width: "70%",
-              },
-            },
-            onSave: async (id: ResourceID) => {
-              let updateValues = {};
-              updateValues[field.columnName()] = id;
-              if (onChange) {
-                if (field.mode === "multiple") {
-                  const ids = value as string[];
-                  ids.push(id.toString());
-                  onChange(ids);
-                } else {
-                  onChange(id.toString());
-                }
-              }
-            },
-          })}
-        </Col>
+      {showAddOnNotFound && (
+        <CreateEntityModal
+          entity={targetEntity}
+          onSave={(id) => {
+            setModalVisible(false);
+            onSave(id);
+          }}
+          modal={{
+            visible: modalVisible,
+            onCancel: () => setModalVisible(false),
+          }}
+        />
       )}
+      {showAddButton && getAddButton()}
     </Row>
   );
 };

@@ -118,7 +118,7 @@ export declare class Entity<T extends {
     getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (props?: Pick<IEntityCreateProps, "form" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons"> | undefined) => React.ReactNode;
-    getCreateButton: (props: Pick<CreateEntityProps, "button" | "form" | "key" | "flow" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons">) => React.ReactNode;
+    getCreateButton: (props: Pick<CreateEntityProps, "button" | "form" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons" | "flow" | "key">) => React.ReactNode;
     getEditView: (props: Pick<IEntityEditProps, "form" | "resourceID" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons">) => React.ReactNode;
     getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     getSearchResourceCollectionConfig: () => ResourceCollectionConfig<T>;

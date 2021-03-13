@@ -34,11 +34,6 @@ export class EntityFieldCustom<
   ): React.ReactNode {
     const onChange = props && props.onChange;
     const onChangeProp = (value?: T) => onChange && onChange(value, value);
-    console.log(
-      "??new values",
-      props?.values,
-      props?.formInstance?.getFieldsValue()
-    );
     return this.config.inputElement({
       value: props && props.value,
       onChange: onChangeProp,

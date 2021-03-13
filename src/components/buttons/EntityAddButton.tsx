@@ -1,15 +1,16 @@
 import * as React from "react";
 
-import { FormInstance, Link } from "webpanel-antd";
-
 import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
+import { CreateEntityModal } from "./CreateEntityModal";
 import { Entity } from "../../model/Entity";
 import { IEntityFormProps } from "../form/entity-form";
-import Modal from "antd/lib/modal/Modal";
+import { Link } from "webpanel-antd";
+// import Modal from "antd/lib/modal/Modal";
 import { ModalProps } from "antd/lib/modal";
 import { PlusOutlined } from "@ant-design/icons";
-import { useTranslation } from "react-i18next";
+
+// import { useTranslation } from "react-i18next";
 
 export interface IEntityAddButtonModalFlow {
   type: "modal";
@@ -26,14 +27,8 @@ export interface CreateEntityButtonProps extends CreateEntityProps {
   entity: Entity;
 }
 export const CreateEntityButton = (props: CreateEntityButtonProps) => {
-  const { t } = useTranslation();
+  const { entity, flow, button, ...rest } = props;
   const [modalVisible, setModalVisible] = React.useState(false);
-  const formRef = React.useRef<FormInstance | null>(null);
-  // const [formInstance, setFormInstance] = React.useState<
-  //   FormInstance | undefined
-  // >(undefined);
-
-  const { entity, initialValues, fields, flow, onSave, button } = props;
 
   let _flow = flow || "redirect";
 
@@ -49,41 +44,18 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
     setModalVisible(false);
   };
 
-  const getTitle = (): string => {
-    return (
-      t(`${entity.name}._title`, {
-        defaultValue: entity.title,
-      }) +
-      ": " +
-      ((formRef.current && entity.render(formRef.current.getFieldsValue())) ||
-        "-")
-    );
-  };
-
   if (_flow.type === "modal") {
-    // const modal = _flow.modal;
     return (
       <>
-        <Modal
-          visible={modalVisible}
-          onOk={() => formRef?.current?.submit()}
-          onCancel={() => setModalVisible(false)}
-          title={getTitle()}
-          destroyOnClose={true}
-        >
-          {entity.getCreateView({
-            initialValues,
-            fields,
-            wrapperType: "plain",
-            formRef: formRef,
-            onSave: (id) => {
-              hideModal();
-              if (onSave) {
-                onSave(id);
-              }
-            },
-          })}
-        </Modal>
+        <CreateEntityModal
+          entity={entity}
+          modal={{
+            visible: modalVisible,
+            onCancel: () => hideModal(),
+            ..._flow.modal,
+          }}
+          {...rest}
+        />
         <Button
           icon={<PlusOutlined />}
           {...button}
