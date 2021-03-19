@@ -52,6 +52,10 @@ import {
   IEntityFieldNumberConfig,
 } from "./fields/EntityFieldNumber";
 import {
+  EntityFieldPercentage,
+  IEntityFieldPercentageConfig,
+} from "./fields/EntityFieldPercentage";
+import {
   EntityFieldRelationship,
   IEntityFieldRelationshipConfig,
 } from "./fields/EntityFieldRelationship";
@@ -639,6 +643,13 @@ export class Entity<T extends { id: ResourceID } = any> {
   }
   public numberField(name: string, config?: IEntityFieldNumberConfig<T>): this {
     this.fields.push(new EntityFieldNumber(name, config || {}, this));
+    return this;
+  }
+  public percentageField(
+    name: string,
+    config?: IEntityFieldPercentageConfig<T>
+  ): this {
+    this.fields.push(new EntityFieldPercentage(name, config || {}, this));
     return this;
   }
   public passwordField(name: string, config?: IEntityFieldConfig<T>): this {

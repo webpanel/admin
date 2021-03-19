@@ -12,6 +12,7 @@ import { IEntityFieldDateConfig } from "./fields/EntityFieldDate";
 import { IEntityFieldEnumConfig } from "./fields/EntityFieldEnum";
 import { IEntityFieldFileConfig } from "./fields/EntityFieldFile";
 import { IEntityFieldNumberConfig } from "./fields/EntityFieldNumber";
+import { IEntityFieldPercentageConfig } from "./fields/EntityFieldPercentage";
 import { IEntityFieldRelationshipConfig } from "./fields/EntityFieldRelationship";
 import { IEntityListConfig } from "../components/pages/list";
 import { EntitySelectConfig } from "../components/entity-picker";
@@ -118,7 +119,7 @@ export declare class Entity<T extends {
     getDetailView: (resourceID: React.ReactText, config?: IEntityDetailConfig | undefined) => React.ReactNode;
     getDetailButton: (id: React.ReactText, props: DetailEntityProps) => React.ReactNode;
     getCreateView: (props?: Pick<IEntityCreateProps, "form" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons"> | undefined) => React.ReactNode;
-    getCreateButton: (props: Pick<CreateEntityProps, "button" | "form" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons" | "flow" | "key">) => React.ReactNode;
+    getCreateButton: (props: Pick<CreateEntityProps, "form" | "button" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons" | "flow" | "key">) => React.ReactNode;
     getEditView: (props: Pick<IEntityEditProps, "form" | "resourceID" | "wrapperType" | "fields" | "initialValues" | "formRef" | "onSave" | "onValuesChanged" | "showButtons">) => React.ReactNode;
     getEditButton: (resourceID: React.ReactText) => React.ReactNode;
     getSearchResourceCollectionConfig: () => ResourceCollectionConfig<T>;
@@ -126,6 +127,7 @@ export declare class Entity<T extends {
     stringField(name: string, config?: IEntityFieldConfig<T>): this;
     textField(name: string, config?: IEntityFieldConfig<T>): this;
     numberField(name: string, config?: IEntityFieldNumberConfig<T>): this;
+    percentageField(name: string, config?: IEntityFieldPercentageConfig<T>): this;
     passwordField(name: string, config?: IEntityFieldConfig<T>): this;
     dateField(name: string, config?: IEntityFieldDateConfig<T>): this;
     booleanField(name: string, config?: IEntityFieldBooleanConfig<T>): this;

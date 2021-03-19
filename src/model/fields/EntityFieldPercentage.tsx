@@ -12,39 +12,37 @@ import { IEntityListColumnAlign } from "../../components/pages/list";
 import { InputNumber } from "antd";
 import { InputNumberProps } from "antd/lib/input-number";
 
-const formatter = (
-  value: string | number | undefined,
-  format?: string
-): string => {
-  return numeral(value).format(format || "0,0");
-  // return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-};
-const parser = (value: string): string => {
-  if (!value) {
-    return "";
-  }
-  return numeral(value).format("0");
-  // return value.replace(/\s?|(\s*)/g, "");
+export const PercentageInput = (props: InputNumberProps) => {
+  const { value, onChange, ...rest } = props;
+  return (
+    <InputNumber
+      value={value && value * 100}
+      onChange={(v) =>
+        onChange &&
+        onChange(v && 0.01 * (typeof v === "string" ? parseInt(v, 10) : v))
+      }
+      formatter={(value) => `${value}%`}
+      parser={(value) => (value && value.replace("%", "")) || ""}
+      {...rest}
+    />
+  );
 };
 
-export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
-  format?: string;
-  inputProps?: InputNumberProps;
-}
-export class EntityFieldNumber<T> extends EntityField<
+export interface IEntityFieldPercentageConfig<T>
+  extends IEntityFieldConfig<T> {}
+export class EntityFieldPercentage<T> extends EntityField<
   T,
-  IEntityFieldNumberConfig<T>
+  IEntityFieldPercentageConfig<T>
 > {
   constructor(
     public readonly name: string,
-    protected readonly config: IEntityFieldNumberConfig<T>,
+    protected readonly config: IEntityFieldPercentageConfig<T>,
     public readonly entity: Entity
   ) {
     super(name, config, entity);
 
     if (typeof config.render === "undefined") {
-      this.config.render = (values) =>
-        numeral(values[name]).format(config.format || "0,0");
+      this.config.render = (values) => numeral(values[name]).format("%");
     }
   }
 
@@ -63,15 +61,10 @@ export class EntityFieldNumber<T> extends EntityField<
       : undefined;
 
     return (
-      <InputNumber
+      <PercentageInput
         style={{ minWidth: "195px", width: "100%" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
-        formatter={(value) => formatter(value, this.config.format)}
-        parser={(value) => {
-          return parser(value || "");
-        }}
         {...props}
-        {...this.config.inputProps}
         onChange={onChangeProp}
       />
     );
@@ -80,7 +73,7 @@ export class EntityFieldNumber<T> extends EntityField<
   public filterDropdownInput = (props: IEntityFieldFilterProps<number>) => {
     const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
     return (
-      <InputNumber
+      <PercentageInput
         style={{ minWidth: "195px" }}
         key={`number_field_${this.entity.name}_${this.valuePropName}`}
         placeholder="Number"
@@ -88,8 +81,6 @@ export class EntityFieldNumber<T> extends EntityField<
         onChange={(value: number) =>
           props.setSelectedKeys(value ? [value] : [])
         }
-        formatter={(value) => formatter(value)}
-        parser={(value) => parser(value || "")}
       />
     );
   };
