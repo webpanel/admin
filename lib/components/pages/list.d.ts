@@ -17,7 +17,7 @@ export interface IEntityListTableProps extends TableProps<any>, ResourceCollecti
     pagination?: TablePaginationConfig | false;
 }
 export declare type IEntityListColumnRender = (value: any, values: any, index: number, field: EntityField<any, any>) => React.ReactNode | {
-    childre: React.ReactNode;
+    children: React.ReactNode;
     props: {
         rowSpan: number;
         colSpan: number;

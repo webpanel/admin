@@ -2,7 +2,7 @@ import "../../../styles/entity-list.css";
 
 import * as React from "react";
 
-import { Button, Card, Space } from "antd";
+import { Button, Card, Space, Tooltip } from "antd";
 import {
   EntitylistActionButton,
   detailListButton,
@@ -50,7 +50,7 @@ export type IEntityListColumnRender = (
 ) =>
   | React.ReactNode
   | {
-      childre: React.ReactNode;
+      children: React.ReactNode;
       props: { rowSpan: number; colSpan: number };
     };
 
@@ -182,6 +182,7 @@ export class EntityList<
       align?: IEntityListColumnAlign;
       titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     }[] = [];
+
     if (_fields) {
       for (let f of _fields) {
         const fieldName = typeof f === "string" ? f : f.field;
@@ -248,15 +249,23 @@ export class EntityList<
           card && card.extra,
           <Space>
             {hasTableFilter && (
-              <Button
-                icon={<FilterOutlined />}
-                danger={true}
-                size="small"
-                onClick={async () => {
-                  await resource.updateNamedFilters("table", undefined);
-                  await resource.reload();
-                }}
-              />
+              <Tooltip
+                title={
+                  <Translation ns="webpanel-admin">
+                    {(t) => t("clearFilter")}
+                  </Translation>
+                }
+              >
+                <Button
+                  icon={<FilterOutlined />}
+                  danger={true}
+                  size="small"
+                  onClick={async () => {
+                    await resource.updateNamedFilters("table", undefined);
+                    await resource.reload();
+                  }}
+                />
+              </Tooltip>
             )}
             {_searchable && (
               <ResourceSearchInput

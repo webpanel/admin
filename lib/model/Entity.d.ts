@@ -97,7 +97,7 @@ export declare class Entity<T extends EntityDataType = {
     get initialSorting(): SortInfo[] | undefined;
     get initialFilters(): DataSourceArgumentMap | undefined;
     get searchable(): boolean;
-    getField<Name extends keyof T>(name: Name): EntityField<T, any> | null;
+    getField(name: string): EntityField<T, any> | null;
     getFieldOrFail(name: string): EntityField<T, any>;
     getListFields(): EntityField<T, any>[];
     getEditFields(resourceID?: ResourceID): EntityField<T, any>[];

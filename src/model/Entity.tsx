@@ -254,9 +254,7 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
     return typeof this.config.searchable !== "undefined";
   }
 
-  public getField<Name extends keyof T>(
-    name: Name
-  ): EntityField<T, any> | null {
+  public getField(name: string): EntityField<T, any> | null {
     const filtered = this.fields.filter((f) => f.name === name);
     return filtered.length > 0 ? filtered[0] : null;
   }
@@ -777,7 +775,7 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
     name: Name,
     fn: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode
   ): this {
-    this.getField(name)?.setRender(fn);
+    this.getField(name as string)?.setRender(fn);
     return this;
   }
 
