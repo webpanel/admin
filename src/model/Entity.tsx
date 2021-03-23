@@ -22,7 +22,11 @@ import {
   IEntityEditConfig,
   IEntityEditProps,
 } from "../components/pages/edit";
-import { EntityField, IEntityFieldConfig } from "./EntityField";
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldRenderOptions,
+} from "./EntityField";
 import {
   EntityFieldBoolean,
   IEntityFieldBooleanConfig,
@@ -80,22 +84,32 @@ import { Translation } from "react-i18next";
 
 // import { Button } from 'antd';
 
+type MergeEntityFieldType<
+  T,
+  U,
+  T0 = T & U,
+  T1 = { [K in keyof T0]: T0[K] }
+> = T1;
+
+export type EntityDataType = { id: ResourceID };
+type UnwrapEntity<T> = T extends Entity<infer U> ? U : never;
+
 interface IEntitySearchableConfig {
   fields: Thunk<string[]>;
 }
 
-interface IEntityDetailOptions<T extends { id: ResourceID }> {
+interface IEntityDetailOptions<T extends EntityDataType> {
   entity: Entity<T>;
   resourceID: ResourceID;
 }
-interface IEntityEditOptions<T extends { id: ResourceID }> {
+interface IEntityEditOptions<T extends EntityDataType> {
   entity: Entity<T>;
   resourceID?: ResourceID;
 }
 
 type ILayoutGetter<T> = (props: T) => React.ReactNode;
 
-export interface IEntityConfig<T extends { id: ResourceID }> {
+export interface IEntityConfig<T extends EntityDataType> {
   name: Thunk<string>;
   pathPrefix?: Thunk<string>;
   icon?: Thunk<React.ReactNode>;
@@ -128,12 +142,20 @@ export interface IEntityConfig<T extends { id: ResourceID }> {
   initialFilters?: DataSourceArgumentMap;
 }
 
-export class Entity<T extends { id: ResourceID } = any> {
-  public fields: EntityField<T, any>[] = [];
+export class Entity<T extends EntityDataType = { id: ResourceID }> {
+  public fields: EntityField<any, any>[] = [];
 
   autopermissions?: boolean;
 
-  constructor(private readonly config: IEntityConfig<T>) {}
+  constructor(private config: IEntityConfig<T>) {}
+
+  public updateConfig(config: Partial<IEntityConfig<T>>): this {
+    this.config = {
+      ...this.config,
+      ...config,
+    };
+    return this;
+  }
 
   public get structureName(): string {
     return `${inflection.transform(resolveThunk(this.config.name), [
@@ -210,6 +232,16 @@ export class Entity<T extends { id: ResourceID } = any> {
     };
   }
 
+  public setRender(fn: (value: T) => React.ReactNode): this {
+    this.config.render = (value) => {
+      if (value === null) {
+        return "–";
+      }
+      return fn(value);
+    };
+    return this;
+  }
+
   public get initialSorting(): SortInfo[] | undefined {
     const list = resolveOptionalThunk(this.config.list);
     return (list && list.initialSorting) || this.config.initialSorting;
@@ -222,7 +254,9 @@ export class Entity<T extends { id: ResourceID } = any> {
     return typeof this.config.searchable !== "undefined";
   }
 
-  public getField(name: string): EntityField<T, any> | null {
+  public getField<Name extends keyof T>(
+    name: Name
+  ): EntityField<T, any> | null {
     const filtered = this.fields.filter((f) => f.name === name);
     return filtered.length > 0 ? filtered[0] : null;
   }
@@ -633,68 +667,117 @@ export class Entity<T extends { id: ResourceID } = any> {
   }
 
   // fields
-  public stringField(name: string, config?: IEntityFieldConfig<T>): this {
+  public stringField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
+  >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldString(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public textField(name: string, config?: IEntityFieldConfig<T>): this {
+  public textField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
+  >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldText(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public numberField(name: string, config?: IEntityFieldNumberConfig<T>): this {
+  public numberField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: number }>
+  >(name: Name, config?: IEntityFieldNumberConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldNumber(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public percentageField(
-    name: string,
-    config?: IEntityFieldPercentageConfig<T>
-  ): this {
+  public percentageField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: number }>
+  >(name: Name, config?: IEntityFieldPercentageConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldPercentage(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public passwordField(name: string, config?: IEntityFieldConfig<T>): this {
+  public passwordField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
+  >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldPasssword(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public dateField(name: string, config?: IEntityFieldDateConfig<T>): this {
+  public dateField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: moment.Moment }>
+  >(name: Name, config?: IEntityFieldDateConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldDate(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public booleanField(
-    name: string,
-    config?: IEntityFieldBooleanConfig<T>
-  ): this {
+  public booleanField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: boolean }>
+  >(name: Name, config?: IEntityFieldBooleanConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldBoolean(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public relationshipField(
-    name: string,
-    config: IEntityFieldRelationshipConfig<T>
-  ): this {
+  public relationshipField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, EnhancedKeys>,
+    Config extends IEntityFieldRelationshipConfig<EnhancedKeys>,
+    EnhancedKeys = {
+      [K in Name]: UnwrapEntity<ReturnType<Config["targetEntity"]>>;
+    }
+  >(name: Name, config: Config): Entity<T2> {
     this.fields.push(new EntityFieldRelationship(name, config, this));
-    return this;
+    return this as any;
   }
-  public fileField(name: string, config?: IEntityFieldFileConfig<T>): this {
+  public fileField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: any }>
+  >(name: Name, config?: IEntityFieldFileConfig<T>): Entity<T2> {
     this.fields.push(new EntityFieldFile(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public colorField(name: string, config?: IEntityFieldConfig<T>): this {
+  public colorField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
+  >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldColor(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public enumField(name: string, config: IEntityFieldEnumConfig<T>): this {
+  public enumField<
+    Name extends string,
+    T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
+  >(name: Name, config: IEntityFieldEnumConfig<T2>): Entity<T2> {
     this.fields.push(new EntityFieldEnum(name, config, this));
-    return this;
+    return this as any;
   }
-  public computedField(
-    name: string,
-    config?: IEntityFieldComputedConfig<T>
-  ): this {
+  public computedField<
+    Name extends string,
+    EnhancedKeys = {
+      [K in Name]: any;
+    }
+  >(
+    name: Name,
+    config?: IEntityFieldComputedConfig<any>
+  ): Entity<T & EnhancedKeys> {
     this.fields.push(new EntityFieldComputed(name, config || {}, this));
-    return this;
+    return this as any;
   }
-  public customField(name: string, config: IEntityFieldCustomConfig<T>): this {
+  public customField<
+    Name extends string,
+    EnhancedKeys = {
+      [K in Name]: any;
+    }
+  >(
+    name: Name,
+    config: IEntityFieldCustomConfig<any>
+  ): Entity<T & EnhancedKeys> {
     this.fields.push(new EntityFieldCustom(name, config, this));
+    return this as any;
+  }
+
+  public setFieldRender<Name extends keyof T>(
+    name: Name,
+    fn: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode
+  ): this {
+    this.getField(name)?.setRender(fn);
     return this;
   }
 

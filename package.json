@@ -40,7 +40,7 @@
     "antd": "^4.7.3",
     "i18next": "^17.0.8",
     "react-i18next": "^10.11.4",
-    "typescript": "^3.7.4",
+    "typescript": "^4.2.3",
     "webpanel-antd": "^0.2.9",
     "webpanel-data": "^0.1.0"
   }

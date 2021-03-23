@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Col, Popover, Row } from "antd";
+import { Button, Col, Popover, Row, message } from "antd";
 import { EditOutlined, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 
 import { EntityField } from "../../model/EntityField";
@@ -68,9 +68,16 @@ export const ListCell = (props: IListCellProps) => {
                     icon={<SaveOutlined />}
                     type="primary"
                     onClick={async () => {
-                      await save(value);
-                      setValue(undefined);
-                      setEditing(false);
+                      try {
+                        console.log("???", value);
+                        await save(value);
+                        console.log("saved");
+                        setValue(undefined);
+                      } catch (err) {
+                        message.error(err.message);
+                      } finally {
+                        setEditing(false);
+                      }
                     }}
                   />
                 </Col>

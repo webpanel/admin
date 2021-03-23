@@ -69,6 +69,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     get readable(): boolean;
     get writeable(): boolean;
     get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
+    setRender(fn: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode): void;
     inputElement(props?: IEntityFieldInputElementProps): React.ReactNode;
     get valuePropName(): string;
     fieldElement(key: string | number, config: {

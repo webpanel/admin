@@ -10,7 +10,7 @@ export interface IEntityFieldRelationshipCreatableConfig {
     notFound: boolean;
 }
 export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T> {
-    targetEntity: Thunk<Entity>;
+    targetEntity: any;
     type: IEntityFieldRelationshipType;
     creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
 }

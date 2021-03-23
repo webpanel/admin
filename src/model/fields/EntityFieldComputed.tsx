@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import { EntityField, IEntityFieldConfig } from "../EntityField";
 
 // import { FieldAction } from '../permissions';
 
-export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
+export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<any> {
   // columnName?: string;
   fetchField?: string;
 }
@@ -27,6 +27,6 @@ export class EntityFieldComputed<T> extends EntityField<
     onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    return 'cannot edit computed field';
+    return "cannot edit computed field";
   }
 }

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { EntityField, IEntityFieldConfig } from '../EntityField';
-export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<T> {
+import * as React from "react";
+import { EntityField, IEntityFieldConfig } from "../EntityField";
+export interface IEntityFieldComputedConfig<T> extends IEntityFieldConfig<any> {
     fetchField?: string;
 }
 export declare class EntityFieldComputed<T> extends EntityField<T, IEntityFieldComputedConfig<T>> {

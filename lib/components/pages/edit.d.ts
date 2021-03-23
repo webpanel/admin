@@ -7,4 +7,4 @@ export interface IEntityEditProps extends IEntityEditConfig, IEntityFormEditProp
 }
 export interface IEntityCreateProps extends IEntityEditConfig, IEntityFormCreateProps {
 }
-export declare const EntityEdit: (props: (IEntityEditProps & IEntityEditConfig) | (IEntityCreateProps & IEntityEditConfig)) => JSX.Element;
+export declare const EntityEdit: (props: (IEntityEditProps | IEntityCreateProps) & IEntityEditConfig) => JSX.Element;

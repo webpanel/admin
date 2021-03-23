@@ -211,6 +211,12 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     };
   }
 
+  public setRender(
+    fn: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode
+  ) {
+    this.config.render = fn;
+  }
+
   public inputElement(props?: IEntityFieldInputElementProps): React.ReactNode {
     return "input element is empty";
   }
