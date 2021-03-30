@@ -808,13 +808,10 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
   }
 
   // resource hooks
-  public useResource(
-    resourceID: ResourceID,
-    config?: Partial<ResourceHookConfig<T>>
-  ): Resource<T> {
-    let entityFields: EntityField<any, any>[] = this.getDetailFields(
-      resourceID
-    );
+  public useResource(config?: Partial<ResourceHookConfig<T>>): Resource<T> {
+    let entityFields: EntityField<any, any>[] = config?.id
+      ? this.getDetailFields(config?.id)
+      : this.getEditFields();
 
     return useResource({
       fields: [
@@ -825,7 +822,7 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
       ],
       ...config,
       name: this.name,
-      id: resourceID,
+      id: config?.id,
       dataSource: this.dataSource,
     });
   }

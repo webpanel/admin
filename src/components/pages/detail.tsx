@@ -40,7 +40,8 @@ export const EntityDetail = (props: IEntityDetailProps) => {
   const { entity, resourceID, pollInterval, wrapperType, modal, card } = props;
 
   const { t } = useTranslation();
-  const resource = entity.useResource(resourceID, {
+  const resource = entity.useResource({
+    id: resourceID,
     pollInterval: pollInterval,
   });
 

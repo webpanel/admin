@@ -171,7 +171,7 @@ export declare class Entity<T extends EntityDataType = {
     getCreateLink(): string;
     getDetailLink(id: ResourceID): string;
     getEditLink(id: ResourceID): string;
-    useResource(resourceID: ResourceID, config?: Partial<ResourceHookConfig<T>>): Resource<T>;
+    useResource(config?: Partial<ResourceHookConfig<T>>): Resource<T>;
     useResourceCollection(config?: Partial<ResourceCollectionHookConfig<T>>): ResourceCollection<T>;
 }
 export {};
