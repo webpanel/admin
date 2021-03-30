@@ -28,7 +28,7 @@
     "i18next": "*",
     "react-i18next": "*",
     "webpanel-antd": "^0.2.9",
-    "webpanel-data": "^0.2.11"
+    "webpanel-data": "^0.2.12"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,6 @@
     "react-i18next": "^10.11.4",
     "typescript": "^4.2.3",
     "webpanel-antd": "^0.2.9",
-    "webpanel-data": "^0.2.11"
+    "webpanel-data": "^0.2.12"
   }
 }
