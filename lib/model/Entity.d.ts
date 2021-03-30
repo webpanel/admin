@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CreateEntityProps } from "../components/buttons/EntityAddButton";
-import { DataSource, ResourceID, SortInfo } from "webpanel-data";
+import { DataSource, Resource, ResourceCollectionHookConfig, ResourceHookConfig, ResourceID, SortInfo } from "webpanel-data";
 import { DetailEntityProps } from "../components/buttons/EntityDetailButton";
 import { IEntityDetailConfig, IEntityDetailProps } from "../components/pages/detail";
 import { IEntityCreateProps, IEntityEditConfig, IEntityEditProps } from "../components/pages/edit";
@@ -16,12 +16,12 @@ import { IEntityFieldPercentageConfig } from "./fields/EntityFieldPercentage";
 import { IEntityFieldRelationshipConfig } from "./fields/EntityFieldRelationship";
 import { IEntityListConfig } from "../components/pages/list";
 import { EntitySelectConfig } from "../components/entity-picker";
+import { ResourceCollection, ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
 import { Thunk } from "ts-thunk";
 import { DataSourceArgumentMap } from "webpanel-data/lib/DataSource";
 import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
-import { ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
 import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
 declare type MergeEntityFieldType<T, U, T0 = T & U, T1 = {
     [K in keyof T0]: T0[K];
@@ -171,5 +171,7 @@ export declare class Entity<T extends EntityDataType = {
     getCreateLink(): string;
     getDetailLink(id: ResourceID): string;
     getEditLink(id: ResourceID): string;
+    useResource(resourceID: ResourceID, config?: Partial<ResourceHookConfig<T>>): Resource<T>;
+    useResourceCollection(config?: Partial<ResourceCollectionHookConfig<T>>): ResourceCollection<T>;
 }
 export {};

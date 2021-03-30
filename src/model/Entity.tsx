@@ -5,7 +5,16 @@ import {
   CreateEntityButton,
   CreateEntityProps,
 } from "../components/buttons/EntityAddButton";
-import { DataSource, ResourceID, SortInfo } from "webpanel-data";
+import {
+  DataSource,
+  Resource,
+  ResourceCollectionHookConfig,
+  ResourceHookConfig,
+  ResourceID,
+  SortInfo,
+  useResource,
+  useResourceCollection,
+} from "webpanel-data";
 import {
   DetailEntityButton,
   DetailEntityProps,
@@ -66,6 +75,10 @@ import {
 import { EntityList, IEntityListConfig } from "../components/pages/list";
 import { EntitySelect, EntitySelectConfig } from "../components/entity-picker";
 import { Layout, Link, RouteComponentProps } from "webpanel-antd";
+import {
+  ResourceCollection,
+  ResourceCollectionConfig,
+} from "webpanel-data/lib/ResourceCollection";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
 
 import { Button } from "antd";
@@ -78,7 +91,6 @@ import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { Redirect } from "react-router";
-import { ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
 import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
 import { Translation } from "react-i18next";
 
@@ -793,5 +805,46 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
   }
   public getEditLink(id: ResourceID): string {
     return `${this.getListLink()}/${id}/edit`;
+  }
+
+  // resource hooks
+  public useResource(
+    resourceID: ResourceID,
+    config?: Partial<ResourceHookConfig<T>>
+  ): Resource<T> {
+    let entityFields: EntityField<any, any>[] = this.getDetailFields(
+      resourceID
+    );
+
+    return useResource({
+      fields: [
+        "id",
+        ...(entityFields
+          .map((x) => x && x.fetchField())
+          .filter((x) => x) as string[]),
+      ],
+      ...config,
+      name: this.name,
+      id: resourceID,
+      dataSource: this.dataSource,
+    });
+  }
+
+  public useResourceCollection(
+    config?: Partial<ResourceCollectionHookConfig<T>>
+  ): ResourceCollection<T> {
+    let entityFields: EntityField<any, any>[] = this.getListFields();
+
+    return useResourceCollection({
+      fields: [
+        "id",
+        ...(entityFields
+          .map((x) => x && x.fetchField())
+          .filter((x) => x) as string[]),
+      ],
+      ...config,
+      name: this.name,
+      dataSource: this.dataSource,
+    });
   }
 }
