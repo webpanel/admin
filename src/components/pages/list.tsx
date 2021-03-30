@@ -174,7 +174,9 @@ export class EntityList<
   }[] {
     const { entity, fields } = this.props;
 
-    const _fields = resolveOptionalThunk(fields);
+    const _fields = resolveOptionalThunk(
+      fields || entity.getListConfig()?.fields
+    );
     let listFields: {
       field: EntityField<any, any>;
       hidden: boolean;
