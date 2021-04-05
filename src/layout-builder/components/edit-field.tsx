@@ -14,19 +14,17 @@ export interface LayoutBuilderEditFieldInternalProps {
   entity: Entity;
 }
 
-export class LayoutBuilderEditField extends React.Component<
-  LayoutBuilderEditFieldProps & LayoutBuilderEditFieldInternalProps
-> {
-  render(): React.ReactNode {
-    const { name, entity, formLayout, values, formInstance } = this.props;
-    const field = entity.getField(name);
+export const LayoutBuilderEditField = (
+  props: LayoutBuilderEditFieldProps & LayoutBuilderEditFieldInternalProps
+): React.ReactNode => {
+  const { name, entity, formLayout, values, formInstance } = props;
+  const field = entity.getField(name);
 
-    if (field === null) {
-      return `unknown field ${name}`;
-    }
-    if (!field.writeable) {
-      return null;
-    }
-    return field.fieldElement(name, { formLayout, formInstance }, values);
+  if (field === null) {
+    return `unknown field ${name}`;
   }
-}
+  if (!field.writeable) {
+    return null;
+  }
+  return field.fieldElement(name, { formLayout, formInstance }, values);
+};

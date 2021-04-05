@@ -51,6 +51,8 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     protected readonly config: C;
     readonly entity: Entity;
     constructor(name: string, config: C, entity: Entity);
+    clone(entity?: Entity): this;
+    get titleTranslationKey(): string;
     get title(): string;
     get shortTitle(): string;
     get listColumnAlign(): IEntityListColumnAlign;

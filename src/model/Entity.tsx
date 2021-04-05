@@ -123,6 +123,7 @@ type ILayoutGetter<T> = (props: T) => React.ReactNode;
 
 export interface IEntityConfig<T extends EntityDataType> {
   name: Thunk<string>;
+  resourceName?: Thunk<string>;
   pathPrefix?: Thunk<string>;
   icon?: Thunk<React.ReactNode>;
   dataSource: Thunk<DataSource>;
@@ -154,19 +155,28 @@ export interface IEntityConfig<T extends EntityDataType> {
   initialFilters?: DataSourceArgumentMap;
 }
 
-export class Entity<T extends EntityDataType = { id: ResourceID }> {
+export class Entity<T extends EntityDataType = EntityDataType> {
   public fields: EntityField<any, any>[] = [];
 
   autopermissions?: boolean;
 
   constructor(private config: IEntityConfig<T>) {}
 
-  public updateConfig(config: Partial<IEntityConfig<T>>): this {
-    this.config = {
-      ...this.config,
+  public updateConfig(config: Partial<IEntityConfig<T>>): Entity<T> {
+    const entity = this.clone();
+    entity.config = {
+      ...entity.config,
       ...config,
     };
-    return this;
+    return entity;
+  }
+
+  private clone(): Entity<T> {
+    const e: Entity<T> = new Entity(this.config);
+    e.fields = this.fields.map((f) => {
+      return f.clone();
+    });
+    return e;
   }
 
   public get structureName(): string {
@@ -211,6 +221,9 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
 
   public get name(): string {
     return resolveThunk(this.config.name);
+  }
+  public get resourceName(): string {
+    return resolveOptionalThunk(this.config.resourceName) || this.name;
   }
 
   public get dataSource(): DataSource {
@@ -659,7 +672,7 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
 
   public getSearchResourceCollectionConfig = (): ResourceCollectionConfig<T> => {
     return {
-      name: this.name,
+      name: this.resourceName,
       fields: [
         "id",
         ...this.searchableFields.map(
@@ -681,50 +694,57 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
   >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldString(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldString(name, config || {}, entity));
+    return entity as any;
   }
   public textField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
   >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldText(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldText(name, config || {}, entity));
+    return entity as any;
   }
   public numberField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: number }>
   >(name: Name, config?: IEntityFieldNumberConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldNumber(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldNumber(name, config || {}, entity));
+    return entity as any;
   }
   public percentageField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: number }>
   >(name: Name, config?: IEntityFieldPercentageConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldPercentage(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldPercentage(name, config || {}, entity));
+    return entity as any;
   }
   public passwordField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
   >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldPasssword(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldPasssword(name, config || {}, entity));
+    return entity as any;
   }
   public dateField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: moment.Moment }>
   >(name: Name, config?: IEntityFieldDateConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldDate(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldDate(name, config || {}, entity));
+    return entity as any;
   }
   public booleanField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: boolean }>
   >(name: Name, config?: IEntityFieldBooleanConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldBoolean(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldBoolean(name, config || {}, entity));
+    return entity as any;
   }
   public relationshipField<
     Name extends string,
@@ -734,29 +754,33 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
       [K in Name]: UnwrapEntity<ReturnType<Config["targetEntity"]>>;
     }
   >(name: Name, config: Config): Entity<T2> {
-    this.fields.push(new EntityFieldRelationship(name, config, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldRelationship(name, config, entity));
+    return entity as any;
   }
   public fileField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: any }>
   >(name: Name, config?: IEntityFieldFileConfig<T>): Entity<T2> {
-    this.fields.push(new EntityFieldFile(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldFile(name, config || {}, entity));
+    return entity as any;
   }
   public colorField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
   >(name: Name, config?: IEntityFieldConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldColor(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldColor(name, config || {}, entity));
+    return entity as any;
   }
   public enumField<
     Name extends string,
     T2 extends MergeEntityFieldType<T, { [K in Name]: string }>
   >(name: Name, config: IEntityFieldEnumConfig<T2>): Entity<T2> {
-    this.fields.push(new EntityFieldEnum(name, config, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldEnum(name, config, entity));
+    return entity as any;
   }
   public computedField<
     Name extends string,
@@ -767,8 +791,9 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
     name: Name,
     config?: IEntityFieldComputedConfig<any>
   ): Entity<T & EnhancedKeys> {
-    this.fields.push(new EntityFieldComputed(name, config || {}, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldComputed(name, config || {}, this));
+    return entity as any;
   }
   public customField<
     Name extends string,
@@ -779,8 +804,9 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
     name: Name,
     config: IEntityFieldCustomConfig<any>
   ): Entity<T & EnhancedKeys> {
-    this.fields.push(new EntityFieldCustom(name, config, this));
-    return this as any;
+    const entity = this.clone();
+    entity.fields.push(new EntityFieldCustom(name, config, this));
+    return entity as any;
   }
 
   public setFieldRender<Name extends keyof T>(
@@ -821,7 +847,7 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
           .filter((x) => x) as string[]),
       ],
       ...config,
-      name: this.name,
+      name: this.resourceName,
       id: config?.id,
       dataSource: this.dataSource,
     });
@@ -840,7 +866,7 @@ export class Entity<T extends EntityDataType = { id: ResourceID }> {
           .filter((x) => x) as string[]),
       ],
       ...config,
-      name: this.name,
+      name: this.resourceName,
       dataSource: this.dataSource,
     });
   }

@@ -44,6 +44,7 @@ interface IEntityEditOptions<T extends EntityDataType> {
 declare type ILayoutGetter<T> = (props: T) => React.ReactNode;
 export interface IEntityConfig<T extends EntityDataType> {
     name: Thunk<string>;
+    resourceName?: Thunk<string>;
     pathPrefix?: Thunk<string>;
     icon?: Thunk<React.ReactNode>;
     dataSource: Thunk<DataSource>;
@@ -72,14 +73,13 @@ export interface IEntityConfig<T extends EntityDataType> {
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
 }
-export declare class Entity<T extends EntityDataType = {
-    id: ResourceID;
-}> {
+export declare class Entity<T extends EntityDataType = EntityDataType> {
     private config;
     fields: EntityField<any, any>[];
     autopermissions?: boolean;
     constructor(config: IEntityConfig<T>);
-    updateConfig(config: Partial<IEntityConfig<T>>): this;
+    updateConfig(config: Partial<IEntityConfig<T>>): Entity<T>;
+    private clone;
     get structureName(): string;
     get title(): string;
     get enabled(): boolean;
@@ -88,6 +88,7 @@ export declare class Entity<T extends EntityDataType = {
     deletable(values: T): boolean;
     get showDetailPage(): boolean;
     get name(): string;
+    get resourceName(): string;
     get dataSource(): DataSource;
     getListConfig(): IEntityListConfig<T> | undefined;
     getEditConfig(resourceID?: ResourceID): IEntityEditConfig | undefined;

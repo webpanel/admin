@@ -1,4 +1,4 @@
-import * as React from "react";
+/// <reference types="react" />
 import { Entity } from "../../model/Entity";
 export interface LayoutBuilderStringFieldProps {
     name: string;
@@ -8,7 +8,4 @@ export interface LayoutBuilderStringFieldInternalProps {
     entity: Entity;
     data: any;
 }
-export declare class LayoutBuilderStringField extends React.Component<LayoutBuilderStringFieldProps & LayoutBuilderStringFieldInternalProps> {
-    private layouts;
-    render(): React.ReactNode;
-}
+export declare const LayoutBuilderStringField: (props: LayoutBuilderStringFieldProps & LayoutBuilderStringFieldInternalProps) => JSX.Element | null;

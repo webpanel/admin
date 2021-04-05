@@ -134,7 +134,7 @@ export class LayoutBuilder {
                 key={`${(item.field && item.field.name) || "empty"}_${i}`}
                 label={
                   item.field &&
-                  t(`${this.entity.name}.${item.field.name}`, {
+                  t(`${item.field.titleTranslationKey}`, {
                     defaultValue: item.field.title,
                   })
                 }

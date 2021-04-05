@@ -211,7 +211,7 @@ export class EntityFieldRelationship<T> extends EntityField<
       <Translation key={key}>
         {(t) => (
           <FormItem
-            label={t(`${this.entity.name}.${this.name}`, {
+            label={t(this.titleTranslationKey, {
               defaultValue: this.title,
             })}
             extra={this.config.description}

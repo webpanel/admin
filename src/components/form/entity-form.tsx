@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { Form, Spin, message } from "antd";
-import { Resource, ResourceID, useResource } from "webpanel-data";
+import { Resource, ResourceID } from "webpanel-data";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "../../model/Entity";
@@ -89,15 +89,13 @@ export const EntityForm = (
       .filter((x) => x) as EntityField<any, any>[];
   }
 
-  const resource = useResource({
-    name: entity.name,
+  const resource = entity.useResource({
     id: resourceID,
-    initialValues,
+    initialValues: initialValues as any,
     fields: entityFields
       .filter((f) => f && f.fetchField() && f.writeable)
       .map((f) => f.editFetchField())
       .filter((f) => f) as string[],
-    dataSource: entity.dataSource,
   });
 
   if (!resource.loading && resource.data === null) {

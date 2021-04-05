@@ -76,6 +76,14 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     public readonly entity: Entity
   ) {}
 
+  public clone(entity?: Entity): this {
+    return this.constructor(this.name, this.config, entity || this.entity);
+  }
+
+  public get titleTranslationKey(): string {
+    return `${this.entity.name}.${this.name}`;
+  }
+
   public get title(): string {
     return (
       resolveOptionalThunk(this.config.title) ||
@@ -245,13 +253,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
         valuePropName={this.valuePropName}
         rules={resolveOptionalThunk(this.config.rules)}
         label={
-          <Translation>
-            {(t) =>
-              t(`${this.entity.name}.${this.name}`, {
-                defaultValue: this.title,
-              })
-            }
-          </Translation>
+          <Translation>{(t) => t(this.titleTranslationKey, {})}</Translation>
         }
         extra={resolveOptionalThunk(this.config.description)}
         {...formItemLayout}

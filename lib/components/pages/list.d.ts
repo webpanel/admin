@@ -1,12 +1,12 @@
 import "../../../styles/entity-list.css";
 import * as React from "react";
+import { Entity, EntityDataType } from "../../model/Entity";
 import { EntitylistActionButton } from "./list.buttons";
-import { ResourceCollection, ResourceCollectionOptions, ResourceID } from "webpanel-data";
+import { ResourceCollection, ResourceCollectionOptions } from "webpanel-data";
 import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk } from "ts-thunk";
 import { CardProps } from "antd/lib/card";
 import { CreateEntityProps } from "../buttons/EntityAddButton";
-import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 import i18next from "i18next";
@@ -31,9 +31,7 @@ export declare type IEntityListColumn<T = any> = string | {
     align?: IEntityListColumnAlign;
     titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
 };
-export interface IEntityListConfig<T extends {
-    id: ResourceID;
-}> extends ResourceCollectionOptions<T> {
+export interface IEntityListConfig<T extends EntityDataType> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
     card?: CardProps;
     searchable?: boolean;
@@ -46,18 +44,14 @@ export interface IEntityListConfig<T extends {
     editableFields?: Thunk<string[]>;
     wrapperType?: "card" | "plain";
 }
-export interface IEntityListProps<T extends {
-    id: ResourceID;
-}> extends IEntityListConfig<T> {
+export interface IEntityListProps<T extends EntityDataType> extends IEntityListConfig<T> {
     entity: Entity<T>;
 }
 export interface EntityListTitleRenderProps<T> {
     title: string;
     data: T[] | undefined;
 }
-export declare class EntityList<T extends {
-    id: ResourceID;
-} = any> extends React.Component<IEntityListProps<T>, {
+export declare class EntityList<T extends EntityDataType = any> extends React.Component<IEntityListProps<T>, {
     version: number;
 }> {
     state: {

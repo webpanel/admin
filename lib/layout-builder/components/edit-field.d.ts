@@ -10,6 +10,4 @@ export interface LayoutBuilderEditFieldProps {
 export interface LayoutBuilderEditFieldInternalProps {
     entity: Entity;
 }
-export declare class LayoutBuilderEditField extends React.Component<LayoutBuilderEditFieldProps & LayoutBuilderEditFieldInternalProps> {
-    render(): React.ReactNode;
-}
+export declare const LayoutBuilderEditField: (props: LayoutBuilderEditFieldProps & LayoutBuilderEditFieldInternalProps) => React.ReactNode;

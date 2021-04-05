@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Entity } from "../../model/Entity";
 import { Form } from "antd";
-import { Translation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 export interface LayoutBuilderStringFieldProps {
   name: string;
@@ -14,10 +14,11 @@ export interface LayoutBuilderStringFieldInternalProps {
   data: any;
 }
 
-export class LayoutBuilderStringField extends React.Component<
-  LayoutBuilderStringFieldProps & LayoutBuilderStringFieldInternalProps
-> {
-  private layouts = {
+export const LayoutBuilderStringField = (
+  props: LayoutBuilderStringFieldProps & LayoutBuilderStringFieldInternalProps
+) => {
+  const { t } = useTranslation();
+  const layouts = {
     horizontal: {
       labelCol: {
         xs: { span: 24 },
@@ -40,31 +41,26 @@ export class LayoutBuilderStringField extends React.Component<
     },
   };
 
-  render(): React.ReactNode {
-    const { entity, name, data, layout, ...props } = this.props;
-    const field = entity.getField(name);
+  const { entity, name, data, layout, ...restProps } = props;
+  const field = entity.getField(name);
 
-    if (field === null) {
-      return `unknown field ${name}`;
-    }
-
-    if (!field.readable) {
-      return null;
-    }
-
-    return (
-      <Translation>
-        {(t) => (
-          <Form.Item
-            {...props}
-            label={t(field.name, { defaultValue: field.title })}
-            colon={field.title ? true : false}
-            {...this.layouts[layout || "horizontal"]}
-          >
-            {field.render(data)}
-          </Form.Item>
-        )}
-      </Translation>
-    );
+  if (field === null) {
+    return <>unknown field {name}</>;
   }
-}
+
+  if (!field.readable) {
+    return null;
+  }
+
+  const label = t(field.titleTranslationKey, { defaultValue: field.title });
+  return (
+    <Form.Item
+      {...restProps}
+      label={label}
+      colon={label ? true : false}
+      {...layouts[layout || "horizontal"]}
+    >
+      {field.render(data)}
+    </Form.Item>
+  );
+};

@@ -3,6 +3,7 @@ import "../../../styles/entity-list.css";
 import * as React from "react";
 
 import { Button, Card, Space, Tooltip } from "antd";
+import { Entity, EntityDataType } from "../../model/Entity";
 import {
   EntitylistActionButton,
   detailListButton,
@@ -12,7 +13,6 @@ import {
   ResourceCollection,
   ResourceCollectionLayer,
   ResourceCollectionOptions,
-  ResourceID,
 } from "webpanel-data";
 import {
   ResourceSearchInput,
@@ -24,7 +24,6 @@ import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { CardProps } from "antd/lib/card";
 import { CreateEntityProps } from "../buttons/EntityAddButton";
-import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
 import { FilterOutlined } from "@ant-design/icons";
 import { ListCell } from "./list-cell";
@@ -70,7 +69,7 @@ export type IEntityListColumn<T = any> =
       titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
     };
 
-export interface IEntityListConfig<T extends { id: ResourceID }>
+export interface IEntityListConfig<T extends EntityDataType>
   extends ResourceCollectionOptions<T> {
   table?: IEntityListTableProps;
   card?: CardProps;
@@ -88,7 +87,7 @@ export interface IEntityListConfig<T extends { id: ResourceID }>
   wrapperType?: "card" | "plain";
 }
 
-export interface IEntityListProps<T extends { id: ResourceID }>
+export interface IEntityListProps<T extends EntityDataType>
   extends IEntityListConfig<T> {
   entity: Entity<T>;
 }
@@ -98,9 +97,10 @@ export interface EntityListTitleRenderProps<T> {
   data: T[] | undefined;
 }
 
-export class EntityList<
-  T extends { id: ResourceID } = any
-> extends React.Component<IEntityListProps<T>, { version: number }> {
+export class EntityList<T extends EntityDataType = any> extends React.Component<
+  IEntityListProps<T>,
+  { version: number }
+> {
   public state = { version: 0 };
 
   getColumns(
@@ -122,7 +122,7 @@ export class EntityList<
       (column): ResourceTableColumn => {
         const { field, render, align, titleRender } = column;
         const _align = align || field.listColumnAlign;
-        const fieldTitle = t(`${field.entity.name}.${field.name}`, {
+        const fieldTitle = t(field.titleTranslationKey, {
           defaultValue: field.shortTitle,
         });
         const title = titleRender
@@ -419,7 +419,7 @@ export class EntityList<
       <Translation>
         {(t) => (
           <ResourceCollectionLayer
-            name={entity.name}
+            name={entity.resourceName}
             dataSource={entity.dataSource}
             {...restProps}
             fields={fields}
