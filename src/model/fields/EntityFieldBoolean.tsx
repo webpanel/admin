@@ -1,6 +1,8 @@
 import * as React from "react";
 
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Checkbox, Select } from "antd";
+import { CheckboxChangeEvent, CheckboxProps } from "antd/lib/checkbox";
 import {
   EntityField,
   IEntityFieldConfig,
@@ -8,9 +10,14 @@ import {
   IEntityFieldRenderOptions,
 } from "../EntityField";
 
-import { CheckboxChangeEvent } from "antd/lib/checkbox";
-
 export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {}
+
+const IndeterminateCheckbox = (props: CheckboxProps) => {
+  const { checked, ...rest } = props;
+  return (
+    <Checkbox {...rest} indeterminate={checked === null} checked={checked} />
+  );
+};
 
 export class EntityFieldBoolean<T> extends EntityField<
   T,
@@ -24,7 +31,7 @@ export class EntityFieldBoolean<T> extends EntityField<
     if (value === null || typeof value === "undefined") {
       return "–";
     }
-    return value ? "✓" : "✗";
+    return value ? <CheckOutlined /> : <CloseOutlined />;
   }
 
   public get render(): (
@@ -33,6 +40,7 @@ export class EntityFieldBoolean<T> extends EntityField<
   ) => React.ReactNode {
     return (values) => this.renderValue(values[this.name]);
   }
+
   public inputElement(props?: {
     value?: any;
     onChange?: (value: any, valueElement: React.ReactNode) => void;
@@ -44,8 +52,9 @@ export class EntityFieldBoolean<T> extends EntityField<
           onChange(event.target.value, this.renderValue(event.target.value))
       : undefined;
     return (
-      <Checkbox
+      <IndeterminateCheckbox
         key={`boolean_field_${this.entity.name}_${this.valuePropName}`}
+        indeterminate={props?.value === null}
         {...props}
         onChange={onChangeProp}
       />
@@ -65,8 +74,12 @@ export class EntityFieldBoolean<T> extends EntityField<
         showSearch={false}
         allowClear={false}
       >
-        <Select.Option value={0}>✗</Select.Option>
-        <Select.Option value={1}>✓</Select.Option>
+        <Select.Option value={0}>
+          <CloseOutlined />
+        </Select.Option>
+        <Select.Option value={1}>
+          <CheckOutlined />
+        </Select.Option>
       </Select>
     );
   };
@@ -81,6 +94,7 @@ export class EntityFieldBoolean<T> extends EntityField<
       return res;
     };
   }
+
   public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
     return (values: { [key: string]: any }) => {
       let res: any[] = [];
