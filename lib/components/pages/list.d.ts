@@ -1,8 +1,8 @@
 import "../../../styles/entity-list.css";
 import * as React from "react";
+import { DataSourceAggregationFunction, ResourceCollection, ResourceCollectionOptions } from "webpanel-data";
 import { Entity, EntityDataType } from "../../model/Entity";
 import { EntitylistActionButton } from "./list.buttons";
-import { ResourceCollection, ResourceCollectionOptions } from "webpanel-data";
 import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk } from "ts-thunk";
 import { CardProps } from "antd/lib/card";
@@ -28,9 +28,7 @@ export declare type IEntityListColumn<T = any> = string | {
     render?: IEntityListColumnRender;
     align?: IEntityListColumnAlign;
     titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
-    aggregation?: (aggregations: {
-        [key: string]: any;
-    }) => React.ReactNode;
+    aggregation?: DataSourceAggregationFunction;
 };
 export interface IEntityListConfig<T extends EntityDataType> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;

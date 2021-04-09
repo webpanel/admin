@@ -69,9 +69,7 @@ export const ListCell = (props: IListCellProps) => {
                     type="primary"
                     onClick={async () => {
                       try {
-                        console.log("???", value);
                         await save(value);
-                        console.log("saved");
                         setValue(undefined);
                       } catch (err) {
                         message.error(err.message);

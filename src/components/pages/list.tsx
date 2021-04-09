@@ -3,17 +3,18 @@ import "../../../styles/entity-list.css";
 import * as React from "react";
 
 import { Button, Card, Space, Tooltip } from "antd";
+import {
+  DataSourceAggregationFunction,
+  ResourceCollection,
+  ResourceCollectionOptions,
+  useResourceCollection,
+} from "webpanel-data";
 import { Entity, EntityDataType } from "../../model/Entity";
 import {
   EntitylistActionButton,
   detailListButton,
   editListButton,
 } from "./list.buttons";
-import {
-  ResourceCollection,
-  ResourceCollectionOptions,
-  useResourceCollection,
-} from "webpanel-data";
 import {
   ResourceSearchInput,
   ResourceTable,
@@ -31,6 +32,7 @@ import { ListCell } from "./list-cell";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 import { ResourceTablePropsActionButton } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import i18next from "i18next";
+import inflection from "inflection";
 
 export interface IEntityListTableProps
   extends TableProps<any>,
@@ -59,7 +61,7 @@ interface EntityListField<T> {
   render?: IEntityListColumnRender;
   align?: IEntityListColumnAlign;
   titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
-  aggregation?: (aggregations: { [key: string]: any }) => React.ReactNode;
+  aggregation?: DataSourceAggregationFunction;
 }
 
 export type IEntityListColumnAlign = "left" | "right" | "center";
@@ -76,7 +78,7 @@ export type IEntityListColumn<T = any> =
       render?: IEntityListColumnRender;
       align?: IEntityListColumnAlign;
       titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
-      aggregation?: (aggregations: { [key: string]: any }) => React.ReactNode;
+      aggregation?: DataSourceAggregationFunction;
     };
 
 export interface IEntityListConfig<T extends EntityDataType>
@@ -114,14 +116,16 @@ export const EntityList = <T extends EntityDataType = any>(
     listFields: EntityListField<T>[],
     resource: ResourceCollection<T>,
     t: i18next.TFunction
-  ): ResourceTableColumn[] => {
+  ): ResourceTableColumn<T>[] => {
     const { entity, editableFields } = props;
 
     const _editableFields = resolveOptionalThunk(editableFields) || [];
     const entityListFields = listFields.map((x) => x.field);
 
+    const hasAggregations = listFields.filter((x) => x.aggregation).length > 0;
+
     return listFields.map(
-      (column): ResourceTableColumn => {
+      (column): ResourceTableColumn<T> => {
         const { field, render, align, titleRender, aggregation } = column;
         const _align = align || field.listColumnAlign;
         const fieldTitle = t(field.titleTranslationKey, {
@@ -131,24 +135,11 @@ export const EntityList = <T extends EntityDataType = any>(
           ? titleRender({ title: fieldTitle, data: resource.data })
           : fieldTitle;
 
-        const col: ResourceTableColumn = {
-          align: _align,
+        const col: ResourceTableColumn<T> = {
           key: field.name,
           dataIndex: field.name,
-          title: title,
-          sorter: field.sortable,
-          sortColumns: field.sortColumns(),
-          // children: aggregation
-          //   ? ({
-          //       title: aggregation(resource.aggregations || {}),
-          //     } as any)
-          //   : undefined,
-          filterDropdown: field.filter
-            ? field.filterDropdown(resource)
-            : undefined,
-          filterNormalize: field.filterNormalizeFn(),
-          filterDenormalize: field.filterDenormalizeFn(),
-
+          align: _align,
+          shouldCellUpdate: () => false,
           render: (value: any, record: any, index: number): React.ReactNode => {
             const values = record;
             if (render) {
@@ -170,9 +161,35 @@ export const EntityList = <T extends EntityDataType = any>(
           },
         };
 
-        if (aggregation) {
-          col.children = [{ ...col, title: "aaa" }] as any;
+        if (hasAggregations) {
+          col.children = [
+            {
+              ...col,
+              title: () => {
+                if (!aggregation) {
+                  return;
+                }
+                const key =
+                  col.dataIndex +
+                  inflection.camelize(aggregation.toLowerCase());
+                const value =
+                  resource.aggregations && resource.aggregations[key];
+                const obj = {};
+                obj[field.name] = value;
+                return field.render(obj);
+              },
+            },
+          ] as any;
         }
+
+        col.title = title;
+        col.sorter = field.sortable;
+        col.sortColumns = field.sortColumns();
+        col.filterDropdown = field.filter
+          ? field.filterDropdown(resource)
+          : undefined;
+        col.filterNormalize = field.filterNormalizeFn();
+        col.filterDenormalize = field.filterDenormalizeFn();
 
         return col;
       }
@@ -395,6 +412,7 @@ export const EntityList = <T extends EntityDataType = any>(
     initialFilters,
     initialSorting,
     wrapperType,
+    aggregations,
     ...restProps
   } = props;
 
@@ -405,11 +423,20 @@ export const EntityList = <T extends EntityDataType = any>(
       .filter((x) => x) as string[]),
   ];
 
+  const allAggregations = aggregations || [];
+  for (const f of getListFields()) {
+    if (f.aggregation) {
+      allAggregations.push({ name: f.field.name, function: f.aggregation });
+    }
+  }
+
   const resource = useResourceCollection({
     name: entity.name,
     dataSource: entity.dataSource,
     ...restProps,
     fields,
+    aggregations:
+      Object.keys(allAggregations).length > 0 ? allAggregations : undefined,
     initialSorting: initialSorting || entity.initialSorting,
     initialFilters: initialFilters || entity.initialFilters,
   });
