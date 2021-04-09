@@ -53,6 +53,15 @@ export type IEntityListColumnRender = (
       props: { rowSpan: number; colSpan: number };
     };
 
+interface EntityListField<T> {
+  field: EntityField<any, any>;
+  hidden: boolean;
+  render?: IEntityListColumnRender;
+  align?: IEntityListColumnAlign;
+  titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
+  aggregation?: (aggregations: { [key: string]: any }) => React.ReactNode;
+}
+
 export type IEntityListColumnAlign = "left" | "right" | "center";
 
 export type IEntityListColumn<T = any> =
@@ -67,6 +76,7 @@ export type IEntityListColumn<T = any> =
       render?: IEntityListColumnRender;
       align?: IEntityListColumnAlign;
       titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
+      aggregation?: (aggregations: { [key: string]: any }) => React.ReactNode;
     };
 
 export interface IEntityListConfig<T extends EntityDataType>
@@ -101,12 +111,7 @@ export const EntityList = <T extends EntityDataType = any>(
   props: IEntityListProps<T>
 ) => {
   const getColumns = (
-    listFields: {
-      field: EntityField<any, any>;
-      render?: IEntityListColumnRender;
-      align?: IEntityListColumnAlign;
-      titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
-    }[],
+    listFields: EntityListField<T>[],
     resource: ResourceCollection<T>,
     t: i18next.TFunction
   ): ResourceTableColumn[] => {
@@ -117,7 +122,7 @@ export const EntityList = <T extends EntityDataType = any>(
 
     return listFields.map(
       (column): ResourceTableColumn => {
-        const { field, render, align, titleRender } = column;
+        const { field, render, align, titleRender, aggregation } = column;
         const _align = align || field.listColumnAlign;
         const fieldTitle = t(field.titleTranslationKey, {
           defaultValue: field.shortTitle,
@@ -125,14 +130,19 @@ export const EntityList = <T extends EntityDataType = any>(
         const title = titleRender
           ? titleRender({ title: fieldTitle, data: resource.data })
           : fieldTitle;
-        return {
+
+        const col: ResourceTableColumn = {
           align: _align,
           key: field.name,
           dataIndex: field.name,
           title: title,
           sorter: field.sortable,
           sortColumns: field.sortColumns(),
-
+          // children: aggregation
+          //   ? ({
+          //       title: aggregation(resource.aggregations || {}),
+          //     } as any)
+          //   : undefined,
           filterDropdown: field.filter
             ? field.filterDropdown(resource)
             : undefined,
@@ -159,28 +169,23 @@ export const EntityList = <T extends EntityDataType = any>(
             );
           },
         };
+
+        if (aggregation) {
+          col.children = [{ ...col, title: "aaa" }] as any;
+        }
+
+        return col;
       }
     );
   };
 
-  const getListFields = (): {
-    field: EntityField<any, any>;
-    hidden: boolean;
-    render?: IEntityListColumnRender;
-    align?: IEntityListColumnAlign;
-  }[] => {
+  const getListFields = (): EntityListField<T>[] => {
     const { entity, fields } = props;
 
     const _fields = resolveOptionalThunk(
       fields || entity.getListConfig()?.fields
     );
-    let listFields: {
-      field: EntityField<any, any>;
-      hidden: boolean;
-      render?: IEntityListColumnRender;
-      align?: IEntityListColumnAlign;
-      titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
-    }[] = [];
+    let listFields: EntityListField<T>[] = [];
 
     if (_fields) {
       for (let f of _fields) {
@@ -190,13 +195,22 @@ export const EntityList = <T extends EntityDataType = any>(
         const align = (typeof f !== "string" && f.align) || undefined;
         const titleRender =
           (typeof f !== "string" && f.titleRender) || undefined;
+        const aggregation =
+          (typeof f !== "string" && f.aggregation) || undefined;
         const field = entity.getField(fieldName);
         if (!field) {
           throw new Error(
             `Field '${fieldName}' not found in entity '${entity.name}'`
           );
         }
-        listFields.push({ field, hidden, render, align, titleRender });
+        listFields.push({
+          field,
+          hidden,
+          render,
+          align,
+          titleRender,
+          aggregation,
+        });
       }
     } else {
       for (let f of entity.getListFields()) {

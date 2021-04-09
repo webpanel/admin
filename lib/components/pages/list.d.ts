@@ -28,6 +28,9 @@ export declare type IEntityListColumn<T = any> = string | {
     render?: IEntityListColumnRender;
     align?: IEntityListColumnAlign;
     titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
+    aggregation?: (aggregations: {
+        [key: string]: any;
+    }) => React.ReactNode;
 };
 export interface IEntityListConfig<T extends EntityDataType> extends ResourceCollectionOptions<T> {
     table?: IEntityListTableProps;
