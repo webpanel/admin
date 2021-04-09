@@ -15,7 +15,11 @@ export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {}
 const IndeterminateCheckbox = (props: CheckboxProps) => {
   const { checked, ...rest } = props;
   return (
-    <Checkbox {...rest} indeterminate={checked === null} checked={checked} />
+    <Checkbox
+      {...rest}
+      indeterminate={checked === null || typeof checked === "undefined"}
+      checked={checked}
+    />
   );
 };
 
@@ -54,7 +58,6 @@ export class EntityFieldBoolean<T> extends EntityField<
     return (
       <IndeterminateCheckbox
         key={`boolean_field_${this.entity.name}_${this.valuePropName}`}
-        indeterminate={props?.value === null}
         {...props}
         onChange={onChangeProp}
       />
