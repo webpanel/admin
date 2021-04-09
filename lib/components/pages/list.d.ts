@@ -8,8 +8,6 @@ import { Thunk } from "ts-thunk";
 import { CardProps } from "antd/lib/card";
 import { CreateEntityProps } from "../buttons/EntityAddButton";
 import { EntityField } from "../../model/EntityField";
-import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
-import i18next from "i18next";
 export interface IEntityListTableProps extends TableProps<any>, ResourceCollectionOptions<any> {
     actionButtons?: Thunk<EntitylistActionButton[], any>;
     actionButtonsTitle?: React.ReactNode;
@@ -51,21 +49,4 @@ export interface EntityListTitleRenderProps<T> {
     title: string;
     data: T[] | undefined;
 }
-export declare class EntityList<T extends EntityDataType = any> extends React.Component<IEntityListProps<T>, {
-    version: number;
-}> {
-    state: {
-        version: number;
-    };
-    getColumns(listFields: {
-        field: EntityField<any, any>;
-        render?: IEntityListColumnRender;
-        align?: IEntityListColumnAlign;
-        titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
-    }[], resource: ResourceCollection<T>, t: i18next.TFunction): ResourceTableColumn[];
-    private getListFields;
-    private cardContent;
-    private tableActionButtons;
-    private tableContent;
-    render(): React.ReactNode;
-}
+export declare const EntityList: <T extends EntityDataType = any>(props: IEntityListProps<T>) => JSX.Element;

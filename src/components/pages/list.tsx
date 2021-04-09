@@ -11,8 +11,8 @@ import {
 } from "./list.buttons";
 import {
   ResourceCollection,
-  ResourceCollectionLayer,
   ResourceCollectionOptions,
+  useResourceCollection,
 } from "webpanel-data";
 import {
   ResourceSearchInput,
@@ -21,6 +21,7 @@ import {
 } from "webpanel-antd";
 import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
+import { Translation, useTranslation } from "react-i18next";
 
 import { CardProps } from "antd/lib/card";
 import { CreateEntityProps } from "../buttons/EntityAddButton";
@@ -29,7 +30,6 @@ import { FilterOutlined } from "@ant-design/icons";
 import { ListCell } from "./list-cell";
 import { ResourceTableColumn } from "webpanel-antd/lib/table/ResourceTable";
 import { ResourceTablePropsActionButton } from "webpanel-antd/lib/table/ResourceTableActionButtons";
-import { Translation } from "react-i18next";
 import i18next from "i18next";
 
 export interface IEntityListTableProps
@@ -97,13 +97,10 @@ export interface EntityListTitleRenderProps<T> {
   data: T[] | undefined;
 }
 
-export class EntityList<T extends EntityDataType = any> extends React.Component<
-  IEntityListProps<T>,
-  { version: number }
-> {
-  public state = { version: 0 };
-
-  getColumns(
+export const EntityList = <T extends EntityDataType = any>(
+  props: IEntityListProps<T>
+) => {
+  const getColumns = (
     listFields: {
       field: EntityField<any, any>;
       render?: IEntityListColumnRender;
@@ -112,8 +109,8 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
     }[],
     resource: ResourceCollection<T>,
     t: i18next.TFunction
-  ): ResourceTableColumn[] {
-    const { entity, editableFields } = this.props;
+  ): ResourceTableColumn[] => {
+    const { entity, editableFields } = props;
 
     const _editableFields = resolveOptionalThunk(editableFields) || [];
     const entityListFields = listFields.map((x) => x.field);
@@ -164,15 +161,15 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
         };
       }
     );
-  }
+  };
 
-  private getListFields(): {
+  const getListFields = (): {
     field: EntityField<any, any>;
     hidden: boolean;
     render?: IEntityListColumnRender;
     align?: IEntityListColumnAlign;
-  }[] {
-    const { entity, fields } = this.props;
+  }[] => {
+    const { entity, fields } = props;
 
     const _fields = resolveOptionalThunk(
       fields || entity.getListConfig()?.fields
@@ -207,20 +204,13 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
       }
     }
     return listFields;
-  }
+  };
 
-  private cardContent(
+  const cardContent = (
     resource: ResourceCollection<T>,
     t: i18next.TFunction
-  ): React.ReactNode {
-    const {
-      entity,
-      card,
-      title,
-      searchable,
-      showAddButton,
-      addButton,
-    } = this.props;
+  ): React.ReactNode => {
+    const { entity, card, title, searchable, showAddButton, addButton } = props;
 
     const _searchable =
       typeof searchable !== "undefined" ? searchable : entity.searchable;
@@ -246,10 +236,11 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
           title ||
           t(`${entity.name}._title`, { count: 100, defaultValue: entity.title })
         }
+        key={`${entity.name}.table-card`}
         {...card}
         extra={[
           card && card.extra,
-          <Space>
+          <Space key="default-buttons">
             {hasTableFilter && (
               <Tooltip
                 title={
@@ -296,16 +287,16 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
           </Space>,
         ].filter((x) => x)}
       >
-        {this.tableContent(resource, t)}
+        {tableContent(resource, t)}
       </Card>
     );
-  }
+  };
 
-  private tableActionButtons(
+  const tableActionButtons = (
     resourceValues: T,
     buttons?: EntitylistActionButton[]
-  ): ResourceTablePropsActionButton<T>[] {
-    const { entity, table } = this.props;
+  ): ResourceTablePropsActionButton<T>[] => {
+    const { entity, table } = props;
     const size = table && table.size === "small" ? "small" : "default";
     if (typeof buttons === "undefined") {
       buttons = ["detail", "edit", "delete"];
@@ -341,13 +332,13 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
         }
       )
       .filter((x) => x);
-  }
+  };
 
-  private tableContent(
+  const tableContent = (
     resource: ResourceCollection<T>,
     t: i18next.TFunction
-  ): React.ReactNode {
-    const { entity, table } = this.props;
+  ): React.ReactNode => {
+    const { entity, table } = props;
 
     const defaultPagination: TablePaginationConfig = {
       defaultPageSize: 30,
@@ -360,12 +351,7 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
     return (
       <>
         <ResourceTable
-          key={
-            "table_" +
-            resource.name +
-            "_" +
-            (resource.loading ? "loading" : "loaded")
-          }
+          key={"table_" + resource.name}
           className="entitytable"
           scroll={{ x: true }}
           resourceCollection={resource}
@@ -375,65 +361,51 @@ export class EntityList<T extends EntityDataType = any> extends React.Component<
           }}
           {...table}
           actionButtons={(values) =>
-            this.tableActionButtons(
+            tableActionButtons(
               values,
               resolveOptionalThunk(table?.actionButtons, values)
             )
           }
-          columns={this.getColumns(
-            this.getListFields().filter((x) => !x.hidden),
+          columns={getColumns(
+            getListFields().filter((x) => !x.hidden),
             resource,
             t
           )}
         />
       </>
     );
-  }
+  };
 
-  public render(): React.ReactNode {
-    const {
-      entity,
-      initialFilters,
-      initialSorting,
-      wrapperType,
-      ...restProps
-    } = this.props;
+  const {
+    entity,
+    initialFilters,
+    initialSorting,
+    wrapperType,
+    ...restProps
+  } = props;
 
-    const fields = [
-      "id",
-      ...(this.getListFields()
-        .map((x) => x.field.fetchField())
-        .filter((x) => x) as string[]),
-    ];
+  const fields = [
+    "id",
+    ...(getListFields()
+      .map((x) => x.field.fetchField())
+      .filter((x) => x) as string[]),
+  ];
 
-    // const resource = useResourceCollection({
-    //   name: entity.name,
-    //   dataSource: this.props.dataSource,
-    //   ...restProps,
-    //   fields,
-    //   initialSorting:initialSorting || entity.initialSorting,
-    //   initialFilters:initialFilters || entity.initialFilters
-    // });
+  const resource = useResourceCollection({
+    name: entity.name,
+    dataSource: entity.dataSource,
+    ...restProps,
+    fields,
+    initialSorting: initialSorting || entity.initialSorting,
+    initialFilters: initialFilters || entity.initialFilters,
+  });
+  const { t } = useTranslation();
 
-    return (
-      <Translation>
-        {(t) => (
-          <ResourceCollectionLayer
-            name={entity.resourceName}
-            dataSource={entity.dataSource}
-            {...restProps}
-            fields={fields}
-            initialSorting={initialSorting || entity.initialSorting}
-            initialFilters={initialFilters || entity.initialFilters}
-            // pollInterval={pollInterval}
-            render={(resource: ResourceCollection<any>) =>
-              wrapperType === "plain"
-                ? this.tableContent(resource, t)
-                : this.cardContent(resource, t)
-            }
-          />
-        )}
-      </Translation>
-    );
-  }
-}
+  return (
+    <>
+      {wrapperType === "plain"
+        ? tableContent(resource, t)
+        : cardContent(resource, t)}
+    </>
+  );
+};

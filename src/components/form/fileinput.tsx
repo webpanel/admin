@@ -6,9 +6,9 @@ import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
 import { Entity } from "../../model/Entity";
-import { ResourceLayer } from "webpanel-data";
 import { UploadFile } from "antd/lib/upload/interface";
 import { UploadRequest } from "./upload-request";
+import { useResource } from "webpanel-data";
 
 interface IFile {
   id: string;
@@ -30,6 +30,39 @@ interface IFileInputState {
   value: string | null;
   accessToken?: string;
 }
+
+const FileUploader = (
+  props: IFileInputProps & {
+    openItem: (hostURL: string, id: string, token?: string) => Promise<void>;
+  }
+) => {
+  const { entity, hostURL, value, accessToken, openItem } = props;
+  const resource = useResource({
+    name: "File",
+    id: value,
+    dataSource: entity.dataSource,
+    fields: ["name", "size"],
+  });
+
+  if (!value) {
+    return null;
+  }
+
+  return (
+    (resource.data && (
+      <Button
+        size="small"
+        onClick={async () =>
+          hostURL &&
+          openItem(hostURL, value, await resolveOptionalThunk(accessToken))
+        }
+      >
+        {resource.name} ({numeral(resource.data.size).format("0.0 b")})
+      </Button>
+    )) ||
+    null
+  );
+};
 
 export class FileInput extends React.Component<
   IFileInputProps,
@@ -89,37 +122,6 @@ export class FileInput extends React.Component<
     }
   };
 
-  renderFile(): React.ReactNode {
-    const { value, accessToken } = this.state;
-    const { entity, hostURL } = this.props;
-
-    if (!value) {
-      return null;
-    }
-
-    return (
-      <ResourceLayer
-        name="File"
-        id={value}
-        dataSource={entity.dataSource}
-        fields={["name", "size"]}
-        render={({ data }) =>
-          (data && (
-            <Button
-              size="small"
-              onClick={() =>
-                hostURL && this.openItem(hostURL, value, accessToken)
-              }
-            >
-              {data.name} ({numeral(data.size).format("0.0 b")})
-            </Button>
-          )) ||
-          null
-        }
-      />
-    );
-  }
-
   clearValue() {
     this.setState({ value: null });
   }
@@ -135,7 +137,7 @@ export class FileInput extends React.Component<
 
     return value ? (
       <>
-        {this.renderFile()}
+        <FileUploader {...this.props} openItem={this.openItem} />
         <Button
           icon={<CloseOutlined />}
           onClick={() => this.udpateValue(null)}
