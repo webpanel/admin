@@ -5,9 +5,9 @@ Webpanel Administration library for creating various admin interfaces.
 # Getting started
 
 ```
-npx create-react-app my-app --template typescript --use-npm
+npx create-react-app --template typescript --use-npm my-app
 cd my-app
-npm add react@16.9.0 react-dom@16.9.0 webpanel-admin webpanel-antd webpanel-data antd@4.7.3 i18next react-i18next
+npm add react@16.14.0 react-dom@16.14.0 webpanel-admin webpanel-antd webpanel-data antd@4.7.3 i18next react-i18next
 ```
 
 Update `src/App.tsx` to following content:
