@@ -270,9 +270,9 @@ export const EntityList = <T extends EntityDataType = any>(
         }
         key={`${entity.name}.table-card`}
         {...card}
-        extra={[
-          card && card.extra,
+        extra={
           <Space key="default-buttons">
+            {card && card.extra}
             {hasTableFilter && (
               <Tooltip
                 title={
@@ -301,7 +301,6 @@ export const EntityList = <T extends EntityDataType = any>(
                   width: "100%",
                   minWidth: 100,
                   maxWidth: 150,
-                  marginRight: 8,
                 }}
               />
             )}
@@ -316,8 +315,8 @@ export const EntityList = <T extends EntityDataType = any>(
                     onSave: () => resource.reload(),
                     ...(typeof _addButton === "object" ? _addButton : {}),
                   }))}
-          </Space>,
-        ].filter((x) => x)}
+          </Space>
+        }
       >
         {tableContent(resource, t)}
       </Card>
