@@ -1,3 +1,7 @@
 .entitytable td {
   white-space: nowrap;
 }
+
+.table-aggregation-row {
+  white-space: nowrap;
+}

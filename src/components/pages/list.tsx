@@ -165,6 +165,7 @@ export const EntityList = <T extends EntityDataType = any>(
           col.children = [
             {
               ...col,
+              className: "table-aggregation-row",
               title: () => {
                 if (!aggregation) {
                   return;
