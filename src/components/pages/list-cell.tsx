@@ -49,9 +49,9 @@ export const ListCell = (props: IListCellProps) => {
       {editable ? (
         <Popover
           content={
-            <div style={{ width: 250 }}>
+            <div>
               <Row gutter={[8, 8]}>
-                <Col flex="auto">
+                <Col flex="auto" style={{ width: 250 }}>
                   {field.inputElement({
                     value: value || values[field.columnName()],
                     onChange: async (
