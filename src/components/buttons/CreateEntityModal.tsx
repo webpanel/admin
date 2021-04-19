@@ -14,9 +14,10 @@ export interface CreateEntityModalProps extends IEntityFormProps {
 export const CreateEntityModal = (props: CreateEntityModalProps) => {
   const { t } = useTranslation();
   // const [modalVisible, setModalVisible] = React.useState(false);
-  const formRef = React.useRef<FormInstance | null>(null);
 
-  const { entity, modal, ...rest } = props;
+  const { entity, modal, formRef, ...rest } = props;
+
+  const formRefLocal = formRef || React.useRef<FormInstance | null>(null);
 
   const getTitle = (): string => {
     return (
@@ -24,7 +25,7 @@ export const CreateEntityModal = (props: CreateEntityModalProps) => {
         defaultValue: entity.title,
       }) +
       ": " +
-      ((formRef.current && entity.render(formRef.current.getFieldsValue())) ||
+      ((formRef?.current && entity.render(formRef.current.getFieldsValue())) ||
         "-")
     );
   };
@@ -32,15 +33,15 @@ export const CreateEntityModal = (props: CreateEntityModalProps) => {
   return (
     <Modal
       // visible={modalVisible}
-      onOk={() => formRef?.current?.submit()}
+      onOk={() => formRefLocal?.current?.submit()}
       // onCancel={() => setModalVisible(false)}
       title={getTitle()}
       destroyOnClose={true}
       {...modal}
     >
       {entity.getCreateView({
+        formRef: formRefLocal,
         wrapperType: "plain",
-        formRef: formRef,
         ...rest,
       })}
     </Modal>

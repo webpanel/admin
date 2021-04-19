@@ -50,10 +50,11 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
         <CreateEntityModal
           entity={entity}
           modal={{
-            visible: modalVisible,
             onCancel: () => hideModal(),
             ..._flow.modal,
+            visible: modalVisible,
           }}
+          onSave={() => hideModal()}
           {...rest}
         />
         <Button
