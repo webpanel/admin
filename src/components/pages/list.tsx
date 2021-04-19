@@ -139,7 +139,8 @@ export const EntityList = <T extends EntityDataType = any>(
           key: field.name,
           dataIndex: field.name,
           align: _align,
-          shouldCellUpdate: () => false,
+          shouldCellUpdate: (record: any, prevRecord: any) =>
+            record !== prevRecord,
           render: (value: any, record: any, index: number): React.ReactNode => {
             const values = record;
             if (render) {
