@@ -86,6 +86,7 @@ export interface IEntityListConfig<T extends EntityDataType>
   table?: IEntityListTableProps;
   card?: CardProps;
   searchable?: boolean;
+  hidden?: Thunk<boolean, ResourceCollection<T>>;
   // deprecated, please use addButton property
   showAddButton?: boolean;
   addButton?: Thunk<
@@ -414,6 +415,7 @@ export const EntityList = <T extends EntityDataType = any>(
     initialSorting,
     wrapperType,
     aggregations,
+    hidden,
     ...restProps
   } = props;
 
@@ -442,6 +444,11 @@ export const EntityList = <T extends EntityDataType = any>(
     initialFilters: initialFilters || entity.initialFilters,
   });
   const { t } = useTranslation();
+
+  const isHidden = resolveOptionalThunk(hidden, resource);
+  if (isHidden) {
+    return null;
+  }
 
   return (
     <>

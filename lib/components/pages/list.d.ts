@@ -34,6 +34,7 @@ export interface IEntityListConfig<T extends EntityDataType> extends ResourceCol
     table?: IEntityListTableProps;
     card?: CardProps;
     searchable?: boolean;
+    hidden?: Thunk<boolean, ResourceCollection<T>>;
     showAddButton?: boolean;
     addButton?: Thunk<boolean | CreateEntityProps | React.ReactNode, {
         collection: ResourceCollection<T>;
@@ -50,4 +51,4 @@ export interface EntityListTitleRenderProps<T> {
     title: string;
     data: T[] | undefined;
 }
-export declare const EntityList: <T extends EntityDataType = any>(props: IEntityListProps<T>) => JSX.Element;
+export declare const EntityList: <T extends EntityDataType = any>(props: IEntityListProps<T>) => JSX.Element | null;
