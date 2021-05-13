@@ -62,6 +62,7 @@ interface EntityListField<T> {
   align?: IEntityListColumnAlign;
   titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
   aggregation?: DataSourceAggregationFunction;
+  width?: number | string;
 }
 
 export type IEntityListColumnAlign = "left" | "right" | "center";
@@ -79,6 +80,7 @@ export type IEntityListColumn<T = any> =
       align?: IEntityListColumnAlign;
       titleRender?: (props: EntityListTitleRenderProps<T>) => React.ReactNode;
       aggregation?: DataSourceAggregationFunction;
+      width?: number;
     };
 
 export interface IEntityListConfig<T extends EntityDataType>
@@ -125,78 +127,75 @@ export const EntityList = <T extends EntityDataType = any>(
 
     const hasAggregations = listFields.filter((x) => x.aggregation).length > 0;
 
-    return listFields.map(
-      (column): ResourceTableColumn<T> => {
-        const { field, render, align, titleRender, aggregation } = column;
-        const _align = align || field.listColumnAlign;
-        const fieldTitle = t(field.titleTranslationKey, {
-          defaultValue: field.shortTitle,
-        });
-        const title = titleRender
-          ? titleRender({ title: fieldTitle, data: resource.data })
-          : fieldTitle;
+    return listFields.map((columnField): ResourceTableColumn<T> => {
+      const { field, render, align, titleRender, aggregation } = columnField;
+      const _align = align || field.listColumnAlign;
+      const fieldTitle = t(field.titleTranslationKey, {
+        defaultValue: field.shortTitle,
+      });
+      const title = titleRender
+        ? titleRender({ title: fieldTitle, data: resource.data })
+        : fieldTitle;
 
-        const col: ResourceTableColumn<T> = {
-          key: field.name,
-          dataIndex: field.name,
-          align: _align,
-          shouldCellUpdate: (record: any, prevRecord: any) =>
-            record !== prevRecord,
-          render: (value: any, record: any, index: number): React.ReactNode => {
-            const values = record;
-            if (render) {
-              return render(value, values, index, field);
-            }
-            return (
-              <ListCell
-                collection={resource}
-                values={values}
-                field={field}
-                editable={
-                  entity.updateable(record) &&
-                  _editableFields.indexOf(field.name) > -1 &&
-                  field.writeable
-                }
-                fields={entityListFields}
-              />
-            );
-          },
-        };
+      const col: ResourceTableColumn<T> = {
+        key: field.name,
+        dataIndex: field.name,
+        align: _align,
+        width: columnField.width,
+        shouldCellUpdate: (record: any, prevRecord: any) =>
+          record !== prevRecord,
+        render: (value: any, record: any, index: number): React.ReactNode => {
+          const values = record;
+          if (render) {
+            return render(value, values, index, field);
+          }
+          return (
+            <ListCell
+              collection={resource}
+              values={values}
+              field={field}
+              editable={
+                entity.updateable(record) &&
+                _editableFields.indexOf(field.name) > -1 &&
+                field.writeable
+              }
+              fields={entityListFields}
+            />
+          );
+        },
+      };
 
-        if (hasAggregations) {
-          col.children = [
-            {
-              ...col,
-              className: "table-aggregation-row",
-              title: () => {
-                if (!aggregation) {
-                  return;
-                }
-                const key =
-                  col.dataIndex +
-                  inflection.camelize(aggregation.toLowerCase());
-                const value =
-                  resource.aggregations && resource.aggregations[key];
-                const obj = {};
-                obj[field.name] = value;
-                return field.render(obj);
-              },
+      if (hasAggregations) {
+        col.children = [
+          {
+            ...col,
+            className: "table-aggregation-row",
+            title: () => {
+              if (!aggregation) {
+                return;
+              }
+              const key =
+                col.dataIndex + inflection.camelize(aggregation.toLowerCase());
+              const value = resource.aggregations && resource.aggregations[key];
+              const obj = {};
+              obj[field.name] = value;
+              return field.render(obj);
             },
-          ] as any;
-        }
-
-        col.title = title;
-        col.sorter = field.sortable;
-        col.sortColumns = field.sortColumns();
-        col.filterDropdown = field.filter
-          ? field.filterDropdown(resource)
-          : undefined;
-        col.filterNormalize = field.filterNormalizeFn();
-        col.filterDenormalize = field.filterDenormalizeFn();
-
-        return col;
+          },
+        ] as any;
       }
-    );
+
+      col.title = title;
+      col.sorter = field.sortable;
+      col.sortColumns = field.sortColumns();
+      col.filterDropdown = field.filter
+        ? field.filterDropdown(resource)
+        : undefined;
+      col.filterNormalize = field.filterNormalizeFn();
+      col.filterDenormalize = field.filterDenormalizeFn();
+
+      return col;
+    });
   };
 
   const getListFields = (): EntityListField<T>[] => {
@@ -213,6 +212,7 @@ export const EntityList = <T extends EntityDataType = any>(
         const render = (typeof f !== "string" && f.render) || undefined;
         const hidden = (typeof f !== "string" && f.hidden) || false;
         const align = (typeof f !== "string" && f.align) || undefined;
+        const width = (typeof f !== "string" && f.width) || undefined;
         const titleRender =
           (typeof f !== "string" && f.titleRender) || undefined;
         const aggregation =
@@ -230,6 +230,7 @@ export const EntityList = <T extends EntityDataType = any>(
           align,
           titleRender,
           aggregation,
+          width,
         });
       }
     } else {
