@@ -7,6 +7,7 @@ import {
   DataSourceAggregationFunction,
   ResourceCollection,
   ResourceCollectionOptions,
+  ResourceID,
   useResourceCollection,
 } from "webpanel-data";
 import { Entity, EntityDataType } from "../../model/Entity";
@@ -41,6 +42,7 @@ export interface IEntityListTableProps
   actionButtonsTitle?: React.ReactNode;
   actionButtonsFixed?: boolean;
   pagination?: TablePaginationConfig | false;
+  onDelete?: (id: ResourceID) => void;
 }
 
 export type IEntityListColumnRender = (
@@ -119,7 +121,7 @@ export const EntityList = <T extends EntityDataType = any>(
     listFields: EntityListField<T>[],
     resource: ResourceCollection<T>,
     t: i18next.TFunction
-  ): ResourceTableColumn<T>[] => {
+  ): ResourceTableColumn[] => {
     const { entity, editableFields } = props;
 
     const _editableFields = resolveOptionalThunk(editableFields) || [];
@@ -127,7 +129,7 @@ export const EntityList = <T extends EntityDataType = any>(
 
     const hasAggregations = listFields.filter((x) => x.aggregation).length > 0;
 
-    return listFields.map((columnField): ResourceTableColumn<T> => {
+    return listFields.map((columnField): ResourceTableColumn => {
       const { field, render, align, titleRender, aggregation } = columnField;
       const _align = align || field.listColumnAlign;
       const fieldTitle = t(field.titleTranslationKey, {
@@ -137,7 +139,7 @@ export const EntityList = <T extends EntityDataType = any>(
         ? titleRender({ title: fieldTitle, data: resource.data })
         : fieldTitle;
 
-      const col: ResourceTableColumn<T> = {
+      const col: ResourceTableColumn = {
         key: field.name,
         dataIndex: field.name,
         align: _align,
@@ -405,6 +407,11 @@ export const EntityList = <T extends EntityDataType = any>(
             resource,
             t
           )}
+          onRowDelete={(id) => {
+            if (table?.onDelete) {
+              table.onDelete(id);
+            }
+          }}
         />
       </>
     );

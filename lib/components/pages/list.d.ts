@@ -1,6 +1,6 @@
 import "../../../styles/entity-list.css";
 import * as React from "react";
-import { DataSourceAggregationFunction, ResourceCollection, ResourceCollectionOptions } from "webpanel-data";
+import { DataSourceAggregationFunction, ResourceCollection, ResourceCollectionOptions, ResourceID } from "webpanel-data";
 import { Entity, EntityDataType } from "../../model/Entity";
 import { EntitylistActionButton } from "./list.buttons";
 import { TablePaginationConfig, TableProps } from "antd/lib/table";
@@ -13,6 +13,7 @@ export interface IEntityListTableProps extends TableProps<any>, ResourceCollecti
     actionButtonsTitle?: React.ReactNode;
     actionButtonsFixed?: boolean;
     pagination?: TablePaginationConfig | false;
+    onDelete?: (id: ResourceID) => void;
 }
 export declare type IEntityListColumnRender = (value: any, values: any, index: number, field: EntityField<any, any>) => React.ReactNode | {
     children: React.ReactNode;
