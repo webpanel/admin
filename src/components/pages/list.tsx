@@ -87,7 +87,7 @@ export type IEntityListColumn<T = any> =
 
 export interface IEntityListConfig<T extends EntityDataType>
   extends ResourceCollectionOptions<T> {
-  table?: IEntityListTableProps;
+  table?: Thunk<IEntityListTableProps, ResourceCollection<T>>;
   card?: CardProps;
   searchable?: boolean;
   hidden?: Thunk<boolean, ResourceCollection<T>>;
@@ -330,9 +330,11 @@ export const EntityList = <T extends EntityDataType = any>(
 
   const tableActionButtons = (
     resourceValues: T,
+    resourceCollection: ResourceCollection<T>,
     buttons?: EntitylistActionButton[]
   ): ResourceTablePropsActionButton<T>[] => {
-    const { entity, table } = props;
+    const { entity, table: _table } = props;
+    const table = resolveOptionalThunk(_table, resourceCollection);
     const size = table && table.size === "small" ? "small" : "default";
     if (typeof buttons === "undefined") {
       buttons = ["detail", "edit", "delete"];
@@ -374,7 +376,8 @@ export const EntityList = <T extends EntityDataType = any>(
     resource: ResourceCollection<T>,
     t: i18next.TFunction
   ): React.ReactNode => {
-    const { entity, table } = props;
+    const { entity, table: _table } = props;
+    const table = resolveOptionalThunk(_table, resource);
 
     const defaultPagination: TablePaginationConfig = {
       defaultPageSize: 30,
@@ -399,6 +402,7 @@ export const EntityList = <T extends EntityDataType = any>(
           actionButtons={(values) =>
             tableActionButtons(
               values,
+              resource,
               resolveOptionalThunk(table?.actionButtons, values)
             )
           }

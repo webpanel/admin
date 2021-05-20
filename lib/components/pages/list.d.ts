@@ -33,7 +33,7 @@ export declare type IEntityListColumn<T = any> = string | {
     width?: number;
 };
 export interface IEntityListConfig<T extends EntityDataType> extends ResourceCollectionOptions<T> {
-    table?: IEntityListTableProps;
+    table?: Thunk<IEntityListTableProps, ResourceCollection<T>>;
     card?: CardProps;
     searchable?: boolean;
     hidden?: Thunk<boolean, ResourceCollection<T>>;
