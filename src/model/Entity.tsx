@@ -96,12 +96,8 @@ import { Translation } from "react-i18next";
 
 // import { Button } from 'antd';
 
-type MergeEntityFieldType<
-  T,
-  U,
-  T0 = T & U,
-  T1 = { [K in keyof T0]: T0[K] }
-> = T1;
+type MergeEntityFieldType<T, U, T0 = T & U, T1 = { [K in keyof T0]: T0[K] }> =
+  T1;
 
 export type EntityDataType = { id: ResourceID };
 type UnwrapEntity<T> = T extends Entity<infer U> ? U : never;
@@ -474,8 +470,8 @@ export class Entity<T extends EntityDataType = EntityDataType> {
         <Layout.StructureItem
           key="/new"
           name={
-            <Translation>
-              {(t) => t("common.new", { defaultValue: "New" })}
+            <Translation ns="webpanel-admin">
+              {(t) => t("new", { defaultValue: "New" })}
             </Translation>
           }
           // header={
@@ -488,9 +484,7 @@ export class Entity<T extends EntityDataType = EntityDataType> {
         <Layout.StructureItem
           key="/:id"
           name={
-            <Translation>
-              {(t) => t("common.detail", { defaultValue: "Detail" })}
-            </Translation>
+            <Translation ns="webpanel-admin">{(t) => t("detail")}</Translation>
           }
           // header={(route: RouteComponentProps<any>) => ({
           //   // title: `Detail`,
@@ -505,9 +499,7 @@ export class Entity<T extends EntityDataType = EntityDataType> {
         <Layout.StructureItem
           key="/:id/edit"
           name={
-            <Translation>
-              {(t) => t("common.edit", { defaultValue: "Edit" })}
-            </Translation>
+            <Translation ns="webpanel-admin">{(t) => t("edit")}</Translation>
           }
           // header={
           //   {
@@ -546,18 +538,17 @@ export class Entity<T extends EntityDataType = EntityDataType> {
     return <Redirect to={`${resourceID}/edit`} />;
   };
 
-  private handleFormOnSave = (route: RouteComponentProps<any>) => (
-    id: ResourceID
-  ) => {
-    if (
-      route.history.length > 1 &&
-      (route.location.state as any)?.goBackEnabled
-    ) {
-      route.history.goBack();
-      return;
-    }
-    route.history.push(this.getDetailLink(id));
-  };
+  private handleFormOnSave =
+    (route: RouteComponentProps<any>) => (id: ResourceID) => {
+      if (
+        route.history.length > 1 &&
+        (route.location.state as any)?.goBackEnabled
+      ) {
+        route.history.goBack();
+        return;
+      }
+      route.history.push(this.getDetailLink(id));
+    };
   private getEditPageLayout = (
     route: RouteComponentProps<any>,
     props?: Omit<IEntityEditProps, "resourceID">
@@ -670,20 +661,21 @@ export class Entity<T extends EntityDataType = EntityDataType> {
     );
   };
 
-  public getSearchResourceCollectionConfig = (): ResourceCollectionConfig<T> => {
-    return {
-      name: this.resourceName,
-      fields: [
-        "id",
-        ...this.searchableFields.map(
-          (x: EntityField<any, any>) => x.fetchField() || x.name
-        ),
-      ],
-      initialSorting: this.initialSorting,
-      initialFilters: this.initialFilters,
-      dataSource: this.dataSource,
+  public getSearchResourceCollectionConfig =
+    (): ResourceCollectionConfig<T> => {
+      return {
+        name: this.resourceName,
+        fields: [
+          "id",
+          ...this.searchableFields.map(
+            (x: EntityField<any, any>) => x.fetchField() || x.name
+          ),
+        ],
+        initialSorting: this.initialSorting,
+        initialFilters: this.initialFilters,
+        dataSource: this.dataSource,
+      };
     };
-  };
 
   public getSelect(config?: EntitySelectConfig): React.ReactNode {
     return <EntitySelect entity={this} {...config} />;
