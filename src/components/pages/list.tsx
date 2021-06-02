@@ -446,7 +446,7 @@ export const EntityList = <T extends EntityDataType = any>(
   }
 
   const resource = useResourceCollection({
-    name: entity.name,
+    name: entity.resourceName,
     dataSource: entity.dataSource,
     ...restProps,
     fields,
