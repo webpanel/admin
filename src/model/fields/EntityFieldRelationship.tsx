@@ -7,6 +7,7 @@ import {
   IEntityFieldFilterProps,
   IEntityFieldRenderOptions,
 } from "../EntityField";
+import { Link, ResourceSelect } from "webpanel-antd";
 import { Thunk, resolveOptionalThunk, resolveThunk } from "ts-thunk";
 // import { IEntityEditConfig } from '../../components/pages/edit';
 import { Translation, useTranslation } from "react-i18next";
@@ -18,7 +19,6 @@ import FormItem from "antd/lib/form/FormItem";
 import { FormLayout } from "antd/lib/form/Form";
 import { PlusOutlined } from "@ant-design/icons";
 import { ResourceID } from "webpanel-data";
-import { ResourceSelect } from "webpanel-antd";
 
 export type IEntityFieldRelationshipType = "toOne" | "toMany";
 export type IEntityFieldRelationshipSelectMode = undefined | "multiple";
@@ -181,7 +181,9 @@ export class EntityFieldRelationship<T> extends EntityField<
           .map((x) => {
             const content = _render && _render(x);
             if (_showLink) {
-              return <a href={_targetEntity.getDetailLink(x.id)}>{content}</a>;
+              return (
+                <Link to={_targetEntity.getDetailLink(x.id)}>{content}</Link>
+              );
             }
             return content;
           })
@@ -196,7 +198,9 @@ export class EntityFieldRelationship<T> extends EntityField<
       let content = _render && _render(value);
 
       if (_showLink) {
-        content = <a href={_targetEntity.getDetailLink(value.id)}>{content}</a>;
+        content = (
+          <Link to={_targetEntity.getDetailLink(value.id)}>{content}</Link>
+        );
       }
 
       return content;
