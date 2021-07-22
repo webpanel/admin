@@ -33,6 +33,7 @@ export interface IEntityFieldRelationshipConfig<T>
   targetEntity: any;
   type: IEntityFieldRelationshipType;
   creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
+  showLink?: Thunk<boolean>;
 }
 
 type SelectValueType = string | string[];
@@ -156,8 +157,9 @@ export class EntityFieldRelationship<T> extends EntityField<
   public fetchField(): string | null {
     let name = this.name;
 
-    const searchFields = resolveThunk(this.config.targetEntity)
-      .searchableFields;
+    const searchFields = resolveThunk(
+      this.config.targetEntity
+    ).searchableFields;
     name += `{ id ${searchFields
       .map((x: EntityField<any, any>) => x.fetchField())
       .join(" ")}} ${this.columnName()} `;
@@ -168,8 +170,9 @@ export class EntityFieldRelationship<T> extends EntityField<
     record: T,
     options?: IEntityFieldRenderOptions
   ) => React.ReactNode {
-    const { targetEntity, type, render } = this.config;
-    const _render = render || resolveThunk(targetEntity).render;
+    const { targetEntity, type, render, showLink } = this.config;
+    const _targetEntity = resolveThunk(targetEntity);
+    const _render = render || _targetEntity.render;
     return (values) => {
       const value = values[this.name];
       if (type === "toMany" && Array.isArray(value)) {
@@ -183,7 +186,13 @@ export class EntityFieldRelationship<T> extends EntityField<
         return "–";
       }
 
-      return _render && _render(value);
+      let content = _render && _render(value);
+
+      if (showLink) {
+        content = <a href={_targetEntity.getDetailLink(value.id)}>{content}</a>;
+      }
+
+      return content;
     };
   }
 
