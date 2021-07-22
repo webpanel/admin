@@ -55,13 +55,14 @@ export const EntityDetail = (props: IEntityDetailProps) => {
     id: resourceID,
     data: resource.data || {},
   });
-  const getTitle = (): string => {
+  const getTitle = (): React.ReactNode => {
     return (
-      t(`${entity.name}._title`, {
-        defaultValue: entity.title,
-      }) +
-      ": " +
-      ((resource.data && entity.render(resource.data)) || "-")
+      <>
+        {t(`${entity.name}._title`, {
+          defaultValue: entity.title,
+        })}
+        : {(resource.data && entity.render(resource.data)) || "-"}
+      </>
     );
   };
 
