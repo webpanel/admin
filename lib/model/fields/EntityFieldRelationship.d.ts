@@ -13,6 +13,7 @@ export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T>
     targetEntity: any;
     type: IEntityFieldRelationshipType;
     creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
+    showLink?: Thunk<boolean>;
 }
 export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
     get type(): IEntityFieldRelationshipType;

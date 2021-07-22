@@ -33,6 +33,7 @@ export interface IEntityFieldRelationshipConfig<T>
   targetEntity: any;
   type: IEntityFieldRelationshipType;
   creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
+  showLink?: Thunk<boolean>;
 }
 
 type SelectValueType = string | string[];
@@ -156,8 +157,9 @@ export class EntityFieldRelationship<T> extends EntityField<
   public fetchField(): string | null {
     let name = this.name;
 
-    const searchFields = resolveThunk(this.config.targetEntity)
-      .searchableFields;
+    const searchFields = resolveThunk(
+      this.config.targetEntity
+    ).searchableFields;
     name += `{ id ${searchFields
       .map((x: EntityField<any, any>) => x.fetchField())
       .join(" ")}} ${this.columnName()} `;
@@ -168,13 +170,21 @@ export class EntityFieldRelationship<T> extends EntityField<
     record: T,
     options?: IEntityFieldRenderOptions
   ) => React.ReactNode {
-    const { targetEntity, type, render } = this.config;
-    const _render = render || resolveThunk(targetEntity).render;
+    const { targetEntity, type, render, showLink } = this.config;
+    const _targetEntity = resolveThunk(targetEntity);
+    const _showLink = resolveOptionalThunk(showLink);
+    const _render = render || _targetEntity.render;
     return (values) => {
       const value = values[this.name];
       if (type === "toMany" && Array.isArray(value)) {
         return value
-          .map((x) => _render && _render(x))
+          .map((x) => {
+            const content = _render && _render(x);
+            if (_showLink) {
+              return <a href={_targetEntity.getDetailLink(x.id)}>{content}</a>;
+            }
+            return content;
+          })
           .filter((x) => x)
           .map((x) => <Tag key={String(x)}>{x}</Tag>);
       }
@@ -183,7 +193,13 @@ export class EntityFieldRelationship<T> extends EntityField<
         return "–";
       }
 
-      return _render && _render(value);
+      let content = _render && _render(value);
+
+      if (_showLink) {
+        content = <a href={_targetEntity.getDetailLink(value.id)}>{content}</a>;
+      }
+
+      return content;
     };
   }
 
