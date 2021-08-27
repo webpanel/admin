@@ -35,7 +35,7 @@ export interface IEntityFieldConfig<T> {
     shortTitle?: Thunk<string>;
     enabled?: Thunk<boolean>;
     readable?: Thunk<boolean>;
-    writable?: Thunk<boolean>;
+    writable?: Thunk<boolean, T>;
     render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     rules?: Thunk<Rule[]>;
     dependencies?: Thunk<string[]>;
@@ -70,6 +70,7 @@ export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     get enabled(): boolean;
     get readable(): boolean;
     get writeable(): boolean;
+    isWriteable(values?: T): boolean;
     get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
     setRender(fn: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode): void;
     inputElement(props?: IEntityFieldInputElementProps): React.ReactNode;

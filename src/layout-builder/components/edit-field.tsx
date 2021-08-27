@@ -23,7 +23,7 @@ export const LayoutBuilderEditField = (
   if (field === null) {
     return `unknown field ${name}`;
   }
-  if (!field.writeable) {
+  if (!field.isWriteable(values)) {
     return null;
   }
   return field.fieldElement(name, { formLayout, formInstance }, values);

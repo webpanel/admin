@@ -159,7 +159,7 @@ export const EntityList = <T extends EntityDataType = any>(
               editable={
                 entity.updateable(record) &&
                 _editableFields.indexOf(field.name) > -1 &&
-                field.writeable
+                field.isWriteable(record)
               }
               fields={entityListFields}
             />

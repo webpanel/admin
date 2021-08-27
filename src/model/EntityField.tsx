@@ -59,7 +59,7 @@ export interface IEntityFieldConfig<T> {
   shortTitle?: Thunk<string>;
   enabled?: Thunk<boolean>;
   readable?: Thunk<boolean>;
-  writable?: Thunk<boolean>;
+  writable?: Thunk<boolean, T>;
   render?: (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;
   rules?: Thunk<Rule[]>;
   dependencies?: Thunk<string[]>;
@@ -198,6 +198,13 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   public get writeable(): boolean {
     if (!this.enabled) return false;
     const val = resolveOptionalThunk(this.config.writable);
+    if (typeof val !== "undefined") return val;
+    return true;
+  }
+
+  public isWriteable(values?: T): boolean {
+    if (!this.enabled) return false;
+    const val = resolveOptionalThunk(this.config.writable, values);
     if (typeof val !== "undefined") return val;
     return true;
   }
