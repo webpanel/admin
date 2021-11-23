@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { Button, Form } from "antd";
 
+import { useTranslation } from "react-i18next";
+
 export interface ResourceFormButtonsProps {
   saving?: boolean;
   submit?: () => void;
@@ -10,6 +12,7 @@ export interface ResourceFormButtonsProps {
 
 export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
   const { saving, reset, submit } = props;
+  const { t } = useTranslation("webpanel-admin");
   return (
     <Form.Item
       key="form-buttons"
@@ -24,10 +27,10 @@ export const ResourceFormPageButtons = (props: ResourceFormButtonsProps) => {
         onClick={submit}
         htmlType={typeof submit === "undefined" ? "submit" : undefined}
       >
-        Save
+        {t("save")}
       </Button>
       <Button style={{ marginLeft: 8 }} onClick={reset}>
-        Reset
+        {t("reset")}
       </Button>
     </Form.Item>
   );
