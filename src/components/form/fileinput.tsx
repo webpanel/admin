@@ -5,10 +5,10 @@ import { Button, Upload, message } from "antd";
 import { CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Entity } from "../../model/Entity";
 import { UploadFile } from "antd/lib/upload/interface";
 import { UploadRequest } from "./upload-request";
 import { useResource } from "webpanel-data";
+import { EntityBase } from "../../model/EntityBase";
 
 interface IFile {
   id: string;
@@ -19,7 +19,7 @@ interface IFile {
   contentType?: string;
 }
 interface IFileInputProps {
-  entity: Entity;
+  entity: EntityBase;
   uploadURL?: string;
   hostURL?: string;
   value?: string;

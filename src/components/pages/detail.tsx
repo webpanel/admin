@@ -7,11 +7,11 @@ import Modal, { ModalProps } from "antd/lib/modal";
 import { Card } from "antd";
 import { CardProps } from "antd/lib/card";
 import { DescriptionsProps } from "antd/lib/descriptions";
-import { Entity } from "../../model/Entity";
 import { PageNotFound } from "./not-found";
 import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
 import { useTranslation } from "react-i18next";
+import { EntityWithFields } from "../../model/EntityWithFields";
 
 export interface IEntityDetailFieldOptions {
   field: string | null;
@@ -32,7 +32,7 @@ export interface IEntityDetailConfig {
   card?: CardProps;
 }
 export interface IEntityDetailProps extends IEntityDetailConfig {
-  entity: Entity;
+  entity: EntityWithFields;
   resourceID: ResourceID;
 }
 

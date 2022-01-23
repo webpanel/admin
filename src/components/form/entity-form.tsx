@@ -4,12 +4,12 @@ import { Form, Spin, message } from "antd";
 import { Resource, ResourceID } from "webpanel-data";
 import { Thunk, resolveOptionalThunk } from "ts-thunk";
 
-import { Entity } from "../../model/Entity";
 import { EntityField } from "../../model/EntityField";
 import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
 import { PageNotFound } from "../pages/not-found";
 import { ResourceFormPageButtons } from "./buttons";
+import { EntityWithFields } from "../../model/EntityWithFields";
 
 export type EntityOnSaveHandler = (id: ResourceID) => void;
 
@@ -30,7 +30,7 @@ export interface IEntityFormConfig {
 }
 
 export interface IEntityFormProps extends IEntityFormConfig {
-  entity: Entity;
+  entity: EntityWithFields;
   formRef?: React.MutableRefObject<FormInstance | null>;
   onSave?: EntityOnSaveHandler;
   onValuesChanged?: (values: any) => void;

@@ -4,11 +4,11 @@ import { SearchOutlined, SelectOutlined } from "@ant-design/icons";
 
 import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
-import { Entity } from "../../model/Entity";
 import { IEntityDetailConfig } from "../pages/detail";
 import { Link } from "webpanel-antd";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
+import { EntityWithFields } from "../../model/EntityWithFields";
 
 export interface IEntityDetailButtonModalFlow {
   type: "modal";
@@ -24,7 +24,7 @@ export interface DetailEntityProps extends IEntityDetailConfig {
 }
 
 export interface DetailEntityButtonProps extends DetailEntityProps {
-  entity: Entity;
+  entity: EntityWithFields;
   entityId: ResourceID;
 }
 export class DetailEntityButton extends React.Component<

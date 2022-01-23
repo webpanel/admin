@@ -1,7 +1,8 @@
 import * as React from "react";
 
 import { EditOutlined, SearchOutlined } from "@ant-design/icons";
-import { Entity, EntityDataType } from "../../model/Entity";
+import { Entity } from "../../model/Entity";
+import { EntityDataType } from "../../model/EntityBase";
 
 import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 import { Button } from "antd";

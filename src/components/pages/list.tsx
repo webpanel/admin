@@ -10,7 +10,8 @@ import {
   ResourceID,
   useResourceCollection,
 } from "webpanel-data";
-import { Entity, EntityDataType } from "../../model/Entity";
+import { Entity } from "../../model/Entity";
+import { EntityDataType } from "../../model/EntityBase";
 import {
   EntitylistActionButton,
   detailListButton,

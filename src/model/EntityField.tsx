@@ -15,6 +15,7 @@ import { Entity } from "./Entity";
 import { IEntityListColumnAlign } from "../components/pages/list";
 import { Rule } from "rc-field-form/es/interface";
 import { Translation } from "react-i18next";
+import { EntityBase } from "./EntityBase";
 
 // import { ResourceCollection } from 'webpanel-data';
 
@@ -73,7 +74,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   constructor(
     public readonly name: string,
     protected readonly config: C,
-    public readonly entity: Entity
+    public readonly entity: EntityBase
   ) {}
 
   public clone(entity?: Entity): this {

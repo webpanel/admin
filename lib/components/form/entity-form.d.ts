@@ -1,9 +1,9 @@
 import * as React from "react";
 import { ResourceID } from "webpanel-data";
 import { Thunk } from "ts-thunk";
-import { Entity } from "../../model/Entity";
 import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
+import { EntityWithFields } from "../../model/EntityWithFields";
 export declare type EntityOnSaveHandler = (id: ResourceID) => void;
 export interface IEntityFormFieldOptions {
     field: string | null;
@@ -20,7 +20,7 @@ export interface IEntityFormConfig {
     };
 }
 export interface IEntityFormProps extends IEntityFormConfig {
-    entity: Entity;
+    entity: EntityWithFields;
     formRef?: React.MutableRefObject<FormInstance | null>;
     onSave?: EntityOnSaveHandler;
     onValuesChanged?: (values: any) => void;

@@ -1,7 +1,8 @@
 import "../../../styles/entity-list.css";
 import * as React from "react";
 import { DataSourceAggregationFunction, ResourceCollection, ResourceCollectionOptions, ResourceID } from "webpanel-data";
-import { Entity, EntityDataType } from "../../model/Entity";
+import { Entity } from "../../model/Entity";
+import { EntityDataType } from "../../model/EntityBase";
 import { EntitylistActionButton } from "./list.buttons";
 import { TablePaginationConfig, TableProps } from "antd/lib/table";
 import { Thunk } from "ts-thunk";

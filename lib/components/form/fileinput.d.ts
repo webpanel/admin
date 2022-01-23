@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Thunk } from "ts-thunk";
-import { Entity } from "../../model/Entity";
 import { UploadFile } from "antd/lib/upload/interface";
+import { EntityBase } from "../../model/EntityBase";
 interface IFile {
     id: string;
     ID: string;
@@ -11,7 +11,7 @@ interface IFile {
     contentType?: string;
 }
 interface IFileInputProps {
-    entity: Entity;
+    entity: EntityBase;
     uploadURL?: string;
     hostURL?: string;
     value?: string;

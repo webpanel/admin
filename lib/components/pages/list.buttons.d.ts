@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Entity, EntityDataType } from "../../model/Entity";
+import { Entity } from "../../model/Entity";
+import { EntityDataType } from "../../model/EntityBase";
 import { ActionButtonProps } from "webpanel-antd/lib/table/ResourceTableActionButtons";
 export declare type EntityListSize = "small" | "default";
 export interface EntityListActionButtonProps<T extends EntityDataType> extends ActionButtonProps<T> {

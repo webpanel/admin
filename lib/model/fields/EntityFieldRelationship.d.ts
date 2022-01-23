@@ -1,8 +1,9 @@
 import * as React from "react";
-import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps, IEntityFieldRenderOptions } from "../EntityField";
+import { EntityField, IEntityFieldConfig, IEntityFieldConfigFilter, IEntityFieldFilterProps, IEntityFieldRenderOptions } from "../EntityField";
 import { Thunk } from "ts-thunk";
 import { Entity } from "../Entity";
 import { FormLayout } from "antd/lib/form/Form";
+import { EntityBase } from "../EntityBase";
 export declare type IEntityFieldRelationshipType = "toOne" | "toMany";
 export declare type IEntityFieldRelationshipSelectMode = undefined | "multiple";
 export interface IEntityFieldRelationshipCreatableConfig {
@@ -15,7 +16,13 @@ export interface IEntityFieldRelationshipConfig<T> extends IEntityFieldConfig<T>
     creatable?: Thunk<boolean | IEntityFieldRelationshipCreatableConfig>;
     showLink?: Thunk<boolean>;
 }
-export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFieldRelationshipConfig<T>> {
+export declare const relationshipFieldFilter: (columnName: string, entity: Thunk<Entity<any>>) => IEntityFieldConfigFilter;
+export declare class EntityFieldRelationship<T, C extends IEntityFieldRelationshipConfig<T>> extends EntityField<T, C> {
+    readonly name: string;
+    protected readonly config: C;
+    readonly entity: EntityBase;
+    private filterConfig;
+    constructor(name: string, config: C, entity: EntityBase);
     get type(): IEntityFieldRelationshipType;
     columnName(): string;
     get mode(): IEntityFieldRelationshipSelectMode;
@@ -29,7 +36,7 @@ export declare class EntityFieldRelationship<T> extends EntityField<T, IEntityFi
         onChange?: (value: any) => void;
         autoFocus?: boolean;
     }): React.ReactNode;
-    filterDropdownInput: (props: IEntityFieldFilterProps<string>) => JSX.Element;
+    filterDropdownInput: (props: IEntityFieldFilterProps<string>) => React.ReactNode;
     get filterNormalize(): (values: string[]) => {
         [key: string]: any;
     };

@@ -3,7 +3,6 @@ import * as React from "react";
 import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
 import { CreateEntityModal } from "./CreateEntityModal";
-import { Entity } from "../../model/Entity";
 import { IEntityFormProps } from "../form/entity-form";
 import { Link } from "webpanel-antd";
 // import Modal from "antd/lib/modal/Modal";
@@ -24,7 +23,7 @@ export interface CreateEntityProps extends IEntityFormProps {
 }
 
 export interface CreateEntityButtonProps extends CreateEntityProps {
-  entity: Entity;
+  // entity: EntityBase;
 }
 export const CreateEntityButton = (props: CreateEntityButtonProps) => {
   const { entity, flow, button, ...rest } = props;

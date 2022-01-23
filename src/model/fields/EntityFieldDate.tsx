@@ -4,6 +4,7 @@ import * as moment from "moment";
 import {
   EntityField,
   IEntityFieldConfig,
+  IEntityFieldConfigFilter,
   IEntityFieldFilterProps,
   IEntityFieldRenderOptions,
 } from "../EntityField";
@@ -11,16 +12,95 @@ import {
 import { DatePicker as AntdDatePicker } from "antd";
 import { DatePicker } from "../../components/date-picker";
 import { RangeValue } from "rc-picker/lib/interface";
+import { EntityBase } from "../EntityBase";
 
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
   showTime?: boolean;
   format?: string;
 }
 
-export class EntityFieldDate<T> extends EntityField<
+export const dateFieldFilter = (
+  columnName: string,
+  range?: boolean,
+  format?: string,
+  showTime?: boolean
+): IEntityFieldConfigFilter => {
+  return {
+    dropdownInput: (props) => {
+      const value = props.selectedKeys;
+      return range ? (
+        <AntdDatePicker.RangePicker
+          format={format || showTime ? "YYYY/MM/DD HH:mm" : "YYYY/MM/DD"}
+          allowClear={false}
+          value={[value[0] && moment(value[0]), value[1] && moment(value[1])]}
+          onChange={(dates: RangeValue<any>) => {
+            if (dates != null) {
+              props.setSelectedKeys([
+                moment(dates[0] || undefined).startOf("day"),
+                moment(dates[1] || undefined).endOf("day"),
+              ]);
+            }
+          }}
+        />
+      ) : (
+        <AntdDatePicker
+          value={value[0]}
+          allowClear={false}
+          onChange={(date: moment.Moment) => {
+            props.setSelectedKeys([
+              moment(date).startOf("day"),
+              moment(date).endOf("day"),
+            ]);
+          }}
+        />
+      );
+    },
+    normalizer: (values: moment.Moment[] | null) => {
+      let res = {};
+      values = values || [];
+      if (values.length == 1) {
+        res[columnName] = moment(values[0]).toISOString();
+      } else if (values.length === 2) {
+        res[columnName + "_gte"] = moment(values[0]).toISOString();
+        res[columnName + "_lte"] = moment(values[1]).toISOString();
+      }
+      return res;
+    },
+    denormalizer: (values: { [key: string]: any }): any[] => {
+      let res: any[] = [];
+      if (values[columnName]) {
+        res = [moment(values[columnName])];
+      } else if (values[columnName + "_gte"] && values[columnName + "_lte"]) {
+        res = [
+          moment(values[columnName + "_gte"]),
+          moment(values[columnName + "_lte"]),
+        ];
+      }
+      return res;
+    },
+  };
+};
+
+export class EntityFieldDate<
   T,
-  IEntityFieldDateConfig<T>
-> {
+  C extends IEntityFieldDateConfig<T>
+> extends EntityField<T, C> {
+  private filterConfig: IEntityFieldConfigFilter;
+
+  constructor(
+    public readonly name: string,
+    protected readonly config: C,
+    public readonly entity: EntityBase
+  ) {
+    super(name, config, entity);
+    this.filterConfig = dateFieldFilter(
+      this.columnName(),
+      this.range,
+      this.format,
+      this.config.showTime
+    );
+  }
+
   private get format(): string {
     return (
       this.config.format ||
@@ -30,14 +110,14 @@ export class EntityFieldDate<T> extends EntityField<
 
   private renderValue(value: moment.Moment | string | null): React.ReactNode {
     if (value === null) {
-      return "–";
+      return "-";
     }
 
     const d = moment(value);
     if (d.isValid()) {
       return d.format(this.format);
     } else {
-      return "–";
+      return "-";
     }
   }
 
@@ -74,65 +154,17 @@ export class EntityFieldDate<T> extends EntityField<
   public filterDropdownInput = (
     props: IEntityFieldFilterProps<moment.Moment>
   ) => {
-    const value = props.selectedKeys;
-    return this.range ? (
-      <AntdDatePicker.RangePicker
-        format={this.config.format}
-        allowClear={false}
-        value={[value[0] && moment(value[0]), value[1] && moment(value[1])]}
-        onChange={(dates: RangeValue<any>) => {
-          if (dates != null) {
-            props.setSelectedKeys([
-              moment(dates[0] || undefined).startOf("day"),
-              moment(dates[1] || undefined).endOf("day"),
-            ]);
-          }
-        }}
-      />
-    ) : (
-      <AntdDatePicker
-        value={value[0]}
-        allowClear={false}
-        onChange={(date: moment.Moment) => {
-          props.setSelectedKeys([
-            moment(date).startOf("day"),
-            moment(date).endOf("day"),
-          ]);
-        }}
-      />
+    return (
+      this.filterConfig.dropdownInput && this.filterConfig.dropdownInput(props)
     );
   };
 
-  public get filterNormalize(): (
-    values: moment.Moment[]
-  ) => { [key: string]: any } {
-    return (values: moment.Moment[] | null) => {
-      let res = {};
-      values = values || [];
-      if (values.length == 1) {
-        res[this.columnName()] = moment(values[0]).toISOString();
-      } else if (values.length === 2) {
-        res[this.columnName() + "_gte"] = moment(values[0]).toISOString();
-        res[this.columnName() + "_lte"] = moment(values[1]).toISOString();
-      }
-      return res;
-    };
+  public get filterNormalize(): (values: moment.Moment[]) => {
+    [key: string]: any;
+  } {
+    return this.filterConfig.normalizer!;
   }
   public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
-    return (values: { [key: string]: any }) => {
-      let res: any[] = [];
-      if (values[this.columnName()]) {
-        res = [moment(values[this.columnName()])];
-      } else if (
-        values[this.columnName() + "_gte"] &&
-        values[this.columnName() + "_lte"]
-      ) {
-        res = [
-          moment(values[this.columnName() + "_gte"]),
-          moment(values[this.columnName() + "_lte"]),
-        ];
-      }
-      return res;
-    };
+    return this.filterConfig.denormalizer!;
   }
 }

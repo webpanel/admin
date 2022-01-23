@@ -1,9 +1,9 @@
 import * as React from "react";
 import { ButtonProps } from "antd/lib/button";
-import { Entity } from "../../model/Entity";
 import { IEntityDetailConfig } from "../pages/detail";
 import { ModalProps } from "antd/lib/modal";
 import { ResourceID } from "webpanel-data";
+import { EntityWithFields } from "../../model/EntityWithFields";
 export interface IEntityDetailButtonModalFlow {
     type: "modal";
     modal?: ModalProps;
@@ -16,7 +16,7 @@ export interface DetailEntityProps extends IEntityDetailConfig {
     hideLinkToDetail?: boolean;
 }
 export interface DetailEntityButtonProps extends DetailEntityProps {
-    entity: Entity;
+    entity: EntityWithFields;
     entityId: ResourceID;
 }
 export declare class DetailEntityButton extends React.Component<DetailEntityButtonProps, {

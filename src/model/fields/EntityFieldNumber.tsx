@@ -7,10 +7,10 @@ import {
   IEntityFieldFilterProps,
 } from "../EntityField";
 
-import { Entity } from "../Entity";
 import { IEntityListColumnAlign } from "../../components/pages/list";
 import { InputNumber } from "antd";
 import { InputNumberProps } from "antd/lib/input-number";
+import { EntityBase } from "../EntityBase";
 
 const formatter = (
   value: string | number | undefined,
@@ -38,7 +38,7 @@ export class EntityFieldNumber<T> extends EntityField<
   constructor(
     public readonly name: string,
     protected readonly config: IEntityFieldNumberConfig<T>,
-    public readonly entity: Entity
+    public readonly entity: EntityBase
   ) {
     super(name, config, entity);
 

@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { Entity } from "../../model/Entity";
 import { ResourceCollectionConfig } from "webpanel-data/lib/ResourceCollection";
 import { ResourceSelect } from "webpanel-antd";
 import { SelectProps } from "antd/lib/select";
+import { EntityWithFields } from "../../model/EntityWithFields";
 
 export interface EntitySelectConfig extends SelectProps<any> {
   key?: string;
@@ -11,7 +11,7 @@ export interface EntitySelectConfig extends SelectProps<any> {
 }
 
 export interface EntitySelectProps extends EntitySelectConfig {
-  entity: Entity;
+  entity: EntityWithFields;
 }
 
 export const EntitySelect = (props: EntitySelectProps) => {

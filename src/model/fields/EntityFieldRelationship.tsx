@@ -4,6 +4,7 @@ import { Button, Col, Row, Tag } from "antd";
 import {
   EntityField,
   IEntityFieldConfig,
+  IEntityFieldConfigFilter,
   IEntityFieldFilterProps,
   IEntityFieldRenderOptions,
 } from "../EntityField";
@@ -19,6 +20,7 @@ import FormItem from "antd/lib/form/FormItem";
 import { FormLayout } from "antd/lib/form/Form";
 import { PlusOutlined } from "@ant-design/icons";
 import { ResourceID } from "webpanel-data";
+import { EntityBase } from "../EntityBase";
 
 export type IEntityFieldRelationshipType = "toOne" | "toMany";
 export type IEntityFieldRelationshipSelectMode = undefined | "multiple";
@@ -38,7 +40,7 @@ export interface IEntityFieldRelationshipConfig<T>
 
 type SelectValueType = string | string[];
 interface RelationshipSelectWithAddButtonProps {
-  field: EntityFieldRelationship<any>;
+  field: EntityFieldRelationship<any, any>;
   targetEntity: Entity<any>;
   isCreatable: boolean | IEntityFieldRelationshipCreatableConfig;
   onChange?: (value: SelectValueType) => void;
@@ -138,10 +140,45 @@ const RelationshipSelectWithAddButton = (
   );
 };
 
-export class EntityFieldRelationship<T> extends EntityField<
+export const relationshipFieldFilter = (
+  columnName: string,
+  entity: Thunk<Entity<any>>
+): IEntityFieldConfigFilter => {
+  return {
+    dropdownInput: (props) => {
+      return getRelationshipFilterDropdownInput(resolveThunk(entity), props);
+    },
+    normalizer: (values: string[]): { [key: string]: any } => {
+      const res = {};
+      if (values && values.length > 0) {
+        res[columnName] = { id_in: values };
+      }
+      return res;
+    },
+    denormalizer: (values: { [key: string]: any }): any[] => {
+      return (values[columnName] && values[columnName].id_in) || [];
+    },
+  };
+};
+
+export class EntityFieldRelationship<
   T,
-  IEntityFieldRelationshipConfig<T>
-> {
+  C extends IEntityFieldRelationshipConfig<T>
+> extends EntityField<T, C> {
+  private filterConfig: IEntityFieldConfigFilter;
+
+  constructor(
+    public readonly name: string,
+    protected readonly config: C,
+    public readonly entity: EntityBase
+  ) {
+    super(name, config, entity);
+    this.filterConfig = relationshipFieldFilter(
+      this.columnName(),
+      this.config.targetEntity
+    );
+  }
+
   public get type(): IEntityFieldRelationshipType {
     return this.config.type === "toOne" ? "toOne" : "toMany";
   }
@@ -289,53 +326,16 @@ export class EntityFieldRelationship<T> extends EntityField<
   }
 
   public filterDropdownInput = (props: IEntityFieldFilterProps<string>) => {
-    const { targetEntity } = this.config;
-    const _targetEntity = resolveThunk(targetEntity);
-    return getRelationshipFilterDropdownInput(_targetEntity, props);
+    return (
+      this.filterConfig.dropdownInput && this.filterConfig.dropdownInput(props)
+    );
   };
 
   public get filterNormalize(): (values: string[]) => { [key: string]: any } {
-    return (values: string[] | null) => {
-      let res = {};
-      values = values || [];
-      if (this.type === "toMany") {
-        if (values.length == 1) {
-          res[this.name] = { id: values[0] };
-        } else if (values.length > 1) {
-          res[this.name] = { id_in: values };
-        }
-      } else {
-        if (values.length == 1) {
-          res[this.name + "Id"] = values[0];
-        } else if (values.length > 1) {
-          res[this.name + "Id_in"] = values;
-        }
-      }
-      return res;
-    };
+    return this.filterConfig.normalizer!;
   }
   public get filterDenormalize(): (values: { [key: string]: any }) => any[] {
-    return (values: { [key: string]: any }) => {
-      let res: any[] = [];
-      const value =
-        values[this.columnName()] ||
-        values[this.columnName() + "_in"] ||
-        values[this.columnName() + "Id"] ||
-        values[this.columnName() + "Id_in"] ||
-        values[this.columnName().replace("Ids", "").replace("Id", "")];
-      if (value) {
-        if (value.id) {
-          res = [value.id];
-        } else if (value.id_in) {
-          res = value.id_in;
-        } else if (Array.isArray(value)) {
-          res = value;
-        } else {
-          res = [value];
-        }
-      }
-      return res;
-    };
+    return this.filterConfig.denormalizer!;
   }
 }
 

@@ -1,9 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { EntityField, IEntityFieldConfig } from '../EntityField';
+import { EntityField, IEntityFieldConfig } from "../EntityField";
 
-import { Input } from 'antd';
-
+import { Input } from "antd";
 export class EntityFieldString<
   T,
   C extends IEntityFieldConfig<T>

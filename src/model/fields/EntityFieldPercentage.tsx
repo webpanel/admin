@@ -7,10 +7,10 @@ import {
   IEntityFieldFilterProps,
 } from "../EntityField";
 
-import { Entity } from "../Entity";
 import { IEntityListColumnAlign } from "../../components/pages/list";
 import { InputNumber } from "antd";
 import { InputNumberProps } from "antd/lib/input-number";
+import { EntityBase } from "../EntityBase";
 
 export const PercentageInput = (props: InputNumberProps) => {
   const { value, onChange, ...rest } = props;
@@ -37,7 +37,7 @@ export class EntityFieldPercentage<T> extends EntityField<
   constructor(
     public readonly name: string,
     protected readonly config: IEntityFieldPercentageConfig<T>,
-    public readonly entity: Entity
+    public readonly entity: EntityBase
   ) {
     super(name, config, entity);
 

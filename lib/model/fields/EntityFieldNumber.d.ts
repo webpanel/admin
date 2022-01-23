@@ -1,8 +1,8 @@
 import * as React from "react";
 import { EntityField, IEntityFieldConfig, IEntityFieldFilterProps } from "../EntityField";
-import { Entity } from "../Entity";
 import { IEntityListColumnAlign } from "../../components/pages/list";
 import { InputNumberProps } from "antd/lib/input-number";
+import { EntityBase } from "../EntityBase";
 export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
     format?: string;
     inputProps?: InputNumberProps;
@@ -10,8 +10,8 @@ export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldNumber<T> extends EntityField<T, IEntityFieldNumberConfig<T>> {
     readonly name: string;
     protected readonly config: IEntityFieldNumberConfig<T>;
-    readonly entity: Entity;
-    constructor(name: string, config: IEntityFieldNumberConfig<T>, entity: Entity);
+    readonly entity: EntityBase;
+    constructor(name: string, config: IEntityFieldNumberConfig<T>, entity: EntityBase);
     get listColumnAlign(): IEntityListColumnAlign;
     inputElement(props?: {
         value?: any;

@@ -6,6 +6,7 @@ import { Thunk } from "ts-thunk";
 import { Entity } from "./Entity";
 import { IEntityListColumnAlign } from "../components/pages/list";
 import { Rule } from "rc-field-form/es/interface";
+import { EntityBase } from "./EntityBase";
 export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
@@ -49,8 +50,8 @@ export interface IEntityFieldConfig<T> {
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
     protected readonly config: C;
-    readonly entity: Entity;
-    constructor(name: string, config: C, entity: Entity);
+    readonly entity: EntityBase;
+    constructor(name: string, config: C, entity: EntityBase);
     clone(entity?: Entity): this;
     get titleTranslationKey(): string;
     get title(): string;
