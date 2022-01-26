@@ -151,12 +151,12 @@ export const relationshipFieldFilter = (
     normalizer: (values: string[]): { [key: string]: any } => {
       const res = {};
       if (values && values.length > 0) {
-        res[columnName] = { id_in: values };
+        res[columnName + "_in"] = values;
       }
       return res;
     },
     denormalizer: (values: { [key: string]: any }): any[] => {
-      return (values[columnName] && values[columnName].id_in) || [];
+      return values[columnName + "_in"] || [];
     },
   };
 };
