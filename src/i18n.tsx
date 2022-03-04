@@ -17,6 +17,8 @@ export const i18nAddResourceBundles = (i18n: i18n) => {
     notFoundPageTitle: "Not found",
     notFoundPageSubTitle: "Check page address or contact tech assistance",
     notFoundPageHome: "Home",
+    formSaved: "Form saved",
+    formSaveFailed: "There was an error while saving form: ",
   });
   i18n.addResourceBundle("cs", "webpanel-admin", {
     new: "Nový",
@@ -35,5 +37,7 @@ export const i18nAddResourceBundles = (i18n: i18n) => {
     notFoundPageSubTitle:
       "Zkontrolujte adresu stránky nebo kontaktujte technickou podporu",
     notFoundPageHome: "Domů",
+    formSaved: "Formulář uložen",
+    formSaveFailed: "Při ukládání foruláře došlo k chybě: ",
   });
 };

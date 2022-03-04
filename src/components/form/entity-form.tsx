@@ -10,6 +10,7 @@ import { FormLayout } from "antd/lib/form/Form";
 import { PageNotFound } from "../pages/not-found";
 import { ResourceFormPageButtons } from "./buttons";
 import { EntityWithFields } from "../../model/EntityWithFields";
+import { useTranslation } from "react-i18next";
 
 export type EntityOnSaveHandler = (id: ResourceID) => void;
 
@@ -51,6 +52,7 @@ export const isEntityEditFormProps = (
 export const EntityForm = (
   props: IEntityFormCreateProps | IEntityFormEditProps
 ) => {
+  const { t } = useTranslation("webpanel-admin");
   const { formRef, onSave, onValuesChanged, showButtons, form } = props;
   const [formInstance] = Form.useForm();
   const [saving, setSaving] = React.useState(false);
@@ -60,7 +62,7 @@ export const EntityForm = (
   }
 
   const handleFormSuccess = async (resource: Resource) => {
-    message.success("Form saved!");
+    message.success(t("formSaved"));
     if (onSave) {
       onSave(resource.id || 0);
     }
@@ -121,7 +123,7 @@ export const EntityForm = (
           await resource.save(values);
           handleFormSuccess(resource);
         } catch (err) {
-          message.error(err.message);
+          message.error(t("formSaveFailed") + err.message);
         } finally {
           setSaving(false);
         }
