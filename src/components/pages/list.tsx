@@ -141,7 +141,7 @@ export const EntityList = <T extends EntityDataType = any>(
         : fieldTitle;
 
       const col: ResourceTableColumn = {
-        key: field.name,
+        key: `${field.name}_${_editableFields.join("-")}`,
         dataIndex: field.name,
         align: _align,
         width: columnField.width,
