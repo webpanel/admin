@@ -125,12 +125,12 @@ export const EntityList = <T extends EntityDataType = any>(
   ): ResourceTableColumn[] => {
     const { entity, editableFields } = props;
 
-    const _editableFields = resolveOptionalThunk(editableFields) || [];
     const entityListFields = listFields.map((x) => x.field);
 
     const hasAggregations = listFields.filter((x) => x.aggregation).length > 0;
 
     return listFields.map((columnField): ResourceTableColumn => {
+      const _editableFields = resolveOptionalThunk(editableFields) || [];
       const { field, render, align, titleRender, aggregation } = columnField;
       const _align = align || field.listColumnAlign;
       const fieldTitle = t(field.titleTranslationKey, {
@@ -139,9 +139,8 @@ export const EntityList = <T extends EntityDataType = any>(
       const title = titleRender
         ? titleRender({ title: fieldTitle, data: resource.data })
         : fieldTitle;
-
       const col: ResourceTableColumn = {
-        key: `${field.name}_${_editableFields.join("-")}`,
+        key: field.name,
         dataIndex: field.name,
         align: _align,
         width: columnField.width,
