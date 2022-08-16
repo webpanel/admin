@@ -183,6 +183,10 @@ export class EntityFieldRelationship<
     return this.config.type === "toOne" ? "toOne" : "toMany";
   }
 
+  public get targetEntity(): Entity<any> {
+    return this.config.targetEntity;
+  }
+
   public columnName(): string {
     return `${this.name}${this.type === "toOne" ? "Id" : "Ids"}`;
   }

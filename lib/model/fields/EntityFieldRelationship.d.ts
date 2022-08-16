@@ -24,6 +24,7 @@ export declare class EntityFieldRelationship<T, C extends IEntityFieldRelationsh
     private filterConfig;
     constructor(name: string, config: C, entity: EntityBase);
     get type(): IEntityFieldRelationshipType;
+    get targetEntity(): Entity<any>;
     columnName(): string;
     get mode(): IEntityFieldRelationshipSelectMode;
     fetchField(): string | null;
