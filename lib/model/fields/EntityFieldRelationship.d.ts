@@ -20,9 +20,9 @@ export declare const relationshipFieldFilter: (columnName: string, entity: Thunk
 export declare class EntityFieldRelationship<T, C extends IEntityFieldRelationshipConfig<T>> extends EntityField<T, C> {
     readonly name: string;
     protected readonly config: C;
-    readonly entity: EntityBase;
+    readonly _entity: EntityBase;
     private filterConfig;
-    constructor(name: string, config: C, entity: EntityBase);
+    constructor(name: string, config: C, _entity: EntityBase);
     get type(): IEntityFieldRelationshipType;
     get targetEntity(): Entity<any>;
     columnName(): string;

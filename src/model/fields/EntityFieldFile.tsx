@@ -95,10 +95,10 @@ export class EntityFieldFile<T> extends EntityField<
 
     return (
       <FileInput
-        entity={this.entity}
+        entity={this._entity}
         hostURL={this.config.hostURL}
         uploadURL={this.config.uploadURL}
-        key={`text_field_${this.entity.name}_${this.valuePropName}`}
+        key={`text_field_${this._entity.name}_${this.valuePropName}`}
         accessToken={accessToken}
         {...props}
         onChange={onChangeProp}

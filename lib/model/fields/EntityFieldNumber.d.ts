@@ -10,8 +10,8 @@ export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldNumber<T> extends EntityField<T, IEntityFieldNumberConfig<T>> {
     readonly name: string;
     protected readonly config: IEntityFieldNumberConfig<T>;
-    readonly entity: EntityBase;
-    constructor(name: string, config: IEntityFieldNumberConfig<T>, entity: EntityBase);
+    readonly _entity: EntityBase;
+    constructor(name: string, config: IEntityFieldNumberConfig<T>, _entity: EntityBase);
     get listColumnAlign(): IEntityListColumnAlign;
     inputElement(props?: {
         value?: any;

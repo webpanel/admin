@@ -20,7 +20,7 @@ export class EntityFieldString<
 
     return (
       <Input
-        key={`string_field_${this.entity.name}_${this.valuePropName}`}
+        key={`string_field_${this._entity.name}_${this.valuePropName}`}
         {...props}
         {...(this.config.attributes || {})}
         onChange={onChangeProp}

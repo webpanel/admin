@@ -37,9 +37,9 @@ export class EntityFieldPercentage<T> extends EntityField<
   constructor(
     public readonly name: string,
     protected readonly config: IEntityFieldPercentageConfig<T>,
-    public readonly entity: EntityBase
+    public readonly _entity: EntityBase
   ) {
-    super(name, config, entity);
+    super(name, config, _entity);
 
     if (typeof config.render === "undefined") {
       this.config.render = (values) => numeral(values[name]).format("%");
@@ -63,7 +63,7 @@ export class EntityFieldPercentage<T> extends EntityField<
     return (
       <PercentageInput
         style={{ minWidth: "195px", width: "100%" }}
-        key={`number_field_${this.entity.name}_${this.valuePropName}`}
+        key={`number_field_${this._entity.name}_${this.valuePropName}`}
         {...props}
         onChange={onChangeProp}
       />
@@ -75,7 +75,7 @@ export class EntityFieldPercentage<T> extends EntityField<
     return (
       <PercentageInput
         style={{ minWidth: "195px" }}
-        key={`number_field_${this.entity.name}_${this.valuePropName}`}
+        key={`number_field_${this._entity.name}_${this.valuePropName}`}
         placeholder="Number"
         value={value}
         onChange={(value: number) =>

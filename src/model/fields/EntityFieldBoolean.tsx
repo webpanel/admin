@@ -57,7 +57,7 @@ export class EntityFieldBoolean<T> extends EntityField<
       : undefined;
     return (
       <IndeterminateCheckbox
-        key={`boolean_field_${this.entity.name}_${this.valuePropName}`}
+        key={`boolean_field_${this._entity.name}_${this.valuePropName}`}
         {...props}
         onChange={onChangeProp}
       />

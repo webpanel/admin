@@ -9,8 +9,8 @@ export interface IEntityFieldPercentageConfig<T> extends IEntityFieldConfig<T> {
 export declare class EntityFieldPercentage<T> extends EntityField<T, IEntityFieldPercentageConfig<T>> {
     readonly name: string;
     protected readonly config: IEntityFieldPercentageConfig<T>;
-    readonly entity: EntityBase;
-    constructor(name: string, config: IEntityFieldPercentageConfig<T>, entity: EntityBase);
+    readonly _entity: EntityBase;
+    constructor(name: string, config: IEntityFieldPercentageConfig<T>, _entity: EntityBase);
     get listColumnAlign(): IEntityListColumnAlign;
     inputElement(props?: {
         value?: any;

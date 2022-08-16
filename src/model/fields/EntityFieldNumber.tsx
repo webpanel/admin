@@ -38,9 +38,9 @@ export class EntityFieldNumber<T> extends EntityField<
   constructor(
     public readonly name: string,
     protected readonly config: IEntityFieldNumberConfig<T>,
-    public readonly entity: EntityBase
+    public readonly _entity: EntityBase
   ) {
-    super(name, config, entity);
+    super(name, config, _entity);
 
     if (typeof config.render === "undefined") {
       this.config.render = (values) =>
@@ -65,7 +65,7 @@ export class EntityFieldNumber<T> extends EntityField<
     return (
       <InputNumber
         style={{ minWidth: "195px", width: "100%" }}
-        key={`number_field_${this.entity.name}_${this.valuePropName}`}
+        key={`number_field_${this._entity.name}_${this.valuePropName}`}
         formatter={(value) => formatter(value, this.config.format)}
         parser={(value) => {
           return parser(value || "");
@@ -82,7 +82,7 @@ export class EntityFieldNumber<T> extends EntityField<
     return (
       <InputNumber
         style={{ minWidth: "195px" }}
-        key={`number_field_${this.entity.name}_${this.valuePropName}`}
+        key={`number_field_${this._entity.name}_${this.valuePropName}`}
         placeholder="Number"
         value={value}
         onChange={(value: number) =>

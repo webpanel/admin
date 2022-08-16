@@ -10,9 +10,9 @@ export declare const dateFieldFilter: (columnName: string, range?: boolean | und
 export declare class EntityFieldDate<T, C extends IEntityFieldDateConfig<T>> extends EntityField<T, C> {
     readonly name: string;
     protected readonly config: C;
-    readonly entity: EntityBase;
+    readonly _entity: EntityBase;
     private filterConfig;
-    constructor(name: string, config: C, entity: EntityBase);
+    constructor(name: string, config: C, _entity: EntityBase);
     private get format();
     private renderValue;
     get render(): (record: T, options?: IEntityFieldRenderOptions) => React.ReactNode;

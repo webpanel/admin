@@ -10,7 +10,7 @@ export class EntityFieldColor<T, C> extends EntityField<T, C> {
           width: "30px",
           height: "20px",
           backgroundColor: value,
-          borderRadius: "3px"
+          borderRadius: "3px",
         }}
       />
     ) : (
@@ -41,7 +41,7 @@ export class EntityFieldColor<T, C> extends EntityField<T, C> {
 
     return (
       <input
-        key={`color_field_${this.entity.name}_${this.valuePropName}`}
+        key={`color_field_${this._entity.name}_${this.valuePropName}`}
         type="color"
         {...props}
         onChange={onChangeProp}

@@ -90,9 +90,9 @@ export class EntityFieldDate<
   constructor(
     public readonly name: string,
     protected readonly config: C,
-    public readonly entity: EntityBase
+    public readonly _entity: EntityBase
   ) {
-    super(name, config, entity);
+    super(name, config, _entity);
     this.filterConfig = dateFieldFilter(
       this.columnName(),
       this.range,
@@ -142,7 +142,7 @@ export class EntityFieldDate<
 
     return (
       <DatePicker
-        key={`date_field_${this.entity.name}_${this.valuePropName}`}
+        key={`date_field_${this._entity.name}_${this.valuePropName}`}
         showTime={this.config.showTime}
         format={this.format}
         {...props}

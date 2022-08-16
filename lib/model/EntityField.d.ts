@@ -50,10 +50,11 @@ export interface IEntityFieldConfig<T> {
 export declare class EntityField<T, C extends IEntityFieldConfig<T>> {
     readonly name: string;
     protected readonly config: C;
-    readonly entity: EntityBase;
-    constructor(name: string, config: C, entity: EntityBase);
+    protected readonly _entity: EntityBase;
+    constructor(name: string, config: C, _entity: EntityBase);
     clone(entity?: Entity): this;
     get titleTranslationKey(): string;
+    get entity(): Entity<any>;
     get title(): string;
     get shortTitle(): string;
     get listColumnAlign(): IEntityListColumnAlign;

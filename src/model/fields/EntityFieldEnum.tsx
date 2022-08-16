@@ -52,7 +52,7 @@ export class EntityFieldEnum<T> extends EntityField<
     const selectOptions = resolveThunk(this.config.options).map(
       (value: IOption) => (
         <Select.Option
-          key={`enum_field_${this.entity.name}_${this.valuePropName}_${value.value}`}
+          key={`enum_field_${this._entity.name}_${this.valuePropName}_${value.value}`}
           value={value.value}
         >
           {value.label}
@@ -66,7 +66,7 @@ export class EntityFieldEnum<T> extends EntityField<
           width: "100%",
           minWidth: "100px",
         }}
-        key={`enum_field_${this.entity.name}_${this.valuePropName}`}
+        key={`enum_field_${this._entity.name}_${this.valuePropName}`}
         showSearch={true}
         allowClear={true}
         {...props}
@@ -102,9 +102,9 @@ export class EntityFieldEnum<T> extends EntityField<
     );
   };
 
-  public get filterNormalize(): (
-    values: string[] | null
-  ) => { [key: string]: any } {
+  public get filterNormalize(): (values: string[] | null) => {
+    [key: string]: any;
+  } {
     return (values: string[] | null) => {
       let res = {};
       values = values || [];

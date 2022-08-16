@@ -74,15 +74,19 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
   constructor(
     public readonly name: string,
     protected readonly config: C,
-    public readonly entity: EntityBase
+    protected readonly _entity: EntityBase
   ) {}
 
   public clone(entity?: Entity): this {
-    return this.constructor(this.name, this.config, entity || this.entity);
+    return this.constructor(this.name, this.config, entity || this._entity);
   }
 
   public get titleTranslationKey(): string {
-    return `${this.entity.name}.${this.name}`;
+    return `${this._entity.name}.${this.name}`;
+  }
+
+  public get entity(): Entity<any> {
+    return this._entity as Entity<any>;
   }
 
   public get title(): string {
@@ -287,7 +291,7 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     const value = props.selectedKeys ? props.selectedKeys[0] : undefined;
     return (
       <Input
-        key={`field_${this.entity.name}_${this.valuePropName}`}
+        key={`field_${this._entity.name}_${this.valuePropName}`}
         value={value}
         onChange={(e) =>
           props.setSelectedKeys(e.target.value ? [e.target.value] : [])

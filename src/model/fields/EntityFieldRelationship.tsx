@@ -78,7 +78,7 @@ const RelationshipSelectWithAddButton = (
     return (
       <Col flex="32px">
         {targetEntity.getCreateButton({
-          key: `relationship_field_${field.entity.name}_${field.valuePropName}_add`,
+          key: `relationship_field_${field._entity.name}_${field.valuePropName}_add`,
           flow: {
             type: "modal",
             modal: {
@@ -170,9 +170,9 @@ export class EntityFieldRelationship<
   constructor(
     public readonly name: string,
     protected readonly config: C,
-    public readonly entity: EntityBase
+    public readonly _entity: EntityBase
   ) {
-    super(name, config, entity);
+    super(name, config, _entity);
     this.filterConfig = relationshipFieldFilter(
       this.columnName(),
       this.config.targetEntity
