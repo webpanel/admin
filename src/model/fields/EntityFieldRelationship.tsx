@@ -184,7 +184,7 @@ export class EntityFieldRelationship<
   }
 
   public get targetEntity(): Entity<any> {
-    return this.config.targetEntity;
+    return resolveThunk(this.config.targetEntity as Thunk<Entity<any>>);
   }
 
   public columnName(): string {
