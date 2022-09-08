@@ -218,18 +218,18 @@ export class EntityFieldRelationship<
     return (values) => {
       const value = values[this.name];
       if (type === "toMany" && Array.isArray(value)) {
-        return value
-          .map((x) => {
-            const content = _render && _render(x);
-            if (_showLink) {
-              return (
-                <Link to={_targetEntity.getDetailLink(x.id)}>{content}</Link>
-              );
-            }
-            return content;
-          })
-          .filter((x) => x)
-          .map((x) => <Tag key={String(x)}>{x}</Tag>);
+        return value.map((x) => {
+          if (render) {
+            return render(x);
+          }
+          let content = _render && _render(x);
+          if (_showLink) {
+            content = (
+              <Link to={_targetEntity.getDetailLink(x.id)}>{content}</Link>
+            );
+          }
+          return <Tag key={String(x)}>{content}</Tag>;
+        });
       }
 
       if (!value) {
