@@ -2,11 +2,12 @@ import * as React from "react";
 import * as moment from "moment";
 import { EntityField, IEntityFieldConfig, IEntityFieldConfigFilter, IEntityFieldFilterProps, IEntityFieldRenderOptions } from "../EntityField";
 import { EntityBase } from "../EntityBase";
+import { SharedTimeProps } from "rc-picker/lib/panels/TimePanel";
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
-    showTime?: boolean;
+    showTime?: boolean | SharedTimeProps<any>;
     format?: string;
 }
-export declare const dateFieldFilter: (columnName: string, range?: boolean, format?: string, showTime?: boolean) => IEntityFieldConfigFilter;
+export declare const dateFieldFilter: (columnName: string, range?: boolean, format?: string, showTime?: boolean | SharedTimeProps<any>) => IEntityFieldConfigFilter;
 export declare class EntityFieldDate<T, C extends IEntityFieldDateConfig<T>> extends EntityField<T, C> {
     readonly name: string;
     protected readonly config: C;

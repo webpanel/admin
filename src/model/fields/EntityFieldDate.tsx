@@ -13,9 +13,10 @@ import { DatePicker as AntdDatePicker } from "antd";
 import { DatePicker } from "../../components/date-picker";
 import { RangeValue } from "rc-picker/lib/interface";
 import { EntityBase } from "../EntityBase";
+import { SharedTimeProps } from "rc-picker/lib/panels/TimePanel";
 
 export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
-  showTime?: boolean;
+  showTime?: boolean | SharedTimeProps<any>;
   format?: string;
 }
 
@@ -23,7 +24,7 @@ export const dateFieldFilter = (
   columnName: string,
   range?: boolean,
   format?: string,
-  showTime?: boolean
+  showTime?: boolean | SharedTimeProps<any>
 ): IEntityFieldConfigFilter => {
   return {
     dropdownInput: (props) => {
@@ -31,6 +32,7 @@ export const dateFieldFilter = (
       return range ? (
         <AntdDatePicker.RangePicker
           format={format || showTime ? "YYYY/MM/DD HH:mm" : "YYYY/MM/DD"}
+          showTime={showTime}
           allowClear={false}
           value={[value[0] && moment(value[0]), value[1] && moment(value[1])]}
           onChange={(dates: RangeValue<any>) => {
@@ -46,6 +48,7 @@ export const dateFieldFilter = (
         <AntdDatePicker
           value={value[0]}
           allowClear={false}
+          showTime={showTime}
           onChange={(date: moment.Moment) => {
             props.setSelectedKeys([
               moment(date).startOf("day"),
