@@ -1,4 +1,4 @@
-import { RcCustomRequestOptions } from "antd/lib/upload/interface";
-export declare function UploadRequest(options: RcCustomRequestOptions): {
+import type { UploadRequestOption } from "rc-upload/lib/interface";
+export declare function UploadRequest(options: UploadRequestOption): {
     abort(): void;
 };

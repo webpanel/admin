@@ -4,11 +4,11 @@ import { Thunk } from "ts-thunk";
 import { FormInstance } from "webpanel-antd";
 import { FormLayout } from "antd/lib/form/Form";
 import { EntityWithFields } from "../../model/EntityWithFields";
-export declare type EntityOnSaveHandler = (id: ResourceID) => void;
+export type EntityOnSaveHandler = (id: ResourceID) => void;
 export interface IEntityFormFieldOptions {
     field: string | null;
 }
-export declare type IEntityFormConfigField = IEntityFormFieldOptions | string | null;
+export type IEntityFormConfigField = IEntityFormFieldOptions | string | null;
 interface IEntityInternalFormProps {
     layout?: FormLayout;
 }

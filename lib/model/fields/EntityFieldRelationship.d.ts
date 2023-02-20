@@ -4,8 +4,8 @@ import { Thunk } from "ts-thunk";
 import { Entity } from "../Entity";
 import { FormLayout } from "antd/lib/form/Form";
 import { EntityBase } from "../EntityBase";
-export declare type IEntityFieldRelationshipType = "toOne" | "toMany";
-export declare type IEntityFieldRelationshipSelectMode = undefined | "multiple";
+export type IEntityFieldRelationshipType = "toOne" | "toMany";
+export type IEntityFieldRelationshipSelectMode = undefined | "multiple";
 export interface IEntityFieldRelationshipCreatableConfig {
     addButton: boolean;
     notFound: boolean;

@@ -16,15 +16,15 @@ export interface IEntityListTableProps extends TableProps<any>, ResourceCollecti
     pagination?: TablePaginationConfig | false;
     onDelete?: (id: ResourceID) => void;
 }
-export declare type IEntityListColumnRender = (value: any, values: any, index: number, field: EntityField<any, any>) => React.ReactNode | {
+export type IEntityListColumnRender = (value: any, values: any, index: number, field: EntityField<any, any>) => React.ReactNode | {
     children: React.ReactNode;
     props: {
         rowSpan: number;
         colSpan: number;
     };
 };
-export declare type IEntityListColumnAlign = "left" | "right" | "center";
-export declare type IEntityListColumn<T = any> = string | {
+export type IEntityListColumnAlign = "left" | "right" | "center";
+export type IEntityListColumn<T = any> = string | {
     field: string;
     hidden?: boolean;
     render?: IEntityListColumnRender;

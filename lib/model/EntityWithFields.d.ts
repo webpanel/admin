@@ -19,10 +19,10 @@ import { DetailEntityProps } from "../components/buttons/EntityDetailButton";
 import { IEntityDetailConfig } from "../components/pages/detail";
 import { IEntityListConfig } from "../components/pages/list";
 import { EntitySelectConfig } from "../components/entity-picker";
-declare type MergeEntityFieldType<T, U, T0 = T & U, T1 = {
+type MergeEntityFieldType<T, U, T0 = T & U, T1 = {
     [K in keyof T0]: T0[K];
 }> = T1;
-declare type UnwrapEntity<T> = T extends EntityBase<infer U> ? U : never;
+type UnwrapEntity<T> = T extends EntityBase<infer U> ? U : never;
 export declare class EntityWithFields<T extends EntityDataType = any> extends EntityBase<T> {
     fields: EntityField<any, any>[];
     protected clone(): this;
@@ -77,10 +77,10 @@ export declare class EntityWithFields<T extends EntityDataType = any> extends En
     getSearchResourceCollectionConfig: () => ResourceCollectionConfig<T>;
     useResource(config?: Partial<ResourceHookConfig<T>>): Resource<T>;
     useResourceCollection(config?: Partial<ResourceCollectionHookConfig<T>>): ResourceCollection<T>;
-    getListView: (config?: Thunk<IEntityListConfig<T>, undefined> | undefined) => React.ReactNode;
-    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig | undefined) => React.ReactNode;
+    getListView: (config?: Thunk<IEntityListConfig<T>>) => React.ReactNode;
+    getDetailView: (resourceID: ResourceID, config?: IEntityDetailConfig) => React.ReactNode;
     getDetailButton: (id: ResourceID, props: DetailEntityProps) => React.ReactNode;
-    getCreateView: (props?: Omit<IEntityCreateProps, "entity"> | undefined) => React.ReactNode;
+    getCreateView: (props?: Omit<IEntityCreateProps, "entity">) => React.ReactNode;
     getCreateButton: (props: Omit<CreateEntityProps, "entity">) => React.ReactNode;
     getEditView: (props: Omit<IEntityEditProps, "entity">) => React.ReactNode;
     menuItem: () => React.ReactNode;

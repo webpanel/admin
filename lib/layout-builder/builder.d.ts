@@ -20,8 +20,8 @@ export interface LayoutBuilderConfig {
     formInstance?: FormInstance;
     resource: Resource;
 }
-declare type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityFormConfigField;
-declare type IEntityBuilderFieldOptions = IEntityFormFieldOptions | IEntityDetailFieldOptions;
+type IEntityBuilderConfigField = IEntityDetailConfigField | IEntityFormConfigField;
+type IEntityBuilderFieldOptions = IEntityFormFieldOptions | IEntityDetailFieldOptions;
 export declare class LayoutBuilder {
     readonly config: LayoutBuilderConfig;
     constructor(config: LayoutBuilderConfig);

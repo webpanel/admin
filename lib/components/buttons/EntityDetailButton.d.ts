@@ -8,7 +8,7 @@ export interface IEntityDetailButtonModalFlow {
     type: "modal";
     modal?: ModalProps;
 }
-declare type FlowType = "redirect" | IEntityDetailButtonModalFlow;
+type FlowType = "redirect" | IEntityDetailButtonModalFlow;
 export interface DetailEntityProps extends IEntityDetailConfig {
     flow?: FlowType;
     key?: string;

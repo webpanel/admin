@@ -1,4 +1,4 @@
-import { EntityField } from '../EntityField';
-export declare class EntityFieldPasssword<T, C> extends EntityField<T, C> {
+import { EntityField, IEntityFieldConfig } from "../EntityField";
+export declare class EntityFieldPasssword<T, C extends IEntityFieldConfig<T>> extends EntityField<T, C> {
     fetchField(): string | null;
 }

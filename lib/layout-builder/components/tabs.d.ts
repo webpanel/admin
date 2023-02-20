@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TabPaneProps, TabsProps } from 'antd/lib/tabs';
-export declare type LayoutBuilderTabsItem = TabPaneProps & {
+export type LayoutBuilderTabsItem = TabPaneProps & {
     key: string;
     content: React.ReactNode;
 };

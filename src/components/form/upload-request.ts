@@ -1,11 +1,11 @@
-import { RcCustomRequestOptions } from "antd/lib/upload/interface";
-
+import { RcFile } from "antd/lib/upload";
+import type { UploadRequestOption } from "rc-upload/lib/interface";
 class UploadError extends Error {
   public status: number;
   public url: string;
 }
 
-function getError(options: RcCustomRequestOptions, xhr: XMLHttpRequest) {
+function getError(options: UploadRequestOption, xhr: XMLHttpRequest) {
   const msg = `cannot ${options.action} ${xhr.status}'`;
   const err = new UploadError(msg);
   err.status = xhr.status;
@@ -40,14 +40,14 @@ function getBody(xhr: XMLHttpRequest) {
 // }
 
 const getFileObject = async (
-  options: RcCustomRequestOptions
+  options: UploadRequestOption
 ): Promise<{ id: string; uploadURL: string }> => {
   return fetch(options.action, {
     method: "POST",
     body: JSON.stringify({
-      filename: options.file.name,
-      size: options.file.size,
-      contentType: options.file.type,
+      filename: (options.file as RcFile).name,
+      size: (options.file as RcFile).size,
+      contentType: (options.file as RcFile).type,
     }),
     headers: {
       ...options.headers,
@@ -56,7 +56,7 @@ const getFileObject = async (
   }).then((res) => res.json());
 };
 
-export function UploadRequest(options: RcCustomRequestOptions) {
+export function UploadRequest(options: UploadRequestOption) {
   const xhr = new XMLHttpRequest();
   var fileObject: { id: string; uploadURL: string };
 
@@ -66,22 +66,28 @@ export function UploadRequest(options: RcCustomRequestOptions) {
       if (e.total > 0) {
         event.percent = (e.loaded / e.total) * 100;
       }
-      options.onProgress(event, options.file);
+      if (options.onProgress) {
+        options.onProgress(event);
+      }
     };
   }
 
   xhr.onerror = function error(e) {
-    options.onError(getError(options, xhr), getBody(xhr));
+    if (options.onError) {
+      options.onError(getError(options, xhr), getBody(xhr));
+    }
   };
 
   xhr.onload = function onload() {
     // allow success when 2xx status
     // see https://github.com/react-component/upload/issues/34
     if (xhr.status < 200 || xhr.status >= 300) {
-      return options.onError(getError(options, xhr), getBody(xhr));
+      return (
+        options.onError && options.onError(getError(options, xhr), getBody(xhr))
+      );
     }
 
-    options.onSuccess(fileObject, options.file);
+    options.onSuccess && options.onSuccess(fileObject);
   };
 
   getFileObject(options).then((fo) => {

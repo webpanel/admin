@@ -16,7 +16,7 @@ export const PercentageInput = (props: InputNumberProps) => {
   const { value, onChange, ...rest } = props;
   return (
     <InputNumber
-      value={value && value * 100}
+      value={value && (value as number) * 100}
       onChange={(v) =>
         onChange &&
         onChange(v && 0.01 * (typeof v === "string" ? parseInt(v, 10) : v))
@@ -57,7 +57,7 @@ export class EntityFieldPercentage<T> extends EntityField<
   }): React.ReactNode {
     const onChange = props && props.onChange;
     const onChangeProp = onChange
-      ? (value: number | string | undefined) => onChange(value, value)
+      ? (value: any | undefined) => onChange(value, value)
       : undefined;
 
     return (

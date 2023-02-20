@@ -10,7 +10,7 @@ export interface IEntityDetailFieldOptions {
     field: string | null;
     span?: number;
 }
-export declare type IEntityDetailConfigField = IEntityDetailFieldOptions | string | null;
+export type IEntityDetailConfigField = IEntityDetailFieldOptions | string | null;
 export interface IEntityDetailConfig {
     fields?: Thunk<IEntityDetailConfigField[]>;
     pollInterval?: number;

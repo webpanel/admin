@@ -7,7 +7,7 @@ import { Entity } from "./Entity";
 import { IEntityListColumnAlign } from "../components/pages/list";
 import { Rule } from "rc-field-form/es/interface";
 import { EntityBase } from "./EntityBase";
-export declare type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
+export type FieldSections = "list" | "detail" | "edit" | "search" | "custom";
 export interface IEntityFieldFilterProps<T> {
     selectedKeys: T[];
     setSelectedKeys: (keys: T[]) => {};

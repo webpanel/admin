@@ -2,7 +2,11 @@ import { CloseOutlined } from "@ant-design/icons";
 import { Button, Space } from "antd";
 import * as React from "react";
 
-import { EntityField, IEntityFieldRenderOptions } from "../EntityField";
+import {
+  EntityField,
+  IEntityFieldConfig,
+  IEntityFieldRenderOptions,
+} from "../EntityField";
 
 interface ColorInputProps {
   value?: string | null;
@@ -32,7 +36,10 @@ export const ColorInput = ({ value, onChange }: ColorInputProps) => {
   );
 };
 
-export class EntityFieldColor<T, C> extends EntityField<T, C> {
+export class EntityFieldColor<
+  T,
+  C extends IEntityFieldConfig<T>
+> extends EntityField<T, C> {
   private renderValue(value?: string): React.ReactNode {
     return value ? (
       <div

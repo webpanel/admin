@@ -6,7 +6,7 @@ export interface IEntityFieldDateConfig<T> extends IEntityFieldConfig<T> {
     showTime?: boolean;
     format?: string;
 }
-export declare const dateFieldFilter: (columnName: string, range?: boolean | undefined, format?: string | undefined, showTime?: boolean | undefined) => IEntityFieldConfigFilter;
+export declare const dateFieldFilter: (columnName: string, range?: boolean, format?: string, showTime?: boolean) => IEntityFieldConfigFilter;
 export declare class EntityFieldDate<T, C extends IEntityFieldDateConfig<T>> extends EntityField<T, C> {
     readonly name: string;
     protected readonly config: C;

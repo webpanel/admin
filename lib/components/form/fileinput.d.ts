@@ -28,7 +28,7 @@ export declare class FileInput extends React.Component<IFileInputProps, IFileInp
     componentDidMount(): void;
     fileChangeHandler(file: UploadFile): void;
     udpateValue(file: IFile | null): void;
-    openItem: (hostURL: string, id: string, token?: string | undefined) => Promise<void>;
+    openItem: (hostURL: string, id: string, token?: string) => Promise<void>;
     clearValue(): void;
     render(): React.ReactNode;
 }

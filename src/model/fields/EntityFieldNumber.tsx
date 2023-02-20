@@ -19,12 +19,11 @@ const formatter = (
   return numeral(value).format(format || "0,0");
   // return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 };
-const parser = (value: string): string => {
+const parser = (value: string): number => {
   if (!value) {
-    return "";
+    return 0;
   }
-  return numeral(value).format("0");
-  // return value.replace(/\s?|(\s*)/g, "");
+  return numeral(value).value();
 };
 
 export interface IEntityFieldNumberConfig<T> extends IEntityFieldConfig<T> {

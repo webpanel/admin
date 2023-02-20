@@ -9,7 +9,7 @@ import { LayoutBuilder } from "../layout-builder";
 import { LayoutBuilderConfig } from "../layout-builder/builder";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { StructureItemProps } from "webpanel-antd/lib/layout/Structure";
-export declare type EntityDataType = {
+export type EntityDataType = {
     id: ResourceID;
 };
 interface IEntitySearchableConfig {
@@ -23,7 +23,7 @@ interface IEntityEditOptions<T extends EntityDataType> {
     entity: EntityBase<T>;
     resourceID?: ResourceID;
 }
-declare type ILayoutGetter<T> = (props: T) => React.ReactNode;
+type ILayoutGetter<T> = (props: T) => React.ReactNode;
 export interface IEntityConfig<T extends EntityDataType> {
     name: Thunk<string>;
     resourceName?: Thunk<string>;
