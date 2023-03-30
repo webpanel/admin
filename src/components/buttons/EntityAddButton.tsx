@@ -26,7 +26,7 @@ export interface CreateEntityButtonProps extends CreateEntityProps {
   // entity: EntityBase;
 }
 export const CreateEntityButton = (props: CreateEntityButtonProps) => {
-  const { entity, flow, button, ...rest } = props;
+  const { entity, flow, button, onSave, ...rest } = props;
   const [modalVisible, setModalVisible] = React.useState(false);
 
   let _flow = flow || "redirect";
@@ -49,12 +49,17 @@ export const CreateEntityButton = (props: CreateEntityButtonProps) => {
         <CreateEntityModal
           entity={entity}
           modal={{
-            onCancel: () => hideModal(),
             ..._flow.modal,
+            onCancel: () => hideModal(),
             visible: modalVisible,
           }}
-          onSave={() => hideModal()}
           {...rest}
+          onSave={async (resourceId) => {
+            if (onSave) {
+              onSave(resourceId);
+            }
+            hideModal();
+          }}
         />
         <Button
           icon={<PlusOutlined />}
