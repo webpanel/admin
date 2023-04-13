@@ -53,7 +53,10 @@ export const ListCell = (props: IListCellProps) => {
               <Row gutter={[8, 8]}>
                 <Col flex="auto" style={{ width: 250 }}>
                   {field.inputElement({
-                    value: value || values[field.columnName()],
+                    value:
+                      typeof value !== "undefined"
+                        ? value
+                        : values[field.columnName()],
                     onChange: async (
                       value: any,
                       valueElement: React.ReactNode

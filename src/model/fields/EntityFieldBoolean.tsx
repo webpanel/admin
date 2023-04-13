@@ -12,13 +12,20 @@ import {
 
 export interface IEntityFieldBooleanConfig<T> extends IEntityFieldConfig<T> {}
 
-const IndeterminateCheckbox = (props: CheckboxProps) => {
-  const { checked, ...rest } = props;
+const IndeterminateCheckbox = (
+  props: Omit<CheckboxProps, "onChange"> & { onChange?: (val: boolean) => void }
+) => {
+  const { value, onChange, ...rest } = props;
   return (
     <Checkbox
       {...rest}
-      indeterminate={checked === null || typeof checked === "undefined"}
-      checked={checked}
+      indeterminate={value === null || typeof value === "undefined"}
+      checked={value}
+      onChange={(event: CheckboxChangeEvent) => {
+        if (onChange) {
+          onChange(event.target.checked);
+        }
+      }}
     />
   );
 };
@@ -27,9 +34,9 @@ export class EntityFieldBoolean<T> extends EntityField<
   T,
   IEntityFieldBooleanConfig<T>
 > {
-  public get valuePropName(): string {
-    return "checked";
-  }
+  // public get valuePropName(): string {
+  //   return "checked";
+  // }
 
   private renderValue(value: boolean): React.ReactNode {
     if (value === null || typeof value === "undefined") {
@@ -50,16 +57,15 @@ export class EntityFieldBoolean<T> extends EntityField<
     onChange?: (value: any, valueElement: React.ReactNode) => void;
     autoFocus?: boolean;
   }): React.ReactNode {
-    const onChange = props && props.onChange;
+    const { onChange, ...rest } = props || {};
     const onChangeProp = onChange
-      ? (event: CheckboxChangeEvent) =>
-          onChange(event.target.value, this.renderValue(event.target.value))
+      ? (value: boolean) => onChange(value, this.renderValue(value))
       : undefined;
     return (
       <IndeterminateCheckbox
         key={`boolean_field_${this._entity.name}_${this.valuePropName}`}
-        {...props}
         onChange={onChangeProp}
+        {...rest}
       />
     );
   }
