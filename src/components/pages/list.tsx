@@ -89,7 +89,7 @@ export type IEntityListColumn<T = any> =
 export interface IEntityListConfig<T extends EntityDataType>
   extends ResourceCollectionOptions<T> {
   table?: Thunk<IEntityListTableProps, ResourceCollection<T>>;
-  card?: CardProps;
+  card?: Thunk<CardProps, ResourceCollection<T>>;
   searchable?: boolean;
   hidden?: Thunk<boolean, ResourceCollection<T>>;
   // deprecated, please use addButton property
@@ -258,6 +258,7 @@ export const EntityList = <T extends EntityDataType = any>(
     if (typeof showAddButton !== "undefined") {
       _addButton = showAddButton;
     }
+    let _card = resolveOptionalThunk(card, resource);
 
     if (typeof _addButton === "undefined" || _addButton === true) {
       _addButton = {
@@ -274,10 +275,10 @@ export const EntityList = <T extends EntityDataType = any>(
           t(`${entity.name}._title`, { count: 100, defaultValue: entity.title })
         }
         key={`${entity.name}.table-card`}
-        {...card}
+        {..._card}
         extra={
           <Space key="default-buttons">
-            {card && card.extra}
+            {_card && _card.extra}
             {hasTableFilter && (
               <Tooltip
                 title={
