@@ -29,6 +29,7 @@ export interface IEntityFieldConfigFilter {
 }
 export interface IEntityFieldRenderOptions {
     size?: "small" | "medium" | "large";
+    forceString?: boolean;
 }
 export interface IEntityFieldConfig<T> {
     title?: Thunk<string>;

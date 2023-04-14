@@ -25,6 +25,9 @@ export type EntityDataType = { id: ResourceID };
 interface IEntitySearchableConfig {
   fields: Thunk<string[]>;
 }
+export interface IEntityRenderOptions {
+  forceString?: boolean;
+}
 
 interface IEntityDetailOptions<T extends EntityDataType> {
   entity: EntityBase<T>;
@@ -63,7 +66,7 @@ export interface IEntityConfig<T extends EntityDataType> {
   searchable?: Thunk<boolean | IEntitySearchableConfig>;
   // render loaded entity to string (in search fields etc.)
   // only fields with {visible:['search']} are loaded for rendering
-  render?: (value: T | null) => React.ReactNode;
+  render?: (value: T | null, options?: IEntityRenderOptions) => React.ReactNode;
 
   // deprecated, user table config directly
   initialSorting?: SortInfo[];

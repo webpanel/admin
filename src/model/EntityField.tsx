@@ -50,6 +50,7 @@ const isIEntityFieldConfigFilter = (
 
 export interface IEntityFieldRenderOptions {
   size?: "small" | "medium" | "large";
+  forceString?: boolean;
 }
 
 export interface IEntityFieldConfig<T> {
@@ -223,7 +224,12 @@ export class EntityField<T, C extends IEntityFieldConfig<T>> {
     }
     return (values: T, options?: IEntityFieldRenderOptions) => {
       const value = values[this.name] || "";
-      if (!value || !value.substring || value.length < 50) {
+      if (
+        !value ||
+        !value.substring ||
+        value.length < 50 ||
+        options?.forceString
+      ) {
         return value;
       }
       const shortValue = value.substring(0, 50) + "...";

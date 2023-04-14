@@ -15,6 +15,9 @@ export type EntityDataType = {
 interface IEntitySearchableConfig {
     fields: Thunk<string[]>;
 }
+export interface IEntityRenderOptions {
+    forceString?: boolean;
+}
 interface IEntityDetailOptions<T extends EntityDataType> {
     entity: EntityBase<T>;
     resourceID: ResourceID;
@@ -51,7 +54,7 @@ export interface IEntityConfig<T extends EntityDataType> {
     edit?: Thunk<IEntityEditConfig, IEntityEditOptions<T>>;
     detail?: Thunk<IEntityDetailConfig, IEntityDetailOptions<T>>;
     searchable?: Thunk<boolean | IEntitySearchableConfig>;
-    render?: (value: T | null) => React.ReactNode;
+    render?: (value: T | null, options?: IEntityRenderOptions) => React.ReactNode;
     initialSorting?: SortInfo[];
     initialFilters?: DataSourceArgumentMap;
 }

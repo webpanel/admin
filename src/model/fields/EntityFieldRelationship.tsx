@@ -215,14 +215,17 @@ export class EntityFieldRelationship<
     const _targetEntity = resolveThunk(targetEntity);
     const _showLink = resolveOptionalThunk(showLink);
     const _render = render || _targetEntity.render;
-    return (values) => {
+    return (values, options) => {
       const value = values[this.name];
       if (type === "toMany" && Array.isArray(value)) {
-        return value.map((x) => {
+        const arr = value.map((x) => {
           if (render) {
-            return render(x);
+            return render(x, options);
           }
-          let content = _render && _render(x);
+          let content = _render && _render(x, options);
+          if (options?.forceString) {
+            return content;
+          }
           if (_showLink) {
             content = (
               <Link to={_targetEntity.getDetailLink(x.id)}>{content}</Link>
@@ -230,14 +233,21 @@ export class EntityFieldRelationship<
           }
           return <Tag key={String(x)}>{content}</Tag>;
         });
+        if (options?.forceString) {
+          return arr.join(", ");
+        }
+        return arr;
       }
 
       if (!value) {
         return "–";
       }
 
-      let content = _render && _render(value);
+      let content = _render && _render(value, options);
 
+      if (options?.forceString) {
+        return content;
+      }
       if (_showLink) {
         content = (
           <Link to={_targetEntity.getDetailLink(value.id)}>{content}</Link>
