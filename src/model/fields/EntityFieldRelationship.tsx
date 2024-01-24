@@ -55,6 +55,7 @@ const RelationshipSelectWithAddButton = (
     undefined
   );
   const { t } = useTranslation("webpanel-admin");
+  const { t: _t } = useTranslation();
 
   const showAddButton =
     typeof isCreatable === "boolean" ? isCreatable : isCreatable.addButton;
@@ -82,7 +83,9 @@ const RelationshipSelectWithAddButton = (
           flow: {
             type: "modal",
             modal: {
-              title: `Add ${targetEntity.title}`,
+              title: _t(`${targetEntity.name}._title`, {
+                defaultValue: targetEntity.title,
+              }),
               width: "70%",
             },
           },
